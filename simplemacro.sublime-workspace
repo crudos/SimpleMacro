@@ -1,0 +1,1087 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Get",
+				"GetChecked"
+			],
+			[
+				"SM_CondCbo",
+				"SM_CondCboxInput"
+			],
+			[
+				"Li",
+				"LINE_TYPE_TABLE"
+			],
+			[
+				"cond",
+				"conditionals"
+			],
+			[
+				"selected",
+				"selectedLine"
+			],
+			[
+				"arg",
+				"arg_num"
+			],
+			[
+				"line",
+				"line_num"
+			],
+			[
+				"check",
+				"checkButton"
+			],
+			[
+				"SM_Cond",
+				"SM_CondCbox"
+			],
+			[
+				"USe",
+				"USE_ALTERNATES"
+			],
+			[
+				"toolt",
+				"tooltipText"
+			],
+			[
+				"Crea",
+				"CreateTab_Update"
+			],
+			[
+				"lin",
+				"line_count"
+			],
+			[
+				"L",
+				"L"
+			],
+			[
+				"selec",
+				"selectedArg"
+			],
+			[
+				"BOTTOM",
+				"BOTTOMLEFT"
+			],
+			[
+				"creat",
+				"createSelect"
+			],
+			[
+				"fun",
+				"function	function"
+			],
+			[
+				"parse",
+				"parse"
+			],
+			[
+				"macro",
+				"macroStart"
+			],
+			[
+				"sele",
+				"createSelect"
+			],
+			[
+				"create",
+				"createParse"
+			],
+			[
+				"ARG",
+				"ArgListEntry_OnClick"
+			],
+			[
+				"BOTT",
+				"BOTTOMLEFT"
+			],
+			[
+				"relative",
+				"relativePoint"
+			],
+			[
+				"set",
+				"SetText"
+			],
+			[
+				"SM_Con",
+				"SM_CondCbox"
+			],
+			[
+				"Frame",
+				"Frames"
+			],
+			[
+				"Ba",
+				"SM_BackgroundTemplate"
+			],
+			[
+				"SM",
+				"SM_BackgroundTemplate"
+			],
+			[
+				"LINE",
+				"LINE_TYPE_TABLE"
+			],
+			[
+				"SM_Pop",
+				"SM_PopulateCondList"
+			],
+			[
+				"SImple",
+				"SimpleMacroMenu"
+			],
+			[
+				"SM_Po",
+				"SM_PopulateArgList"
+			],
+			[
+				"selecte",
+				"selectedLine"
+			],
+			[
+				"Create",
+				"CreateFrame"
+			],
+			[
+				"Simp",
+				"SimpleMacroMenu"
+			],
+			[
+				"SimpleMacro",
+				"SimpleMacroMenu"
+			],
+			[
+				"relat",
+				"relativePoint"
+			],
+			[
+				"O",
+				"OnClick"
+			],
+			[
+				"SimpleM",
+				"SimpleMacroMenu"
+			],
+			[
+				"On",
+				"OnLoad"
+			],
+			[
+				"parentMacroScrol",
+				"parentMacroScrollFrame"
+			],
+			[
+				"SMC",
+				"SMCreateButton_SelectMacro"
+			],
+			[
+				"Select",
+				"SMCreateButton_SelectMacro"
+			],
+			[
+				"SetTe",
+				"SetTexture"
+			],
+			[
+				"SimpleMacroMenuCreate",
+				"SimpleMacroMenuCreateTabPage"
+			],
+			[
+				"GameF",
+				"GameFontHighlightSmall"
+			],
+			[
+				"UIPanel",
+				"UIPanelScrollFrameTemplate"
+			],
+			[
+				"c",
+				"conditionals"
+			],
+			[
+				"con",
+				"conditional"
+			],
+			[
+				"cmd",
+				"command"
+			],
+			[
+				"i",
+				"i"
+			],
+			[
+				"SimpleMacroMenuCreateTabPage",
+				"SimpleMacroMenuCreateTabPageTextScrollFrameMacroText"
+			],
+			[
+				"TOP",
+				"TOPLEFT"
+			],
+			[
+				"reative",
+				"relativeTo"
+			],
+			[
+				"SMCreate",
+				"SMCreateButtons_Update"
+			],
+			[
+				"UIDropDown",
+				"UIDropDownMenu_CreateInfo"
+			],
+			[
+				"SimpleMacroCr",
+				"SimpleMacroMenuCreateTabPage"
+			],
+			[
+				"Simpl",
+				"SimpleMacroMenu"
+			],
+			[
+				"parentCreate",
+				"parentCreateScrollFrame"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "menu/menu.lua",
+			"settings":
+			{
+				"buffer_size": 22077,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "menu/menu.xml",
+			"settings":
+			{
+				"buffer_size": 31609,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "SimpleMacro.lua",
+			"settings":
+			{
+				"buffer_size": 5208,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "SimpleMacro.xml",
+			"settings":
+			{
+				"buffer_size": 9015,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "localization/enUS.lua",
+			"settings":
+			{
+				"buffer_size": 9976,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "libs/macroparser/macroparser.lua",
+			"settings":
+			{
+				"buffer_size": 10524,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"contents": "MAX_ACCOUNT_MACROS = 36;\nMAX_CHARACTER_MACROS = 18;\nNUM_MACROS_PER_ROW = 6;\nNUM_MACRO_ICONS_SHOWN = 20;\nNUM_ICONS_PER_ROW = 5;\nNUM_ICON_ROWS = 4;\nMACRO_ICON_ROW_HEIGHT = 36;\n\nUIPanelWindows[\"MacroFrame\"] = { area = \"left\", pushable = 5, whileDead = 1, 	xoffset = -16, 		yoffset = 12 };\n\nfunction MacroFrame_Show()\n	ShowUIPanel(MacroFrame);\nend\n\nfunction MacroFrame_OnLoad(self)\n	MacroFrame_SetAccountMacros();\n	PanelTemplates_SetNumTabs(MacroFrame, 2);\n	PanelTemplates_SetTab(MacroFrame, 1);\nend\n\nfunction MacroFrame_OnShow(self)\n	MacroFrame_Update();\n	PlaySound(\"igCharacterInfoOpen\");\n	UpdateMicroButtons();\nend\n\nfunction MacroFrame_OnHide(self)\n	MacroPopupFrame:Hide();\n	MacroFrame_SaveMacro();\n	--SaveMacros();\n	PlaySound(\"igCharacterInfoClose\");\n	UpdateMicroButtons();\nend\n\nfunction MacroFrame_SetAccountMacros()\n	MacroFrame.macroBase = 0;\n	MacroFrame.macroMax = MAX_ACCOUNT_MACROS;\n	local numAccountMacros, numCharacterMacros = GetNumMacros();\n	if ( numAccountMacros > 0 ) then\n		MacroFrame_SelectMacro(MacroFrame.macroBase + 1);\n	else\n		MacroFrame_SelectMacro(nil);\n	end\nend\n\nfunction MacroFrame_SetCharacterMacros()\n	MacroFrame.macroBase = MAX_ACCOUNT_MACROS;\n	MacroFrame.macroMax = MAX_CHARACTER_MACROS;\n	local numAccountMacros, numCharacterMacros = GetNumMacros();\n	if ( numCharacterMacros > 0 ) then\n		MacroFrame_SelectMacro(MacroFrame.macroBase + 1);\n	else\n		MacroFrame_SelectMacro(nil);\n	end\nend\n\nfunction MacroFrame_Update()\n	local numMacros;\n	local numAccountMacros, numCharacterMacros = GetNumMacros();\n	local macroButtonName, macroButton, macroIcon, macroName;\n	local name, texture, body;\n	local selectedName, selectedBody, selectedIcon;\n\n	if ( MacroFrame.macroBase == 0 ) then\n		numMacros = numAccountMacros;\n	else\n		numMacros = numCharacterMacros;\n	end\n\n	-- Macro List\n	local maxMacroButtons = max(MAX_ACCOUNT_MACROS, MAX_CHARACTER_MACROS);\n	for i=1, maxMacroButtons do\n		macroButtonName = \"MacroButton\"..i;\n		macroButton = _G[macroButtonName];\n		macroIcon = _G[macroButtonName..\"Icon\"];\n		macroName = _G[macroButtonName..\"Name\"];\n		if ( i <= MacroFrame.macroMax ) then\n			if ( i <= numMacros ) then\n				name, texture, body = GetMacroInfo(MacroFrame.macroBase + i);\n				macroIcon:SetTexture(texture);\n				macroName:SetText(name);\n				macroButton:Enable();\n				-- Highlight Selected Macro\n				if ( MacroFrame.selectedMacro and (i == (MacroFrame.selectedMacro - MacroFrame.macroBase)) ) then\n					macroButton:SetChecked(1);\n					MacroFrameSelectedMacroName:SetText(name);\n					MacroFrameText:SetText(body);\n					MacroFrameSelectedMacroButton:SetID(i);\n					MacroFrameSelectedMacroButtonIcon:SetTexture(texture);\n					MacroPopupFrame.selectedIconTexture = texture;\n				else\n					macroButton:SetChecked(0);\n				end\n			else\n				macroButton:SetChecked(0);\n				macroIcon:SetTexture(\"\");\n				macroName:SetText(\"\");\n				macroButton:Disable();\n			end\n			macroButton:Show();\n		else\n			macroButton:Hide();\n		end\n	end\n\n	-- Macro Details\n	if ( MacroFrame.selectedMacro ~= nil ) then\n		MacroFrame_ShowDetails();\n		MacroDeleteButton:Enable();\n	else\n		MacroFrame_HideDetails();\n		MacroDeleteButton:Disable();\n	end\n	\n	--Update New Button\n	if ( numMacros < MacroFrame.macroMax ) then\n		MacroNewButton:Enable();\n	else\n		MacroNewButton:Disable();\n	end\n\n	-- Disable Buttons\n	if ( MacroPopupFrame:IsShown() ) then\n		MacroEditButton:Disable();\n		MacroDeleteButton:Disable();\n	else\n		MacroEditButton:Enable();\n		MacroDeleteButton:Enable();\n	end\n\n	if ( not MacroFrame.selectedMacro ) then\n		MacroDeleteButton:Disable();\n	end\nend\n\nfunction MacroFrame_AddMacroLine(line)\n	if ( MacroFrameText:IsVisible() ) then\n		MacroFrameText:SetText(MacroFrameText:GetText()..line);\n	end\nend\n\nfunction MacroButton_OnClick(self, button)\n	MacroFrame_SaveMacro();\n	MacroFrame_SelectMacro(MacroFrame.macroBase + self:GetID());\n	MacroFrame_Update();\n	MacroPopupFrame:Hide();\n	MacroFrameText:ClearFocus();\nend\n\nfunction MacroFrame_SelectMacro(id)\n	MacroFrame.selectedMacro = id;\nend\n\nfunction MacroFrame_DeleteMacro()\n	local selectedMacro = MacroFrame.selectedMacro;\n	DeleteMacro(selectedMacro);\n	-- the order of the return values (account macros, character macros) matches up with the IDs of the tabs\n	local numMacros = select(PanelTemplates_GetSelectedTab(MacroFrame), GetNumMacros());\n	if ( selectedMacro > numMacros + MacroFrame.macroBase) then\n		selectedMacro = selectedMacro - 1;\n	end\n	if ( selectedMacro <= MacroFrame.macroBase ) then\n		MacroFrame.selectedMacro = nil;\n	else\n		MacroFrame.selectedMacro = selectedMacro;\n	end\n	MacroFrame_Update();\n	MacroFrameText:ClearFocus();\nend\n\nfunction MacroNewButton_OnClick(self, button)\n	MacroFrame_SaveMacro();\n	MacroPopupFrame.mode = \"new\";\n	MacroPopupFrame:Show();\nend\n\nfunction MacroEditButton_OnClick(self, button)\n	MacroFrame_SaveMacro();\n	MacroPopupFrame.mode = \"edit\";\n	MacroPopupFrame:Show();\nend\n\nfunction MacroFrame_HideDetails()\n	MacroEditButton:Hide();\n	MacroFrameCharLimitText:Hide();\n	MacroFrameText:Hide();\n	MacroFrameSelectedMacroName:Hide();\n	MacroFrameSelectedMacroBackground:Hide();\n	MacroFrameSelectedMacroButton:Hide();\nend\n\nfunction MacroFrame_ShowDetails()\n	MacroEditButton:Show();\n	MacroFrameCharLimitText:Show();\n	MacroFrameEnterMacroText:Show();\n	MacroFrameText:Show();\n	MacroFrameSelectedMacroName:Show();\n	MacroFrameSelectedMacroBackground:Show();\n	MacroFrameSelectedMacroButton:Show();\nend\n\nfunction MacroButtonContainer_OnLoad(self)\n	local button;\n	local maxMacroButtons = max(MAX_ACCOUNT_MACROS, MAX_CHARACTER_MACROS);\n	for i=1, maxMacroButtons do\n		button = CreateFrame(\"CheckButton\", \"MacroButton\"..i, self, \"MacroButtonTemplate\");\n		button:SetID(i);\n		if ( i == 1 ) then\n			button:SetPoint(\"TOPLEFT\", self, \"TOPLEFT\", 6, -6);\n		elseif ( mod(i, NUM_MACROS_PER_ROW) == 1 ) then\n			button:SetPoint(\"TOP\", \"MacroButton\"..(i-NUM_MACROS_PER_ROW), \"BOTTOM\", 0, -10);\n		else\n			button:SetPoint(\"LEFT\", \"MacroButton\"..(i-1), \"RIGHT\", 13, 0);\n		end\n	end\nend\n\nfunction MacroPopupFrame_OnShow(self)\n	MacroPopupEditBox:SetFocus();\n\n	PlaySound(\"igCharacterInfoOpen\");\n	MacroPopupFrame_Update(self);\n	MacroPopupOkayButton_Update();\n\n	if ( self.mode == \"new\" ) then\n		MacroFrameText:Hide();\n		MacroPopupButton_SelectTexture(1);\n	end\n	\n	-- Disable Buttons\n	MacroEditButton:Disable();\n	MacroDeleteButton:Disable();\n	MacroNewButton:Disable();\n	MacroFrameTab1:Disable();\n	MacroFrameTab2:Disable();\nend\n\nfunction MacroPopupFrame_OnHide(self)\n	if ( self.mode == \"new\" ) then\n		MacroFrameText:Show();\n		MacroFrameText:SetFocus();\n	end\n	\n	-- Enable Buttons\n	MacroEditButton:Enable();\n	MacroDeleteButton:Enable();\n	local numMacros;\n	local numAccountMacros, numCharacterMacros = GetNumMacros();\n	if ( MacroFrame.macroBase == 0 ) then\n		numMacros = numAccountMacros;\n	else\n		numMacros = numCharacterMacros;\n	end\n	if ( numMacros < MacroFrame.macroMax ) then\n		MacroNewButton:Enable();\n	end\n	-- Enable tabs\n	PanelTemplates_UpdateTabs(MacroFrame);\nend\n\nfunction MacroPopupFrame_Update(self)\n	self = self or MacroPopupFrame;\n	local numMacroIcons = GetNumMacroIcons();\n	local macroPopupIcon, macroPopupButton;\n	local macroPopupOffset = FauxScrollFrame_GetOffset(MacroPopupScrollFrame);\n	local index;\n	\n	-- Determine whether we're creating a new macro or editing an existing one\n	if ( self.mode == \"new\" ) then\n		MacroPopupEditBox:SetText(\"\");\n	elseif ( self.mode == \"edit\" ) then\n		local name, texture, body = GetMacroInfo(MacroFrame.selectedMacro);\n		MacroPopupEditBox:SetText(name);\n	end\n	\n	-- Icon list\n	local texture;\n	for i=1, NUM_MACRO_ICONS_SHOWN do\n		macroPopupIcon = _G[\"MacroPopupButton\"..i..\"Icon\"];\n		macroPopupButton = _G[\"MacroPopupButton\"..i];\n		index = (macroPopupOffset * NUM_ICONS_PER_ROW) + i;\n		texture = GetMacroIconInfo(index);\n		if ( index <= numMacroIcons ) then\n			macroPopupIcon:SetTexture(texture);\n			macroPopupButton:Show();\n		else\n			macroPopupIcon:SetTexture(\"\");\n			macroPopupButton:Hide();\n		end\n		if ( MacroPopupFrame.selectedIcon and (index == MacroPopupFrame.selectedIcon) ) then\n			macroPopupButton:SetChecked(1);\n		elseif ( MacroPopupFrame.selectedIconTexture ==  texture ) then\n			macroPopupButton:SetChecked(1);\n		else\n			macroPopupButton:SetChecked(nil);\n		end\n	end\n	\n	-- Scrollbar stuff\n	FauxScrollFrame_Update(MacroPopupScrollFrame, ceil(numMacroIcons / NUM_ICONS_PER_ROW) , NUM_ICON_ROWS, MACRO_ICON_ROW_HEIGHT );\nend\n\nfunction MacroPopupFrame_CancelEdit()\n	MacroPopupFrame:Hide();\n	MacroFrame_Update();\n	MacroPopupFrame.selectedIcon = nil;\nend\n\nfunction MacroPopupOkayButton_Update()\n	if ( (strlen(MacroPopupEditBox:GetText()) > 0) and MacroPopupFrame.selectedIcon ) then\n		MacroPopupOkayButton:Enable();\n	else\n		MacroPopupOkayButton:Disable();\n	end\n	if ( MacroPopupFrame.mode == \"edit\" and (strlen(MacroPopupEditBox:GetText()) > 0) ) then\n		MacroPopupOkayButton:Enable();\n	end\nend\n\nfunction MacroPopupButton_SelectTexture(selectedIcon)\n	MacroPopupFrame.selectedIcon = selectedIcon;\n	-- Clear out selected texture\n	MacroPopupFrame.selectedIconTexture = nil;\n	MacroFrameSelectedMacroButtonIcon:SetTexture(GetMacroIconInfo(MacroPopupFrame.selectedIcon));\n	MacroPopupOkayButton_Update();\n	local mode = MacroPopupFrame.mode;\n	MacroPopupFrame.mode = nil;\n	MacroPopupFrame_Update(MacroPopupFrame);\n	MacroPopupFrame.mode = mode;\nend\n\nfunction MacroPopupButton_OnClick(self, button)\n	MacroPopupButton_SelectTexture(self:GetID() + (FauxScrollFrame_GetOffset(MacroPopupScrollFrame) * NUM_ICONS_PER_ROW));\nend\n\nfunction MacroPopupOkayButton_OnClick(self, button)\n	local index = 1\n	if ( MacroPopupFrame.mode == \"new\" ) then\n		index = CreateMacro(MacroPopupEditBox:GetText(), MacroPopupFrame.selectedIcon, nil, (MacroFrame.macroBase > 0));\n	elseif ( MacroPopupFrame.mode == \"edit\" ) then\n		index = EditMacro(MacroFrame.selectedMacro, MacroPopupEditBox:GetText(), MacroPopupFrame.selectedIcon);\n	end\n	MacroPopupFrame:Hide();\n	MacroFrame_SelectMacro(index);\n	MacroFrame_Update();\nend\n\nfunction MacroFrame_SaveMacro()\n	if ( MacroFrame.textChanged and MacroFrame.selectedMacro ) then\n		EditMacro(MacroFrame.selectedMacro, nil, nil, MacroFrameText:GetText());\n		MacroFrame.textChanged = nil;\n	end\nend\n",
+			"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/AddOns/Blizzard_MacroUI/Blizzard_MacroUI.lua",
+			"file_size": 10402,
+			"file_write_time": 130737067355990689,
+			"settings":
+			{
+				"buffer_size": 10049,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/AddOns/Blizzard_MacroUI/Blizzard_MacroUI.xml",
+			"settings":
+			{
+				"buffer_size": 25780,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsFrame.lua",
+			"settings":
+			{
+				"buffer_size": 24473,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsPanels.lua",
+			"settings":
+			{
+				"buffer_size": 70182,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsPanels.xml",
+			"settings":
+			{
+				"buffer_size": 139909,
+				"line_ending": "Windows"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 392.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"snip",
+				"Snippet: Sub Paragraph"
+			],
+			[
+				"lore",
+				"Snippet: Lorem ipsum"
+			],
+			[
+				"s",
+				"Set Syntax: LaTeX"
+			]
+		],
+		"width": 392.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/menu/grouptab.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/SimpleMacro.lua",
+		"/C/Users/Yemane/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/menu/grouptab.xml",
+		"/C/Users/Yemane/AppData/Local/Temp/Temp1_roids-04-16-swift1.2.zip/roids-04-16-swift1.2/roids2/GameScene.swift",
+		"/C/Users/Yemane/AppData/Local/Temp/Temp1_roids-04-16-swift1.2.zip/roids-04-16-swift1.2/roids2/Player.swift",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsFrame.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/menu/menu.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/SimpleMacro.toc",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/localization/localization.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/SimpleMacro.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/menu/createtab.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/menu/createtab.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/libs/macroparser/macroparser.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/Menu.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/Menu.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/menu/createtab",
+		"/D/My Documents/Mac OS X VM/Yosemite 10.10 Retail VMware Image/Mac OS X 10.9.vmx",
+		"/D/My Documents/Mac OS X VM/Yosemite 10.10 Retail VMware Image/Mac OS X 10.9.vmxf",
+		"/C/Users/Yemane/AppData/Local/Temp/Temp1_roids-04-16-swift1.2.zip/roids-04-16-swift1.2/roids2/GameViewController.swift",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/localization/enUS.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/constants.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsPanels.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsPanels.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/TellMeWhen/Options/TellMeWhen_Options.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/AddOns/Blizzard_MacroUI/Blizzard_MacroUI.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/parser/macroparser.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/TellMeWhen/TellMeWhen.toc",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/macroparser.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/enUS.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/simplemacro.sublime-workspace",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/AddOns/Blizzard_MacroUI/Blizzard_MacroUI.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SimpleMacro/localization.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SimpleMacro/enUS.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SimpleMacro/localization/enUS.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/main.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/effects/flare.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/settings/groups.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/settings/settings.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/settings/settings.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/Prat-3.0/Prat-3.0.toc",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/libs/libs.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/libs/Classy-1.0/Classy-1.0.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SimpleMacro/SimpleMacro.toc",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar_Options/OmniBar_Options.toc",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar_Options/OmniBar_Options.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar_Options/OmniBar_Options.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar_Options/localization.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SuccessfulInterruptAnnouncer/SuccessfulInterruptAnnouncer.toc",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/TellMeWhen/Localization/TellMeWhen-enUS.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/GladiatorlosSA/Locales/enUS.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/Skada/locale/enUS.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/locales/enUS.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/locales/locales.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/localization/localization.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/OmniCC.toc",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/localization/en.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/localization/enUS",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/localization/cn.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/MacroToolkit.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/modules/bindingframe.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/modules/modules.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/MacroToolkit.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/locales/esES.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/MacroToolkit/locales/esMX.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar/OmniBar.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar/OmniBar.toc",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniBar/OmniBar.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/localization/fr.lua",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptions",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsFrame.lua",
+		"/C/Users/Yemane/AppData/Roaming/Sublime Text 3/Packages/Default/Default (Windows).sublime-keymap",
+		"/C/Users/Yemane/AppData/Local/Temp/Temp2_Prog 3.zip/Prog 3/rcopy.c",
+		"/C/Users/Yemane/AppData/Local/Temp/Temp1_Prog 3.zip/Prog 3/server.c",
+		"/C/Users/Yemane/AppData/Local/Temp/Temp2_Prog 3.zip/Prog 3/server.c",
+		"/C/Users/Yemane/Dropbox/wow/tMorph/tMorph.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/DiminishingReturns/Display.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/DiminishingReturns/DiminishingReturns.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/DiminishingReturns/Config.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/DiminishingReturns/Tracker.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/DiminishingReturns/FrameSetup.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/TellMeWhen/Localization/TellMeWhen-esES.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/TellMeWhen/Localization/StaticFormats.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/Prat-3.0/Bindings.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/core/core.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/SimpleMacro/Menu",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/core/actions.lua",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/OmniCC/effects/effects.xml",
+		"/C/Users/Yemane/Dropbox/coding/wow addon/wowaddon.sublime-workspace",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SimpleMacro/SimpleMacro.xml",
+		"/C/Program Files (x86)/World of Warcraft/Interface/AddOns/SimpleMacro/SimpleMacro.lua",
+		"/C/Users/Yemane/AppData/Roaming/Sublime Text 3/Packages/User/Plain text.sublime-settings",
+		"/C/Users/Yemane/AppData/Roaming/Sublime Text 3/Packages/User/Default (Windows).sublime-keymap",
+		"/C/Users/Yemane/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 34.0
+	},
+	"find_in_files":
+	{
+		"height": 90.0,
+		"where_history":
+		[
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"frame.i",
+			"L[\"LINE",
+			"L",
+			"GetStringWidth",
+			"184",
+			"DropDown",
+			"CreateTab_SelectMacro",
+			"Text",
+			"CreateTab_SelectMacro",
+			"SimpleMacroMenu.selectedLine",
+			"CreateTab_Update",
+			"Drop",
+			"inp",
+			"CreateTab_SelectMacro",
+			"SM_PopulateLineList",
+			"cboxNum = 1",
+			"_, cond",
+			"pairs(L.",
+			"pairs(L",
+			"conds",
+			"getConditionals",
+			"addConditional",
+			"Conditionals",
+			"Focus",
+			"GetId",
+			"= true",
+			"SM_CheckButton",
+			"SM_Cond",
+			"condEntryNum",
+			"INPUT_HINT",
+			"ALTERNATE",
+			"}",
+			"target",
+			"INPUT =",
+			"true",
+			"INPUT = true",
+			"true",
+			"ALTERNATE",
+			"DEFAULT =",
+			"L[\"",
+			"L",
+			"L[\"CONDITIONAL_LIST\"]",
+			"L[\"CONDITIONAL_LIST\"",
+			"change",
+			"CreateTab_SelectMacro",
+			"createParse",
+			"SM_PopulateLineList",
+			"Save",
+			"SM_UserButtons_Update()",
+			"SM_UserButton_Update()",
+			"SM_GroupButtons_Update",
+			"SM_UserButtons_Update",
+			"SMUserButtons",
+			"SMGroupButtons",
+			"SimpleMacroMenuGroupTab",
+			"SimpleMacroMenu",
+			"Alternate",
+			"Alternates",
+			"DropDown",
+			"UIDropDownMenu_SetSelectedValue",
+			"tooltip",
+			"SimpleMacroMenu.createParse",
+			"line_count + 1",
+			"arg_count + 1",
+			"getLine",
+			"CondButton",
+			"Disable",
+			"_CMD",
+			"SimpleMacroMenuCreateTabLineTypeDropDown",
+			"Enable()",
+			"DropDown",
+			"CreateTab_Update",
+			"HideUIPanel(SM_CondMenu)",
+			"CreateTab_Update",
+			"SM_CondMenu",
+			"SMSaveMacro",
+			"cc",
+			"CondEntry",
+			"SM_SetCondButton",
+			"conds =",
+			"\"CONDITIONAL_LIST\"][",
+			"AL_LIST\"][",
+			"T\"][",
+			"][",
+			"CONDITIONAL_LIST",
+			"List",
+			"disable",
+			"SetText",
+			"SimpleMacroCheck",
+			"[\"DEFAULT\"]",
+			"L[\"CONDITIONAL_LIST\"]",
+			"DEFAULT",
+			"SHORT",
+			"--",
+			"SHORT",
+			"LONG",
+			"\\",
+			"SM_Back",
+			"getLine",
+			"line",
+			"Line",
+			"line",
+			"Line",
+			"line",
+			"arg",
+			"Arg",
+			"arg",
+			"line",
+			"Line",
+			"line",
+			"Line",
+			"line",
+			"ArgEntry",
+			"SM_PopulateLineList",
+			"LineList_OnLoad",
+			"arg_entry",
+			"ac",
+			"selectedArg",
+			"Command",
+			"selected",
+			"LineEntry",
+			"line_entry",
+			"LineEntry",
+			"lc",
+			"createParse",
+			"LineList",
+			"sched",
+			"PlaySound"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"condlist",
+			"SimpleMacroMenuCreateTabPageTextScrollFrameMacroText"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 2,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "menu/menu.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 22077,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20797,
+								20797
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9288.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 3,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "menu/menu.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 31609,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								28939,
+								28939
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 9837.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 2,
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "SimpleMacro.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 5208,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5151,
+								5151
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "SimpleMacro.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9015,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								7151,
+								7154
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2537.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "localization/enUS.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 9976,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1144,
+								1144
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 4,
+					"type": "text"
+				}
+			]
+		},
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 5,
+					"file": "libs/macroparser/macroparser.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10524,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5330,
+								5330
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"tab_size": 3,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 3723.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 5,
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/AddOns/Blizzard_MacroUI/Blizzard_MacroUI.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 10049,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3439,
+								3440
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1848.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 6,
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/AddOns/Blizzard_MacroUI/Blizzard_MacroUI.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 25780,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								11536,
+								11536
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 5655.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 7,
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsFrame.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 24473,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2039,
+								2039
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1031.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 8,
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsPanels.lua",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 70182,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								16288,
+								16299
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Lua/Lua.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 7369.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 9,
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "/C/Users/Yemane/Dropbox/coding/wow addon/WoW_Interface_enUS/FrameXML/InterfaceOptionsPanels.xml",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 139909,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1461,
+								1461
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/XML/XML.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 66555.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 10,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 0.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			0.622926536916,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+		"last_automatic_layout":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			],
+			[
+				1,
+				0,
+				2,
+				1
+			]
+		]
+	},
+	"show_minimap": true,
+	"show_open_files": true,
+	"show_tabs": true,
+	"side_bar_visible": false,
+	"side_bar_width": 150.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

@@ -1,0 +1,755 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+   <Script file="menu.lua"/>
+
+   <!-- TEMPLATES -->
+   <CheckButton name="SimpleMacroButtonTemplate" inherits="PopupButtonTemplate" virtual="true">
+      <Scripts>
+         <OnLoad>
+            self:RegisterForDrag("LeftButton")
+         </OnLoad>
+         <OnClick>
+            SimpleMacroButton_OnClick(self, button, down)
+         </OnClick>
+         <OnDragStart>
+            SimplePickupMacro(self)
+         </OnDragStart>
+      </Scripts>
+   </CheckButton>
+   <CheckButton name="SimpleMacroBaseCheckButtonTemplate" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            if self:GetChecked() then
+               PlaySound("igMainMenuOptionCheckBoxOn")
+            else
+               PlaySound("igMainMenuOptionCheckBoxOff")
+            end
+            SM_CheckButton_OnClick(self)
+         </OnClick>
+      </Scripts>
+   </CheckButton>
+   <CheckButton name="SimpleMacroCheckButtonTemplate" inherits="SimpleMacroBaseCheckButtonTemplate" virtual="true">
+      <Layers>
+         <Layer level="ARTWORK">
+            <FontString name="$parentText" inherits="GameFontHighlight">
+               <Anchors>
+                  <Anchor point="LEFT" relativePoint="RIGHT">
+                     <Offset>
+                        <AbsDimension x="0" y="1"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+         </Layer>
+      </Layers>
+   </CheckButton>
+   <CheckButton name="SimpleMacroSmallCheckButtonTemplate" inherits="SimpleMacroBaseCheckButtonTemplate" virtual="true">
+      <Layers>
+         <Layer level="ARTWORK">
+            <FontString name="$parentText" inherits="GameFontHighlightSmall">
+               <Anchors>
+                  <Anchor point="LEFT" relativePoint="RIGHT">
+                     <Offset>
+                        <AbsDimension x="0" y="4"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+         </Layer>
+      </Layers>
+   </CheckButton>
+   <CheckButton name="SM_ListEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
+      <Size x="244" y="16"/>
+      <Layers>
+         <Layer level="CONTENT">
+            <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="number">
+               <Anchors>
+                  <Anchor point="LEFT">
+                     <Offset>
+                        <AbsDimension x="16" y="0"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+            <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="command">
+               <Anchors>
+                  <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT">
+                     <Offset>
+                        <AbsDimension x="24" y="0"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+         </Layer>
+      </Layers>
+   </CheckButton>
+   <CheckButton name="LineEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            LineListEntry_OnClick(self, button, down)
+         </OnClick>
+      </Scripts>
+   </CheckButton>
+   <CheckButton name="ArgEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            ArgListEntry_OnClick(self, button, down)
+         </OnClick>
+      </Scripts>
+   </CheckButton>
+   <CheckButton name="CondEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            <!-- CondListEntry_OnClick(self, button, down) -->
+         </OnClick>
+      </Scripts>
+   </CheckButton>
+   <Frame name="SM_BackgroundTemplate" virtual="true">
+      <Size>
+         <AbsDimension x="324" y="156"/>
+      </Size>
+      <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+         <EdgeSize>
+            <AbsValue val="16"/>
+         </EdgeSize>
+         <TileSize>
+            <AbsValue val="16"/>
+         </TileSize>
+         <BackgroundInsets>
+            <AbsInset left="5" right="5" top="5" bottom="5"/>
+         </BackgroundInsets>
+      </Backdrop>
+      <Scripts>
+         <OnLoad>
+            self:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b, 0)
+            self:SetBackdropColor(0, 0, 0, .65)
+         </OnLoad>
+      </Scripts>
+   </Frame>
+
+   <!-- INTERFACE OPTIONS MENU -->
+   <Frame name="SimpleMacroMenu" toplevel="true" enableMouse="true" hidden="false">
+      <Frames>
+         <!-- CREATE TAB -->
+         <Frame name="$parentCreateTab" hidden="false">
+            <Anchors>
+               <Anchor point="TOPLEFT"/>
+               <Anchor point="BOTTOMRIGHT"/>
+            </Anchors>
+            <Frames>
+               <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
+                  <Anchors>
+                     <Anchor point="TOPLEFT">
+                        <Offset x="16" y="-60"/>
+                     </Anchor>
+                  </Anchors>
+                  <Layers>
+                     <Layer>
+                        <FontString name="$parentText" inherits="GameFontNormalLarge">
+                           <Anchors>
+                              <Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
+                                 <Offset>
+                                    <AbsDimension x="8" y="0"/>
+                                 </Offset>
+                              </Anchor>
+                           </Anchors>
+                        </FontString>
+                     </Layer>
+                  </Layers>
+                  <Scripts>
+                     <OnClick function="SimplePickupMacro"/>
+                  </Scripts>
+               </Button>
+               <ScrollFrame name="$parentLineFrame" inherits="UIPanelScrollFrameTemplate">
+                  <Size x="244" y="76"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentSelected" relativePoint="BOTTOMLEFT">
+                        <Offset x="-4" y="-108"/>
+                     </Anchor>
+                  </Anchors>
+                  <ScrollChild>
+                     <Frame name="SimpleMacroMenuCreateTabLineList">
+                        <Size x="10" y="1"/>
+                        <Anchors>
+                           <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                     </Frame>
+                  </ScrollChild>
+                  <Scripts>
+                     <OnLoad function="ScrollFrame_OnLoad"/>
+                  </Scripts>
+                  <Layers>
+                     <Layer>
+                        <FontString name="LinesTitle" inherits="GameFontNormal" text="Lines">
+                           <Size>
+                              <AbsDimension x="0" y="-4"/>
+                           </Size>
+                           <Anchors>
+                              <Anchor point="TOPLEFT">
+                                 <Offset>
+                                    <AbsDimension x="0" y="12"/>
+                                 </Offset>
+                              </Anchor>
+                           </Anchors>
+                        </FontString>
+                     </Layer>
+                  </Layers>
+               </ScrollFrame>
+               <Frame name="$parentLineFrameBackground" inherits="SM_BackgroundTemplate">
+                  <Size x="278" y="88"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentLineFrame" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="-5" y="5"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+               </Frame>
+               <Button name="SM_AddLineButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Add">
+                  <Size>
+                     <AbsDimension x="130" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentLineFrame" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                           <AbsDimension x="0" y="-4"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SM_AddLineButton_OnClick(self)
+                        PlaySound("gsTitleOptionOK")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <Button name="SM_DeleteLineButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Delete">
+                  <Size>
+                     <AbsDimension x="130" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="LEFT" relativeTo="SM_AddLineButton" relativePoint="RIGHT">
+                        <Offset>
+                           <AbsDimension x="6" y="0"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SM_DeleteLineButton_OnClick(self)
+                        PlaySound("gsTitleOptionOK")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <ScrollFrame name="$parentArgFrame" inherits="UIPanelScrollFrameTemplate">
+                  <Size x="244" y="52"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentLineFrame" relativePoint="BOTTOMLEFT">
+                        <Offset x="0" y="-52"/>
+                     </Anchor>
+                  </Anchors>
+                  <ScrollChild> 
+                     <Frame name="SimpleMacroMenuCreateTabArgList">
+                        <Size x="10" y="1"/>
+                        <Anchors>
+                           <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                     </Frame>
+                  </ScrollChild>
+                  <Scripts>
+                     <OnLoad function="ScrollFrame_OnLoad"/>
+                  </Scripts>
+                  <Layers>
+                     <Layer>
+                        <FontString name="ArgsTitle" inherits="GameFontNormal" text="Arguments">
+                           <Size>
+                              <AbsDimension x="0" y="-4"/>
+                           </Size>
+                           <Anchors>
+                              <Anchor point="TOPLEFT">
+                                 <Offset>
+                                    <AbsDimension x="0" y="12"/>
+                                 </Offset>
+                              </Anchor>
+                           </Anchors>
+                        </FontString>
+                     </Layer>
+                  </Layers>
+               </ScrollFrame>
+               <Frame name="$parentArgFrameBackground" inherits="SM_BackgroundTemplate">
+                  <Size x="278" y="64"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentArgFrame" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="-5" y="5"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+               </Frame>
+               <Button name="SM_AddArgButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Add">
+                  <Size>
+                     <AbsDimension x="130" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentArgFrame" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                           <AbsDimension x="0" y="-4"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SM_AddArgButton_OnClick(self)
+                        PlaySound("gsTitleOptionOK")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <Button name="SM_DeleteArgButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Delete">
+                  <Size>
+                     <AbsDimension x="130" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="LEFT" relativeTo="SM_AddArgButton" relativePoint="RIGHT">
+                        <Offset>
+                           <AbsDimension x="6" y="0"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SM_DeleteArgButton_OnClick(self)
+                        PlaySound("gsTitleOptionOK")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <ScrollFrame name="$parentCondFrame" inherits="UIPanelScrollFrameTemplate">
+                  <Size x="244" y="88"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentArgFrame" relativePoint="BOTTOMLEFT">
+                        <Offset x="0" y="-52"/>
+                     </Anchor>
+                  </Anchors>
+                  <ScrollChild> 
+                     <Frame name="SimpleMacroMenuCreateTabCondList">
+                        <Size x="10" y="1"/>
+                        <Anchors>
+                           <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                     </Frame>
+                  </ScrollChild>
+                  <Scripts>
+                     <OnLoad function="ScrollFrame_OnLoad"/>
+                  </Scripts>
+                  <Layers>
+                     <Layer>
+                        <FontString name="CondsTitle" inherits="GameFontNormal" text="Conditionals">
+                           <Size>
+                              <AbsDimension x="0" y="-4"/>
+                           </Size>
+                           <Anchors>
+                              <Anchor point="TOPLEFT">
+                                 <Offset>
+                                    <AbsDimension x="0" y="12"/>
+                                 </Offset>
+                              </Anchor>
+                           </Anchors>
+                        </FontString>
+                     </Layer>
+                  </Layers>
+               </ScrollFrame>
+               <Frame name="$parentCondFrameBackground" inherits="SM_BackgroundTemplate">
+                  <Size x="278" y="100"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentCondFrame" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="-5" y="5"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+               </Frame>
+               <Button name="SM_SetCondButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Set Conditionals">
+                  <Size>
+                     <AbsDimension x="266" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentCondFrame" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                           <AbsDimension x="0" y="-4"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        ShowUIPanel(SM_CondMenu)
+                        self:Disable()
+                        PlaySound("gsTitleOptionOK")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <ScrollFrame name="$parentMacroScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                  <Size x="292" y="146"/>
+                  <Anchors>
+                     <Anchor point="TOPRIGHT">
+                        <Offset x="-40" y="-56"/>
+                     </Anchor>
+                  </Anchors>
+                  <ScrollChild>
+                     <Frame name="SMCreateButtons">
+                        <Size x="200" y="10"/>
+                        <Anchors>
+                           <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                        <Scripts>
+                           <OnLoad function="SMCreateButtons_OnLoad"/>
+                        </Scripts>
+                     </Frame>
+                  </ScrollChild>
+                  <Scripts>
+                     <OnLoad function="ScrollFrame_OnLoad"/>
+                  </Scripts>
+               </ScrollFrame>
+               <Frame name="$parentMacroScrollBackground" inherits="SM_BackgroundTemplate">
+                  <Size>
+                     <AbsDimension x="328" y="156"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="-7" y="5"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+               </Frame>
+               <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account">
+                  <Anchors>
+                     <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="2" y="-2"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SM_CreateTabAccountMacroTab_OnClick(self)
+                        PlaySound("igCharacterInfoTab")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character">
+                  <Anchors>
+                     <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT">
+                        <Offset>
+                           <AbsDimension x="-16" y="0"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SM_CreateTabCharacterMacroTab_OnClick(self)
+                        PlaySound("igCharacterInfoTab")
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <Frame name="$parentLineTypeDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                           <AbsDimension x="0" y="-44"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Layers>
+                     <Layer level="BACKGROUND">
+                        <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
+                           <Anchors>
+                              <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                                 <Offset>
+                                    <AbsDimension x="16" y="3"/>
+                                 </Offset>
+                              </Anchor>
+                           </Anchors>
+                        </FontString>
+                     </Layer>
+                  </Layers>
+                  <Scripts>
+                     <OnLoad>
+                        self:RegisterEvent("PLAYER_ENTERING_WORLD")
+                     </OnLoad>
+                     <OnEnter>
+                        if not self.isDisabled then
+                           GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+                           GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+                        end
+                     </OnEnter>
+                     <OnEvent function="SimpleMacroMenuCreateTabLineTypeDropDown_OnEvent"/>
+                     <OnLeave function="GameTooltip_Hide"/>
+                  </Scripts>
+               </Frame>
+               <ScrollFrame name="$parentTextScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                  <Size>
+                     <AbsDimension x="286" y="85"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
+                        <Offset>
+                           <AbsDimension x="-42" y="56"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <ScrollChild>
+                     <EditBox name="$parentMacroText" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
+                        <Size>
+                           <AbsDimension x="286" y="85"/>
+                        </Size>
+                        <Scripts>
+                           <OnTextChanged>
+                              SimpleMacroMenuCreateTab.textChanged = 1;
+                              SMCharLimitText:SetFormattedText(MACROFRAME_CHAR_LIMIT, SimpleMacroMenuCreateTabTextScrollFrameMacroText:GetNumLetters());
+                              self.cursorOffset = self.cursorOffset or 0;
+                              self.cursorHeight = self.cursorHeight or 0;
+                              ScrollingEdit_OnTextChanged(self, self:GetParent());
+                           </OnTextChanged>
+                           <OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+                           <OnUpdate>
+                              self.cursorOffset = self.cursorOffset or 0;
+                              self.cursorHeight = self.cursorHeight or 0;
+                              ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+                           </OnUpdate>
+                           <OnEscapePressed function="EditBox_ClearFocus"/>
+                        </Scripts>
+                        <FontString inherits="GameFontHighlightSmall"/>
+                     </EditBox>
+                  </ScrollChild>
+               </ScrollFrame>
+               <Button name="$parentMacroTextFocus">
+                  <Size>
+                     <AbsDimension x="286" y="85"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="SimpleMacroMenuCreateTabTextScrollFrameMacroText"/>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick>
+                        SimpleMacroMenuCreateTabTextScrollFrameMacroText:SetFocus();
+                     </OnClick>
+                  </Scripts>
+               </Button>
+               <Frame name="$parentMacroTextBackground">
+                  <Size>
+                     <AbsDimension x="322" y="95"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentTextScrollFrameMacroText" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="-7" y="5"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Layers>
+                     <Layer level="ARTWORK">
+                        <FontString name="SMCharLimitText" inherits="GameFontHighlightSmall">
+                           <Size>
+                              <AbsDimension x="0" y="10"/>
+                           </Size>
+                           <Anchors>
+                              <Anchor point="BOTTOM" >
+                                 <Offset>
+                                    <AbsDimension x="0" y="-10"/>
+                                 </Offset>
+                              </Anchor>
+                           </Anchors>
+                        </FontString>
+                     </Layer>
+                  </Layers>
+                  <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+                     <EdgeSize>
+                        <AbsValue val="16"/>
+                     </EdgeSize>
+                     <TileSize>
+                        <AbsValue val="16"/>
+                     </TileSize>
+                     <BackgroundInsets>
+                        <AbsInset left="5" right="5" top="5" bottom="5"/>
+                     </BackgroundInsets>
+                  </Backdrop>
+                  <Scripts>
+                     <OnLoad>
+                        self:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b);
+                        self:SetBackdropColor(TOOLTIP_DEFAULT_BACKGROUND_COLOR.r, TOOLTIP_DEFAULT_BACKGROUND_COLOR.g, TOOLTIP_DEFAULT_BACKGROUND_COLOR.b);
+                     </OnLoad>
+                  </Scripts>
+               </Frame>
+               <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Save">
+                  <Size>
+                     <AbsDimension x="320" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentTextScrollFrame" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                           <AbsDimension x="-6" y="-16"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick function="SimpleMacroMenuSaveButton_OnClick"/>
+                  </Scripts>
+               </Button>
+            </Frames>
+            <Scripts>
+               <OnLoad>
+                  UIDropDownMenu_SetSelectedValue(SimpleMacroMenuCreateTabLineTypeDropDown, "none")
+                  UIDropDownMenu_EnableDropDown(SimpleMacroMenuCreateTabLineTypeDropDown)
+               </OnLoad>
+            </Scripts>
+         </Frame>
+         <!-- END CREATE TAB -->
+         <Frame name="$parentPanelContainer">
+            <Anchors>
+               <Anchor point="TOPLEFT">
+                  <Offset>
+                     <AbsDimension x="2" y="-28"/>
+                  </Offset>
+               </Anchor>
+               <Anchor point="BOTTOMLEFT">
+                  <Offset>
+                     <AbsDimension x="0" y="2"/>
+                  </Offset>
+               </Anchor>
+               <Anchor point="RIGHT">
+                  <Offset>
+                     <AbsDimension x="-2" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
+               <EdgeSize>
+                  <AbsValue val="8"/>
+               </EdgeSize>
+               <TileSize>
+                  <AbsValue val="16"/>
+               </TileSize>
+               <BackgroundInsets>
+                  <AbsInset left="5" right="5" top="5" bottom="5"/>
+               </BackgroundInsets>
+            </Backdrop>
+            <Scripts>
+               <OnLoad>
+                  self:SetBackdropBorderColor(.6, .6, .6, 1);
+               </OnLoad>
+            </Scripts>
+         </Frame>
+         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Create">
+            <Anchors>
+               <Anchor point="TOPLEFT">
+                  <Offset>
+                     <AbsDimension x="8" y="-4"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  SimpleMacroMenuCreateTab_OnClick(self)
+                  PlaySound("igCharacterInfoTab")
+               </OnClick>
+            </Scripts>
+         </Button>
+         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Groups">
+            <Anchors>
+               <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT">
+                  <Offset>
+                     <AbsDimension x="-16" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  SimpleMacroMenuGroupTab_OnClick(self)
+                  PlaySound("igCharacterInfoTab")
+               </OnClick>
+            </Scripts>
+         </Button>
+      </Frames>
+      <Scripts>
+         <OnLoad function="SimpleMacroMenu_OnLoad"/>
+         <OnShow function="SimpleMacroMenu_OnShow"/>
+         <OnHide function="SimpleMacroMenu_OnHide"/>
+      </Scripts>
+   </Frame>
+
+   <!-- 35 conditionals -->
+   <Frame name="SM_CondMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+      <Size x="450" y="660"/>
+      <Anchors>
+         <Anchor point="BOTTOMLEFT" relativeTo="SimpleMacroMenu" relativePoint="BOTTOMRIGHT">
+            <Offset>
+               <AbsDimension x="20" y="-52"/>
+            </Offset>
+         </Anchor>
+      </Anchors>
+      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+         <BackgroundInsets>
+            <AbsInset left="11" right="11" top="12" bottom="10"/>
+         </BackgroundInsets>
+         <TileSize>
+            <AbsValue val="32"/>
+         </TileSize>
+         <EdgeSize>
+            <AbsValue val="32"/>
+         </EdgeSize>
+      </Backdrop> 
+      <Frames>
+         <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Cancel">
+            <Size>
+               <AbsDimension x="104" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="BOTTOMRIGHT">
+                  <Offset>
+                     <AbsDimension x="-14" y="14"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  SM_CondMenu_CancelButton_OnClick(self)
+                  PlaySound("gsTitleOptionOK")
+               </OnClick>
+            </Scripts>
+         </Button>
+         <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Save">
+            <Size>
+               <AbsDimension x="104" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT">
+                  <Offset>
+                     <AbsDimension x="-2" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  SM_CondMenu_SaveButton_OnClick(self)
+                  PlaySound("gsTitleOptionOK")
+               </OnClick>
+            </Scripts>
+         </Button>
+         <CheckButton name="$parentAlternateCheckButton" inherits="SimpleMacroSmallCheckButtonTemplate">
+            <Anchors>
+               <Anchor point="BOTTOMLEFT">
+                  <Offset>
+                     <AbsDimension x="10" y="14"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_AlternateCheck_OnClick"/>
+            </Scripts>
+         </CheckButton>
+      </Frames>
+      <Scripts>
+         <OnLoad function="SM_CondMenu_OnLoad"/>
+         <OnShow function="SM_CondMenu_OnShow"/>
+         <OnHide function="SM_CondMenu_OnHide"/>
+      </Scripts>
+   </Frame>
+</Ui>

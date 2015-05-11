@@ -1,0 +1,120 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+   <Script file="grouptab.lua"/>
+      <!-- GROUP TAB -->
+   <Frame name="$parentGroupTab" hidden="true" parent="SimpleMacroMenu">
+      <Anchors>
+         <Anchor point="TOPLEFT"/>
+         <Anchor point="BOTTOMRIGHT"/>
+      </Anchors>
+      <Frames>
+         <ScrollFrame name="$parentUserScrollFrame" inherits="UIPanelScrollFrameTemplate">
+            <Size x="244" y="146"/>
+            <Anchors>
+               <Anchor point="TOPLEFT">
+                  <Offset x="15" y="-76"/>
+               </Anchor>
+            </Anchors>
+            <ScrollChild>
+               <Frame name="SM_UserButtons">
+                  <Size x="235" y="10"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT"/>
+                  </Anchors>
+                  <Scripts>
+                     <OnLoad function="SM_UserButtons_OnLoad"/>
+                  </Scripts>
+               </Frame>
+            </ScrollChild>
+            <Scripts>
+               <OnLoad function="ScrollFrame_OnLoad"/>
+            </Scripts>
+         </ScrollFrame>
+         <ScrollFrame name="$parentGroupScrollFrame" inherits="UIPanelScrollFrameTemplate">
+            <Size x="244" y="146"/>
+            <Anchors>
+               <Anchor point="LEFT" relativeTo="$parentUserScrollFrame" relativePoint="RIGHT">
+                  <Offset>
+                     <AbsDimension x="64" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <ScrollChild>
+               <Frame name="SM_GroupButtons">
+                  <Size x="235" y="10"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT"/>
+                  </Anchors>
+                  <Scripts>
+                     <OnLoad function="SM_GroupButtons_OnLoad"/>
+                  </Scripts>
+               </Frame>
+            </ScrollChild>
+            <Scripts>
+               <OnLoad function="ScrollFrame_OnLoad"/>
+            </Scripts>
+         </ScrollFrame>
+         <Button name="SM_GroupAddButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Add To Group">
+            <Size>
+               <AbsDimension x="272" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="TOPLEFT" relativeTo="$parentUserScrollFrame" relativePoint="BOTTOMLEFT">
+                  <Offset>
+                     <AbsDimension x="0" y="-30"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_GroupAddButton_OnClick"/>
+            </Scripts>
+         </Button>
+         <Button name="SM_GroupDeleteButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Delete From Group">
+            <Size>
+               <AbsDimension x="272" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="LEFT" relativeTo="SM_GroupAddButton" relativePoint="RIGHT">
+                  <Offset>
+                     <AbsDimension x="36" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_GroupDeleteButton_OnClick"/>
+            </Scripts>
+         </Button>
+         <Button name="SM_GroupTargetButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Change Target">
+            <Size>
+               <AbsDimension x="144" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="TOPLEFT" relativeTo="SM_GroupDeleteButton" relativePoint="BOTTOMLEFT">
+                  <Offset>
+                     <AbsDimension x="0" y="-10"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_GroupTargetButton_OnClick"/>
+            </Scripts>
+         </Button>
+         <EditBox name="$parentTargetText" inherits="InputBoxTemplate">
+            <Size>
+               <AbsDimension x="112" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="LEFT" relativeTo="SM_GroupTargetButton" relativePoint="RIGHT">
+                  <Offset>
+                     <AbsDimension x="16" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnLoad>
+                  self:SetAutoFocus(false)
+               </OnLoad>
+            </Scripts>
+         </EditBox>
+      </Frames> 
+   </Frame>
+</Ui>

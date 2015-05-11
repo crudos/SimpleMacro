@@ -1,0 +1,235 @@
+<Ui xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="SimpleMacro.lua"/>
+
+   <!-- TEMPLATES -->
+
+
+   <!-- CREATE MACRO POPUP FRAME -->
+   <Frame name="SimpleMacroFrame" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
+      <Size>
+         <AbsDimension x="384" y="512"/>
+      </Size>
+      <Anchors>
+         <Anchor point="TOPLEFT">
+            <Offset>
+               <AbsDimension x="0" y="-104"/>
+            </Offset>
+         </Anchor>
+      </Anchors>
+      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+         <BackgroundInsets>
+            <AbsInset left="11" right="11" top="12" bottom="10"/>
+         </BackgroundInsets>
+         <TileSize>
+            <AbsValue val="32"/>
+         </TileSize>
+         <EdgeSize>
+            <AbsValue val="32"/>
+         </EdgeSize>
+      </Backdrop>
+      <HitRectInsets>
+         <AbsInset left="0" right="34" top="0" bottom="75"/>
+      </HitRectInsets>
+      <Layers>
+         <Layer level="BACKGROUND">
+            <Texture name="SimpleMacroFramePortrait" urgency="5" file="img\sm128"> <!-- file="Interface\MacroFrame\MacroFrame-Icon" -->
+               <Size>
+                  <AbsDimension x="60" y="60"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="TOPLEFT">
+                     <Offset>
+                        <AbsDimension x="7" y="-6"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </Texture>
+         </Layer>
+         <Layer level="BORDER">
+            <Texture urgency="5" file="Interface\PaperDollInfoFrame\UI-Character-General-TopLeft">
+               <Size>
+                  <AbsDimension x="256" y="256"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="TOPLEFT"/>
+               </Anchors>
+            </Texture>
+            <Texture urgency="5" file="Interface\PaperDollInfoFrame\UI-Character-General-TopRight">
+               <Size>
+                  <AbsDimension x="128" y="256"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="TOPRIGHT"/>
+               </Anchors>
+            </Texture>
+            <Texture urgency="5" file="Interface\MacroFrame\MacroFrame-BotLeft">
+               <Size>
+                  <AbsDimension x="256" y="256"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="BOTTOMLEFT"/>
+               </Anchors>
+            </Texture>
+            <Texture urgency="5" file="Interface\MacroFrame\MacroFrame-BotRight">
+               <Size>
+                  <AbsDimension x="128" y="256"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="BOTTOMRIGHT"/>
+               </Anchors>
+            </Texture>
+            <FontString inherits="GameFontNormal" text="Simple Macro">
+               <Anchors>
+                  <Anchor point="TOP" relativeTo="SimpleMacroFrame">
+                     <Offset>
+                        <AbsDimension x="0" y="-17"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+         </Layer>
+         <Layer level="ARTWORK"> 
+            <Texture name="SimpleMacroHorizontalBarLeft" urgency="5" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+               <Size>
+                  <AbsDimension x="256" y="16"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="TOPLEFT">
+                     <Offset>
+                        <AbsDimension x="15" y="-220"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+               <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
+            </Texture>
+            <Texture urgency="5" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+               <Size>
+                  <AbsDimension x="75" y="16"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="LEFT" relativeTo="SimpleMacroHorizontalBarLeft" relativePoint="RIGHT">
+                     <Offset>
+                        <AbsDimension x="0" y="0"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+               <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
+            </Texture>
+            <Texture name="SimpleMacroFrameSelectedMacroBackground" urgency="5" file="Interface\Buttons\UI-EmptySlot">
+               <Size>
+                  <AbsDimension x="64" y="64"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="TOPLEFT">
+                     <Offset>
+                        <AbsDimension x="16" y="-228"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </Texture>
+            <FontString name="SimpleMacroFrameSelectedMacroName" inherits="GameFontNormalLarge" justifyH="LEFT">
+               <Size>
+                  <AbsDimension x="256" y="16"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" relativePoint="TOPRIGHT">
+                     <Offset>
+                        <AbsDimension x="-4" y="-10"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+            <FontString name="SimpleMacroFrameEnterMacroText" inherits="GameFontHighlightSmall" text="ENTER_MACRO_LABEL">
+               <Anchors>
+                  <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT">
+                     <Offset>
+                        <AbsDimension x="8" y="0"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+            <FontString name="SimpleMacroFrameCharLimitText" inherits="GameFontHighlightSmall">
+               <Size>
+                  <AbsDimension x="0" y="10"/>
+               </Size>
+               <Anchors>
+                  <Anchor point="BOTTOM">
+                     <Offset>
+                        <AbsDimension x="-15" y="105"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+         </Layer>
+      </Layers>
+      <Frames>
+         <Button name="SimpleMacroDeleteButton" inherits="UIPanelButtonTemplate" text="DELETE">
+            <Size>
+               <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="BOTTOMLEFT" relativeTo="SimpleMacroFrame" relativePoint="BOTTOMLEFT">
+                  <Offset>
+                     <AbsDimension x="17" y="79"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  <!--MacroFrame_DeleteMacro(); -->
+               </OnClick>
+            </Scripts>
+         </Button>
+         <Button name="SimpleMacroNewButton" inherits="UIPanelButtonTemplate" text="NEW">
+            <Size>
+               <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="CENTER" relativeTo="SimpleMacroFrame" relativePoint="TOPLEFT">
+                  <Offset>
+                     <AbsDimension x="222" y="-422"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_newbutton_onclick"/>
+            </Scripts>
+         </Button>
+         <Button name="SimpleMacroExitButton" inherits="UIPanelButtonTemplate" text="EXIT">
+            <Size>
+               <AbsDimension x="80" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="CENTER" relativeTo="SimpleMacroFrame" relativePoint="TOPLEFT">
+                  <Offset>
+                     <AbsDimension x="303" y="-422"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="HideParentPanel"/>
+            </Scripts>
+         </Button>
+         <Button name="SimpleMacroFrameCloseButton" inherits="UIPanelCloseButton">
+            <Anchors>
+               <Anchor point="TOPRIGHT" relativeTo="SimpleMacroFrame" relativePoint="TOPRIGHT">
+                  <Offset>
+                     <AbsDimension x="-29" y="-8"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+         </Button>
+      </Frames>
+      <Scripts>
+         <OnLoad function="SimpleMacroFrame_OnLoad"/>
+         <OnShow function="SimpleMacroFrame_OnShow"/>
+         <OnHide function="SimpleMacroFrame_OnHide"/>
+         <OnDragStart>
+            self:StartMoving()
+         </OnDragStart>
+         <OnDragStop>
+            self:StopMovingOrSizing()
+         </OnDragStop>
+      </Scripts>
+   </Frame>
+</Ui>

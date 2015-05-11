@@ -1,0 +1,16 @@
+## Interface: 60100
+## Title: SimpleMacro
+## Author: Crudos
+## Version: 1.0
+## Notes: Allows you to create and change macros easily.
+## SavedVariablesPerCharacter: GroupTable, GroupCount
+
+localization\localization.xml
+
+libs\macroparser\macroparser.lua
+
+menu\menu.xml
+menu\grouptab.xml
+
+SimpleMacro.lua
+SimpleMacro.xml
