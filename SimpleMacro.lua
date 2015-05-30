@@ -158,11 +158,11 @@ function SimpleMacroFrame_OnHide(self)
 end
 
 function SimpleMacro_Show()
-   ShowUIPanel(SimpleMacroFrame)
+   ShowUIPanel(SimpleMacroMenu)
 end
 
 function SimpleMacro_Hide(self)
-   HideUIPanel(SimpleMacroFrame)
+   HideUIPanel(SimpleMacroMenu)
 end
 
 SLASH_SIMPLEMACRO1 = '/sm'
@@ -175,12 +175,15 @@ local function slashCmdHandler(msg, editbox)
    if command == 'open' then
       SimpleMacro_Show()
    else
+      SimpleMacro_Show()
+      [[
       InterfaceOptionsFrame_OpenToCategory(SimpleMacroMenu)
       if not frame.i then -- needs this to open correctly, dont do it after first time
          InterfaceOptionsFrame_OpenToCategory(SimpleMacroMenu)
          InterfaceOptionsFrame_OpenToCategory(SimpleMacroMenu)
       end
       frame.i = 1
+      ]]
    end
 end
 

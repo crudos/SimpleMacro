@@ -126,8 +126,32 @@
       </Scripts>
    </Frame>
 
-   <!-- INTERFACE OPTIONS MENU -->
-   <Frame name="SimpleMacroMenu" toplevel="true" enableMouse="true" hidden="false">
+   <!-- POPUP MENU -->
+   <Frame name="SimpleMacroMenu" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
+      <Size>
+         <AbsDimension x="624" y="648"/>
+      </Size>
+      <Anchors>
+         <Anchor point="TOPLEFT">
+            <Offset>
+               <AbsDimension x="0" y="-104"/>
+            </Offset>
+         </Anchor>
+      </Anchors>
+      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+         <BackgroundInsets>
+            <AbsInset left="11" right="11" top="12" bottom="10"/>
+         </BackgroundInsets>
+         <TileSize>
+            <AbsValue val="32"/>
+         </TileSize>
+         <EdgeSize>
+            <AbsValue val="32"/>
+         </EdgeSize>
+      </Backdrop>
+      <HitRectInsets>
+         <AbsInset left="0" right="34" top="0" bottom="75"/>
+      </HitRectInsets>
       <Frames>
          <!-- CREATE TAB -->
          <Frame name="$parentCreateTab" hidden="false">
@@ -136,6 +160,7 @@
                <Anchor point="BOTTOMRIGHT"/>
             </Anchors>
             <Frames>
+               <
                <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
                   <Anchors>
                      <Anchor point="TOPLEFT">
@@ -593,6 +618,21 @@
                      <OnClick function="SimpleMacroMenuSaveButton_OnClick"/>
                   </Scripts>
                </Button>
+               <Button name="$parentExitButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Save">
+                  <Size>
+                     <AbsDimension x="90" y="22"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPRIGT" relativeTo="$parentTextScrollFrame" relativePoint="BOTTOMRIGHT">
+                        <Offset>
+                           <AbsDimension x="-6" y="-16"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <Scripts>
+                     <OnClick function="SimpleMacroMenuCancelButton_OnClick"/>
+                  </Scripts>
+               </Button>
             </Frames>
             <Scripts>
                <OnLoad>
@@ -672,6 +712,12 @@
          <OnLoad function="SimpleMacroMenu_OnLoad"/>
          <OnShow function="SimpleMacroMenu_OnShow"/>
          <OnHide function="SimpleMacroMenu_OnHide"/>
+         <OnDragStart>
+            self:StartMoving()
+         </OnDragStart>
+         <OnDragStop>
+            self:StopMovingOrSizing()
+         </OnDragStop>
       </Scripts>
    </Frame>
 

@@ -60,6 +60,7 @@ function SimpleMacroMenu_OnHide(panel)
 end
 
 function SimpleMacroMenu_OnLoad(panel)
+   panel:RegisterForDrag("LeftButton")
    panel.name = "SimpleMacro"
    InterfaceOptions_AddCategory(panel)
    panel.elapsed = 0
@@ -556,6 +557,10 @@ function SM_DeleteArgButton_OnClick(self)
    parse:removeArgument(SimpleMacroMenu.selectedLine, SimpleMacroMenu.selectedArg)
    EditMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart, nil, nil, parse:compose())
    CreateTab_Update()
+end
+
+function SimpleMacroMenuCancelButton_OnClick(self)
+   HideUIPanel(SimpleMacroMenu)
 end
 
 function SM_CondMenu_OnLoad(panel)
