@@ -131,135 +131,70 @@ L["LINE_TYPE_TABLE"][6][13] = { COMMANDS = { "stopattack" }, DESCRIPTION = "Turn
 L["LINE_TYPE_TABLE"][6][14] = { COMMANDS = { "stopcasting" }, DESCRIPTION = "Stops casting or channeling." }
 L["LINE_TYPE_TABLE"][6][15] = { COMMANDS = { "swapactionbar" }, DESCRIPTION = "Swaps between two given action bars." }
 
---[[
-guilddemote - /gdemote,/guilddemote - Demotes a guild-member.
-guilddisband - /gdisband,/guilddisband - Disbands a guild.
-guildinfo - /ginfo,/guildinfo - Displays information about your guild.
-guildinvite - /ginvite,/guildinvite - Invites a player to join your guild.
-guildleader - /gleader,/guildleader - Makes another guild member the new Guild Master.
-guildquit - /gquit,/guildquit - Removes your character from your current guild.
-guildmotd - /gmotd,/guildmotd - Sets the guild Message of the Day.
-guildpromote - /gpromote,/guildpromote - Promotes a guild member to the next higher rank.
-guildroster - /groster,/guildroster - Opens the Guild window.
-guildremove - /guildremove,/gremove,/gkick - Removes a member of your guild from your guild.
-]]
 -- Guild Commands
-L["LINE_TYPE_TABLE"][7][1] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][2] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][3] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][4] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][5] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][6] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][7] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][8] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][9] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][7][10] = { COMMANDS = { "" }, DESCRIPTION = "" }
+L["LINE_TYPE_TABLE"][7][1] = { COMMANDS = { "guilddemote", "gdemote" }, DESCRIPTION = "Demotes a guild-member." }
+L["LINE_TYPE_TABLE"][7][2] = { COMMANDS = { "guilddisband", "gdisband" }, DESCRIPTION = "Disbands a guild." }
+L["LINE_TYPE_TABLE"][7][3] = { COMMANDS = { "guildinfo", "ginfo" }, DESCRIPTION = "Displays information about your guild." }
+L["LINE_TYPE_TABLE"][7][4] = { COMMANDS = { "guildinvite", "ginvite" }, DESCRIPTION = "Invites a player to join your guild." }
+L["LINE_TYPE_TABLE"][7][5] = { COMMANDS = { "guildleader", "gleader" }, DESCRIPTION = "Makes another guild member the new Guild Master." }
+L["LINE_TYPE_TABLE"][7][6] = { COMMANDS = { "guildquit", "gquit" }, DESCRIPTION = "Removes your character from your current guild." }
+L["LINE_TYPE_TABLE"][7][7] = { COMMANDS = { "guildmotd", "gmotd" }, DESCRIPTION = "Sets the guild Message of the Day." }
+L["LINE_TYPE_TABLE"][7][8] = { COMMANDS = { "guildpromote", "gpromote" }, DESCRIPTION = "Promotes a guild member to the next higher rank." }
+L["LINE_TYPE_TABLE"][7][9] = { COMMANDS = { "guildroster", "groster" }, DESCRIPTION = "Opens the Guild window." }
+L["LINE_TYPE_TABLE"][7][10] = { COMMANDS = { "guildremove", "gremove", "gkick" }, DESCRIPTION = "Removes a member of your guild from your guild." }
 
---[[
-clearmainassist - /clearmainassist,/clearma,/mainassistoff,/maoff - Clears the current Main Assist.
-clearmaintank - /clearmaintank,/clearmt,/maintankoff,/mtoff - Clears the current Main Tank.
-clearworldmarker - /clearworldmarker,/cwm - Clears world markers
-invite - /i,/inv,/invite - Invites a player to your party or raid.
-ffa - Sets the loot method for your raid/party to Free-For-All.
-group - Sets the loot method for your raid/party to Group Loot.
-master - Sets the loot method for your raid/party to Master Loot.
-mainassist - /mainassist,/ma - Set the main assist.
-maintank - /maintank,/mt - Set the main tank.
-needbeforegreed - Sets the loot method for your raid/party to Need Before Greed.
-promote - /pr,/promote - Promotes the given member to Party or Raid leader.
-raidinfo - Shows you what instances you are saved to, along with the Instance ID.
-readycheck - Performs a ready check in your raid or party.
-roundrobin - Sets the loot method for your raid/party to Round Robin.
-targetmarker - /targetmarker,/tm - Sets or clears a target marker from your current target.
-threshold - Sets the loot threshold to apply loot rules.
-uninvite - /uninvite,/u,/un,/kick,/votekick - Removes a player from your current party or raid.
-worldmarker - /worldmarker,/wm - Allows placement of world markers.
-]]
 -- Party and Raid Commands
-L["LINE_TYPE_TABLE"][8][1] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][2] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][3] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][4] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][5] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][6] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][7] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][8] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][9] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][10] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][11] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][12] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][13] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][14] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][15] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][16] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][17] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][8][18] = { COMMANDS = { "" }, DESCRIPTION = "" }
+L["LINE_TYPE_TABLE"][8][1] = { COMMANDS = { "clearmainassist", "clearma", "mainassistoff", "maoff" }, DESCRIPTION = "Clears the current Main Assist." }
+L["LINE_TYPE_TABLE"][8][2] = { COMMANDS = { "clearmaintank", "clearmt", "maintankoff", "mtoff" }, DESCRIPTION = "Clears the current Main Tank." }
+L["LINE_TYPE_TABLE"][8][3] = { COMMANDS = { "clearworldmarker", "cwm" }, DESCRIPTION = "Clears world markers" }
+L["LINE_TYPE_TABLE"][8][4] = { COMMANDS = { "invite", "inv", "i" }, DESCRIPTION = "Invites a player to your party or raid." }
+L["LINE_TYPE_TABLE"][8][5] = { COMMANDS = { "ffa" }, DESCRIPTION = "Sets the loot method for your raid/party to Free-For-All." }
+L["LINE_TYPE_TABLE"][8][6] = { COMMANDS = { "group" }, DESCRIPTION = "Sets the loot method for your raid/party to Group Loot." }
+L["LINE_TYPE_TABLE"][8][7] = { COMMANDS = { "master" }, DESCRIPTION = "Sets the loot method for your raid/party to Master Loot." }
+L["LINE_TYPE_TABLE"][8][8] = { COMMANDS = { "mainassist", "ma" }, DESCRIPTION = "Set the main assist." }
+L["LINE_TYPE_TABLE"][8][9] = { COMMANDS = { "maintank", "mt" }, DESCRIPTION = "Set the main tank." }
+L["LINE_TYPE_TABLE"][8][10] = { COMMANDS = { "needbeforegreed" }, DESCRIPTION = "Sets the loot method for your raid/party to Need Before Greed." }
+L["LINE_TYPE_TABLE"][8][11] = { COMMANDS = { "promote", "pr" }, DESCRIPTION = "Promotes the given member to Party or Raid leader." }
+L["LINE_TYPE_TABLE"][8][12] = { COMMANDS = { "raidinfo" }, DESCRIPTION = "Shows you what instances you are saved to, along with the Instance ID." }
+L["LINE_TYPE_TABLE"][8][13] = { COMMANDS = { "readycheck" }, DESCRIPTION = "Performs a ready check in your raid or party." }
+L["LINE_TYPE_TABLE"][8][14] = { COMMANDS = { "roundrobin" }, DESCRIPTION = "Sets the loot method for your raid/party to Round Robin." }
+L["LINE_TYPE_TABLE"][8][15] = { COMMANDS = { "targetmarker", "tm" }, DESCRIPTION = "Sets or clears a target marker from your current target." }
+L["LINE_TYPE_TABLE"][8][16] = { COMMANDS = { "threshold" }, DESCRIPTION = "Sets the loot threshold to apply loot rules." }
+L["LINE_TYPE_TABLE"][8][17] = { COMMANDS = { "uninvite", "u", "un", "kick", "votekick" }, DESCRIPTION = "Removes a player from your current party or raid." }
+L["LINE_TYPE_TABLE"][8][18] = { COMMANDS = { "worldmarker", "wm" }, DESCRIPTION = "Allows placement of world markers." }
 
---[[
-petassist - Sets pet to assist mode. (added in version 4.2)
-petattack - Sends pet to attack currently selected target.
-petautocastoff - Turn off autocast for a pet spell.
-petautocaston - Turn on autocast for a pet spell.
-petautocasttoggle - Toggle autocast for a pet spell.
-petdefensive - Set pet to defensive.
-petfollow - Set pet to follow you.
-petmoveto - Set pet to move to and stay at a hover-targeted location.
-petpassive - Set pet to passive mode.
-petstay - Set pet to stay where it is at.
-]]
 -- Pet Commands
-L["LINE_TYPE_TABLE"][9][1] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][2] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][3] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][4] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][5] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][6] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][7] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][8] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][9] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][9][10] = { COMMANDS = { "" }, DESCRIPTION = "" }
+L["LINE_TYPE_TABLE"][9][1] = { COMMANDS = { "petassist" }, DESCRIPTION = "Sets pet to assist mode. (added in version 4.2)" }
+L["LINE_TYPE_TABLE"][9][2] = { COMMANDS = { "petattack" }, DESCRIPTION = "Sends pet to attack currently selected target." }
+L["LINE_TYPE_TABLE"][9][3] = { COMMANDS = { "petautocastoff" }, DESCRIPTION = "Turn off autocast for a pet spell." }
+L["LINE_TYPE_TABLE"][9][4] = { COMMANDS = { "petautocaston" }, DESCRIPTION = "Turn on autocast for a pet spell." }
+L["LINE_TYPE_TABLE"][9][5] = { COMMANDS = { "petautocasttoggle" }, DESCRIPTION = "Toggle autocast for a pet spell." }
+L["LINE_TYPE_TABLE"][9][6] = { COMMANDS = { "petdefensive" }, DESCRIPTION = "Set pet to defensive." }
+L["LINE_TYPE_TABLE"][9][7] = { COMMANDS = { "petfollow" }, DESCRIPTION = "Set pet to follow you." }
+L["LINE_TYPE_TABLE"][9][8] = { COMMANDS = { "petmoveto" }, DESCRIPTION = "Set pet to move to and stay at a hover-targeted location." }
+L["LINE_TYPE_TABLE"][9][9] = { COMMANDS = { "petpassive" }, DESCRIPTION = "Set pet to passive mode." }
+L["LINE_TYPE_TABLE"][9][10] = { COMMANDS = { "petstay" }, DESCRIPTION = "Set pet to stay where it is at." }
 
---[[
-console - Allows user to view or change global client-side options, or perform certain system commands.
-click - Simulate a mouse click on a button.
-disableaddons - Disables all addons and reloads the UI.
-dump - Displays the value of a given variable.
-enableaddons - Enables all addons and reloads the UI.
-eventtrace - /eventtrace,/etrace - Allows the user to trace events in-game.
-framestack - /framestack,/fstack - Allows the user to see all frames under the cursor.
-help - /h,/help,/? - Displays a help message with some basic commands.
-logout - /camp,/logout - Logs your character out of the game, back to the character selection screen.
-macrohelp - Displays a help message with basic information about creating and using macros.
-played - Displays information about your character's time logged in.
-quit - /quit,/exit - Exits the game.
-random - /random,/rand,/rnd,/roll - Generates a random number from 1 to 100. "/random X" rolls a number from 1 to X, "/random X Y" rolls a number from X though Y.
-reload - Reloads the User Interface.
-script - /script,/run - Runs a block of LUA code.
-stopmacro - Stop processing the current macro.
-time - Displays the current time
-timetest - Used for benchmarking, also shows FPS.
-who - Shows you a list of people matching filtering options.
-]]
 -- System Commands
-L["LINE_TYPE_TABLE"][10][1] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][2] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][3] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][4] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][5] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][6] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][7] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][8] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][9] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][10] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][11] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][12] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][13] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][14] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][15] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][16] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][17] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][18] = { COMMANDS = { "" }, DESCRIPTION = "" }
-L["LINE_TYPE_TABLE"][10][19] = { COMMANDS = { "" }, DESCRIPTION = "" }
+L["LINE_TYPE_TABLE"][10][1] = { COMMANDS = { "console" }, DESCRIPTION = "Allows user to view or change global client-side options, or perform certain system commands." }
+L["LINE_TYPE_TABLE"][10][2] = { COMMANDS = { "click" }, DESCRIPTION = "Simulate a mouse click on a button." }
+L["LINE_TYPE_TABLE"][10][3] = { COMMANDS = { "disableaddons" }, DESCRIPTION = "Disables all addons and reloads the UI." }
+L["LINE_TYPE_TABLE"][10][4] = { COMMANDS = { "dump" }, DESCRIPTION = "Displays the value of a given variable." }
+L["LINE_TYPE_TABLE"][10][5] = { COMMANDS = { "enableaddons" }, DESCRIPTION = "Enables all addons and reloads the UI." }
+L["LINE_TYPE_TABLE"][10][6] = { COMMANDS = { "eventtrace", "etrace" }, DESCRIPTION = "Allows the user to trace events in-game." }
+L["LINE_TYPE_TABLE"][10][7] = { COMMANDS = { "framestack", "fstack" }, DESCRIPTION = "Allows the user to see all frames under the cursor." }
+L["LINE_TYPE_TABLE"][10][8] = { COMMANDS = { "help", "h", "?" }, DESCRIPTION = "Displays a help message with some basic commands." }
+L["LINE_TYPE_TABLE"][10][9] = { COMMANDS = { "logout", "camp" }, DESCRIPTION = "Logs your character out of the game, back to the character selection screen." }
+L["LINE_TYPE_TABLE"][10][10] = { COMMANDS = { "macrohelp" }, DESCRIPTION = "Displays a help message with basic information about creating and using macros." }
+L["LINE_TYPE_TABLE"][10][11] = { COMMANDS = { "played" }, DESCRIPTION = "Displays information about your character's time logged in." }
+L["LINE_TYPE_TABLE"][10][12] = { COMMANDS = { "quit", "exit" }, DESCRIPTION = "Exits the game." }
+L["LINE_TYPE_TABLE"][10][13] = { COMMANDS = { "random", "rand", "rnd", "roll" }, DESCRIPTION = "Generates a random number from 1 to 100. \"/random X\" rolls a number from 1 to X, \"/random X Y\" rolls a number from X though Y." }
+L["LINE_TYPE_TABLE"][10][14] = { COMMANDS = { "reload" }, DESCRIPTION = "Reloads the User Interface." }
+L["LINE_TYPE_TABLE"][10][15] = { COMMANDS = { "script", "run" }, DESCRIPTION = "Runs a block of LUA code." }
+L["LINE_TYPE_TABLE"][10][16] = { COMMANDS = { "stopmacro" }, DESCRIPTION = "Stop processing the current macro." }
+L["LINE_TYPE_TABLE"][10][17] = { COMMANDS = { "time" }, DESCRIPTION = "Displays the current time" }
+L["LINE_TYPE_TABLE"][10][18] = { COMMANDS = { "timetest" }, DESCRIPTION = "Used for benchmarking, also shows FPS." }
+L["LINE_TYPE_TABLE"][10][19] = { COMMANDS = { "who" }, DESCRIPTION = "Shows you a list of people matching filtering options." }
 
 -- Targeting Commands
 L["LINE_TYPE_TABLE"][11][1] = { COMMANDS = { "assist", "a" }, DESCRIPTION = "Targets a player's target." }
