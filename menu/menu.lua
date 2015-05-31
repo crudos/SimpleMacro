@@ -4,6 +4,8 @@ CREATETAB_MACROS_PER_ROW = 6
 CREATETAB_CONDITIONALS_PER_COL = 18
 CREATETAB_CONDITIONALS_SPACING = 184
 NUM_CONDITIONALS = 36
+SM_MAX_MACRO_CATEGORIES = 12
+SM_MAX_MACRO_COMMANDS = 32
 
 local _, L = ...
 local G = _G
@@ -73,6 +75,11 @@ function SimpleMacroMenu_OnLoad(panel)
 end
 
 -- CREATE TAB
+
+function SimpleMacroMenuCloseButton_OnClick(self)
+   HideUIPanel(SimpleMacroMenu)
+end
+
 function SimpleMacroMenuCreateTab_OnClick(self)
    PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
    SimpleMacroMenuCreateTab:Show()
@@ -319,6 +326,316 @@ function CreateTab_Update()
    HideUIPanel(SM_CondMenu)
 end
 
+
+
+
+
+
+
+
+
+
+
+
+function MacroEditorLine_OnClick(self, button, down)
+end
+
+function MacroEditorArg_OnClick(self, button, down)
+end
+
+function MacroEditorCond_OnClick(self, button, down)
+end
+
+function SM_MacroEditor_OnLoad(self)
+   local addLineFrame, height, width
+
+   width, height = self:GetSize() 
+
+   addLineFrame = CreateFrame("CheckButton", "SM_MacroEditor_AddNewLine", self, "SM_MacroEditorLineEntryTemplate")
+   addLineFrame:SetPoint("BOTTOM", self:GetParent(), "BOTTOM", 0, 0)
+   addLineFrame:SetSize(width, 16)
+   addLineFrame:SetScript("OnClick", MacroEditor_AddNewLine_OnClick)
+
+   G["SM_MacroEditor_AddNewLineData"]:SetText("")
+   G["SM_MacroEditor_AddNewLineText"]:SetText("+ add new line +")
+end
+
+function MacroEditor_AddNewLine_OnClick(self, button, down)
+   ShowUIPanel(SM_NewLineMenu)
+   self:Disable()
+end
+
+function SM_NewLineMenu_OnLoad(panel)
+end
+
+function SM_NewLineMenu_OnShow(panel)
+   PlaySound("igCharacterInfoTab")
+end
+
+function SM_NewLineMenu_OnHide(panel)
+end
+
+function SM_CategoryDropDown_OnEvent(self, event, ...)
+   if event == "PLAYER_ENTERING_WORLD" then
+      self.defaultValue = L.LINE_TYPE_TABLE[1].CATEGORY
+      self.value = self.defaultValue
+      self.tooltip = self.defaultValue.." commands."
+      
+      self.SetValue = 
+         function (self, value)
+            self.value = value
+            UIDropDownMenu_SetSelectedValue(self, value)
+            self.tooltip = value.." commands."
+         end
+      self.GetValue =
+         function (self)
+            return UIDropDownMenu_GetSelectedValue(self)
+         end
+      self.GetID =
+         function (self)
+            local i
+
+            for i = 1, SM_MAX_MACRO_CATEGORIES do
+               if self:GetValue() == L.LINE_TYPE_TABLE[i].CATEGORY then
+                  return i
+               end
+            end
+         end
+      self.RefreshValue =
+         function (self)
+            UIDropDownMenu_Initialize(self, SM_CategoryDropDown_Initialize)
+            UIDropDownMenu_SetSelectedValue(self, self.value)
+         end
+
+      UIDropDownMenu_SetWidth(self, 120)
+      UIDropDownMenu_Initialize(self, SM_CategoryDropDown_Initialize)
+      UIDropDownMenu_SetSelectedValue(self, self.value)
+      
+      G[self:GetName().."Label"]:SetText(L.LINE_TYPE_CATEGORY_LABEL)
+      self:UnregisterEvent(event)
+   end
+end
+
+function SM_CategoryDropDown_OnClick(self)
+   SM_NewLineMenuCategoryDropDown:SetValue(self.value)
+
+   local categoryID = SM_NewLineMenuCategoryDropDown:GetID()
+   SM_CommandDropDown_Initialize()
+   SM_NewLineMenuCommandDropDown:SetValue(L.LINE_TYPE_TABLE[categoryID][1].COMMANDS[1])
+end
+
+function SM_CategoryDropDown_Initialize()
+   local selectedValue = SM_NewLineMenuCategoryDropDown:GetValue()
+   local info = UIDropDownMenu_CreateInfo()
+
+   for _, entry in ipairs(L.LINE_TYPE_TABLE) do
+      info.text = entry.CATEGORY
+      info.func = SM_CategoryDropDown_OnClick
+      info.value = entry.CATEGORY
+      if info.value == selectedValue then
+         info.checked = 1
+      else
+         info.checked = nil
+      end
+      info.tooltipTitle = entry.CATEGORY
+      info.tooltipText = entry.CATEGORY.." commands."
+      UIDropDownMenu_AddButton(info)
+   end
+end
+
+function SM_CommandDropDown_OnEvent(self, event, ...)
+      if event == "PLAYER_ENTERING_WORLD" then
+      self.defaultValue = L.LINE_TYPE_TABLE[1][1].COMMANDS[1]
+      self.value = self.defaultValue
+      self.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
+
+      self.SetValue = 
+         function (self, value)
+            local categoryID, commandID
+
+            self.value = value
+            UIDropDownMenu_SetSelectedValue(self, value)
+            categoryID = SM_NewLineMenuCategoryDropDown:GetID()
+            commandID = SM_NewLineMenuCommandDropDown:GetID() or 1
+
+            self.tooltip = L.LINE_TYPE_TABLE[categoryID][commandID].DESCRIPTION
+         end
+      self.GetValue =
+         function (self)
+            return UIDropDownMenu_GetSelectedValue(self)
+         end
+      self.GetID =
+         function (self)
+            local category, i
+
+            category = SM_NewLineMenuCategoryDropDown:GetID()
+
+            for i = 1, SM_MAX_MACRO_COMMANDS do
+               if L.LINE_TYPE_TABLE[category][i] ~= nil then
+                  for _, cmd in pairs(L.LINE_TYPE_TABLE[category][i].COMMANDS) do
+                     if SM_NewLineMenuCommandDropDown:GetValue() == cmd then
+                        return i
+                     end
+                  end
+               end
+            end
+         end
+      self.RefreshValue =
+         function (self)
+            UIDropDownMenu_Initialize(self, SM_CommandDropDown_Initialize)
+            UIDropDownMenu_SetSelectedValue(self, self.value)
+         end
+
+      UIDropDownMenu_SetWidth(self, 120)
+      UIDropDownMenu_Initialize(self, SM_CommandDropDown_Initialize)
+      UIDropDownMenu_SetSelectedValue(self, self.value)
+
+      G[self:GetName().."Label"]:SetText(L.LINE_TYPE_COMMAND_LABEL)
+      self:UnregisterEvent(event)
+   end
+end
+
+function SM_CommandDropDown_OnClick(self)
+   SM_NewLineMenuCommandDropDown:SetValue(self.value)
+end
+
+function SM_CommandDropDown_Initialize()
+   local categoryID = SM_NewLineMenuCategoryDropDown:GetID()
+   local selectedValue = SM_NewLineMenuCommandDropDown:GetValue()
+   local info = UIDropDownMenu_CreateInfo()
+
+   for _, entry in ipairs(L.LINE_TYPE_TABLE[categoryID]) do
+      info.text = entry.COMMANDS[1]
+      info.func = SM_CommandDropDown_OnClick
+      info.value = entry.COMMANDS[1]
+      if info.value == selectedValue then
+         info.checked = 1
+      else
+         info.checked = nil
+      end
+      info.tooltipTitle = entry.COMMANDS[1]
+      info.tooltipText = entry.DESCRIPTION
+      UIDropDownMenu_AddButton(info)
+   end
+end
+
+function SM_NewLineMenu_CancelButton_OnClick(self)
+   HideUIPanel(SM_NewLineMenu)
+   G["SM_MacroEditor_AddNewLine"]:Enable()
+end
+
+function SM_NewLineMenu_AcceptButton_OnClick(self)
+   local newLine, cmd, slashOrHash, value
+
+   value = SM_NewLineMenuCommandDropDown:GetValue()
+
+   newLine = CreateFrame("CheckButton", "SM_MacroEditorLine1",  SimpleMacroMenuCreateTabMacroEditorScrollFrame, "SM_MacroEditorLineEntryTemplate")
+   newLine:SetPoint("TOPLEFT", SimpleMacroMenuCreateTabMacroEditorScrollFrame, "TOPLEFT", 0, 0)
+
+   if SM_NewLineMenuCategoryDropDown:GetValue() == "Metacommands" then
+      slashOrHash = "#"
+   else
+      slashOrHash = "/"
+   end
+
+   G["SM_MacroEditorLine1Data"]:SetText(slashOrHash..SM_NewLineMenuCommandDropDown:GetValue())
+   newLine:SetSize(G["SM_MacroEditorLine1Data"]:GetStringWidth(), 20)
+--   newLine:Show()
+   
+   
+   G["SM_MacroEditor_AddNewLine"]:Enable()
+   HideUIPanel(SM_NewLineMenu)
+end
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function SimpleMacroMenuCreateTabLineTypeDropDown_OnEvent(self, event, ...)
+   if event == "PLAYER_ENTERING_WORLD" then
+      self.defaultValue = ""
+      self.value = self.defaultValue
+      self.tooltip = L.LINE_TYPE_TOOLTIP_NONE
+
+      UIDropDownMenu_SetWidth(self, 120)
+      UIDropDownMenu_Initialize(self, SimpleMacroMenuCreateTabLineTypeDropDown_Initialize)
+      UIDropDownMenu_SetSelectedValue(self, self.value)
+      
+      self.SetValue = 
+         function (self, value)
+            self.value = value
+            UIDropDownMenu_SetSelectedValue(self, value)
+
+            if value == L.LINE_TYPE_TABLE.NONE then
+               self.tooltip = L.LINE_TYPE_TOOLTIP_NONE
+            else
+               if value then
+                  self.tooltip = L.LINE_TYPE_TOOLTIP..(self.value == L.LINE_TYPE_TABLE.SHOWTOOLTIP and "#" or "/")..value.."."
+               end
+            end
+         end
+      self.GetValue =
+         function (self)
+            return UIDropDownMenu_GetSelectedValue(self)
+         end
+      self.RefreshValue =
+         function (self)
+            UIDropDownMenu_Initialize(self, SimpleMacroMenuCreateTabLineTypeDropDown_Initialize)
+            UIDropDownMenu_SetSelectedValue(self, self.value)
+         end
+
+      SimpleMacroMenuCreateTabLineTypeDropDownLabel:SetText(L.LINE_TYPE_DROPDOWN_LABEL)
+      self:UnregisterEvent(event)
+   end
+end
+
+function SimpleMacroMenuCreateTabLineTypeDropDown_OnClick(self)
+   local ltype, parse
+
+   SimpleMacroMenuCreateTabLineTypeDropDown:SetValue(self.value)
+   ltype = self.value == L.LINE_TYPE_TABLE.SHOWTOOLTIP and "#" or "/"
+   parse = SimpleMacroMenu.createParse
+
+   parse.lines[SimpleMacroMenu.selectedLine].type = ltype
+   parse.lines[SimpleMacroMenu.selectedLine].cmd = self.value
+   EditMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart, nil, nil, parse:compose())
+   CreateTab_Update()
+end
+
+function SimpleMacroMenuCreateTabLineTypeDropDown_Initialize()
+   local selectedValue = UIDropDownMenu_GetSelectedValue(SimpleMacroMenuCreateTabLineTypeDropDown)
+   local info = UIDropDownMenu_CreateInfo()
+
+   for _, cmd in ipairs(L.LINE_TYPE_TABLE[6]) do
+      local text = cmd.COMMANDS[1]
+      info.text = text
+      info.func = SimpleMacroMenuCreateTabLineTypeDropDown_OnClick
+      info.value = text
+      if info.value == selectedValue then
+         info.checked = 1
+      else
+         info.checked = nil
+      end
+      info.tooltipTitle = text
+      info.tooltipText = "The command "..text
+      UIDropDownMenu_AddButton(info)
+   end
+end
+
+
+
+
 function LineListEntry_OnClick(self, button, down)
    if SimpleMacroMenu.selectedLine then
       G["LineEntry"..SimpleMacroMenu.selectedLine].highlight:SetVertexColor(0.196, 0.388, 0.8) -- default highlight color, light blue
@@ -384,75 +701,6 @@ function SimpleMacroMenuCreateTab_HideDetails()
    SimpleMacroMenuCreateTabTextScrollFrameMacroText:Hide()
 end
 
-function SimpleMacroMenuCreateTabLineTypeDropDown_OnEvent(self, event, ...)
-   if event == "PLAYER_ENTERING_WORLD" then
-      self.defaultValue = ""
-      self.value = self.defaultValue
-      self.tooltip = L.LINE_TYPE_TOOLTIP_NONE
-
-      UIDropDownMenu_SetWidth(self, 120)
-      UIDropDownMenu_Initialize(self, SimpleMacroMenuCreateTabLineTypeDropDown_Initialize)
-      UIDropDownMenu_SetSelectedValue(self, self.value)
-      
-      self.SetValue = 
-         function (self, value)
-            self.value = value
-            UIDropDownMenu_SetSelectedValue(self, value)
-
-            if value == L.LINE_TYPE_TABLE.NONE then
-               self.tooltip = L.LINE_TYPE_TOOLTIP_NONE
-            else
-               if value then
-                  self.tooltip = L.LINE_TYPE_TOOLTIP..(self.value == L.LINE_TYPE_TABLE.SHOWTOOLTIP and "#" or "/")..value.."."
-               end
-            end
-         end
-      self.GetValue =
-         function (self)
-            return UIDropDownMenu_GetSelectedValue(self)
-         end
-      self.RefreshValue =
-         function (self)
-            UIDropDownMenu_Initialize(self, SimpleMacroMenuCreateTabLineTypeDropDown_Initialize)
-            UIDropDownMenu_SetSelectedValue(self, self.value)
-         end
-
-      SimpleMacroMenuCreateTabLineTypeDropDownLabel:SetText(L.LINE_TYPE_DROPDOWN_LABEL)
-      self:UnregisterEvent(event)
-   end
-end
-
-function SimpleMacroMenuCreateTabLineTypeDropDown_OnClick(self)
-   local ltype, parse
-
-   SimpleMacroMenuCreateTabLineTypeDropDown:SetValue(self.value)
-   ltype = self.value == L.LINE_TYPE_TABLE.SHOWTOOLTIP and "#" or "/"
-   parse = SimpleMacroMenu.createParse
-
-   parse.lines[SimpleMacroMenu.selectedLine].type = ltype
-   parse.lines[SimpleMacroMenu.selectedLine].cmd = self.value
-   EditMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart, nil, nil, parse:compose())
-   CreateTab_Update()
-end
-
-function SimpleMacroMenuCreateTabLineTypeDropDown_Initialize()
-   local selectedValue = UIDropDownMenu_GetSelectedValue(SimpleMacroMenuCreateTabLineTypeDropDown)
-   local info = UIDropDownMenu_CreateInfo()
-
-   for _, cmd in pairs(L.LINE_TYPE_TABLE) do
-      info.text = cmd
-      info.func = SimpleMacroMenuCreateTabLineTypeDropDown_OnClick
-      info.value = cmd
-      if info.value == selectedValue then
-         info.checked = 1
-      else
-         info.checked = nil
-      end
-      info.tooltipTitle = cmd
-      info.tooltipText = "The command "..cmd
-      UIDropDownMenu_AddButton(info)
-   end
-end
 
 function SimpleMacroMenuSaveButton_OnClick(self)
    SM_SaveMacro()
@@ -559,9 +807,17 @@ function SM_DeleteArgButton_OnClick(self)
    CreateTab_Update()
 end
 
-function SimpleMacroMenuCancelButton_OnClick(self)
-   HideUIPanel(SimpleMacroMenu)
-end
+
+
+
+
+
+
+
+
+
+
+-- CONDITIONALS MENU FUNCTIONS --
 
 function SM_CondMenu_OnLoad(panel)
    local cond_cbox, cboxNum, condEntryInput, cbox_text
@@ -646,11 +902,11 @@ function SM_CheckButton_OnClick(checkButton)
 
    if checkButton:GetChecked() and checkButton.interruptCheck then
       checkButton.interruptCheck(checkButton)
-      checkButton:SetChecked(false)   --Make it look like the button wasn't changed, but after the interrupt function has had a chance to look at what it was set to.
+      checkButton:SetChecked(false)
       return
    elseif not checkButton:GetChecked() and checkButton.interruptUncheck then
       checkButton.interruptUncheck(checkButton)
-      checkButton:SetChecked(true) --Make it look like the button wasn't changed, but after the interrupt function has had a chance to look at what it was set to.
+      checkButton:SetChecked(true)
       return
    end
 end

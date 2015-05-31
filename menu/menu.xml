@@ -103,6 +103,43 @@
          </OnClick>
       </Scripts>
    </CheckButton>
+   <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
+      <Size x="92" y="16"/>
+      <Layers>
+         <Layer level="CONTENT">
+            <FontString name="$parentData" inherits="GameFontHighlightSmall" text="ERROR">
+               <Anchors>
+                  <Anchor point="CENTER">
+                     <Offset>
+                        <AbsDimension x="0" y="0"/>
+                     </Offset>
+                  </Anchor>
+               </Anchors>
+            </FontString>
+         </Layer>
+      </Layers>
+   </CheckButton>
+   <CheckButton name="SM_MacroEditorLineEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            MacroEditorLine_OnClick(self, button, down)
+         </OnClick>
+      </Scripts>
+   </CheckButton>
+   <CheckButton name="SM_MacroEditorArgEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            MacroEditorArg_OnClick(self, button, down)
+         </OnClick>
+      </Scripts>
+   </CheckButton>
+   <CheckButton name="SM_MacroEditorCondEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+      <Scripts>
+         <OnClick>
+            MacroEditorCond_OnClick(self, button, down)
+         </OnClick>
+      </Scripts>
+   </CheckButton>
    <Frame name="SM_BackgroundTemplate" virtual="true">
       <Size>
          <AbsDimension x="324" y="156"/>
@@ -160,11 +197,10 @@
                <Anchor point="BOTTOMRIGHT"/>
             </Anchors>
             <Frames>
-               <
                <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
                   <Anchors>
                      <Anchor point="TOPLEFT">
-                        <Offset x="16" y="-60"/>
+                        <Offset x="32" y="-60"/>
                      </Anchor>
                   </Anchors>
                   <Layers>
@@ -187,8 +223,8 @@
                <ScrollFrame name="$parentLineFrame" inherits="UIPanelScrollFrameTemplate">
                   <Size x="244" y="76"/>
                   <Anchors>
-                     <Anchor point="TOPLEFT" relativeTo="$parentSelected" relativePoint="BOTTOMLEFT">
-                        <Offset x="-4" y="-108"/>
+                     <Anchor point="TOPLEFT" relativePoint="TOPLEFT">
+                        <Offset x="16" y="-192"/>
                      </Anchor>
                   </Anchors>
                   <ScrollChild>
@@ -406,7 +442,7 @@
                      <OnClick>
                         ShowUIPanel(SM_CondMenu)
                         self:Disable()
-                        PlaySound("gsTitleOptionOK")
+                        PlaySound("igCharacterInfoTab")
                      </OnClick>
                   </Scripts>
                </Button>
@@ -509,14 +545,49 @@
                      <OnLeave function="GameTooltip_Hide"/>
                   </Scripts>
                </Frame>
+               <ScrollFrame name="$parentMacroEditorScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                  <Size>
+                     <AbsDimension x="286" y="124"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT">
+                        <Offset>
+                           <AbsDimension x="0" y="-96" />
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+                  <ScrollChild>
+                     <Frame name="$parentChild">
+                        <Size x="200" y="10"/>
+                        <Anchors>
+                           <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                        <Scripts>
+                           <OnLoad function="SM_MacroEditor_OnLoad"/>
+                        </Scripts>
+                     </Frame>
+                  </ScrollChild>
+               </ScrollFrame>
+               <Frame name="$parentMacroEditorBackground" inherits="SM_BackgroundTemplate">
+                  <Size>
+                     <AbsDimension x="322" y="134"/>
+                  </Size>
+                  <Anchors>
+                     <Anchor point="TOPLEFT" relativeTo="$parentMacroEditorScrollFrame" relativePoint="TOPLEFT">
+                        <Offset>
+                           <AbsDimension x="-7" y="5"/>
+                        </Offset>
+                     </Anchor>
+                  </Anchors>
+               </Frame>
                <ScrollFrame name="$parentTextScrollFrame" inherits="UIPanelScrollFrameTemplate">
                   <Size>
-                     <AbsDimension x="286" y="85"/>
+                     <AbsDimension x="286" y="84"/>
                   </Size>
                   <Anchors>
                      <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                           <AbsDimension x="-42" y="56"/>
+                           <AbsDimension x="-42" y="96"/>
                         </Offset>
                      </Anchor>
                   </Anchors>
@@ -603,7 +674,7 @@
                      </OnLoad>
                   </Scripts>
                </Frame>
-               <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Save">
+               <Button name="$parentSaveButton" inherits="UIPanelButtonTemplate" text="Save">
                   <Size>
                      <AbsDimension x="320" y="22"/>
                   </Size>
@@ -618,19 +689,19 @@
                      <OnClick function="SimpleMacroMenuSaveButton_OnClick"/>
                   </Scripts>
                </Button>
-               <Button name="$parentExitButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Save">
+               <Button name="$parentCloseButton" inherits="UIPanelButtonTemplate" text="Close">
                   <Size>
-                     <AbsDimension x="90" y="22"/>
+                     <AbsDimension x="116" y="22"/>
                   </Size>
                   <Anchors>
-                     <Anchor point="TOPRIGT" relativeTo="$parentTextScrollFrame" relativePoint="BOTTOMRIGHT">
+                     <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
                         <Offset>
-                           <AbsDimension x="-6" y="-16"/>
+                           <AbsDimension x="-14" y="14"/>
                         </Offset>
                      </Anchor>
                   </Anchors>
                   <Scripts>
-                     <OnClick function="SimpleMacroMenuCancelButton_OnClick"/>
+                     <OnClick function="SimpleMacroMenuCloseButton_OnClick"/>
                   </Scripts>
                </Button>
             </Frames>
@@ -646,17 +717,17 @@
             <Anchors>
                <Anchor point="TOPLEFT">
                   <Offset>
-                     <AbsDimension x="2" y="-28"/>
+                     <AbsDimension x="8" y="-32"/>
                   </Offset>
                </Anchor>
                <Anchor point="BOTTOMLEFT">
                   <Offset>
-                     <AbsDimension x="0" y="2"/>
+                     <AbsDimension x="0" y="8"/>
                   </Offset>
                </Anchor>
                <Anchor point="RIGHT">
                   <Offset>
-                     <AbsDimension x="-2" y="0"/>
+                     <AbsDimension x="-7" y="0"/>
                   </Offset>
                </Anchor>
             </Anchors>
@@ -681,7 +752,7 @@
             <Anchors>
                <Anchor point="TOPLEFT">
                   <Offset>
-                     <AbsDimension x="8" y="-4"/>
+                     <AbsDimension x="8" y="-8"/>
                   </Offset>
                </Anchor>
             </Anchors>
@@ -721,13 +792,175 @@
       </Scripts>
    </Frame>
 
-   <!-- 35 conditionals -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <!-- NEW LINE MENU -->
+   <Frame name="SM_NewLineMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+      <Size x="238" y="164"/>
+      <Anchors>
+         <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT">
+            <Offset>
+               <AbsDimension x="0" y="0"/>
+            </Offset>
+         </Anchor>
+      </Anchors>
+      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+         <BackgroundInsets>
+            <AbsInset left="11" right="11" top="12" bottom="10"/>
+         </BackgroundInsets>
+         <TileSize>
+            <AbsValue val="32"/>
+         </TileSize>
+         <EdgeSize>
+            <AbsValue val="32"/>
+         </EdgeSize>
+      </Backdrop>
+      <Frames>
+         <Frame name="$parentCategoryDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
+            <Anchors>
+               <Anchor point="TOP">
+                  <Offset>
+                     <AbsDimension x="0" y="-32"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Layers>
+               <Layer level="BACKGROUND">
+                  <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
+                     <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                           <Offset>
+                              <AbsDimension x="16" y="3"/>
+                           </Offset>
+                        </Anchor>
+                     </Anchors>
+                  </FontString>
+               </Layer>
+            </Layers>
+            <Scripts>
+               <OnLoad>
+                  self:RegisterEvent("PLAYER_ENTERING_WORLD")
+               </OnLoad>
+               <OnEnter>
+                  if not self.isDisabled then
+                     GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+                     GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+                  end
+               </OnEnter>
+               <OnEvent function="SM_CategoryDropDown_OnEvent"/>
+               <OnLeave function="GameTooltip_Hide"/>
+            </Scripts>
+         </Frame>
+         <Frame name="$parentCommandDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
+            <Anchors>
+               <Anchor point="TOPLEFT" relativeTo="$parentCategoryDropDown" relativePoint="BOTTOMLEFT">
+                  <Offset>
+                     <AbsDimension x="0" y="-18"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Layers>
+               <Layer level="BACKGROUND">
+                  <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
+                     <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                           <Offset>
+                              <AbsDimension x="16" y="3"/>
+                           </Offset>
+                        </Anchor>
+                     </Anchors>
+                  </FontString>
+               </Layer>
+            </Layers>
+            <Scripts>
+               <OnLoad>
+                  self:RegisterEvent("PLAYER_ENTERING_WORLD")
+               </OnLoad>
+               <OnEnter>
+                  if not self.isDisabled then
+                     GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+                     GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+                  end
+               </OnEnter>
+               <OnEvent function="SM_CommandDropDown_OnEvent"/>
+               <OnLeave function="GameTooltip_Hide"/>
+            </Scripts>
+         </Frame>
+         <Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
+            <Size>
+               <AbsDimension x="104" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="BOTTOMRIGHT">
+                  <Offset>
+                     <AbsDimension x="-14" y="14"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_NewLineMenu_CancelButton_OnClick"/>
+            </Scripts>
+         </Button>
+         <Button name="$parentAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
+            <Size>
+               <AbsDimension x="104" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT">
+                  <Offset>
+                     <AbsDimension x="-2" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_NewLineMenu_AcceptButton_OnClick"/>
+            </Scripts>
+         </Button>
+      </Frames>
+      <Scripts>
+         <OnLoad function="SM_NewLineMenu_OnLoad"/>
+         <OnShow function="SM_NewLineMenu_OnShow"/>
+         <OnHide function="SM_NewLineMenu_OnHide"/>
+      </Scripts>
+   </Frame>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+   <!-- CONDITIONALS MENU 35 conditionals -->
    <Frame name="SM_CondMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
       <Size x="450" y="660"/>
       <Anchors>
-         <Anchor point="BOTTOMLEFT" relativeTo="SimpleMacroMenu" relativePoint="BOTTOMRIGHT">
+         <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT">
             <Offset>
-               <AbsDimension x="20" y="-52"/>
+               <AbsDimension x="0" y="0"/>
             </Offset>
          </Anchor>
       </Anchors>
@@ -743,7 +976,7 @@
          </EdgeSize>
       </Backdrop> 
       <Frames>
-         <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Cancel">
+         <Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
             <Size>
                <AbsDimension x="104" y="22"/>
             </Size>
@@ -755,13 +988,10 @@
                </Anchor>
             </Anchors>
             <Scripts>
-               <OnClick>
-                  SM_CondMenu_CancelButton_OnClick(self)
-                  PlaySound("gsTitleOptionOK")
-               </OnClick>
+               <OnClick function="SM_CondMenu_CancelButton_OnClick"/>
             </Scripts>
          </Button>
-         <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Save">
+         <Button name="$parentSaveButton" inherits="UIPanelButtonTemplate" text="Save">
             <Size>
                <AbsDimension x="104" y="22"/>
             </Size>
@@ -773,10 +1003,7 @@
                </Anchor>
             </Anchors>
             <Scripts>
-               <OnClick>
-                  SM_CondMenu_SaveButton_OnClick(self)
-                  PlaySound("gsTitleOptionOK")
-               </OnClick>
+               <OnClick function="SM_CondMenu_SaveButton_OnClick"/>
             </Scripts>
          </Button>
          <CheckButton name="$parentAlternateCheckButton" inherits="SimpleMacroSmallCheckButtonTemplate">

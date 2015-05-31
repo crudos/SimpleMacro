@@ -5,7 +5,7 @@
 
 
    <!-- CREATE MACRO POPUP FRAME -->
-   <Frame name="SimpleMacroFramex" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
+   <Frame name="SimpleMacroFrame" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
       <Size>
          <AbsDimension x="384" y="512"/>
       </Size>
