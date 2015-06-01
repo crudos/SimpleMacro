@@ -113,8 +113,8 @@ local function parse_conds(cond_body)
          cond = {}
          temp = trim(cur)
 
-         if string.match(temp, ".*[:=](.*)") then
-            cond.cond, cond.input = string.match(temp, "(.*[:=])(.*)")
+         if string.match(temp, ".-[@:=](.*)") then
+            cond.cond, cond.input = string.match(temp, "(.-[@:=])(.*)")
          else
             cond.cond = temp
          end
@@ -346,6 +346,8 @@ function SMacro:addLine()
 
    self.lines[new_line].args = {}
    self.lines[new_line].args.count = 0
+
+   return new_line
 end
 
 function SMacro:removeLine(line_num)
@@ -381,14 +383,15 @@ function SMacro:addArgument(line_num, argument)
    self.lines[line_num].args[new_arg].arg = argument
    self.lines[line_num].args.count = new_arg
 
-    self.lines[line_num].args[new_arg].conds = {}
-    self.lines[line_num].args[new_arg].conds.count = 0
+   self.lines[line_num].args[new_arg].conds = {}
+   self.lines[line_num].args[new_arg].conds.count = 0
 
+   return new_arg
 end
 
 function SMacro:setArgument(line_num, arg_num, argument)
-   if not self.lines[line_num].args[arg_num] == nil then
-      self.lines[line_num].args[arg_num] = argument
+   if self.lines[line_num].args[arg_num] ~= nil then
+      self.lines[line_num].args[arg_num].arg = argument
    end
 end
 
@@ -476,4 +479,30 @@ end
 -- get the list of conditionals for line |line_num| and argument |arg_num|
 function SMacro:getConditionals(line_num, arg_num) 
    return self.lines[line_num].args[arg_num].conds
+end
+
+function SMacro:composeConditionals(line_num, arg_num)
+   local result, thisArg, curCond
+
+   thisArg = self.lines[line_num].args[arg_num]
+
+   for count, conditional in ipairs(thisArg.conds) do
+      curCond = conditional.cond
+
+      if conditional.input then
+         curCond = curCond..conditional.input
+      end
+
+      if count == 1 then
+         result = "["..curCond
+      else
+         result = result..", "..curCond
+      end
+
+      if count == thisArg.conds.count then
+         result = result.."]"
+      end
+   end
+
+   return result
 end

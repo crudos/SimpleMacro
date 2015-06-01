@@ -9,7 +9,6 @@ L["LINES_COMMAND_COLUMN"] = "Command"
 L["ARGS_ARGUMENT_COLUMN"] = "Argument"
 
 -- Create 
-
 L["LINE_TYPE_DROPDOWN_LABEL"] = "Line Type"
 L["LINE_TYPE_CATEGORY_LABEL"] = "Category"
 L["LINE_TYPE_COMMAND_LABEL"] = "Command"
