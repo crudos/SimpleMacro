@@ -22,7 +22,8 @@
    SMacro:addConditional(line_num, arg_num, conditional)
    SMacro:setConditional(line_num, arg_num, cond_num, conditional)
    SMacro:removeConditional(line_num, arg_num, cond_num)
-   SMacro:getConditionals(line_num, arg_num) 
+   SMacro:getConditionals(line_num, arg_num)
+   SMacro:composeConditionals(line_num, arg_num)
 
    Table reference:
 
