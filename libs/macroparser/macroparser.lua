@@ -66,18 +66,7 @@ local function isempty(s)
 end
 
 local function trim(s)
-   local cur = s
-
-   if cur then
-      if string.match(cur, "[ ]*(.*)") then
-         cur = string.match(string.reverse(string.match(cur, "[ ]*(.*)")), "[ ]*(.*)")
-           if cur then
-            return string.reverse(cur)
-         end
-      end
-   end
-
-   return ""
+   return s:match'^()%s*$' and '' or s:match'^%s*(.*%S)'
 end
 
 --[[
