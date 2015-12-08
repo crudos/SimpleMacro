@@ -203,7 +203,7 @@ end
 function SM_GroupTargetButton_OnClick(self)
    local id = SimpleMacroMenu.groupSelect
    local list = SimpleMacroMenu.groupButtons
-   local target = SimpleMacroMenuTargetText:GetText()
+   local target = SimpleMacroMenuGroupTabTargetText:GetText()
 
    if not isempty(target) then
       for i = 1, #list do
