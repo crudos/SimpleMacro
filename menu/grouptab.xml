@@ -29,6 +29,36 @@
                <OnLoad function="ScrollFrame_OnLoad"/>
             </Scripts>
          </ScrollFrame>
+         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account">
+            <Anchors>
+               <Anchor point="BOTTOMLEFT" relativeTo="$parentUserScrollFrame" relativePoint="TOPLEFT">
+                  <Offset>
+                     <AbsDimension x="2" y="2"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  SM_GroupTabAccountMacroTab_OnClick(self)
+                  PlaySound("igCharacterInfoTab")
+               </OnClick>
+            </Scripts>
+         </Button>
+         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character">
+            <Anchors>
+               <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT">
+                  <Offset>
+                     <AbsDimension x="-16" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick>
+                  SM_GroupTabCharacterMacroTab_OnClick(self)
+                  PlaySound("igCharacterInfoTab")
+               </OnClick>
+            </Scripts>
+         </Button>
          <ScrollFrame name="$parentGroupScrollFrame" inherits="UIPanelScrollFrameTemplate">
             <Size x="244" y="146"/>
             <Anchors>
@@ -116,5 +146,8 @@
             </Scripts>
          </EditBox>
       </Frames> 
+      <Scripts>
+         <OnLoad function="SM_GroupTab_OnLoad"/>
+      </Scripts>
    </Frame>
 </Ui>

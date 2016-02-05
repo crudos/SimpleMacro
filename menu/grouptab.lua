@@ -5,12 +5,48 @@ GROUPTAB_MACROS_PER_ROW = 5
 local _, L = ...
 local G = _G
 
+local function isempty(s)
+   return s == nil or s == ''
+end
+
+local function setAccountMacros()
+   SimpleMacroMenu.macroStart = 0
+   SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
+
+   local numAccountMacros, numCharacterMacros = GetNumMacros()
+
+   if numAccountMacros > 0 then
+      SM_UserButton_SelectMacro(1)
+   else
+      SM_UserButton_SelectMacro(nil)
+   end
+end
+
+local function setCharacterMacros()
+   SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
+   SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
+
+   local numAccountMacros, numCharacterMacros = GetNumMacros()
+
+   if numCharacterMacros > 0 then
+      SM_UserButton_SelectMacro(1)
+   else
+      SM_UserButton_SelectMacro(nil)
+   end
+end
+
 -- GROUP TAB
+function SM_GroupTab_OnLoad(panel)
+   PanelTemplates_SetNumTabs(SimpleMacroMenuGroupTab, 2)
+   PanelTemplates_SetTab(SimpleMacroMenuGroupTab, 1)
+end
+
 function SimpleMacroMenuGroupTab_OnClick(self)
    PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
    SimpleMacroMenuCreateTab:Hide()
    SimpleMacroMenuGroupTab:Show()
 
+   setAccountMacros()
    SM_UserButton_Update()
    SM_GroupButton_Update()
    SimpleMacroMenuGroupTabTargetText:ClearFocus()
@@ -20,7 +56,7 @@ end
 function SM_UserButtons_OnLoad(self)
    local macrosPerRow = GROUPTAB_MACROS_PER_ROW
    local button
-   for i = 1, MAX_CHARACTER_MACROS do
+   for i = 1, MAX_ACCOUNT_MACROS do
       button = CreateFrame("CheckButton", "SMUserButton"..i, self, "SimpleMacroButtonTemplate")
       button:SetID(i)
       if i == 1 then
@@ -33,10 +69,23 @@ function SM_UserButtons_OnLoad(self)
    end
 end
 
+function SM_GroupTabAccountMacroTab_OnClick(self)
+   PanelTemplates_SetTab(SimpleMacroMenuGroupTab, self:GetID())
+   setAccountMacros()
+   SM_UserButton_Update()
+end
+
+
+function SM_GroupTabCharacterMacroTab_OnClick(self)
+   PanelTemplates_SetTab(SimpleMacroMenuGroupTab, self:GetID())
+   setCharacterMacros()
+   SM_UserButton_Update()
+end
+
 function SM_GroupButtons_OnLoad(self)
    local macrosPerRow = GROUPTAB_MACROS_PER_ROW
    local button
-   for i = 1, MAX_CHARACTER_MACROS do
+   for i = 1, MAX_ACCOUNT_MACROS do
       button = CreateFrame("CheckButton", "SMGroupButton"..i, self, "SimpleMacroButtonTemplate")
       button:SetID(i)
       if i == 1 then
@@ -58,27 +107,40 @@ function SM_UserButton_Update()
    local macroButtonName, macroButton, macroIcon, macroName
    local name, texture, body
 
-   for i = 1, MAX_CHARACTER_MACROS do
+   if SimpleMacroMenu.macroStart == 0 then
+      numMacros = numAccountMacros
+   else
+      numMacros = numCharacterMacros
+   end
+
+   for i = 1, MAX_ACCOUNT_MACROS do
       macroButtonName = "SMUserButton"..i
       macroButton = G[macroButtonName]
       macroIcon = G[macroButtonName.."Icon"]
       macroName = G[macroButtonName.."Name"]
-      if i <= numCharacterMacros then
-         name, texture, body = GetMacroInfo(MAX_ACCOUNT_MACROS + i)
-         macroIcon:SetTexture(texture)
-         macroName:SetText(name)
-         macroButton:Enable()
 
-         if SimpleMacroMenu.userSelect and SimpleMacroMenu.userSelect - MAX_ACCOUNT_MACROS == i then
-            macroButton:SetChecked(true)
+      if i <= SimpleMacroMenu.macroMax then
+         if i <= numMacros then
+            name, texture, body = GetMacroInfo(i + SimpleMacroMenu.macroStart)
+            macroIcon:SetTexture(texture)
+            macroName:SetText(name)
+            macroButton:Enable()
+
+            if SimpleMacroMenu.userSelect and SimpleMacroMenu.userSelect == i then
+               macroButton:SetChecked(true)
+            else
+               macroButton:SetChecked(false)
+            end
          else
+            macroIcon:SetTexture("");
+            macroName:SetText("");
+            macroButton:Disable();
             macroButton:SetChecked(false)
          end
+
+         macroButton:Show()
       else
-         macroIcon:SetTexture("");
-         macroName:SetText("");
-         macroButton:Disable();
-         macroButton:SetChecked(false)
+         macroButton:Hide()
       end
    end
 end
@@ -89,11 +151,12 @@ function SM_GroupButton_Update()
    local name, texture, body
    local list = SimpleMacroMenu.groupButtons
 
-   for i = 1, MAX_CHARACTER_MACROS do
+   for i = 1, MAX_ACCOUNT_MACROS do
       macroButtonName = "SMGroupButton"..i
       macroButton = G[macroButtonName]
       macroIcon = G[macroButtonName.."Icon"]
       macroName = G[macroButtonName.."Name"]
+
       if i <= #list then
          name, texture, body = GetMacroInfo(list[i])
          macroIcon:SetTexture(texture)
@@ -123,7 +186,7 @@ function SM_GroupButton_SelectMacro(id)
 end
 
 function SM_GroupAddButton_OnClick(self)
-   local leftButton = SimpleMacroMenu.userSelect
+   local leftButton = SimpleMacroMenu.userSelect + SimpleMacroMenu.macroStart
    local list = SimpleMacroMenu.groupButtons
    local isFound = false
 
@@ -166,14 +229,14 @@ function SM_GroupDeleteButton_OnClick(self)
    SM_GroupButton_Update()
 end
 
-local function editmacro(index, target)
+local function changeTargets(index, target)
    local numAccountMacros, numCharacterMacros = GetNumMacros() -- API for users current # of macros
    local idx = tonumber(index)
 
    if isempty(index) then
       print("That is not a macro number.")
-   elseif idx <= numCharacterMacros then
-      local macroText = GetMacroBody(idx + MAX_ACCOUNT_MACROS)
+   else
+      local macroText = GetMacroBody(idx)
 
       if string.len(target) ~= 0 then
          local atStart, atEnd, tarStart, tarEnd, oldTar
@@ -190,13 +253,12 @@ local function editmacro(index, target)
             macroText = string.sub(macroText, 1, tarEnd)..target..string.sub(macroText, tarEnd + string.len(oldTar) + 1)
          end
 
-         EditMacro(idx + MAX_ACCOUNT_MACROS, nil, nil, macroText)
+         EditMacro(idx, nil, nil, macroText)
+
          print("The macro at index "..idx.." was changed.")
       else
          print("/sm edit <macro #> <new target>")
       end
-   else
-      print("The macro number provided doesnt exist.")
    end
 end
 
@@ -207,7 +269,7 @@ function SM_GroupTargetButton_OnClick(self)
 
    if not isempty(target) then
       for i = 1, #list do
-         editmacro(list[i] - MAX_ACCOUNT_MACROS, target)
+         changeTargets(list[i], target)
       end
    end
 end

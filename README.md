@@ -1,2 +1,3 @@
 # SimpleMacro
-Senior Project. Addon for World of Warcraft.
+
+Addon for World of Warcraft. http://www.curse.com/addons/wow/simple-macro

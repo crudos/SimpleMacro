@@ -5,6 +5,8 @@ CREATETAB_MACROS_PER_ROW = 6
 local _, L = ...
 local G = _G
 
+-- UNUSED FILE AT THE MOMENT
+
 -- CREATE TAB
 function SimpleMacroMenuCreateTab_OnClick(self)
    PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())

@@ -15,13 +15,41 @@ local function isempty(s)
    return s == nil or s == ''
 end
 
+-- set account macro counters and select the first macro if it exists
+local function setAccountMacros()
+   SimpleMacroMenu.macroStart = 0
+   SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
+
+   local numAccountMacros, numCharacterMacros = GetNumMacros()
+
+   if numAccountMacros > 0 then
+      CreateTab_SelectMacro(1)
+   else
+      CreateTab_SelectMacro(nil)
+   end
+end
+
+-- set character macro counters and select the first macro if it exists
+local function setCharacterMacros()
+   SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
+   SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
+
+   local numAccountMacros, numCharacterMacros = GetNumMacros()
+
+   if numCharacterMacros > 0 then
+      CreateTab_SelectMacro(1)
+   else
+      CreateTab_SelectMacro(nil)
+   end
+end
+
 -- sets the selected macro button
 function SimpleMacroButton_OnClick(self, button, down)
    local name = self:GetName()
    local id = self:GetID()
 
    if name == "SMUserButton"..id then
-      SM_UserButton_SelectMacro(MAX_ACCOUNT_MACROS + id)
+      SM_UserButton_SelectMacro(id)
       SM_UserButton_Update()
    elseif name == "SMGroupButton"..id then
       SM_GroupButton_SelectMacro(id)
@@ -49,18 +77,6 @@ function SimplePickupMacro(self)
    end
 end
 
-function SimpleMacroMenu_OnShow(panel)
-   PlaySound("UChatScrollButton")
-
-   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   SM_SetAccountMacros()
-   CreateTab_Update()
-end
-
-function SimpleMacroMenu_OnHide(panel)
-   PlaySound("UChatScrollButton")
-end
-
 function SimpleMacroMenu_OnLoad(panel)
    panel:RegisterForDrag("LeftButton")
    panel.name = "SimpleMacro"
@@ -71,8 +87,21 @@ function SimpleMacroMenu_OnLoad(panel)
 
    PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
    PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   SM_SetAccountMacros()
+   setAccountMacros()
 end
+
+function SimpleMacroMenu_OnShow(panel)
+   PlaySound("UChatScrollButton")
+
+   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
+   setAccountMacros()
+   CreateTab_Update()
+end
+
+function SimpleMacroMenu_OnHide(panel)
+   PlaySound("UChatScrollButton")
+end
+
 
 -- CREATE TAB
 
@@ -87,46 +116,20 @@ function SimpleMacroMenuCreateTab_OnClick(self)
    SimpleMacroMenuGroupTab:Hide()
 
    PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   SM_SetAccountMacros()
+   setAccountMacros()
    CreateTab_Update()
 end
 
 function SM_CreateTabAccountMacroTab_OnClick(self)
    PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   SM_SetAccountMacros()
+   setAccountMacros()
    CreateTab_Update()
 end
 
 function SM_CreateTabCharacterMacroTab_OnClick(self)
    PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 2)
-   SM_SetCharacterMacros()
+   setCharacterMacros()
    CreateTab_Update()
-end
-
-function SM_SetAccountMacros()
-   SimpleMacroMenu.macroStart = 0
-   SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
-
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
-
-   if numAccountMacros > 0 then
-      CreateTab_SelectMacro(1)
-   else
-      CreateTab_SelectMacro(nil)
-   end
-end
-
-function SM_SetCharacterMacros()
-   SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
-   SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
-
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
-
-   if numCharacterMacros > 0 then
-      CreateTab_SelectMacro(1)
-   else
-      CreateTab_SelectMacro(nil)
-   end
 end
 
 function SMCreateButtons_OnLoad(self)
