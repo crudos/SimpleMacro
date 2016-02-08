@@ -66,44 +66,53 @@ function SimplePickupMacro(self)
    local name = self:GetName()
    local id = self:GetID()
 
-   if name == "SMUserButton"..self:GetID() then
-      PickupMacro(MAX_ACCOUNT_MACROS + id)
-   elseif name == "SMGroupButton"..id then
-      PickupMacro(SimpleMacroMenu.groupButtons[id])
-   elseif name == "SMCreateButton"..id then
-      PickupMacro(id + SimpleMacroMenu.macroStart)
+   if name == "SMGroupButton"..id then
+      PickupMacro(SimpleMacroMenu.groupTable[id])
    else
+      -- SMUserButton and SMCreateButton
       PickupMacro(id + SimpleMacroMenu.macroStart)
    end
 end
 
 function SimpleMacroMenu_OnLoad(panel)
+   tinsert(UISpecialFrames, panel:GetName())
    panel:RegisterForDrag("LeftButton")
    panel.name = "SimpleMacro"
-   InterfaceOptions_AddCategory(panel)
    panel.elapsed = 0
-   PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
-   PanelTemplates_SetTab(SimpleMacroMenu, 1)
+   InterfaceOptions_AddCategory(panel)
 
-   PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
-   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   setAccountMacros()
+   PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
+   PanelTemplates_SetTab(SimpleMacroMenu, 1) 
 end
 
 function SimpleMacroMenu_OnShow(panel)
-   PlaySound("UChatScrollButton")
-
-   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   setAccountMacros()
-   CreateTab_Update()
+   PlaySound("igCharacterInfoOpen")
 end
 
 function SimpleMacroMenu_OnHide(panel)
-   PlaySound("UChatScrollButton")
+   PlaySound("igCharacterInfoClose")
 end
 
-
 -- CREATE TAB
+
+function SM_CreateTab_OnLoad(panel)
+   PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
+   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
+end
+
+function SM_CreateTab_OnShow(panel)
+   if PanelTemplates_GetSelectedTab(SimpleMacroMenuCreateTab) == 1 then
+      setAccountMacros()
+   else
+      setCharacterMacros()
+   end
+
+   CreateTab_Update()
+end
+
+function SM_CreateTab_OnHide(panel)
+
+end
 
 function SM_CloseButton_OnClick(self)
    G["SM_MacroEditor_AddNewLine"]:Enable()
@@ -114,10 +123,6 @@ function SimpleMacroMenuCreateTab_OnClick(self)
    PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
    SimpleMacroMenuCreateTab:Show()
    SimpleMacroMenuGroupTab:Hide()
-
-   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-   setAccountMacros()
-   CreateTab_Update()
 end
 
 function SM_CreateTabAccountMacroTab_OnClick(self)
@@ -161,10 +166,14 @@ function CreateTab_Update()
    local numMacros, maxMacros
    local macroButtonName, macroButton, macroIcon, macroName
    local name, texture, body
+   local createSelect = SimpleMacroMenu.createSelect
+   local macroStart = SimpleMacroMenu.macroStart
 
-   EditMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart, nil, nil, SimpleMacroMenu.createParse:compose())
+   if createSelect then
+      EditMacro(createSelect + macroStart, nil, nil, SimpleMacroMenu.createParse:compose())
+   end
 
-   if SimpleMacroMenu.macroStart == 0 then
+   if macroStart == 0 then
       numMacros = numAccountMacros
    else
       numMacros = numCharacterMacros
@@ -178,12 +187,12 @@ function CreateTab_Update()
 
       if i <= SimpleMacroMenu.macroMax then
          if i <= numMacros then
-            name, texture, body = GetMacroInfo(i + SimpleMacroMenu.macroStart)
+            name, texture, body = GetMacroInfo(i + macroStart)
             macroIcon:SetTexture(texture)
             macroName:SetText(name)
             macroButton:Enable()
 
-            if SimpleMacroMenu.createSelect and SimpleMacroMenu.createSelect == i then
+            if createSelect and createSelect == i then
                macroButton:SetChecked(true)
 
                G["SimpleMacroMenuCreateTabSelected"]:SetID(i)
@@ -207,7 +216,7 @@ function CreateTab_Update()
 
    -- make any button/text field updates
 
-   if SimpleMacroMenu.createSelect ~= nil then
+   if createSelect ~= nil then
       SM_CreateTab_ShowDetails()
       SM_MacroEditor_Update()
    else
@@ -812,9 +821,6 @@ function SM_ArgMenu_AcceptButton_OnClick(self)
    
    SM_MenuButton_OnClick(self)
 end
-
-
-
 
 
 

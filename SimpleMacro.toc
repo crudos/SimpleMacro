@@ -3,7 +3,7 @@
 ## Author: Crudos
 ## Version: 1.0
 ## Notes: Allows you to create and change macros easily.
-## SavedVariablesPerCharacter: GroupTable, GroupCount
+## SavedVariablesPerCharacter: GroupTable
 
 localization\localization.xml
 

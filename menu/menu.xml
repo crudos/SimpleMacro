@@ -368,6 +368,11 @@
                   </Scripts>
                </Button>
             </Frames>
+            <Scripts>
+               <OnLoad function="SM_CreateTab_OnLoad"/>
+               <OnShow function="SM_CreateTab_OnShow"/>
+               <OnHide function="SM_CreateTab_OnHide"/>
+            </Scripts>
          </Frame>
          <!-- END CREATE TAB -->
          <Frame name="$parentPanelContainer">
