@@ -17,7 +17,6 @@ function listener:OnEvent(event, arg1)
       end
 
       SimpleMacroMenu.groupTable = GroupTable
-      end
    end
 
    if event == "PLAYER_LOGOUT" then
