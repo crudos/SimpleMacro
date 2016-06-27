@@ -1,9 +1,7 @@
 -- Author      : Crudos
 -- Create Date : 4/25/2015 12:55:17 PM
-GROUPTAB_MACROS_PER_ROW = 6
-SM_MAX_GROUP_TABS = 4
-
 local _, L = ...
+local C = L["Group"]
 local G = _G
 
 local function isempty(s)
@@ -37,7 +35,7 @@ local function setCharacterMacros()
 end
 
 local function setGroupMacros()
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
    local group = groupTable[groupTable.selected]
 
    if group and #group > 0 then
@@ -54,7 +52,7 @@ local function loadGroupTabs()
    local parentFrame = SimpleMacroMenuGroupTabGroupScrollFrame
    local inheritFrame = "OptionsFrameTabButtonTemplate"
 
-   for i = 1, SM_MAX_GROUP_TABS do
+   for i = 1, C["maxTabs"] do
       CreateFrame("CheckButton", "$parentTab"..i, parentFrame, inheritFrame, i)
    end
 end
@@ -69,7 +67,7 @@ end
 function SM_GroupTab_OnShow(panel)
    if PanelTemplates_GetSelectedTab(SimpleMacroMenuGroupTab) == 1 then
       setAccountMacros()
-   else 
+   else
       setCharacterMacros()
    end
 
@@ -80,46 +78,44 @@ function SM_GroupTab_OnShow(panel)
    SM_GroupButton_Update()
 
    SM_GroupTargetText:ClearFocus()
-
-   if SimpleMacroMenu.groupTable == nil then
-      --print("group table wasn't created yet (BAD)")
-   end
-   if SimpleMacroMenu.groupTable[SimpleMacroMenu.groupTable.selected] == nil then
-      --print("no groups have been made")
-   end
 end
 
 function SM_SetGroupTabs()
    local parentFrame = SimpleMacroMenuGroupTabGroupScrollFrame
    local groupTabName = "SimpleMacroMenuGroupTabGroupScrollFrameTab"
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
    local tab
 
-   -- #groupTable + 1 allows for the "+" button to be added at the end
-   for i = 1, #groupTable + 1 do
+   for i = 1, C["maxTabs"] do
       tab = G[groupTabName..i]
 
-      if nil ~= tab then
-         if i == #groupTable + 1 then
-            tab:SetText("+")
-            tab:SetScript("OnClick", SM_GroupTab_AddGroup_OnClick)
-         else
-            tab:SetText("Group "..i)
-            tab:SetScript("OnClick", SM_GroupTab_Group_OnClick)
-         end
+      -- + 1 allows for the "+" button to be added at the end
+      if i <= #groupTable + 1 then
+         if nil ~= tab then
+            if i == #groupTable + 1 then
+               tab:SetText("+")
+               tab:SetScript("OnClick", SM_GroupTab_AddGroup_OnClick)
+            else
+               tab:SetText(L["GROUP_TAB"]["TAB_TEXT"].." "..i)
+               tab:SetScript("OnClick", SM_GroupTab_Group_OnClick)
+            end
 
-         if i == 1 then
-            tab:SetPoint("BOTTOMLEFT", parentFrame, "TOPLEFT", 2, 2)
-         else
-            tab:SetPoint("LEFT", G[groupTabName..(i-1)], "RIGHT", -16, 0)
-         end
+            if i == 1 then
+               tab:SetPoint("BOTTOMLEFT", parentFrame, "TOPLEFT", 2, 2)
+            else
+               tab:SetPoint("LEFT", G[groupTabName..(i-1)], "RIGHT", -16, 0)
+            end
 
+            tab:Hide()
+            tab:Show()
+         end
+      else
+         -- hides stray tabs
          tab:Hide()
-         tab:Show()
       end
    end
 
-   PanelTemplates_SetNumTabs(parentFrame, SM_MAX_GROUP_TABS)
+   PanelTemplates_SetNumTabs(parentFrame, C["maxTabs"])
 
    if groupTable.selected then
       PanelTemplates_SetTab(parentFrame, groupTable.selected)
@@ -129,10 +125,10 @@ function SM_SetGroupTabs()
 end
 
 function SM_GroupTab_AddGroup_OnClick(self)
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
 
    -- make new group
-   if self:GetID() <= SM_MAX_GROUP_TABS then
+   if self:GetID() <= C["maxTabs"] then
       groupTable[self:GetID()] = {}
       groupTable.selected = self:GetID()
 
@@ -140,11 +136,14 @@ function SM_GroupTab_AddGroup_OnClick(self)
       SM_SetGroupTabs()
    end
 
+   SM_GroupButton_Update()
+   SimpleMacroSettings_Load()
+
    PlaySound("UChatScrollButton")
 end
 
 function SM_GroupTab_Group_OnClick(self)
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
 
    PanelTemplates_SetTab(SimpleMacroMenuGroupTabGroupScrollFrame, self:GetID())
    groupTable.selected = self:GetID()
@@ -169,13 +168,15 @@ end
 -- create buttons containers
 function SM_UserButtons_OnLoad(self)
    local button
+   local macrosPerRow = C["macrosPerRow"]
+
    for i = 1, MAX_ACCOUNT_MACROS do
       button = CreateFrame("CheckButton", "SMUserButton"..i, self, "SimpleMacroButtonTemplate")
       button:SetID(i)
       if i == 1 then
          button:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -6)
-      elseif mod(i, GROUPTAB_MACROS_PER_ROW) == 1 then
-         button:SetPoint("TOP", "SMUserButton"..(i-GROUPTAB_MACROS_PER_ROW), "BOTTOM", 0, -10);
+      elseif mod(i, macrosPerRow) == 1 then
+         button:SetPoint("TOP", "SMUserButton"..(i-macrosPerRow), "BOTTOM", 0, -10);
       else
          button:SetPoint("LEFT", "SMUserButton"..(i-1), "RIGHT", 13, 0);
       end
@@ -196,8 +197,9 @@ function SM_GroupTabCharacterMacroTab_OnClick(self)
 end
 
 function SM_GroupButtons_OnLoad(self)
-   local macrosPerRow = GROUPTAB_MACROS_PER_ROW
    local button
+   local macrosPerRow = C["macrosPerRow"]
+
    for i = 1, MAX_ACCOUNT_MACROS do
       button = CreateFrame("CheckButton", "SMGroupButton"..i, self, "SimpleMacroButtonTemplate")
       button:SetID(i)
@@ -258,7 +260,7 @@ function SM_GroupButton_Update()
    local numAccountMacros, numCharacterMacros = GetNumMacros()
    local macroButtonName, macroButton, macroIcon, macroName
    local name, texture, body
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
    local group = groupTable[groupTable.selected]
 
    for i = 1, MAX_ACCOUNT_MACROS do
@@ -285,7 +287,7 @@ function SM_GroupButton_Update()
          macroButton:SetChecked(false)
       end
    end
-      
+
    if group and #group > 0 then
       SM_GroupDeleteButton:Enable()
       SM_GroupTargetButton:Enable()
@@ -307,7 +309,7 @@ end
 
 function SM_GroupAddButton_OnClick(self)
    local buttonId = SimpleMacroMenu.userSelect + SimpleMacroMenu.macroStart
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
    local group = groupTable[groupTable.selected]
    local isFound = false
 
@@ -327,7 +329,7 @@ end
 
 function SM_GroupDeleteButton_OnClick(self)
    local id = SimpleMacroMenu.groupSelect
-   local groupTable = SimpleMacroMenu.groupTable
+   local groupTable = SimpleMacro.dbc.groupTable
    local group = groupTable[groupTable.selected]
    local temp
 
@@ -349,45 +351,46 @@ end
 local function changeTargets(index, target)
    local numAccountMacros, numCharacterMacros = GetNumMacros() -- API for users current # of macros
    local idx = tonumber(index)
+   local targetPattern = '([^,%]]*).-$'
+   local macroText = GetMacroBody(idx)
 
-   if isempty(index) then
-      print("That is not a macro number.")
+   if string.len(target) ~= 0 then
+      local atStart, atEnd, tarStart, tarEnd, oldTar
+
+      atStart, atEnd = string.find(macroText, "@")
+      if not isempty(atStart) then
+         oldTar = string.match(string.sub(macroText, atEnd + 1), targetPattern)
+         macroText = string.sub(macroText, 1, atEnd)..target..string.sub(macroText, atEnd + string.len(oldTar) + 1)
+      end
+
+      tarStart, tarEnd = string.find(macroText, "target=")
+      if not isempty(tarStart) then
+         oldTar = string.match(string.sub(macroText, tarEnd + 1), targetPattern)
+         macroText = string.sub(macroText, 1, tarEnd)..target..string.sub(macroText, tarEnd + string.len(oldTar) + 1)
+      end
+
+      EditMacro(idx, nil, nil, macroText)
+
+      print("The macro at index "..idx.." was changed.")
    else
-      local macroText = GetMacroBody(idx)
+      print("You need to enter in a target!")
+   end
+end
 
-      if string.len(target) ~= 0 then
-         local atStart, atEnd, tarStart, tarEnd, oldTar
+function SM_ChangeGroupTarget(groupNum, newTarget)
+   local groupTable = SimpleMacro.dbc.groupTable
+   local group = groupTable[groupNum]
 
-         atStart, atEnd = string.find(macroText, "@")
-         if not isempty(atStart) then
-            oldTar = string.match(string.sub(macroText, atEnd + 1), '([^ ,%]]*).-$')
-            macroText = string.sub(macroText, 1, atEnd)..target..string.sub(macroText, atEnd + string.len(oldTar) + 1)
-         end
-
-         tarStart, tarEnd = string.find(macroText, "target=")
-         if not isempty(tarStart) then
-            oldTar = string.match(string.sub(macroText, tarEnd + 1), '([^ ,%]]*).-$')
-            macroText = string.sub(macroText, 1, tarEnd)..target..string.sub(macroText, tarEnd + string.len(oldTar) + 1)
-         end
-
-         EditMacro(idx, nil, nil, macroText)
-
-         print("The macro at index "..idx.." was changed.")
-      else
-         print("You need to enter in a target!")
+   if not isempty(newTarget) then
+      for i = 1, #group do
+         changeTargets(group[i], newTarget)
       end
    end
 end
 
 function SM_GroupTargetButton_OnClick(self)
-   local id = SimpleMacroMenu.groupSelect
-   local groupTable = SimpleMacroMenu.groupTable
-   local group = groupTable[groupTable.selected]
-   local target = SM_GroupTargetText:GetText()
+   local groupNum = SimpleMacro.dbc.groupTable.selected
+   local newTarget = SM_GroupTargetText:GetText()
 
-   if not isempty(target) then
-      for i = 1, #group do
-         changeTargets(group[i], target)
-      end
-   end
+   SM_ChangeGroupTarget(groupNum, newTarget)
 end

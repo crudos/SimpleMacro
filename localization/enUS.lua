@@ -1,14 +1,22 @@
 local _, L = ...
 
--- Constants
+-- Settings
+L["SETTINGS"] = {}
+L["SETTINGS"]["ContextMenu"] = "Add target changer to context menu"
+L["SETTINGS"]["ContextMenuTooltip"] = "Allows updating of groups through the right-click context menu of your target."
 
--- Popup Menu
+-- Context menu
+L["CONTEXT"] = {}
+L["CONTEXT"]["CHANGE_GROUP_TARGET"] = "Change Group Target"
+L["CONTEXT"]["GROUP"] = "Group"
+
+-- Popup menu
 L["LINES_TITLE"] = "Lines"
 L["ARGS_TITLE"] = "Arguments"
 L["LINES_COMMAND_COLUMN"] = "Command"
 L["ARGS_ARGUMENT_COLUMN"] = "Argument"
 
--- Create 
+-- Create tab
 L["LINE_TYPE_DROPDOWN_LABEL"] = "Line Type"
 L["LINE_TYPE_CATEGORY_LABEL"] = "Category"
 L["LINE_TYPE_COMMAND_LABEL"] = "Command"
@@ -294,4 +302,6 @@ L["CONDITIONAL_LIST"][36]["DESCRIPTION"] = "Player has vehicle UI."
 L["USE_ALTERNATES"] = "Use alternate text"
 L["USE_ALTERNATES_DESC"] = "This will replace any eligible conditionals with shorter alternatives." 
 
--- Group Page
+-- Group tab
+L["GROUP_TAB"] = {}
+L["GROUP_TAB"]["TAB_TEXT"] = "Group"

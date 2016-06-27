@@ -1,16 +1,21 @@
 ## Interface: 60200
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 1.0
+## Version: 6.2.4.0
 ## Notes: Allows you to create and change macros easily.
-## SavedVariablesPerCharacter: GroupTable
+## SavedVariables: SimpleMacroDBA
+## SavedVariablesPerCharacter: SimpleMacroDBC
 
+constant\constant.lua
 localization\localization.xml
 
-libs\macroparser\macroparser.lua
+lib\macroparser\macroparser.lua
+lib\test\util.lua
 
 menu\menu.xml
+menu\createtab.xml
 menu\grouptab.xml
 
-SimpleMacro.lua
+settings\settings.xml
+
 SimpleMacro.xml
