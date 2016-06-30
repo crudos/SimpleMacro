@@ -1,6 +1,7 @@
 -- Author      : Crudos
 -- Create Date : 6/28/2016 08:59:00 PM
 local _, L = ...
+local C = L["settings"]
 local G = _G
 
 function SimpleMacroSettings_OnLoad(self)
@@ -56,17 +57,19 @@ end
 function SimpleMacroSettings_RemoveContext()
    local existingIndex
 
-   if UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] ~= nil then
-      for i, v in ipairs(UnitPopupMenus["TARGET"]) do
-         if v == "SM_CHANGE_GROUP_TARGET" then
-            existingIndex = i
-            break
+   for i, menu in ipairs(C["contextMenus"]) do
+      if UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] ~= nil then
+         for i, v in ipairs(UnitPopupMenus[menu]) do
+            if v == "SM_CHANGE_GROUP_TARGET" then
+               existingIndex = i
+               break
+            end
          end
       end
-   end
 
-   if existingIndex ~= nil then
-      tremove(UnitPopupMenus["TARGET"], existingIndex)
+      if existingIndex ~= nil then
+         tremove(UnitPopupMenus[menu], existingIndex)
+      end
    end
 end
 
@@ -78,13 +81,17 @@ end
 
 function SimpleMacroSettings_SetupContextMenu()
    UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
+
    for i, v in ipairs(SimpleMacro.dbc.groupTable) do
       UnitPopupButtons["SM_GROUP_"..i] = { text = L["CONTEXT"]["GROUP"].." "..i, dist = 0 }
       tinsert(UnitPopupMenus["SM_CHANGE_GROUP_TARGET"], "SM_GROUP_"..i)
    end
 
    UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1, dist = 0 }
-   tinsert(UnitPopupMenus["TARGET"], #UnitPopupMenus["TARGET"]-1, "SM_CHANGE_GROUP_TARGET");
+
+   for i, menu in ipairs(C["contextMenus"]) do
+      tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
+   end
 
    hooksecurefunc("ToggleDropDownMenu", SM_ToggleDropDownMenu)
 end
