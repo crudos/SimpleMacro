@@ -127,7 +127,6 @@ end
 function SM_GroupTab_AddGroup_OnClick(self)
    local groupTable = SimpleMacro.dbc.groupTable
 
-   -- make new group
    if self:GetID() <= C["maxTabs"] then
       groupTable[self:GetID()] = {}
       groupTable.selected = self:GetID()
@@ -286,6 +285,12 @@ function SM_GroupButton_Update()
          macroButton:Disable();
          macroButton:SetChecked(false)
       end
+   end
+
+   if group then
+      SM_GroupAddButton:Enable()
+   else
+      SM_GroupAddButton:Disable()
    end
 
    if group and #group > 0 then
