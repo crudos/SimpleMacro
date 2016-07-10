@@ -93,19 +93,12 @@ function SimpleMacroSettings_SetupContextMenu()
       tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
    end
 
-   hooksecurefunc("ToggleDropDownMenu", SM_ToggleDropDownMenu)
+   hooksecurefunc("UnitPopup_OnClick", SM_ContextMenuChangeGroup_OnClick)
 end
 
-function SM_ToggleDropDownMenu(level, value, dropDownFrame, anchorName, xOffset, yOffset, menuList, button, autoHideDelay)
-   if button and button.value == "SM_CHANGE_GROUP_TARGET" and level == 2 then
-      local buttonPrefix = "DropDownList" .. level .. "Button";
-      for i, v in ipairs(SimpleMacro.dbc.groupTable) do
-         _G[buttonPrefix..i]:SetScript("OnClick", SM_ContextChangeGroup_OnClick)
-      end
-   end
-end
+function SM_ContextMenuChangeGroup_OnClick(self)
+   if not string.match(self.value, "SM_GROUP_[0-9]*") then return end
 
-function SM_ContextChangeGroup_OnClick(self)
    local newTarget = self:GetParent().parent.dropdown.name
    SM_ChangeGroupTarget(self:GetID(), newTarget)
    self:GetParent():Hide()
