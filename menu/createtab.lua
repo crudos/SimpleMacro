@@ -221,7 +221,7 @@ function SM_DeleteButton_OnClick(self)
       end
    end
 
-   DeleteMacro(SimpleMacroMenu.createSelect)
+   DeleteMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
    CreateTab_Update()
 end
 
