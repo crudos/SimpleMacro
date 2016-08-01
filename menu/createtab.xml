@@ -40,7 +40,7 @@
                      <Anchors>
                         <Anchor point="TOPLEFT" relativePoint="TOPRIGHT">
                            <Offset>
-                              <AbsDimension x="8" y="0"/>
+                              <AbsDimension x="12" y="2"/>
                            </Offset>
                         </Anchor>
                      </Anchors>
@@ -49,6 +49,21 @@
             </Layers>
             <Scripts>
                <OnClick function="SimplePickupMacro"/>
+            </Scripts>
+         </Button>
+         <Button name="$parentChange" inherits="UIPanelButtonTemplate">
+            <Size>
+               <AbsDimension x="172" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="LEFT"  relativeTo="$parentSelected" relativePoint="RIGHT">
+                  <Offset>
+                     <AbsDimension x="6" y="-8"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_ChangeButton_OnClick"/>
             </Scripts>
          </Button>
          <Frame name="$parentMacroScrollBackground" inherits="SM_BackgroundTemplate">
@@ -454,7 +469,7 @@
          <EdgeSize>
             <AbsValue val="32"/>
          </EdgeSize>
-      </Backdrop> 
+      </Backdrop>
       <Frames>
          <Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
             <Size>
@@ -503,6 +518,144 @@
          <OnLoad function="SM_CondMenu_OnLoad"/>
          <OnShow function="SM_CondMenu_OnShow"/>
          <OnHide function="SM_CondMenu_OnHide"/>
+      </Scripts>
+   </Frame>
+
+   <!-- Change menu -->
+   <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+      <Size x="344" y="450"/>
+      <Anchors>
+         <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT">
+            <Offset>
+               <AbsDimension x="0" y="0"/>
+            </Offset>
+         </Anchor>
+      </Anchors>
+      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+         <BackgroundInsets>
+            <AbsInset left="11" right="11" top="12" bottom="10"/>
+         </BackgroundInsets>
+         <TileSize>
+            <AbsValue val="32"/>
+         </TileSize>
+         <EdgeSize>
+            <AbsValue val="32"/>
+         </EdgeSize>
+      </Backdrop>
+      <Frames>
+         <EditBox name="$parentName" inherits="InputBoxTemplate">
+            <Size>
+               <AbsDimension x="202" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="TOPLEFT">
+                  <Offset>
+                     <AbsDimension x="20" y="-30"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Layers>
+               <Layer>
+                  <FontString name="$parentDesc" inherits="GameFontWhiteSmall">
+                     <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                           <Offset>
+                              <AbsDimension x="-4" y="4"/>
+                           </Offset>
+                        </Anchor>
+                     </Anchors>
+                  </FontString>
+               </Layer>
+            </Layers>
+            <Scripts>
+               <OnLoad>
+                  self:SetAutoFocus(false)
+                  self:SetMaxLetters(16)
+               </OnLoad>
+               <OnShow>
+                  self:SetFocus()
+               </OnShow>
+               <OnEnterPressed>
+                  if SimpleMacroChangeMenuOkayButton:IsEnabled() then
+                     SimpleMacroChangeMenuOkay_OnClick(SimpleMacroChangeMenuOkayButton)
+                  end
+               </OnEnterPressed>
+               <OnTextChanged function="SM_ChangeMenu_NameChanged"/>
+            </Scripts>
+         </EditBox>
+         <ScrollFrame name="$parentIcons" inherits="FauxScrollFrameTemplate">
+            <Size x="292" y="322"/>
+            <Anchors>
+               <Anchor point="TOPLEFT" relativeTo="$parentName" relativePoint="BOTTOMLEFT">
+                  <Offset x="-8" y="-16"/>
+               </Anchor>
+            </Anchors>
+            <Layers>
+               <Layer>
+                  <FontString name="$parentDesc" inherits="GameFontWhiteSmall">
+                     <Anchors>
+                        <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT">
+                           <Offset>
+                              <AbsDimension x="5" y="0"/>
+                           </Offset>
+                        </Anchor>
+                     </Anchors>
+                  </FontString>
+               </Layer>
+            </Layers>
+            <ScrollChild>
+               <Frame name="$parentScrollChildFrame">
+                  <Size x="200" y="10"/>
+                  <Anchors>
+                     <Anchor point="TOPLEFT"/>
+                  </Anchors>
+                  <Scripts>
+                     <OnLoad function="SimpleMacroIcons_OnLoad"/>
+                  </Scripts>
+               </Frame>
+            </ScrollChild>
+            <Scripts>
+               <OnVerticalScroll>
+                  SM_ChangeMenu_OnVerticalScroll(self, offset)
+               </OnVerticalScroll>
+               <OnLoad function="SimpleMacro_IconScrollFrame_OnLoad"/>
+            </Scripts>
+         </ScrollFrame>
+         <Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
+            <Size>
+               <AbsDimension x="86" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="BOTTOMRIGHT">
+                  <Offset>
+                     <AbsDimension x="-14" y="14"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SimpleMacroChangeMenuCancel_OnClick"/>
+            </Scripts>
+         </Button>
+         <Button name="$parentOkayButton" inherits="UIPanelButtonTemplate" text="Okay">
+            <Size>
+               <AbsDimension x="86" y="22"/>
+            </Size>
+            <Anchors>
+               <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT">
+                  <Offset>
+                     <AbsDimension x="-2" y="0"/>
+                  </Offset>
+               </Anchor>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SimpleMacroChangeMenuOkay_OnClick"/>
+            </Scripts>
+         </Button>
+      </Frames>
+      <Scripts>
+         <OnLoad function="SimpleMacroChangeMenu_OnLoad"/>
+         <OnShow function="SimpleMacroChangeMenu_OnShow"/>
+         <OnHide function="SimpleMacroChangeMenu_OnHide"/>
       </Scripts>
    </Frame>
 </Ui>

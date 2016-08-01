@@ -15,9 +15,31 @@ function SimpleMacroButton_OnClick(self, button, down)
       SM_GroupButton_SelectMacro(id)
       SM_GroupButton_Update()
    elseif name == "SMCreateButton"..id then
-      --SM_SaveMacro()
-      CreateTab_SelectMacro(id)
-      CreateTab_Update()
+      SM_CreateTab_SelectMacro(id)
+      SM_CreateTab_Update()
+   elseif name == "SMIconButton"..id then
+      SM_ChangeMenu_SelectIcon(id, nil)
+      SimpleMacroChangeMenu_Update()
+   end
+end
+
+function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
+   local button
+
+   for i = 1, totalButtons do
+      button = CreateFrame("CheckButton", name..i, frame, "SimpleMacroButtonTemplate")
+      button:SetID(i)
+      if i == 1 then
+         button:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
+      elseif mod(i, buttonsPerRow) == 1 then
+         button:SetPoint("TOP", name..(i - buttonsPerRow), "BOTTOM", 0, -10)
+
+         if totalButtons - buttonsPerRow < i then
+            SimpleMacroMenu[name.."LastRow"] = button:GetName()
+         end
+      else
+         button:SetPoint("LEFT", name..(i - 1), "RIGHT", 13, 0)
+      end
    end
 end
 
@@ -46,25 +68,24 @@ function SM_CheckButton_OnClick(checkButton)
    end
 end
 
-function SimpleMacroMenu_OnLoad(panel)
-   tinsert(UISpecialFrames, panel:GetName())
-   panel:RegisterForDrag("LeftButton")
-   panel.name = "SimpleMacro"
-   panel.elapsed = 0
+function SimpleMacroMenu_OnLoad(self)
+   tinsert(UISpecialFrames, self:GetName())
+   self:RegisterForDrag("LeftButton")
+   self.name = "SimpleMacro"
+   self.elapsed = 0
 
    PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
 end
 
-function SimpleMacroMenu_OnShow(panel)
+function SimpleMacroMenu_OnShow(self)
+   PlaySound("igCharacterInfoOpen")
    local tabNum = SimpleMacro.dbc.tab
 
    PanelTemplates_SetTab(SimpleMacroMenu, tabNum)
    G["SimpleMacroMenu"..L["tabs"][tabNum].."Tab"]:Show()
-
-   PlaySound("igCharacterInfoOpen")
 end
 
-function SimpleMacroMenu_OnHide(panel)
+function SimpleMacroMenu_OnHide(self)
    PlaySound("igCharacterInfoClose")
 end
 

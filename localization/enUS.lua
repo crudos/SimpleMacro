@@ -5,6 +5,11 @@ L["SETTINGS"] = {}
 L["SETTINGS"]["ContextMenu"] = "Add target changer to context menu"
 L["SETTINGS"]["ContextMenuTooltip"] = "Allows updating of groups through the right-click context menu of your target."
 
+-- Change menu
+L["CHANGE"] = {}
+L["CHANGE"]["Name"] = "Enter a name (max 16 characters):"
+L["CHANGE"]["Icon"] = "Select an icon:"
+
 -- Context menu
 L["CONTEXT"] = {}
 L["CONTEXT"]["CHANGE_GROUP_TARGET"] = "Change Group Target"
@@ -17,6 +22,9 @@ L["LINES_COMMAND_COLUMN"] = "Command"
 L["ARGS_ARGUMENT_COLUMN"] = "Argument"
 
 -- Create tab
+L["CREATE_TAB"] = {}
+L["CREATE_TAB"]["Change"] = "Change Name/Icon"
+
 L["LINE_TYPE_DROPDOWN_LABEL"] = "Line Type"
 L["LINE_TYPE_CATEGORY_LABEL"] = "Category"
 L["LINE_TYPE_COMMAND_LABEL"] = "Command"
@@ -53,13 +61,13 @@ L["LINE_TYPE_TABLE"][12]["CATEGORY"] = "Metacommands"
 -- PVP Commands
 L["LINE_TYPE_TABLE"][1][1] = { COMMANDS = { "teamcaptain", "tcaptain" }, DESCRIPTION = "Sets the captain of an arena team you are in." }
 L["LINE_TYPE_TABLE"][1][2] = { COMMANDS = { "teamdisband", "tdisband" }, DESCRIPTION = "Disbands an arena team you are in." }
-L["LINE_TYPE_TABLE"][1][3] = { COMMANDS = { "teaminvite", "tinvite" }, DESCRIPTION = "Invites a member to your arena team." } 
-L["LINE_TYPE_TABLE"][1][4] = { COMMANDS = { "teamquit", "tquit" }, DESCRIPTION = "Leaves an arena team you are in." } 
-L["LINE_TYPE_TABLE"][1][5] = { COMMANDS = { "teamremove", "tremove" }, DESCRIPTION = "Removes a member of a team you are in from that team." } 
-L["LINE_TYPE_TABLE"][1][6] = { COMMANDS = { "wargame", "wg" }, DESCRIPTION = "Starts a War Game." } 
+L["LINE_TYPE_TABLE"][1][3] = { COMMANDS = { "teaminvite", "tinvite" }, DESCRIPTION = "Invites a member to your arena team." }
+L["LINE_TYPE_TABLE"][1][4] = { COMMANDS = { "teamquit", "tquit" }, DESCRIPTION = "Leaves an arena team you are in." }
+L["LINE_TYPE_TABLE"][1][5] = { COMMANDS = { "teamremove", "tremove" }, DESCRIPTION = "Removes a member of a team you are in from that team." }
+L["LINE_TYPE_TABLE"][1][6] = { COMMANDS = { "wargame", "wg" }, DESCRIPTION = "Starts a War Game." }
 
 -- Blizzard Interface Commands
-L["LINE_TYPE_TABLE"][2][1] = { COMMANDS = { "achievements", "ach", "achieve", "achievement" }, DESCRIPTION = "Opens the Achievements interface." } 
+L["LINE_TYPE_TABLE"][2][1] = { COMMANDS = { "achievements", "ach", "achieve", "achievement" }, DESCRIPTION = "Opens the Achievements interface." }
 L["LINE_TYPE_TABLE"][2][2] = { COMMANDS = { "calendar" }, DESCRIPTION = "Opens the Calendar interface." }
 L["LINE_TYPE_TABLE"][2][3] = { COMMANDS = { "guildfinder", "gf" }, DESCRIPTION = "Opens the Guild Finder tool." }
 L["LINE_TYPE_TABLE"][2][4] = { COMMANDS = { "lfg", "lfd", "df", "dungeonfinder" }, DESCRIPTION = "Opens the Dungeon Finder interface." }
@@ -300,7 +308,7 @@ L["CONDITIONAL_LIST"][35]["DESCRIPTION"] = "Conditional target has vehicle UI."
 L["CONDITIONAL_LIST"][36]["DESCRIPTION"] = "Player has vehicle UI."
 
 L["USE_ALTERNATES"] = "Use alternate text"
-L["USE_ALTERNATES_DESC"] = "This will replace any eligible conditionals with shorter alternatives." 
+L["USE_ALTERNATES_DESC"] = "This will replace any eligible conditionals with shorter alternatives."
 
 -- Group tab
 L["GROUP_TAB"] = {}

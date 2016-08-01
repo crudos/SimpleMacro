@@ -269,7 +269,8 @@ function SM_GroupButton_Update()
       macroName = G[macroButtonName.."Name"]
 
       if group and i <= #group then
-         name, texture, body = GetMacroInfo(group[i]) --TODO what if group[i] doesn't exist anymore or is the wrong macro
+         --TODO what if group[i] doesn't exist anymore or is the wrong macro
+         name, texture, body = GetMacroInfo(group[i])
          macroIcon:SetTexture(texture)
          macroName:SetText(name)
          macroButton:Enable()
