@@ -289,7 +289,7 @@ function SimpleMacroChangeMenu_OnShow(self)
    elseif mode == "edit" then
       local name, texture, body = GetMacroInfo(createSelect + macroStart)
       SimpleMacroChangeMenuName:SetText(name)
-      local iconIndex = C["rIconTable"][texture]
+      local iconIndex = C["rIconTable"][texture] - 1
       local iconOffset = floor(iconIndex / C["iconsPerRow"])
       FauxScrollFrame_SetOffset(SimpleMacroChangeMenuIcons, iconOffset)
       SM_ChangeMenu_SelectIcon(nil, texture)
