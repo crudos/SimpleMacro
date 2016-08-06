@@ -339,7 +339,7 @@
       <Scripts>
          <OnLoad function="SM_NewLineMenu_OnLoad"/>
          <OnShow function="SM_NewLineMenu_OnShow"/>
-         <OnHide function="SM_NewLineMenu_OnHide"/>
+         <OnHide function="SM_MacroEditor_OnHide"/>
       </Scripts>
    </Frame>
 
@@ -445,7 +445,7 @@
       <Scripts>
          <OnLoad function="SM_ArgMenu_OnLoad"/>
          <OnShow function="SM_ArgMenu_OnShow"/>
-         <OnHide function="SM_ArgMenu_OnHide"/>
+         <OnHide function="SM_MacroEditor_OnHide"/>
       </Scripts>
    </Frame>
 
@@ -517,7 +517,7 @@
       <Scripts>
          <OnLoad function="SM_CondMenu_OnLoad"/>
          <OnShow function="SM_CondMenu_OnShow"/>
-         <OnHide function="SM_CondMenu_OnHide"/>
+         <OnHide function="SM_MacroEditor_OnHide"/>
       </Scripts>
    </Frame>
 

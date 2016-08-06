@@ -67,6 +67,7 @@ function SM_CreateTab_OnShow(panel)
 end
 
 function SM_CreateTab_OnHide(panel)
+   SM_OpenPopupMenu(nil)
 end
 
 function SM_CreateTab_MacroTab_OnClick(self)
@@ -293,6 +294,7 @@ function SimpleMacroChangeMenu_OnShow(self)
       local iconOffset = floor(iconIndex / C["iconsPerRow"])
       FauxScrollFrame_SetOffset(SimpleMacroChangeMenuIcons, iconOffset)
       SM_ChangeMenu_SelectIcon(nil, texture)
+      -- for some reason having this twice properly sets the frame up
       SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["iconRowHeight"] * (iconOffset+1))
       SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["iconRowHeight"] * iconOffset)
    end
@@ -394,14 +396,14 @@ function SimpleMacroChangeMenuOkay_OnClick(self)
    name = G["SimpleMacroChangeMenuName"]:GetText()
    texture = selectedTexture
 
+   local createdIdx
    if mode == "new" then
-      local createdIdx = CreateMacro(name, texture, "", isCharacter)
-      print(createdIdx)
-      --SM_CreateTab_SelectMacro()
+      createdIdx = CreateMacro(name, texture, "", isCharacter)
    elseif mode == "edit" then
-      EditMacro(createSelect + macroStart, name, texture, nil)
+      createdIdx = EditMacro(createSelect + macroStart, name, texture, nil)
    end
 
+   SM_CreateTab_SelectMacro(createdIdx - macroStart)
    SimpleMacroChangeMenu:Hide()
 end
 
@@ -560,6 +562,12 @@ local function SM_MacroEditor_OnClick(self, menuToShow)
    end
 end
 
+function SM_MacroEditor_OnHide(self)
+   G["SM_MacroEditor_AddNewLine"]:Enable()
+
+   PlaySound("igCharacterInfoTab")
+end
+
 function SM_MacroEditorLine_OnClick(self, button, down)
    local parsed, categoryID, commandID, nameID
 
@@ -628,10 +636,6 @@ function SM_NewLineMenu_OnShow(panel)
    PlaySound("igCharacterInfoOpen")
    SM_NewLineMenuCategoryDropDown:RefreshValue()
    SM_NewLineMenuCommandDropDown:RefreshValue()
-end
-
-function SM_NewLineMenu_OnHide(panel)
-   PlaySound("igCharacterInfoTab")
 end
 
 function SM_CategoryDropDown_OnEvent(self, event, ...)
@@ -797,7 +801,6 @@ local function SM_MenuButton_OnClick(self)
    end
 
    HideUIPanel(self:GetParent())
-   G["SM_MacroEditor_AddNewLine"]:Enable()
    SM_CreateTab_Update()
 end
 
@@ -811,8 +814,6 @@ function SM_NewLineMenu_AddArgButton_OnClick(self)
 
    SM_MenuButton_OnClick(self)
    SM_MacroEditorArg_OnClick(G["SM_MacroEditorLine"..lineNum.."Arg"..newArg], nil, nil)
-
-
 end
 
 function SM_NewLineMenu_DeleteButton_OnClick(self)
@@ -853,11 +854,8 @@ end
 
 function SM_ArgMenu_OnShow(panel)
    PlaySound("igCharacterInfoOpen")
-   SM_ArgMenuEditBox:SetFocus()
-end
 
-function SM_ArgMenu_OnHide(panel)
-   PlaySound("igCharacterInfoTab")
+   SM_ArgMenuEditBox:SetFocus()
 end
 
 function SM_ArgMenu_SetCondButton_OnClick(self)
@@ -977,10 +975,6 @@ function SM_CondMenu_OnShow(panel)
          end
       end
    end
-end
-
-function SM_CondMenu_OnHide(panel)
-   PlaySound("igCharacterInfoTab")
 end
 
 function SM_AlternateCheck_OnClick(self)

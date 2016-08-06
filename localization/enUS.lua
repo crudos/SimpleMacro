@@ -3,7 +3,7 @@ local _, L = ...
 -- Settings
 L["SETTINGS"] = {}
 L["SETTINGS"]["ContextMenu"] = "Add target changer to context menu"
-L["SETTINGS"]["ContextMenuTooltip"] = "Allows updating of groups through the right-click context menu of your target."
+L["SETTINGS"]["ContextMenuTooltip"] = "Allows you to update the target of a group by right-clicking a unit frame."
 
 -- Change menu
 L["CHANGE"] = {}
