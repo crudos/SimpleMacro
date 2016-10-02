@@ -12,7 +12,7 @@ L["defaultsCharacter"] = {
 
 L["settings"] = {}
 
-L["settings"]["contextMenus"] = { "TARGET", "PARTY", "PLAYER"}
+L["settings"]["contextMenus"] = { "TARGET", "PARTY", "PLAYER", "RAID_PLAYER" }
 
 L["tabs"] = { "Create", "Group" }
 
