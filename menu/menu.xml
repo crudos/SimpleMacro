@@ -18,9 +18,9 @@
       <Scripts>
          <OnClick>
             if self:GetChecked() then
-               PlaySound(SOUNDKIT.IG_MAIN_MENU_OPTION_CHECKBOX_ON)
+               PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
             else
-               PlaySound(SOUNDKIT.IG_MAIN_MENU_OPTION_CHECKBOX_OFF)
+               PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
             end
             SM_CheckButton_OnClick(self)
          </OnClick>
