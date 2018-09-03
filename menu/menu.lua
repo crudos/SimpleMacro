@@ -78,7 +78,7 @@ function SimpleMacroMenu_OnLoad(self)
 end
 
 function SimpleMacroMenu_OnShow(self)
-   PlaySound("igCharacterInfoOpen")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
    local tabNum = SimpleMacro.dbc.tab
 
    PanelTemplates_SetTab(SimpleMacroMenu, tabNum)
@@ -86,7 +86,7 @@ function SimpleMacroMenu_OnShow(self)
 end
 
 function SimpleMacroMenu_OnHide(self)
-   PlaySound("igCharacterInfoClose")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
 end
 
 function SimpleMacroMenuTab_OnClick(self)

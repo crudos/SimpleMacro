@@ -233,7 +233,7 @@ function SM_DeleteButton_OnClick(self)
    end
 
    SM_CreateTab_Update()
-   PlaySound("igCharacterInfoTab")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
 function SM_ChangeButton_OnClick(self)
@@ -274,7 +274,7 @@ function SM_ChangeMenu_SelectIcon(id, texture)
 end
 
 function SimpleMacroChangeMenu_OnShow(self)
-   PlaySound("igCharacterInfoOpen")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
    local createSelect = SimpleMacroMenu.createSelect
    local macroStart = SimpleMacroMenu.macroStart
@@ -374,7 +374,7 @@ end
 function SimpleMacroChangeMenu_OnHide(self)
    SM_CreateTab_EnableButtons()
    SM_CreateTab_Update()
-   PlaySound("igCharacterInfoTab")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
 function SimpleMacroChangeMenuCancel_OnClick(self)
@@ -565,7 +565,7 @@ end
 function SM_MacroEditor_OnHide(self)
    G["SM_MacroEditor_AddNewLine"]:Enable()
 
-   PlaySound("igCharacterInfoTab")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
 function SM_MacroEditorLine_OnClick(self, button, down)
@@ -633,7 +633,7 @@ function SM_NewLineMenu_OnLoad(panel)
 end
 
 function SM_NewLineMenu_OnShow(panel)
-   PlaySound("igCharacterInfoOpen")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
    SM_NewLineMenuCategoryDropDown:RefreshValue()
    SM_NewLineMenuCommandDropDown:RefreshValue()
 end
@@ -853,7 +853,7 @@ function SM_ArgMenu_OnLoad(panel)
 end
 
 function SM_ArgMenu_OnShow(panel)
-   PlaySound("igCharacterInfoOpen")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
    SM_ArgMenuEditBox:SetFocus()
 end
@@ -945,7 +945,7 @@ function SM_CondCheckButton_OnClick(checkButton)
 end
 
 function SM_CondMenu_OnShow(panel)
-   PlaySound("igCharacterInfoOpen")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
    local sLine, sArg, parse, cc, cur
 

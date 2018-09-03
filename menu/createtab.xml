@@ -89,7 +89,7 @@
             <Scripts>
                <OnClick>
                   SM_CreateTab_MacroTab_OnClick(self)
-                  PlaySound("igCharacterInfoTab")
+                  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
                </OnClick>
             </Scripts>
          </Button>
@@ -104,7 +104,7 @@
             <Scripts>
                <OnClick>
                   SM_CreateTab_MacroTab_OnClick(self)
-                  PlaySound("igCharacterInfoTab")
+                  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
                </OnClick>
             </Scripts>
          </Button>

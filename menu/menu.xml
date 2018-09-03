@@ -18,9 +18,9 @@
       <Scripts>
          <OnClick>
             if self:GetChecked() then
-               PlaySound("igMainMenuOptionCheckBoxOn")
+               PlaySound(SOUNDKIT.IG_MAIN_MENU_OPTION_CHECKBOX_ON)
             else
-               PlaySound("igMainMenuOptionCheckBoxOff")
+               PlaySound(SOUNDKIT.IG_MAIN_MENU_OPTION_CHECKBOX_OFF)
             end
             SM_CheckButton_OnClick(self)
          </OnClick>
@@ -234,7 +234,7 @@
             <Scripts>
                <OnClick>
                   SimpleMacroMenuTab_OnClick(self)
-                  PlaySound("igCharacterInfoTab")
+                  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
                </OnClick>
             </Scripts>
          </Button>
@@ -249,7 +249,7 @@
             <Scripts>
                <OnClick>
                   SimpleMacroMenuTab_OnClick(self)
-                  PlaySound("igCharacterInfoTab")
+                  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
                </OnClick>
             </Scripts>
          </Button>

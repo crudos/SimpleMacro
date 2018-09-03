@@ -1,7 +1,7 @@
-## Interface: 70100
+## Interface: 80000
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 7.1.5.0
+## Version: 8.0.0.0
 ## Notes: Allows you to create and change macros easily.
 ## SavedVariables: SimpleMacroDBA
 ## SavedVariablesPerCharacter: SimpleMacroDBC

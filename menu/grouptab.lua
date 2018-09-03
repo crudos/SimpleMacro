@@ -138,7 +138,7 @@ function SM_GroupTab_AddGroup_OnClick(self)
    SM_GroupButton_Update()
    SimpleMacroSettings_Load()
 
-   PlaySound("UChatScrollButton")
+   PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
 end
 
 function SM_GroupTab_Group_OnClick(self)
@@ -155,7 +155,7 @@ function SM_GroupTab_Group_OnClick(self)
 
    SM_GroupButton_Update()
 
-   PlaySound("igCharacterInfoTab")
+   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
 function SimpleMacroMenuGroupTab_OnClick(self)
