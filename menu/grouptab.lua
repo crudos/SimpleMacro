@@ -376,8 +376,6 @@ local function changeTargets(index, target)
       end
 
       EditMacro(idx, nil, nil, macroText)
-
-      print("The macro at index "..idx.." was changed.")
    else
       print("You need to enter in a target!")
    end
@@ -392,6 +390,8 @@ function SM_ChangeGroupTarget(groupNum, newTarget)
          changeTargets(group[i], newTarget)
       end
    end
+
+   print("Set target of Group "..groupNum.." to "..newTarget)
 end
 
 function SM_GroupTargetButton_OnClick(self)

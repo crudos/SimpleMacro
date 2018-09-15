@@ -83,11 +83,11 @@ function SimpleMacroSettings_SetupContextMenu()
    UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
 
    for i, v in ipairs(SimpleMacro.dbc.groupTable) do
-      UnitPopupButtons["SM_GROUP_"..i] = { text = L["CONTEXT"]["GROUP"].." "..i, dist = 0 }
+      UnitPopupButtons["SM_GROUP_"..i] = { text = L["CONTEXT"]["GROUP"].." "..i }
       tinsert(UnitPopupMenus["SM_CHANGE_GROUP_TARGET"], "SM_GROUP_"..i)
    end
 
-   UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1, dist = 0 }
+   UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
 
    for i, menu in ipairs(C["contextMenus"]) do
       tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
