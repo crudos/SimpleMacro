@@ -31,11 +31,7 @@
          <Layer level="ARTWORK">
             <FontString name="$parentText" inherits="GameFontHighlight">
                <Anchors>
-                  <Anchor point="LEFT" relativePoint="RIGHT">
-                     <Offset>
-                        <AbsDimension x="0" y="1"/>
-                     </Offset>
-                  </Anchor>
+                  <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="1"/>
                </Anchors>
             </FontString>
          </Layer>
@@ -46,11 +42,7 @@
          <Layer level="ARTWORK">
             <FontString name="$parentText" inherits="GameFontHighlightSmall">
                <Anchors>
-                  <Anchor point="LEFT" relativePoint="RIGHT">
-                     <Offset>
-                        <AbsDimension x="0" y="4"/>
-                     </Offset>
-                  </Anchor>
+                  <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="4"/>
                </Anchors>
             </FontString>
          </Layer>
@@ -62,20 +54,12 @@
          <Layer level="CONTENT">
             <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="number">
                <Anchors>
-                  <Anchor point="LEFT">
-                     <Offset>
-                        <AbsDimension x="16" y="0"/>
-                     </Offset>
-                  </Anchor>
+                  <Anchor point="LEFT" x="16" y="0"/>
                </Anchors>
             </FontString>
             <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="command">
                <Anchors>
-                  <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT">
-                     <Offset>
-                        <AbsDimension x="24" y="0"/>
-                     </Offset>
-                  </Anchor>
+                  <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT" x="24" y="0"/>
                </Anchors>
             </FontString>
          </Layer>
@@ -108,11 +92,7 @@
          <Layer level="CONTENT">
             <FontString name="$parentData" inherits="GameFontHighlightSmall" text="ERROR">
                <Anchors>
-                  <Anchor point="CENTER">
-                     <Offset>
-                        <AbsDimension x="0" y="0"/>
-                     </Offset>
-                  </Anchor>
+                  <Anchor point="CENTER" x="0" y="0"/>
                </Anchors>
             </FontString>
          </Layer>
@@ -139,97 +119,31 @@
          </OnClick>
       </Scripts>
    </CheckButton>
-   <Frame name="SM_BackgroundTemplate" virtual="true">
-      <Size>
-         <AbsDimension x="324" y="156"/>
-      </Size>
-      <Backdrop bgFile="Interface\Tooltips\UI-Tooltip-Background" edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-         <EdgeSize>
-            <AbsValue val="16"/>
-         </EdgeSize>
-         <TileSize>
-            <AbsValue val="16"/>
-         </TileSize>
-         <BackgroundInsets>
-            <AbsInset left="5" right="5" top="5" bottom="5"/>
-         </BackgroundInsets>
-      </Backdrop>
-      <Scripts>
-         <OnLoad>
-            self:SetBackdropBorderColor(TOOLTIP_DEFAULT_COLOR.r, TOOLTIP_DEFAULT_COLOR.g, TOOLTIP_DEFAULT_COLOR.b, 0)
-            self:SetBackdropColor(0, 0, 0, .65)
-         </OnLoad>
-      </Scripts>
-   </Frame>
    <!-- Menu -->
-   <Frame name="SimpleMacroMenu" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true">
-      <Size>
-         <AbsDimension x="350" y="524"/>
-      </Size>
-      <Anchors>
-         <Anchor point="TOPLEFT">
-            <Offset>
-               <AbsDimension x="0" y="-104"/>
-            </Offset>
-         </Anchor>
-      </Anchors>
-      <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
-         <BackgroundInsets>
-            <AbsInset left="11" right="11" top="12" bottom="10"/>
-         </BackgroundInsets>
-         <TileSize>
-            <AbsValue val="32"/>
-         </TileSize>
-         <EdgeSize>
-            <AbsValue val="32"/>
-         </EdgeSize>
-      </Backdrop>
-      <HitRectInsets>
-         <AbsInset left="0" right="34" top="0" bottom="75"/>
-      </HitRectInsets>
+   <Frame name="SimpleMacroMenu" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate">
+      <Size x="350" y="524"/>
+      <Layers>
+         <Layer level="OVERLAY" textureSubLevel="-1">
+           <Texture name="MacroFramePortrait" file="Interface\MacroFrame\MacroFrame-Icon">
+             <Size x="60" y="60"/>
+             <Anchors>
+               <Anchor point="TOPLEFT" x="-5" y="5"/>
+             </Anchors>
+           </Texture>
+         </Layer>
+         <Layer level="BORDER">
+           <FontString inherits="GameFontNormal" text="Simple Macro">
+             <Anchors>
+               <Anchor point="TOP" relativeTo="SimpleMacroMenu" x="0" y="-5"/>
+             </Anchors>
+           </FontString>
+         </Layer>
+      </Layers>
       <Frames>
-         <Frame name="$parentPanelContainer">
-            <Anchors>
-               <Anchor point="TOPLEFT">
-                  <Offset>
-                     <AbsDimension x="8" y="-32"/>
-                  </Offset>
-               </Anchor>
-               <Anchor point="BOTTOMLEFT">
-                  <Offset>
-                     <AbsDimension x="0" y="8"/>
-                  </Offset>
-               </Anchor>
-               <Anchor point="RIGHT">
-                  <Offset>
-                     <AbsDimension x="-7" y="0"/>
-                  </Offset>
-               </Anchor>
-            </Anchors>
-            <Backdrop edgeFile="Interface\Tooltips\UI-Tooltip-Border" tile="true">
-               <EdgeSize>
-                  <AbsValue val="8"/>
-               </EdgeSize>
-               <TileSize>
-                  <AbsValue val="16"/>
-               </TileSize>
-               <BackgroundInsets>
-                  <AbsInset left="5" right="5" top="5" bottom="5"/>
-               </BackgroundInsets>
-            </Backdrop>
-            <Scripts>
-               <OnLoad>
-                  self:SetBackdropBorderColor(.6, .6, .6, 1);
-               </OnLoad>
-            </Scripts>
-         </Frame>
+         <Frame name="$parentPanelContainer"/>
          <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Create">
             <Anchors>
-               <Anchor point="TOPLEFT">
-                  <Offset>
-                     <AbsDimension x="8" y="-8"/>
-                  </Offset>
-               </Anchor>
+               <Anchor point="TOPLEFT" x="8" y="-8"/>
             </Anchors>
             <Scripts>
                <OnClick>
@@ -240,11 +154,7 @@
          </Button>
          <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Group">
             <Anchors>
-               <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT">
-                  <Offset>
-                     <AbsDimension x="-16" y="0"/>
-                  </Offset>
-               </Anchor>
+               <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
             </Anchors>
             <Scripts>
                <OnClick>
@@ -254,15 +164,9 @@
             </Scripts>
          </Button>
          <Button name="$parentCloseButton" inherits="UIPanelButtonTemplate" text="Close">
-            <Size>
-               <AbsDimension x="86" y="22"/>
-            </Size>
+            <Size x="86" y="22"/>
             <Anchors>
-               <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT">
-                  <Offset>
-                     <AbsDimension x="-14" y="14"/>
-                  </Offset>
-               </Anchor>
+               <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-14" y="14"/>
             </Anchors>
             <Scripts>
                <OnClick function="SM_CloseButton_OnClick"/>
