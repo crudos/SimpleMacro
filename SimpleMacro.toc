@@ -1,7 +1,7 @@
 ## Interface: 90001
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 9.0.1.0
+## Version: 9.0.0.1
 ## Notes: Allows you to create and change macros easily.
 ## SavedVariables: SimpleMacroDBA
 ## SavedVariablesPerCharacter: SimpleMacroDBC
