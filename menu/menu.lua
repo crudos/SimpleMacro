@@ -3,6 +3,8 @@
 local _, L = ...
 local G = _G
 
+UIPanelWindows["SimpleMacroMenu"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };
+
 -- sets the selected macro button
 function SimpleMacroButton_OnClick(self, button, down)
    local name = self:GetName()
@@ -102,7 +104,7 @@ function SimpleMacroMenuTab_OnClick(self)
    end
 end
 
-function SM_CloseButton_OnClick(self)
+function SM_ExitButton_OnClick(self)
    G["SM_MacroEditor_AddNewLine"]:Enable()
    HideUIPanel(SimpleMacroMenu)
 end

@@ -143,7 +143,7 @@
          <Frame name="$parentPanelContainer"/>
          <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Create">
             <Anchors>
-               <Anchor point="TOPLEFT" x="8" y="-8"/>
+               <Anchor point="TOPLEFT" x="54" y="-20"/>
             </Anchors>
             <Scripts>
                <OnClick>
@@ -163,13 +163,13 @@
                </OnClick>
             </Scripts>
          </Button>
-         <Button name="$parentCloseButton" inherits="UIPanelButtonTemplate" text="Close">
+         <Button name="$parentExitButton" inherits="UIPanelButtonTemplate" text="Exit">
             <Size x="86" y="22"/>
             <Anchors>
-               <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-14" y="14"/>
+               <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="4"/>
             </Anchors>
             <Scripts>
-               <OnClick function="SM_CloseButton_OnClick"/>
+               <OnClick function="SM_ExitButton_OnClick"/>
             </Scripts>
          </Button>
       </Frames>

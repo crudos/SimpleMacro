@@ -7,7 +7,7 @@
       </Anchors>
       <Frames>
          <ScrollFrame name="$parentMacroScrollFrame" inherits="UIPanelScrollFrameTemplate">
-            <Size x="292" y="146"/>
+            <Size x="292" y="190"/>
             <Anchors>
                <Anchor point="TOPRIGHT" x="-40" y="-64"/>
             </Anchors>
@@ -28,7 +28,7 @@
          </ScrollFrame>
          <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
             <Anchors>
-               <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-32"/>
+               <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-14"/>
             </Anchors>
             <Layers>
                <Layer>
@@ -46,7 +46,7 @@
          <Button name="$parentChange" inherits="UIPanelButtonTemplate">
             <Size x="172" y="22"/>
             <Anchors>
-               <Anchor point="LEFT"  relativeTo="$parentSelected" relativePoint="RIGHT" x="6" y="-8"/>
+               <Anchor point="LEFT" relativeTo="$parentSelected" relativePoint="RIGHT" x="6" y="-8"/>
             </Anchors>
             <Scripts>
                <OnClick function="SM_ChangeButton_OnClick"/>
@@ -58,9 +58,9 @@
                <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="-7" y="5"/>
             </Anchors>
          </Frame>
-         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account">
+         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account Macros">
             <Anchors>
-               <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="2" y="2"/>
+               <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
             </Anchors>
             <Scripts>
                <OnClick>
@@ -69,7 +69,7 @@
                </OnClick>
             </Scripts>
          </Button>
-         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character">
+         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character Macros">
             <Anchors>
                <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
             </Anchors>
@@ -81,9 +81,9 @@
             </Scripts>
          </Button>
          <ScrollFrame name="$parentMacroEditorScrollFrame" inherits="UIPanelScrollFrameTemplate">
-            <Size x="292" y="124"/>
+            <Size x="292" y="144"/>
             <Anchors>
-               <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="0" y="-124" />
+               <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="0" y="-80"/>
             </Anchors>
             <ScrollChild>
                <Frame name="$parentChild">
@@ -98,7 +98,7 @@
             </ScrollChild>
          </ScrollFrame>
          <Frame name="$parentMacroEditorBackground" inherits="TooltipBackdropTemplate">
-            <Size x="328" y="134"/>
+            <Size x="328" y="154"/>
             <Anchors>
                <Anchor point="TOPLEFT" relativeTo="$parentMacroEditorScrollFrame" relativePoint="TOPLEFT" x="-7" y="5"/>
             </Anchors>
@@ -106,7 +106,7 @@
          <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="Delete">
             <Size x="86" y="22"/>
             <Anchors>
-               <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="14" y="14"/>
+               <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="4" y="4"/>
             </Anchors>
             <Scripts>
                <OnClick function="SM_DeleteButton_OnClick"/>
@@ -115,7 +115,7 @@
          <Button name="$parentNewButton" inherits="UIPanelButtonTemplate" text="New">
             <Size x="86" y="22"/>
             <Anchors>
-               <Anchor point="LEFT"  relativeTo="$parentDeleteButton" relativePoint="RIGHT" x="62" y="0"/>
+               <Anchor point="RIGHT" relativeTo="SimpleMacroMenuExitButton" relativePoint="LEFT" x="0" y="0"/>
             </Anchors>
             <Scripts>
                <OnClick function="SM_NewButton_OnClick"/>

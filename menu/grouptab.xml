@@ -7,7 +7,7 @@
       </Anchors>
       <Frames>
          <ScrollFrame name="$parentUserScrollFrame" inherits="UIPanelScrollFrameTemplate">
-            <Size x="292" y="146"/>
+            <Size x="292" y="190"/>
             <Anchors>
                <Anchor point="TOPRIGHT" x="-40" y="-64"/>
             </Anchors>
@@ -26,9 +26,9 @@
                <OnLoad function="ScrollFrame_OnLoad"/>
             </Scripts>
          </ScrollFrame>
-         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account">
+         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account Macros">
             <Anchors>
-               <Anchor point="BOTTOMLEFT" relativeTo="$parentUserScrollFrame" relativePoint="TOPLEFT" x="2" y="2"/>
+               <Anchor point="BOTTOMLEFT" relativeTo="$parentUserScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
             </Anchors>
             <Scripts>
                <OnClick>
@@ -37,7 +37,7 @@
                </OnClick>
             </Scripts>
          </Button>
-         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character">
+         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character Macros">
             <Anchors>
                <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
             </Anchors>
@@ -49,7 +49,7 @@
             </Scripts>
          </Button>
          <ScrollFrame name="$parentGroupScrollFrame" inherits="UIPanelScrollFrameTemplate">
-            <Size x="292" y="146"/>
+            <Size x="292" y="102"/>
             <Anchors>
                <Anchor point="TOP" relativeTo="$parentUserScrollFrame" relativePoint="BOTTOM" x="0" y="-66"/>
             </Anchors>
@@ -86,19 +86,10 @@
                <OnClick function="SM_GroupDeleteButton_OnClick"/>
             </Scripts>
          </Button>
-         <Button name="SM_GroupTargetButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Change Target">
-            <Size x="164" y="22"/>
-            <Anchors>
-               <Anchor point="TOPLEFT" relativeTo="SM_GroupDeleteButton" relativePoint="BOTTOMLEFT" x="0" y="-6"/>
-            </Anchors>
-            <Scripts>
-               <OnClick function="SM_GroupTargetButton_OnClick"/>
-            </Scripts>
-         </Button>
          <EditBox name="SM_GroupTargetText" inherits="InputBoxTemplate">
             <Size x="112" y="22"/>
             <Anchors>
-               <Anchor point="LEFT" relativeTo="SM_GroupTargetButton" relativePoint="RIGHT" x="16" y="0"/>
+               <Anchor point="TOPLEFT" relativeTo="SM_GroupDeleteButton" relativePoint="BOTTOMLEFT" x="7" y="-6"/>
             </Anchors>
             <Scripts>
                <OnLoad>
@@ -106,6 +97,15 @@
                </OnLoad>
             </Scripts>
          </EditBox>
+         <Button name="SM_GroupTargetButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Change Target">
+            <Size x="164" y="22"/>
+            <Anchors>
+               <Anchor point="LEFT" relativeTo="SM_GroupTargetText" relativePoint="RIGHT" x="9" y="0"/>
+            </Anchors>
+            <Scripts>
+               <OnClick function="SM_GroupTargetButton_OnClick"/>
+            </Scripts>
+         </Button>
       </Frames> 
       <Scripts>
          <OnLoad function="SM_GroupTab_OnLoad"/>
