@@ -58,16 +58,18 @@ function SimpleMacroSettings_RemoveContext()
    local existingIndex
 
    for i, menu in ipairs(C["contextMenus"]) do
-      if UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] ~= nil then
+      if UnitPopupMenus["SM_SUBSECTION_TITLE"] ~= nil then
          for i, v in ipairs(UnitPopupMenus[menu]) do
-            if v == "SM_CHANGE_GROUP_TARGET" then
+            if v == "SM_SUBSECTION_TITLE" then
                existingIndex = i
                break
             end
          end
       end
 
+      -- Remove title and corresponding settings
       if existingIndex ~= nil then
+         tremove(UnitPopupMenus[menu], existingIndex)
          tremove(UnitPopupMenus[menu], existingIndex)
       end
    end
@@ -80,6 +82,14 @@ function SimpleMacroSettings_Setup()
 end
 
 function SimpleMacroSettings_SetupContextMenu()
+   UnitPopupButtons["SM_SUBSECTION_TITLE"] = {
+      text = L["CONTEXT"]["SUBSECTION_TITLE"],
+      isSubsection = true,
+      isUninteractable = true,
+      isTitle = true,
+      isSubsectionSeparator = true,
+      isSubsectionTitle = true }
+
    UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
 
    for i, v in ipairs(SimpleMacro.dbc.groupTable) do
@@ -90,7 +100,15 @@ function SimpleMacroSettings_SetupContextMenu()
    UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
 
    for i, menu in ipairs(C["contextMenus"]) do
-      tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
+      for j, buttonName in ipairs(UnitPopupMenus[menu]) do
+         if (buttonName == 'CANCEL') then
+            cancelIndex = j
+            break
+         end
+      end
+
+      tinsert(UnitPopupMenus[menu], cancelIndex, "SM_CHANGE_GROUP_TARGET")
+      tinsert(UnitPopupMenus[menu], cancelIndex, "SM_SUBSECTION_TITLE")
    end
 
    hooksecurefunc("UnitPopup_OnClick", SM_ContextMenuChangeGroup_OnClick)

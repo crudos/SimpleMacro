@@ -44,7 +44,6 @@ local function slashCmdHandler(msg, editbox)
       print("The group table has been reset.")
    elseif msg == "s" then
       InterfaceOptionsFrame_OpenToCategory("Simple Macro")
-      InterfaceOptionsFrame_OpenToCategory("Simple Macro")
    else
       SimpleMacro_Show()
    end

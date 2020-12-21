@@ -12,6 +12,7 @@ L["CHANGE"]["Icon"] = "Select an icon:"
 
 -- Context menu
 L["CONTEXT"] = {}
+L["CONTEXT"]["SUBSECTION_TITLE"] = "Simple Macro"
 L["CONTEXT"]["CHANGE_GROUP_TARGET"] = "Change Group Target"
 L["CONTEXT"]["GROUP"] = "Group"
 

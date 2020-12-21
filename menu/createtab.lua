@@ -713,7 +713,7 @@ function SM_CategoryDropDown_Initialize()
 end
 
 function SM_CommandDropDown_OnEvent(self, event, ...)
-      if event == "PLAYER_ENTERING_WORLD" then
+   if event == "PLAYER_ENTERING_WORLD" then
       self.defaultValue = L.LINE_TYPE_TABLE[1][1].COMMANDS[1]
       self.value = self.defaultValue
       self.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
