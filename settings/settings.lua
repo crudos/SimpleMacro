@@ -99,16 +99,19 @@ function SimpleMacroSettings_SetupContextMenu()
 
    UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
 
+   otherIndex = nil
    for i, menu in ipairs(C["contextMenus"]) do
       for j, buttonName in ipairs(UnitPopupMenus[menu]) do
-         if (buttonName == 'CANCEL') then
-            cancelIndex = j
+         if (buttonName == 'OTHER_SUBSECTION_TITLE') then
+            otherIndex = j
             break
          end
       end
 
-      tinsert(UnitPopupMenus[menu], cancelIndex, "SM_CHANGE_GROUP_TARGET")
-      tinsert(UnitPopupMenus[menu], cancelIndex, "SM_SUBSECTION_TITLE")
+      if otherIndex ~= nil then
+         tinsert(UnitPopupMenus[menu], otherIndex, "SM_CHANGE_GROUP_TARGET")
+         tinsert(UnitPopupMenus[menu], otherIndex, "SM_SUBSECTION_TITLE")
+      end
    end
 
    hooksecurefunc("UnitPopup_OnClick", SM_ContextMenuChangeGroup_OnClick)
