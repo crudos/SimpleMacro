@@ -1,5 +1,3 @@
--- Author      : Crudos
--- Create Date : 4/25/2015 12:55:17 PM
 local _, L = ...
 local C = L["Group"]
 local G = _G

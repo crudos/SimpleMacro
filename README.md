@@ -1,9 +1,13 @@
 # SimpleMacro
+https://github.com/crudos/SimpleMacro
 
 A helper addon for managing macros in World of Warcraft.
 
 ## Key features
-* Simple click and choose macro creation
-* Batch updates to macros that contain hardcoded targets
+* Form driven macro creation
+* Macro grouping for simulatenous update of target conditionals
 
-https://github.com/crudos/SimpleMacro
+## Slash Commands
+* /sm, /smacro, /simplemacro - Opens the main menu.
+* /sm s - Open settings menu in Interface -> Addons.
+* /sm rg - Resets saved group data.

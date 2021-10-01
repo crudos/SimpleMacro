@@ -1,5 +1,3 @@
--- Author      : Crudos
--- Create Date : 6/28/2016 08:59:00 PM
 local _, L = ...
 local C = L["settings"]
 local G = _G
@@ -58,18 +56,16 @@ function SimpleMacroSettings_RemoveContext()
    local existingIndex
 
    for i, menu in ipairs(C["contextMenus"]) do
-      if UnitPopupMenus["SM_SUBSECTION_TITLE"] ~= nil then
+      if UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] ~= nil then
          for i, v in ipairs(UnitPopupMenus[menu]) do
-            if v == "SM_SUBSECTION_TITLE" then
+            if v == "SM_CHANGE_GROUP_TARGET" then
                existingIndex = i
                break
             end
          end
       end
 
-      -- Remove title and corresponding settings
       if existingIndex ~= nil then
-         tremove(UnitPopupMenus[menu], existingIndex)
          tremove(UnitPopupMenus[menu], existingIndex)
       end
    end
@@ -82,14 +78,6 @@ function SimpleMacroSettings_Setup()
 end
 
 function SimpleMacroSettings_SetupContextMenu()
-   UnitPopupButtons["SM_SUBSECTION_TITLE"] = {
-      text = L["CONTEXT"]["SUBSECTION_TITLE"],
-      isSubsection = true,
-      isUninteractable = true,
-      isTitle = true,
-      isSubsectionSeparator = true,
-      isSubsectionTitle = true }
-
    UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
 
    for i, v in ipairs(SimpleMacro.dbc.groupTable) do
@@ -99,19 +87,8 @@ function SimpleMacroSettings_SetupContextMenu()
 
    UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
 
-   otherIndex = nil
    for i, menu in ipairs(C["contextMenus"]) do
-      for j, buttonName in ipairs(UnitPopupMenus[menu]) do
-         if (buttonName == 'OTHER_SUBSECTION_TITLE') then
-            otherIndex = j
-            break
-         end
-      end
-
-      if otherIndex ~= nil then
-         tinsert(UnitPopupMenus[menu], otherIndex, "SM_CHANGE_GROUP_TARGET")
-         tinsert(UnitPopupMenus[menu], otherIndex, "SM_SUBSECTION_TITLE")
-      end
+      tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
    end
 
    hooksecurefunc("UnitPopup_OnClick", SM_ContextMenuChangeGroup_OnClick)

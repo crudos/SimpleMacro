@@ -1,5 +1,3 @@
--- Author      : Crudos
--- Create Date : 2/27/2015 05:17:35 PM
 local _, L = ...
 local G = _G
 

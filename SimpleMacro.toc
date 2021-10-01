@@ -5,17 +5,22 @@
 ## Notes: Allows you to create and change macros easily.
 ## SavedVariables: SimpleMacroDBA
 ## SavedVariablesPerCharacter: SimpleMacroDBC
+## OptionalDeps: WoWUnit
 
 constant\constant.lua
 localization\localization.xml
 
-lib\macroparser\macroparser.lua
-lib\test\util.lua
+lib\macroParser\macroParser.lua
+lib\SMacro\SMacro.lua
 
 menu\menu.xml
-menu\createtab.xml
-menu\grouptab.xml
+menu\createTab.xml
+menu\groupTab.xml
 
 settings\settings.xml
 
+util\util.lua
+
 SimpleMacro.xml
+
+test\SMacro\SMacroTest.lua

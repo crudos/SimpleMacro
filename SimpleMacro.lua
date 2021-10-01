@@ -1,6 +1,3 @@
--- Author      : Crudos
--- Create Date : 1/27/2015 11:37:49 PM
-
 local addonName, L = ...
 
 local listener = CreateFrame("Frame", "SimpleMacro")
@@ -43,6 +40,7 @@ local function slashCmdHandler(msg, editbox)
       SimpleMacro.dbc.groupTable = {}
       print("The group table has been reset.")
    elseif msg == "s" then
+      InterfaceOptionsFrame_OpenToCategory("Simple Macro")
       InterfaceOptionsFrame_OpenToCategory("Simple Macro")
    else
       SimpleMacro_Show()
