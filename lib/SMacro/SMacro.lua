@@ -289,7 +289,7 @@ end
    ]]
 
 --[[
-   Adds a new conditional   
+   Adds a new conditional
 
    params:
       line_num: row number for the line
@@ -310,7 +310,7 @@ function SMacro:addConditional(line_num, arg_num, conditional, input)
 end
 
 --[[
-   Sets a conditional   
+   Sets a conditional
 
    params:
       line_num: row number for the line
@@ -330,7 +330,7 @@ function SMacro:setConditional(line_num, arg_num, cond_num, conditional, input)
 end
 
 --[[
-   Removes a conditional   
+   Removes a conditional
 
    params:
       line_num: row number for the line

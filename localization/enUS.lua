@@ -8,7 +8,7 @@ L["SETTINGS"]["ContextMenuTooltip"] = "Allows you to update the target of a grou
 -- Change menu
 L["CHANGE"] = {}
 L["CHANGE"]["Name"] = "Enter a name (max 16 characters):"
-L["CHANGE"]["Icon"] = "Select an icon:"
+L["CHANGE"]["Icon"] = "Choose an icon:"
 
 -- Context menu
 L["CONTEXT"] = {}

@@ -6,7 +6,7 @@ local function setAccountMacros()
    SimpleMacroMenu.macroStart = 0
    SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
 
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
+   local numAccountMacros, _ = GetNumMacros()
 
    if numAccountMacros > 0 then
       SM_CreateTab_SelectMacro(1)
@@ -19,7 +19,7 @@ local function setCharacterMacros()
    SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
    SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
 
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
+   local _, numCharacterMacros = GetNumMacros()
 
    if numCharacterMacros > 0 then
       SM_CreateTab_SelectMacro(1)
@@ -47,14 +47,14 @@ local function SM_OpenPopupMenu(menuToShow)
 end
 
 -- Create tab
-function SM_CreateTab_OnLoad(panel)
+function SM_CreateTab_OnLoad(_)
    PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
    PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
 
    SimpleMacroMenuCreateTabChange:SetText(L["CREATE_TAB"]["Change"])
 end
 
-function SM_CreateTab_OnShow(panel)
+function SM_CreateTab_OnShow(_)
    if PanelTemplates_GetSelectedTab(SimpleMacroMenuCreateTab) == 1 then
       setAccountMacros()
    else
@@ -64,7 +64,7 @@ function SM_CreateTab_OnShow(panel)
    SM_CreateTab_Update()
 end
 
-function SM_CreateTab_OnHide(panel)
+function SM_CreateTab_OnHide(_)
    SM_OpenPopupMenu(nil)
 end
 
@@ -207,7 +207,7 @@ function SM_CreateTab_DisableButtons()
    SimpleMacroMenuCreateTabNewButton:Disable()
 end
 
-function SM_SaveButton_OnClick(self)
+function SM_SaveButton_OnClick(_)
    SM_SaveMacro()
    SM_CreateTab_Update()
 end
@@ -216,8 +216,8 @@ function SM_SaveMacro()
    --
 end
 
-function SM_DeleteButton_OnClick(self)
-   local nextMacro, numAccountMacros, numCharacterMacros
+function SM_DeleteButton_OnClick(_)
+   local numAccountMacros, numCharacterMacros
    numAccountMacros, numCharacterMacros = GetNumMacros()
 
    DeleteMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
@@ -234,19 +234,33 @@ function SM_DeleteButton_OnClick(self)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
-function SM_ChangeButton_OnClick(self)
+function SM_printall(table)
+   if table == nil then
+      print("nil value for SM_printall")
+      return
+   end
+
+   local tableContents = ""
+   for k, v in pairs(table) do
+      tableContents = tableContents.." "..k..": "..tostring(v)..","
+   end
+
+   print(tostring(table).." {"..tableContents.." }")
+end
+
+function SM_ChangeButton_OnClick(_)
    SimpleMacroMenu.mode = "edit"
    SM_OpenPopupMenu(SimpleMacroChangeMenu)
 end
 
-function SM_NewButton_OnClick(self)
+function SM_NewButton_OnClick(_)
    SimpleMacroMenu.mode = "new"
    SM_OpenPopupMenu(SimpleMacroChangeMenu)
 end
 
-function SimpleMacroChangeMenu_OnLoad(self)
-   G["SimpleMacroChangeMenuNameDesc"]:SetText(L["CHANGE"]["Name"])
-   G["SimpleMacroChangeMenuIconsDesc"]:SetText(L["CHANGE"]["Icon"])
+function SimpleMacroChangeMenu_OnLoad(_)
+   G["SimpleMacroChangeMenuCreateText"]:SetText(L["CHANGE"]["Name"])
+   G["SimpleMacroChangeMenuIconsChooseText"]:SetText(L["CHANGE"]["Icon"])
 end
 
 function SimpleMacro_IconScrollFrame_OnLoad(self)
@@ -258,10 +272,10 @@ function SimpleMacroIcons_OnLoad(self)
 end
 
 function SM_ChangeMenu_NameChanged(self)
-   if strlen(self:GetText()) > 0 or SimpleMacroMenu.mode == "edit" then
-      SimpleMacroChangeMenuOkayButton:Enable()
+   if strlen(self:GetText()) > 0 and SimpleMacroMenu.mode == "edit" then
+      SimpleMacroChangeMenu.BorderBox.OkayButton:Enable()
    else
-      SimpleMacroChangeMenuOkayButton:Disable()
+      SimpleMacroChangeMenu.BorderBox.OkayButton:Disable()
    end
 
    SimpleMacroMenuCreateTabSelectedText:SetText(self:GetText())
@@ -271,7 +285,7 @@ function SM_ChangeMenu_SelectIcon(id, texture)
    SimpleMacroMenu.selectedTexture = texture or G["SMIconButton"..id.."Icon"]:GetTexture()
 end
 
-function SimpleMacroChangeMenu_OnShow(self)
+function SimpleMacroChangeMenu_OnShow(_)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
    local createSelect = SimpleMacroMenu.createSelect
@@ -282,18 +296,14 @@ function SimpleMacroChangeMenu_OnShow(self)
       SimpleMacroChangeMenuName:SetText("")
       SM_ChangeMenu_SelectIcon(nil, C["iconTable"][1])
       SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Hide()
-      -- for some reason having this twice properly sets the frame up
-      SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["iconRowHeight"])
       SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, 0)
    elseif mode == "edit" then
-      local name, texture, body = GetMacroInfo(createSelect + macroStart)
+      local name, texture, _ = GetMacroInfo(createSelect + macroStart)
       SimpleMacroChangeMenuName:SetText(name)
       local iconIndex = C["rIconTable"][texture] - 1
       local iconOffset = floor(iconIndex / C["iconsPerRow"])
       FauxScrollFrame_SetOffset(SimpleMacroChangeMenuIcons, iconOffset)
       SM_ChangeMenu_SelectIcon(nil, texture)
-      -- for some reason having this twice properly sets the frame up
-      SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["iconRowHeight"] * (iconOffset+1))
       SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["iconRowHeight"] * iconOffset)
    end
 
@@ -306,10 +316,12 @@ function SimpleMacroChangeMenu_OnShow(self)
 end
 
 function SM_ChangeMenu_OnVerticalScroll(self, offset)
+   -- for some reason having this twice properly sets the frame up
+   FauxScrollFrame_OnVerticalScroll(self, offset, C["iconRowHeight"], SimpleMacroChangeMenu_Update)
    FauxScrollFrame_OnVerticalScroll(self, offset, C["iconRowHeight"], SimpleMacroChangeMenu_Update)
 end
 
-local function SimpleMacro_ArrangeButtons(frame, name, prevOffset, offset, numRows, numPerRow, total)
+local function SimpleMacro_ArrangeButtons(frame, name, prevOffset, offset, numRows, numPerRow, _)
    local prevOffsetMod = mod(abs(prevOffset or 0), numRows)
    local offsetMod = mod(abs(offset), numRows)
 
@@ -333,7 +345,6 @@ function SimpleMacroChangeMenu_Update()
    local iconTable = C["iconTable"]
    local numIconRows = numIconFrames / iconsPerRow
    local selectedTexture = SimpleMacroMenu.selectedTexture
-   local selectedIcon = SimpleMacroMenu.selectedIcon
    local offset = FauxScrollFrame_GetOffset(SimpleMacroChangeMenuIcons) or 0
    local scrollFrame = SimpleMacroChangeMenuIconsScrollChildFrame
    local buttonName, button, buttonIcon
@@ -365,22 +376,23 @@ function SimpleMacroChangeMenu_Update()
    end
 
    FauxScrollFrame_Update(
-      SimpleMacroChangeMenuIcons, ceil(#iconTable / iconsPerRow),
-      floor(SimpleMacroChangeMenuIcons:GetHeight() / C["iconRowHeight"]), C["iconRowHeight"])
+      SimpleMacroChangeMenuIcons,
+      ceil(#iconTable / iconsPerRow),
+      floor(SimpleMacroChangeMenuIcons:GetHeight() / C["iconRowHeight"]),
+      C["iconRowHeight"])
 end
 
-function SimpleMacroChangeMenu_OnHide(self)
+function SimpleMacroChangeMenu_OnHide(_)
    SM_CreateTab_EnableButtons()
    SM_CreateTab_Update()
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
-function SimpleMacroChangeMenuCancel_OnClick(self)
+function SimpleMacroChangeMenuCancel_OnClick(_)
    SimpleMacroChangeMenu:Hide()
 end
 
-function SimpleMacroChangeMenuOkay_OnClick(self)
-   local iconTable = C["iconTable"]
+function SimpleMacroChangeMenuOkay_OnClick(_)
    local selectedTexture = SimpleMacroMenu.selectedTexture
    local createSelect = SimpleMacroMenu.createSelect
    local macroStart = SimpleMacroMenu.macroStart
@@ -445,7 +457,7 @@ end
 
 function SM_MacroEditor_Update()
    local parsed, macroEditorLine, macroEditorArg, macroEditorConds, editorHeight
-   local lc, ac, cc, curLine, curArg
+   local _, _, _, curLine, curArg
 
    editorHeight = C["editorHeight"]
    parsed = SimpleMacroMenu.createParse
@@ -532,10 +544,10 @@ local function SearchLineTable(command)
 
    checkString = string.match(command, "[/#]?(.*)")
 
-   for categoryID, category in ipairs(L.LINE_TYPE_TABLE) do
-      for commandID, command in ipairs(category) do
-         for nameID, name in ipairs(command.COMMANDS) do
-            if name == checkString then
+   for categoryID, categoryData in ipairs(L.LINE_TYPE_TABLE) do
+      for commandID, commandData in ipairs(categoryData) do
+         for nameID, nameData in ipairs(commandData.COMMANDS) do
+            if nameData == checkString then
                return categoryID, commandID, nameID
             end
          end
@@ -560,13 +572,13 @@ local function SM_MacroEditor_OnClick(self, menuToShow)
    end
 end
 
-function SM_MacroEditor_OnHide(self)
+function SM_MacroEditor_OnHide(_)
    G["SM_MacroEditor_AddNewLine"]:Enable()
 
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
-function SM_MacroEditorLine_OnClick(self, button, down)
+function SM_MacroEditorLine_OnClick(self, _, _)
    local parsed, categoryID, commandID, nameID
 
    parsed = SimpleMacroMenu.createParse
@@ -583,7 +595,7 @@ function SM_MacroEditorLine_OnClick(self, button, down)
    SM_MacroEditor_OnClick(self, SM_NewLineMenu)
 end
 
-function SM_MacroEditorArg_OnClick(self, button, down)
+function SM_MacroEditorArg_OnClick(self, _, _)
    local parsed, lineNum, argNum
 
    parsed = SimpleMacroMenu.createParse
@@ -593,7 +605,7 @@ function SM_MacroEditorArg_OnClick(self, button, down)
    SM_MacroEditor_OnClick(self, SM_ArgMenu)
 end
 
-function SM_MacroEditorCond_OnClick(self, button, down)
+function SM_MacroEditorCond_OnClick(self, _, _)
    SimpleMacroMenu.selectedLine, SimpleMacroMenu.selectedArg = string.match(self:GetName(), ".-(%d).-(%d).*")
 
    SimpleMacroMenu.selectedLine = tonumber(SimpleMacroMenu.selectedLine)
@@ -615,7 +627,7 @@ function SM_MacroEditor_OnLoad(self)
    G["SM_MacroEditor_AddNewLineData"]:SetText("+ add new line +")
 end
 
-function MacroEditor_AddNewLine_OnClick(self, button, down)
+function MacroEditor_AddNewLine_OnClick(self, _, _)
    SM_NewLineMenu.isEdit = false
 
    SM_NewLineMenuCategoryDropDown:SetDefaultValue()
@@ -625,12 +637,12 @@ function MacroEditor_AddNewLine_OnClick(self, button, down)
 end
 
 -- Lines
-function SM_NewLineMenu_OnLoad(panel)
+function SM_NewLineMenu_OnLoad(_)
    SM_NewLineMenu.isEdit = false
    SM_NewLineMenu.selectedLine = 1
 end
 
-function SM_NewLineMenu_OnShow(panel)
+function SM_NewLineMenu_OnShow(_)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
    SM_NewLineMenuCategoryDropDown:RefreshValue()
    SM_NewLineMenuCommandDropDown:RefreshValue()
@@ -643,35 +655,33 @@ function SM_CategoryDropDown_OnEvent(self, event, ...)
       self.tooltip = self.defaultValue.." commands."
 
       self.SetDefaultValue =
-         function (self)
-            self.value = self.defaultValue
-            UIDropDownMenu_SetSelectedValue(self, self.value)
-            self.tooltip = self.value.." commands."
+         function (this)
+            this.value = this.defaultValue
+            UIDropDownMenu_SetSelectedValue(this, this.value)
+            this.tooltip = this.value.." commands."
          end
       self.SetValue =
-         function (self, value)
-            self.value = value
-            UIDropDownMenu_SetSelectedValue(self, value)
-            self.tooltip = value.." commands."
+         function (this, value)
+            this.value = value
+            UIDropDownMenu_SetSelectedValue(this, value)
+            this.tooltip = value.." commands."
          end
       self.GetValue =
-         function (self)
-            return UIDropDownMenu_GetSelectedValue(self)
+         function (this)
+            return UIDropDownMenu_GetSelectedValue(this)
          end
       self.GetID =
-         function (self)
-            local i
-
+         function (this)
             for i = 1, C["maxMacroCategories"] do
-               if self:GetValue() == L.LINE_TYPE_TABLE[i].CATEGORY then
+               if this:GetValue() == L.LINE_TYPE_TABLE[i].CATEGORY then
                   return i
                end
             end
          end
       self.RefreshValue =
-         function (self)
-            UIDropDownMenu_Initialize(self, SM_CategoryDropDown_Initialize)
-            UIDropDownMenu_SetSelectedValue(self, self.value)
+         function (this)
+            UIDropDownMenu_Initialize(this, SM_CategoryDropDown_Initialize)
+            UIDropDownMenu_SetSelectedValue(this, this.value)
          end
 
       UIDropDownMenu_SetWidth(self, 120)
@@ -717,31 +727,29 @@ function SM_CommandDropDown_OnEvent(self, event, ...)
       self.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
 
       self.SetDefaultValue =
-         function (self)
-            self.value = self.defaultValue
-            UIDropDownMenu_SetSelectedValue(self, self.value)
-            self.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
+         function (this)
+            this.value = this.defaultValue
+            UIDropDownMenu_SetSelectedValue(this, this.value)
+            this.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
          end
       self.SetValue =
-         function (self, value)
+         function (this, value)
             local categoryID, commandID
 
-            self.value = value
-            UIDropDownMenu_SetSelectedValue(self, value)
+            this.value = value
+            UIDropDownMenu_SetSelectedValue(this, value)
             categoryID = SM_NewLineMenuCategoryDropDown:GetID()
             commandID = SM_NewLineMenuCommandDropDown:GetID() or 1
 
-            self.tooltip = L.LINE_TYPE_TABLE[categoryID][commandID].DESCRIPTION
+            this.tooltip = L.LINE_TYPE_TABLE[categoryID][commandID].DESCRIPTION
          end
       self.GetValue =
-         function (self)
-            return UIDropDownMenu_GetSelectedValue(self)
+         function (this)
+            return UIDropDownMenu_GetSelectedValue(this)
          end
       self.GetID =
-         function (self)
-            local category, i
-
-            category = SM_NewLineMenuCategoryDropDown:GetID()
+         function (_)
+            local category = SM_NewLineMenuCategoryDropDown:GetID()
 
             for i = 1, C["maxMacroCommands"] do
                if L.LINE_TYPE_TABLE[category][i] ~= nil then
@@ -754,9 +762,9 @@ function SM_CommandDropDown_OnEvent(self, event, ...)
             end
          end
       self.RefreshValue =
-         function (self)
-            UIDropDownMenu_Initialize(self, SM_CommandDropDown_Initialize)
-            UIDropDownMenu_SetSelectedValue(self, self.value)
+         function (this)
+            UIDropDownMenu_Initialize(this, SM_CommandDropDown_Initialize)
+            UIDropDownMenu_SetSelectedValue(this, this.value)
          end
 
       UIDropDownMenu_SetWidth(self, 120)
@@ -824,7 +832,7 @@ function SM_NewLineMenu_DeleteButton_OnClick(self)
 end
 
 function SM_NewLineMenu_AcceptButton_OnClick(self)
-   local parsed, newLine, cmd, slashOrHash, value
+   local parsed, newLine, slashOrHash, value
 
    parsed = SimpleMacroMenu.createParse
    value = SM_NewLineMenuCommandDropDown:GetValue()
@@ -846,17 +854,17 @@ function SM_NewLineMenu_AcceptButton_OnClick(self)
 end
 
 -- Arguments
-function SM_ArgMenu_OnLoad(panel)
+function SM_ArgMenu_OnLoad(_)
    SM_ArgMenuEditBoxLabel:SetText("Enter argument:")
 end
 
-function SM_ArgMenu_OnShow(panel)
+function SM_ArgMenu_OnShow(_)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
    SM_ArgMenuEditBox:SetFocus()
 end
 
-function SM_ArgMenu_SetCondButton_OnClick(self)
+function SM_ArgMenu_SetCondButton_OnClick(_)
    local entry_name, sLine, sArg
 
    entry_name = SimpleMacroMenu.selectedEditorEntry:GetName()
@@ -893,8 +901,8 @@ function SM_ArgMenu_AcceptButton_OnClick(self)
 end
 
 -- Conditionals
-function SM_CondMenu_OnLoad(panel)
-   local cond_cbox, cboxNum, condEntryInput, cbox_text
+function SM_CondMenu_OnLoad(_)
+   local cond_cbox, condEntryInput, cbox_text
    local conditionalsPerCol = C["conditionalsPerCol"]
    local conditionalSpacing = C["conditionalSpacing"]
 
@@ -942,7 +950,7 @@ function SM_CondCheckButton_OnClick(checkButton)
    SM_CheckButton_OnClick(checkButton)
 end
 
-function SM_CondMenu_OnShow(panel)
+function SM_CondMenu_OnShow(_)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
    local sLine, sArg, parse, cc, cur
@@ -995,8 +1003,8 @@ function SM_AlternateCheck_OnClick(self)
    end
 end
 
-function SM_CondMenu_SaveButton_OnClick(self)
-   local parse, cboxNum, sLine, sArg, condEntryInput, input
+function SM_CondMenu_SaveButton_OnClick(_)
+   local parse, sLine, sArg, input
 
    sLine = SimpleMacroMenu.selectedLine
    sArg = SimpleMacroMenu.selectedArg

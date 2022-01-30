@@ -330,52 +330,99 @@
    </Frame>
 
    <!-- Change menu -->
-   <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-      <Size x="600" y="450"/>
+   <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true" >
+      <Size x="550" y="450"/>
       <Anchors>
          <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
       </Anchors>
+      <Layers>
+         <Layer level="BACKGROUND">
+            <Texture parentKey="BG">
+               <Anchors>
+                  <Anchor point="TOPLEFT" x="7" y="-7"/>
+                  <Anchor point="BOTTOMRIGHT" x="-7" y="7"/>
+               </Anchors>
+               <Color r="0" g="0" b="0" a=".80"/>
+            </Texture>
+         </Layer>
+      </Layers>
       <Frames>
-         <EditBox name="$parentName" inherits="InputBoxTemplate">
-            <Size x="202" y="22"/>
+         <Frame parentKey="BorderBox" inherits="SelectionFrameTemplate" frameLevel="50" hidden="false">
+            <KeyValues>
+               <KeyValue key="OnOkay" value="SimpleMacroChangeMenuOkay_OnClick" type="global"/>
+               <KeyValue key="OnCancel" value="SimpleMacroChangeMenuCancel_OnClick" type="global"/>
+            </KeyValues>
             <Anchors>
-               <Anchor point="TOPLEFT" x="20" y="-30"/>
+               <Anchor point="TOPLEFT"/>
+               <Anchor point="BOTTOMRIGHT"/>
             </Anchors>
             <Layers>
-               <Layer>
-                  <FontString name="$parentDesc" inherits="GameFontWhiteSmall">
+               <Layer level="BORDER">
+                  <FontString name="$parentCreateText" inherits="ChatFontNormal">
                      <Anchors>
-                        <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="-4" y="4"/>
+                        <Anchor point="TOPLEFT" relativeTo="$parent" x="22" y="-16"/>
                      </Anchors>
                   </FontString>
                </Layer>
+               <Layer level="BACKGROUND">
+                  <Texture name="$parentNameLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+                     <Size x="12" y="29"/>
+                     <Anchors>
+                        <Anchor point="TOPLEFT" x="18" y="-32"/>
+                     </Anchors>
+                     <TexCoords left="0" right="0.09375" top="0" bottom="1.0"/>
+                  </Texture>
+                  <Texture name="$parentNameMiddle" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+                     <Size x="175" y="29"/>
+                     <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="RIGHT"/>
+                     </Anchors>
+                     <TexCoords left="0.09375" right="0.90625" top="0" bottom="1.0"/>
+                  </Texture>
+                  <Texture name="$parentNameRight" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+                     <Size x="12" y="29"/>
+                     <Anchors>
+                        <Anchor point="LEFT" relativeTo="$parentNameMiddle" relativePoint="RIGHT"/>
+                     </Anchors>
+                     <TexCoords left="0.90625" right="1.0" top="0" bottom="1.0"/>
+                  </Texture>
+               </Layer>
             </Layers>
-            <Scripts>
-               <OnLoad>
-                  self:SetAutoFocus(false)
-                  self:SetMaxLetters(16)
-               </OnLoad>
-               <OnShow>
-                  self:SetFocus()
-               </OnShow>
-               <OnEnterPressed>
-                  if SimpleMacroChangeMenuOkayButton:IsEnabled() then
-                     SimpleMacroChangeMenuOkay_OnClick(SimpleMacroChangeMenuOkayButton)
-                  end
-               </OnEnterPressed>
-               <OnTextChanged function="SM_ChangeMenu_NameChanged"/>
-            </Scripts>
-         </EditBox>
+            <Frames>
+               <EditBox name="$parentName" letters="16">
+                  <Size x="202" y="22"/>
+                  <Anchors>
+                     <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="LEFT" x="10" y="2"/>
+                  </Anchors>
+                  <Scripts>
+                     <OnLoad>
+                        self:SetAutoFocus(false)
+                     </OnLoad>
+                     <OnShow>
+                        self:SetFocus()
+                     </OnShow>
+                     <OnTextChanged function="SM_ChangeMenu_NameChanged"/>
+                     <OnEnterPressed>
+                        if SimpleMacroChangeMenu.BorderBox.OkayButton:IsEnabled() then
+                           SimpleMacroChangeMenuOkay_OnClick(SimpleMacroChangeMenu.BorderBox.OkayButton)
+                        end
+                     </OnEnterPressed>
+                     <OnEscapePressed function="SimpleMacroChangeMenuCancel_OnClick"/>
+                  </Scripts>
+                  <FontString name="$parentText" inherits="ChatFontNormal"/>
+               </EditBox>
+            </Frames>
+         </Frame>
          <ScrollFrame name="$parentIcons" inherits="FauxScrollFrameTemplate">
-            <Size x="292" y="322"/>
+            <Size x="492" y="344"/>
             <Anchors>
-               <Anchor point="TOPLEFT" relativeTo="$parentName" relativePoint="BOTTOMLEFT" x="-8" y="-16"/>
+               <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="20" y="-76"/>
             </Anchors>
             <Layers>
-               <Layer>
-                  <FontString name="$parentDesc" inherits="GameFontWhiteSmall">
+               <Layer level="BORDER">
+                  <FontString name="$parentChooseText" inherits="GameFontWhiteSmall">
                      <Anchors>
-                        <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="5" y="0"/>
+                        <Anchor point="TOPLEFT" relativeTo="$parent" x="4" y="8"/>
                      </Anchors>
                   </FontString>
                </Layer>
@@ -398,24 +445,6 @@
                <OnLoad function="SimpleMacro_IconScrollFrame_OnLoad"/>
             </Scripts>
          </ScrollFrame>
-         <Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
-            <Size x="86" y="22"/>
-            <Anchors>
-               <Anchor point="BOTTOMRIGHT" x="-14" y="14"/>
-            </Anchors>
-            <Scripts>
-               <OnClick function="SimpleMacroChangeMenuCancel_OnClick"/>
-            </Scripts>
-         </Button>
-         <Button name="$parentOkayButton" inherits="UIPanelButtonTemplate" text="Okay">
-            <Size x="86" y="22"/>
-            <Anchors>
-               <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT" x="-2" y="0"/>
-            </Anchors>
-            <Scripts>
-               <OnClick function="SimpleMacroChangeMenuOkay_OnClick"/>
-            </Scripts>
-         </Button>
       </Frames>
       <Scripts>
          <OnLoad function="SimpleMacroChangeMenu_OnLoad"/>

@@ -25,8 +25,8 @@ L["Create"]["numConditionals"] = 36
 L["Create"]["maxMacroCategories"] = 12
 L["Create"]["maxMacroCommands"] = 32
 L["Create"]["editorHeight"] = 14
-L["Create"]["numIconFrames"] = 54
-L["Create"]["iconsPerRow"] = 6
+L["Create"]["numIconFrames"] = 100
+L["Create"]["iconsPerRow"] = 10
 L["Create"]["iconRowHeight"] = 46
 L["Create"]["iconTable"] = {}
    GetMacroIcons(L["Create"]["iconTable"])
