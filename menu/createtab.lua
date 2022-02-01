@@ -93,15 +93,6 @@ function SMCreateButtons_OnLoad(self)
    end
 end
 
-local function SM_HideEntries(entry_type, num)
-   local count = num
-
-   while G[entry_type..count] do
-      G[entry_type..count]:Hide()
-      count = count + 1
-   end
-end
-
 function SM_CreateTab_Update()
    local numAccountMacros, numCharacterMacros = GetNumMacros()
    local macroButtonName, macroButton, macroIcon, macroName

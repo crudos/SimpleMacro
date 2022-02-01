@@ -4,8 +4,8 @@ local G = _G
 
 function SimpleMacroSettings_OnLoad(self)
    self.name = "Simple Macro";
-   self.okay = function(self) SimpleMacroSettings_OnOkay(self) end
-   self.cancel = function(self) SimpleMacroSettings_OnCancel() end
+   self.okay = function(this) SimpleMacroSettings_OnOkay(this) end
+   self.cancel = function(_) SimpleMacroSettings_OnCancel() end
    self:Hide() -- stops OnShow from running immediately
    InterfaceOptions_AddCategory(self);
 
@@ -55,7 +55,7 @@ end
 function SimpleMacroSettings_RemoveContext()
    local existingIndex
 
-   for i, menu in ipairs(C["contextMenus"]) do
+   for _, menu in ipairs(C["contextMenus"]) do
       if UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] ~= nil then
          for i, v in ipairs(UnitPopupMenus[menu]) do
             if v == "SM_CHANGE_GROUP_TARGET" then
@@ -80,14 +80,14 @@ end
 function SimpleMacroSettings_SetupContextMenu()
    UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
 
-   for i, v in ipairs(SimpleMacro.dbc.groupTable) do
+   for i, _ in ipairs(SimpleMacro.dbc.groupTable) do
       UnitPopupButtons["SM_GROUP_"..i] = { text = L["CONTEXT"]["GROUP"].." "..i }
       tinsert(UnitPopupMenus["SM_CHANGE_GROUP_TARGET"], "SM_GROUP_"..i)
    end
 
    UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
 
-   for i, menu in ipairs(C["contextMenus"]) do
+   for _, menu in ipairs(C["contextMenus"]) do
       tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
    end
 

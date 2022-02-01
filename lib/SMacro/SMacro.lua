@@ -40,7 +40,7 @@ end
       string: text representing the macro's body joined with \n
    ]]
 function SMacro:compose()
-   local lines, i, result
+   local lines, result
 
    lines = self.lines
 
@@ -127,8 +127,6 @@ function SMacro:removeLine(line_num)
    if line_num == line_count then
       self.lines[line_num] = nil
    else
-      local cur
-
       for cur = line_num, line_count - 1, 1 do
          self.lines[cur] = self.lines[cur + 1]
       end
@@ -248,7 +246,7 @@ end
       arg_num: index of the arg
    ]]
 function SMacro:removeArgument(line_num, arg_num)
-   local arguments, arg_count, isRemoved, cur
+   local arguments, arg_count, isRemoved
 
    arguments = self.lines[line_num].args
    arg_count = self.lines[line_num].args.count
@@ -340,7 +338,7 @@ end
       boolean: if the conditional was removed
    ]]
 function SMacro:removeConditional(line_num, arg_num, cond_num)
-   local conditionals, cond_count, isRemoved, cur
+   local conditionals, cond_count, isRemoved
 
    conditionals = self.lines[line_num].args[arg_num].conds
    cond_count = self.lines[line_num].args[arg_num].conds.count

@@ -4,7 +4,7 @@ local G = _G
 UIPanelWindows["SimpleMacroMenu"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };
 
 -- sets the selected macro button
-function SimpleMacroButton_OnClick(self, button, down)
+function SimpleMacroButton_OnClick(self, _, _)
    local name = self:GetName()
    local id = self:GetID()
 
@@ -77,7 +77,7 @@ function SimpleMacroMenu_OnLoad(self)
    PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
 end
 
-function SimpleMacroMenu_OnShow(self)
+function SimpleMacroMenu_OnShow(_)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
    local tabNum = SimpleMacro.dbc.tab
 
@@ -85,7 +85,7 @@ function SimpleMacroMenu_OnShow(self)
    G["SimpleMacroMenu"..L["tabs"][tabNum].."Tab"]:Show()
 end
 
-function SimpleMacroMenu_OnHide(self)
+function SimpleMacroMenu_OnHide(_)
    PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
 end
 
@@ -102,7 +102,7 @@ function SimpleMacroMenuTab_OnClick(self)
    end
 end
 
-function SM_ExitButton_OnClick(self)
+function SM_ExitButton_OnClick(_)
    G["SM_MacroEditor_AddNewLine"]:Enable()
    HideUIPanel(SimpleMacroMenu)
 end

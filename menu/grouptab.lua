@@ -10,7 +10,7 @@ local function setAccountMacros()
    SimpleMacroMenu.macroStart = 0
    SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
 
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
+   local numAccountMacros, _ = GetNumMacros()
 
    if numAccountMacros > 0 then
       SM_UserButton_SelectMacro(1)
@@ -23,7 +23,7 @@ local function setCharacterMacros()
    SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
    SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
 
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
+   local _, numCharacterMacros = GetNumMacros()
 
    if numCharacterMacros > 0 then
       SM_UserButton_SelectMacro(1)
@@ -62,7 +62,7 @@ function SM_GroupTab_OnLoad(panel)
    loadGroupTabs()
 end
 
-function SM_GroupTab_OnShow(panel)
+function SM_GroupTab_OnShow(_)
    if PanelTemplates_GetSelectedTab(SimpleMacroMenuGroupTab) == 1 then
       setAccountMacros()
    else
@@ -254,7 +254,7 @@ function SM_UserButton_Update()
 end
 
 function SM_GroupButton_Update()
-   local numAccountMacros, numCharacterMacros = GetNumMacros()
+   local _, _ = GetNumMacros()
    local macroButtonName, macroButton, macroIcon, macroName
    local name, texture, body
    local groupTable = SimpleMacro.dbc.groupTable
@@ -311,7 +311,7 @@ function SM_GroupButton_SelectMacro(id)
    SimpleMacroMenu.groupSelect = id
 end
 
-function SM_GroupAddButton_OnClick(self)
+function SM_GroupAddButton_OnClick(_)
    local buttonId = SimpleMacroMenu.userSelect + SimpleMacroMenu.macroStart
    local groupTable = SimpleMacro.dbc.groupTable
    local group = groupTable[groupTable.selected]
@@ -331,11 +331,10 @@ function SM_GroupAddButton_OnClick(self)
    SM_GroupButton_Update()
 end
 
-function SM_GroupDeleteButton_OnClick(self)
+function SM_GroupDeleteButton_OnClick(_)
    local id = SimpleMacroMenu.groupSelect
    local groupTable = SimpleMacro.dbc.groupTable
    local group = groupTable[groupTable.selected]
-   local temp
 
    -- if we're deleting the last one, select the previous macro
    if id == #group then
@@ -353,7 +352,7 @@ function SM_GroupDeleteButton_OnClick(self)
 end
 
 local function changeTargets(index, target)
-   local numAccountMacros, numCharacterMacros = GetNumMacros() -- API for users current # of macros
+   local _, _ = GetNumMacros() -- API for users current # of macros
    local idx = tonumber(index)
    local targetPattern = '([^,%]]*).-$'
    local macroText = GetMacroBody(idx)
@@ -392,7 +391,7 @@ function SM_ChangeGroupTarget(groupNum, newTarget)
    print("Set target of Group "..groupNum.." to "..newTarget)
 end
 
-function SM_GroupTargetButton_OnClick(self)
+function SM_GroupTargetButton_OnClick(_)
    local groupNum = SimpleMacro.dbc.groupTable.selected
    local newTarget = SM_GroupTargetText:GetText()
 

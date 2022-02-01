@@ -32,7 +32,7 @@ listener:SetScript("OnEvent", listener.OnEvent)
 SLASH_SIMPLEMACRO1 = '/sm'
 SLASH_SIMPLEMACRO2 = '/smacro'
 SLASH_SIMPLEMACRO3 = '/simplemacro'
-local function slashCmdHandler(msg, editbox)
+local function slashCmdHandler(msg, _)
    if msg == "rdb" then
       SimpleMacro.dba = L["defaultsAccount"]
       SimpleMacro.dbc = L["defaultsCharacter"]
@@ -52,6 +52,6 @@ function SimpleMacro_Show()
    ShowUIPanel(SimpleMacroMenu)
 end
 
-function SimpleMacro_Hide(self)
+function SimpleMacro_Hide(_)
    HideUIPanel(SimpleMacroMenu)
 end

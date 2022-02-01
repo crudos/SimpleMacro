@@ -68,7 +68,7 @@ local function parse_conds(cond_body)
          rest = nil
       end
 
-      if isempty(trim(cur)) then -- remove unecessary conditionals [dead,   ] or [  ]
+      if isempty(trim(cur)) then -- remove unnecessary conditionals [dead,   ] or [  ]
          i = i - 1
       else
          cond = {}
@@ -95,7 +95,7 @@ end
       table: list of args for this line
    ]]
 local function parse_args(arg_body)
-   local text, conds, arg, rest, args, i
+   local text, conds, arg, args, i
 
    args = {}
    text = arg_body
