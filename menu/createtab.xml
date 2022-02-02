@@ -28,14 +28,13 @@
             </ScrollFrame>
             <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
                 <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6"
-                            y="-14"/>
+                    <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-20"/>
                 </Anchors>
                 <Layers>
                     <Layer>
                         <FontString name="$parentText" inherits="GameFontNormalLarge">
                             <Anchors>
-                                <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="12" y="2"/>
+                                <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="12" y="6"/>
                             </Anchors>
                         </FontString>
                     </Layer>

@@ -140,6 +140,22 @@
                     </Anchors>
                 </FontString>
             </Layer>
+            <Layer level="ARTWORK">
+                <Texture name="SimpleMacroHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+                    <Size x="256" y="16"/>
+                    <Anchors>
+                        <Anchor point="TOPLEFT" x="2" y="-252"/>
+                    </Anchors>
+                    <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
+                </Texture>
+                <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+                    <Size x="88" y="16"/>
+                    <Anchors>
+                        <Anchor point="LEFT" relativeTo="SimpleMacroHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
+                    </Anchors>
+                    <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
+                </Texture>
+            </Layer>
         </Layers>
         <Frames>
             <Frame name="$parentPanelContainer"/>
