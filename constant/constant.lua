@@ -1,13 +1,13 @@
 local _, L = ...
 
 L["defaultsAccount"] = {
-   settings = {
-      ContextMenu = false,
-   },
+  settings = {
+    ContextMenu = false,
+  },
 }
 L["defaultsCharacter"] = {
-   groupTable = {},
-   tab = 1,
+  groupTable = {},
+  tab = 1,
 }
 
 L["settings"] = {}
@@ -29,12 +29,12 @@ L["Create"]["numIconFrames"] = 100
 L["Create"]["iconsPerRow"] = 10
 L["Create"]["iconRowHeight"] = 46
 L["Create"]["iconTable"] = {}
-   GetMacroIcons(L["Create"]["iconTable"])
-   GetMacroItemIcons(L["Create"]["iconTable"])
+GetMacroIcons(L["Create"]["iconTable"])
+GetMacroItemIcons(L["Create"]["iconTable"])
 L["Create"]["rIconTable"] = {}
-   for k, v in pairs(L["Create"]["iconTable"]) do
-      L["Create"]["rIconTable"][v] = k
-   end
+for k, v in pairs(L["Create"]["iconTable"]) do
+  L["Create"]["rIconTable"][v] = k
+end
 
 L["Group"] = {}
 L["Group"]["macrosPerRow"] = 6

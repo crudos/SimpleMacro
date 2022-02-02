@@ -1,115 +1,117 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-   <Script file="grouptab.lua"/>
-   <Frame name="$parentGroupTab" hidden="true" parent="SimpleMacroMenu">
-      <Anchors>
-         <Anchor point="TOPLEFT"/>
-         <Anchor point="BOTTOMRIGHT"/>
-      </Anchors>
-      <Frames>
-         <ScrollFrame name="$parentUserScrollFrame" inherits="UIPanelScrollFrameTemplate">
-            <Size x="292" y="190"/>
-            <Anchors>
-               <Anchor point="TOPRIGHT" x="-40" y="-64"/>
-            </Anchors>
-            <ScrollChild>
-               <Frame name="SM_UserButtons">
-                  <Size x="235" y="10"/>
-                  <Anchors>
-                     <Anchor point="TOPLEFT"/>
-                  </Anchors>
-                  <Scripts>
-                     <OnLoad function="SM_UserButtons_OnLoad"/>
-                  </Scripts>
-               </Frame>
-            </ScrollChild>
-            <Scripts>
-               <OnLoad function="ScrollFrame_OnLoad"/>
-            </Scripts>
-         </ScrollFrame>
-         <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account Macros">
-            <Anchors>
-               <Anchor point="BOTTOMLEFT" relativeTo="$parentUserScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
-            </Anchors>
-            <Scripts>
-               <OnClick>
-                  SM_GroupTabAccountMacroTab_OnClick(self)
-                  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-               </OnClick>
-            </Scripts>
-         </Button>
-         <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character Macros">
-            <Anchors>
-               <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
-            </Anchors>
-            <Scripts>
-               <OnClick>
-                  SM_GroupTabCharacterMacroTab_OnClick(self)
-                  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-               </OnClick>
-            </Scripts>
-         </Button>
-         <ScrollFrame name="$parentGroupScrollFrame" inherits="UIPanelScrollFrameTemplate">
-            <Size x="292" y="102"/>
-            <Anchors>
-               <Anchor point="TOP" relativeTo="$parentUserScrollFrame" relativePoint="BOTTOM" x="0" y="-66"/>
-            </Anchors>
-            <ScrollChild>
-               <Frame name="SM_GroupButtons">
-                  <Size x="235" y="10"/>
-                  <Anchors>
-                     <Anchor point="TOPLEFT"/>
-                  </Anchors>
-                  <Scripts>
-                     <OnLoad function="SM_GroupButtons_OnLoad"/>
-                  </Scripts>
-               </Frame>
-            </ScrollChild>
-            <Scripts>
-               <OnLoad function="ScrollFrame_OnLoad"/>
-            </Scripts>
-         </ScrollFrame>
-         <Button name="SM_GroupAddButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Add To Group">
-            <Size x="292" y="22"/>
-            <Anchors>
-               <Anchor point="TOP" relativeTo="$parentUserScrollFrame" relativePoint="BOTTOM" x="0" y="-8"/>
-            </Anchors>
-            <Scripts>
-               <OnClick function="SM_GroupAddButton_OnClick"/>
-            </Scripts>
-         </Button>
-         <Button name="SM_GroupDeleteButton" inherits="UIPanelButtonTemplate" text="Delete From Group">
-            <Size x="292" y="22"/>
-            <Anchors>
-               <Anchor point="TOP" relativeTo="$parentGroupScrollFrame" relativePoint="BOTTOM" x="0" y="-8"/>
-            </Anchors>
-            <Scripts>
-               <OnClick function="SM_GroupDeleteButton_OnClick"/>
-            </Scripts>
-         </Button>
-         <EditBox name="SM_GroupTargetText" inherits="InputBoxTemplate">
-            <Size x="112" y="22"/>
-            <Anchors>
-               <Anchor point="TOPLEFT" relativeTo="SM_GroupDeleteButton" relativePoint="BOTTOMLEFT" x="7" y="-6"/>
-            </Anchors>
-            <Scripts>
-               <OnLoad>
-                  self:SetAutoFocus(false)
-               </OnLoad>
-            </Scripts>
-         </EditBox>
-         <Button name="SM_GroupTargetButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Change Target">
-            <Size x="164" y="22"/>
-            <Anchors>
-               <Anchor point="LEFT" relativeTo="SM_GroupTargetText" relativePoint="RIGHT" x="9" y="0"/>
-            </Anchors>
-            <Scripts>
-               <OnClick function="SM_GroupTargetButton_OnClick"/>
-            </Scripts>
-         </Button>
-      </Frames> 
-      <Scripts>
-         <OnLoad function="SM_GroupTab_OnLoad"/>
-         <OnShow function="SM_GroupTab_OnShow"/>
-      </Scripts>
-   </Frame>
+    <Script file="grouptab.lua"/>
+    <Frame name="$parentGroupTab" hidden="true" parent="SimpleMacroMenu">
+        <Anchors>
+            <Anchor point="TOPLEFT"/>
+            <Anchor point="BOTTOMRIGHT"/>
+        </Anchors>
+        <Frames>
+            <ScrollFrame name="$parentUserScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                <Size x="292" y="190"/>
+                <Anchors>
+                    <Anchor point="TOPRIGHT" x="-40" y="-64"/>
+                </Anchors>
+                <ScrollChild>
+                    <Frame name="SM_UserButtons">
+                        <Size x="235" y="10"/>
+                        <Anchors>
+                            <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad function="SM_UserButtons_OnLoad"/>
+                        </Scripts>
+                    </Frame>
+                </ScrollChild>
+                <Scripts>
+                    <OnLoad function="ScrollFrame_OnLoad"/>
+                </Scripts>
+            </ScrollFrame>
+            <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account Macros">
+                <Anchors>
+                    <Anchor point="BOTTOMLEFT" relativeTo="$parentUserScrollFrame" relativePoint="TOPLEFT" x="26"
+                            y="2"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SM_GroupTabAccountMacroTab_OnClick(self)
+                        PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character Macros">
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        SM_GroupTabCharacterMacroTab_OnClick(self)
+                        PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+                    </OnClick>
+                </Scripts>
+            </Button>
+            <ScrollFrame name="$parentGroupScrollFrame" inherits="UIPanelScrollFrameTemplate">
+                <Size x="292" y="102"/>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentUserScrollFrame" relativePoint="BOTTOM" x="0" y="-66"/>
+                </Anchors>
+                <ScrollChild>
+                    <Frame name="SM_GroupButtons">
+                        <Size x="235" y="10"/>
+                        <Anchors>
+                            <Anchor point="TOPLEFT"/>
+                        </Anchors>
+                        <Scripts>
+                            <OnLoad function="SM_GroupButtons_OnLoad"/>
+                        </Scripts>
+                    </Frame>
+                </ScrollChild>
+                <Scripts>
+                    <OnLoad function="ScrollFrame_OnLoad"/>
+                </Scripts>
+            </ScrollFrame>
+            <Button name="SM_GroupAddButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="Add To Group">
+                <Size x="292" y="22"/>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentUserScrollFrame" relativePoint="BOTTOM" x="0" y="-8"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="SM_GroupAddButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <Button name="SM_GroupDeleteButton" inherits="UIPanelButtonTemplate" text="Delete From Group">
+                <Size x="292" y="22"/>
+                <Anchors>
+                    <Anchor point="TOP" relativeTo="$parentGroupScrollFrame" relativePoint="BOTTOM" x="0" y="-8"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="SM_GroupDeleteButton_OnClick"/>
+                </Scripts>
+            </Button>
+            <EditBox name="SM_GroupTargetText" inherits="InputBoxTemplate">
+                <Size x="112" y="22"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeTo="SM_GroupDeleteButton" relativePoint="BOTTOMLEFT" x="7" y="-6"/>
+                </Anchors>
+                <Scripts>
+                    <OnLoad>
+                        self:SetAutoFocus(false)
+                    </OnLoad>
+                </Scripts>
+            </EditBox>
+            <Button name="SM_GroupTargetButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate"
+                    text="Change Target">
+                <Size x="164" y="22"/>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="SM_GroupTargetText" relativePoint="RIGHT" x="9" y="0"/>
+                </Anchors>
+                <Scripts>
+                    <OnClick function="SM_GroupTargetButton_OnClick"/>
+                </Scripts>
+            </Button>
+        </Frames>
+        <Scripts>
+            <OnLoad function="SM_GroupTab_OnLoad"/>
+            <OnShow function="SM_GroupTab_OnShow"/>
+        </Scripts>
+    </Frame>
 </Ui>

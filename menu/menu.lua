@@ -5,104 +5,104 @@ UIPanelWindows["SimpleMacroMenu"] = { area = "left", pushable = 1, whileDead = 1
 
 -- sets the selected macro button
 function SimpleMacroButton_OnClick(self, _, _)
-   local name = self:GetName()
-   local id = self:GetID()
+  local name = self:GetName()
+  local id = self:GetID()
 
-   if name == "SMUserButton"..id then
-      SM_UserButton_SelectMacro(id)
-      SM_UserButton_Update()
-   elseif name == "SMGroupButton"..id then
-      SM_GroupButton_SelectMacro(id)
-      SM_GroupButton_Update()
-   elseif name == "SMCreateButton"..id then
-      SM_CreateTab_SelectMacro(id)
-      SM_CreateTab_Update()
-   elseif name == "SMIconButton"..id then
-      SM_ChangeMenu_SelectIcon(id, nil)
-      SimpleMacroChangeMenu_Update()
-   end
+  if name == "SMUserButton" .. id then
+    SM_UserButton_SelectMacro(id)
+    SM_UserButton_Update()
+  elseif name == "SMGroupButton" .. id then
+    SM_GroupButton_SelectMacro(id)
+    SM_GroupButton_Update()
+  elseif name == "SMCreateButton" .. id then
+    SM_CreateTab_SelectMacro(id)
+    SM_CreateTab_Update()
+  elseif name == "SMIconButton" .. id then
+    SM_ChangeMenu_SelectIcon(id, nil)
+    SimpleMacroChangeMenu_Update()
+  end
 end
 
 function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
-   local button
+  local button
 
-   for i = 1, totalButtons do
-      button = CreateFrame("CheckButton", name..i, frame, "SimpleMacroButtonTemplate")
-      button:SetID(i)
-      if i == 1 then
-         button:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
-      elseif mod(i, buttonsPerRow) == 1 then
-         button:SetPoint("TOP", name..(i - buttonsPerRow), "BOTTOM", 0, -10)
+  for i = 1, totalButtons do
+    button = CreateFrame("CheckButton", name .. i, frame, "SimpleMacroButtonTemplate")
+    button:SetID(i)
+    if i == 1 then
+      button:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
+    elseif mod(i, buttonsPerRow) == 1 then
+      button:SetPoint("TOP", name .. (i - buttonsPerRow), "BOTTOM", 0, -10)
 
-         if totalButtons - buttonsPerRow < i then
-            SimpleMacroMenu[name.."LastRow"] = button:GetName()
-         end
-      else
-         button:SetPoint("LEFT", name..(i - 1), "RIGHT", 13, 0)
+      if totalButtons - buttonsPerRow < i then
+        SimpleMacroMenu[name .. "LastRow"] = button:GetName()
       end
-   end
+    else
+      button:SetPoint("LEFT", name .. (i - 1), "RIGHT", 13, 0)
+    end
+  end
 end
 
 -- picks up the correct macro when its in the group list
 function SimplePickupMacro(self)
-   local name = self:GetName()
-   local id = self:GetID()
+  local name = self:GetName()
+  local id = self:GetID()
 
-   if name == "SMGroupButton"..id then
-      PickupMacro(SimpleMacroMenu.groupTable[id])
-   else
-      -- SMUserButton and SMCreateButton
-      PickupMacro(id + SimpleMacroMenu.macroStart)
-   end
+  if name == "SMGroupButton" .. id then
+    PickupMacro(SimpleMacroMenu.groupTable[id])
+  else
+    -- SMUserButton and SMCreateButton
+    PickupMacro(id + SimpleMacroMenu.macroStart)
+  end
 end
 
 function SM_CheckButton_OnClick(checkButton)
-   if checkButton:GetChecked() and checkButton.interruptCheck then
-      checkButton.interruptCheck(checkButton)
-      checkButton:SetChecked(false)
-      return
-   elseif not checkButton:GetChecked() and checkButton.interruptUncheck then
-      checkButton.interruptUncheck(checkButton)
-      checkButton:SetChecked(true)
-      return
-   end
+  if checkButton:GetChecked() and checkButton.interruptCheck then
+    checkButton.interruptCheck(checkButton)
+    checkButton:SetChecked(false)
+    return
+  elseif not checkButton:GetChecked() and checkButton.interruptUncheck then
+    checkButton.interruptUncheck(checkButton)
+    checkButton:SetChecked(true)
+    return
+  end
 end
 
 function SimpleMacroMenu_OnLoad(self)
-   tinsert(UISpecialFrames, self:GetName())
-   self:RegisterForDrag("LeftButton")
-   self.name = "SimpleMacro"
-   self.elapsed = 0
+  tinsert(UISpecialFrames, self:GetName())
+  self:RegisterForDrag("LeftButton")
+  self.name = "SimpleMacro"
+  self.elapsed = 0
 
-   PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
+  PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
 end
 
 function SimpleMacroMenu_OnShow(_)
-   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-   local tabNum = SimpleMacro.dbc.tab
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
+  local tabNum = SimpleMacro.dbc.tab
 
-   PanelTemplates_SetTab(SimpleMacroMenu, tabNum)
-   G["SimpleMacroMenu"..L["tabs"][tabNum].."Tab"]:Show()
+  PanelTemplates_SetTab(SimpleMacroMenu, tabNum)
+  G["SimpleMacroMenu" .. L["tabs"][tabNum] .. "Tab"]:Show()
 end
 
 function SimpleMacroMenu_OnHide(_)
-   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
 end
 
 function SimpleMacroMenuTab_OnClick(self)
-   PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
+  PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
 
-   for i, tab in ipairs(L["tabs"]) do
-      if i == self:GetID() then
-         G["SimpleMacroMenu"..tab.."Tab"]:Show()
-         SimpleMacro.dbc.tab = self:GetID()
-      else
-         G["SimpleMacroMenu"..tab.."Tab"]:Hide()
-      end
-   end
+  for i, tab in ipairs(L["tabs"]) do
+    if i == self:GetID() then
+      G["SimpleMacroMenu" .. tab .. "Tab"]:Show()
+      SimpleMacro.dbc.tab = self:GetID()
+    else
+      G["SimpleMacroMenu" .. tab .. "Tab"]:Hide()
+    end
+  end
 end
 
 function SM_ExitButton_OnClick(_)
-   G["SM_MacroEditor_AddNewLine"]:Enable()
-   HideUIPanel(SimpleMacroMenu)
+  G["SM_MacroEditor_AddNewLine"]:Enable()
+  HideUIPanel(SimpleMacroMenu)
 end
