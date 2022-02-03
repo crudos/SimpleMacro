@@ -1,8 +1,6 @@
 if WoWUnit ~= nil then
   local AreEqual, IsTrue, Replace, IsFalse = WoWUnit.AreEqual, WoWUnit.Exists, WoWUnit.Replace, WoWUnit.IsFalse
-  local Exists, NotExists = WoWUnit.Exists, WoWUnit.IsFalse
   local SMacroTest = WoWUnit('SMacro')
-
   local mockBody = '#showtooltip [equipped:Two-Hand] 16; [noequipped:Two-Hand] 17\n/equipset [noequipped:Two-Hand] 2h; [equipped:Two-Hand] 1hsh'
 
   function mockGetMacroInfo(id)
@@ -64,7 +62,7 @@ if WoWUnit ~= nil then
     macro:addConditional(1, 1, 'harm', nil)
     macro:setConditional(1, 1, 1, 'dead', nil)
 
-    AreEqual({ { cond = 'dead' }, count = 1 }, macro:getConditionals(1, 1))
+    AreEqual({ { name = 'dead' }, count = 1 }, macro:getConditionals(1, 1))
   end
 
   function SMacroTest:RemoveConditionalTest()
@@ -93,7 +91,7 @@ if WoWUnit ~= nil then
     macro:addArgument(1, 'arg1')
     macro:addConditional(1, 1, 'harm', nil)
 
-    AreEqual({ { cond = 'harm' }, count = 1 }, macro:getConditionals(1, 1))
+    AreEqual({ { name = 'harm' }, count = 1 }, macro:getConditionals(1, 1))
   end
 
   function SMacroTest:ComposeConditionalTest()
@@ -103,5 +101,14 @@ if WoWUnit ~= nil then
     macro:addConditional(1, 1, 'harm', nil)
 
     AreEqual('[harm]', macro:composeConditionals(1, 1))
+  end
+
+  function SMacroTest:ComposeEmptyConditionalTest()
+    local macro = SMacro:new()
+    macro:addLine()
+    macro:addArgument(1, 'arg1')
+    macro:addConditional(1, 1, '', nil)
+
+    AreEqual('[]', macro:composeConditionals(1, 1))
   end
 end

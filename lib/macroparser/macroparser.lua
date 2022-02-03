@@ -52,9 +52,16 @@ local function parse_conds(cond_body)
   conds = {}
 
   if isempty(cond_body) then
-    rest = ""
+    conds.count = 0
+    return conds
   else
     rest = string.match(cond_body, "[%[](.-)[%]]") -- remove brackets
+
+    -- Found an empty conditional
+    if isempty(trim(rest)) then
+      conds.count = 1
+      return conds
+    end
   end
 
   i = 0
@@ -69,16 +76,16 @@ local function parse_conds(cond_body)
     end
 
     if isempty(trim(cur)) then
-      -- remove unnecessary conditionals [dead,   ] or [  ]
+      -- remove unnecessary conditionals [dead,   ] -> [dead]
       i = i - 1
     else
       cond = {}
       temp = trim(cur)
 
       if string.match(temp, ".-[@:=](.*)") then
-        cond.cond, cond.input = string.match(temp, "(.-[@:=])(.*)")
+        cond.name, cond.input = string.match(temp, "(.-[@:=])(.*)")
       else
-        cond.cond = temp
+        cond.name = temp
       end
 
       conds[i] = cond

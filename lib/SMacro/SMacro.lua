@@ -149,48 +149,58 @@ end
       line_num: row number for the line
    ]]
 function SMacro:getLine(line_num)
-  local body, lines, lc
+  local body, lines, currentLine
 
-  lines = self.lines
   body = ''
-  lc = line_num
+  lines = self.lines
+  currentLine = lines[line_num]
 
-  if (lines[lc] == nil) then
+  if (currentLine == nil) then
     return nil
   end
 
-  if lines[lc].type then
-    body = body .. lines[lc].type
+  if currentLine.type then
+    body = body .. currentLine.type
 
-    if lines[lc].cmd then
-      body = body .. lines[lc].cmd .. ' '
+    if currentLine.cmd then
+      body = body .. currentLine.cmd .. ' '
     end
   end
 
-  for ac = 1, lines[lc].args.count, 1 do
+  for ac = 1, currentLine.args.count, 1 do
     -- add each argument
-    if lines[lc].args[ac].conds.count > 0 then
+    local currentArgument = currentLine.args[ac]
+
+
+    if currentArgument.conds.count > 0 then
       -- add conditionals if they exist
       body = body .. '['
 
-      for cc = 1, lines[lc].args[ac].conds.count, 1 do
-        body = body .. lines[lc].args[ac].conds[cc].cond
+      for cc = 1, currentArgument.conds.count, 1 do
+        local currentConditional = currentArgument.conds[cc]
 
-        if lines[lc].args[ac].conds[cc].input then
-          body = body .. lines[lc].args[ac].conds[cc].input
-        end
+        if (currentConditional == nil) then
+          body = body .. ''
+        else
+          body = body .. currentConditional.name
 
-        if cc ~= lines[lc].args[ac].conds.count then
-          body = body .. ', ' -- add commas after each cond until the last
+          if currentConditional.input then
+            body = body .. currentConditional.input
+          end
+
+          -- add commas until last conditional
+          if cc ~= currentArgument.conds.count then
+            body = body .. ', '
+          end
         end
       end
 
       body = body .. '] '
     end
 
-    body = body .. lines[lc].args[ac].arg
+    body = body .. currentArgument.arg
 
-    if ac ~= lines[lc].args.count then
+    if ac ~= currentLine.args.count then
       body = body .. '; ' -- add semicolons after each arg until the last
     end
   end
@@ -301,7 +311,7 @@ function SMacro:addConditional(line_num, arg_num, conditional, input)
   local cond_count, cond
 
   cond = {}
-  cond.cond = conditional
+  cond.name = conditional
   cond.input = input
   cond_count = self.lines[line_num].args[arg_num].conds.count
 
@@ -323,7 +333,7 @@ function SMacro:setConditional(line_num, arg_num, cond_num, conditional, input)
   if self.lines[line_num].args[arg_num].conds[cond_num] ~= nil then
     local cond = {}
 
-    cond.cond = conditional
+    cond.name = conditional
     cond.input = input
     self.lines[line_num].args[arg_num].conds[cond_num] = cond
   end
@@ -391,24 +401,29 @@ end
       arg_num: index of the arg
    ]]
 function SMacro:composeConditionals(line_num, arg_num)
-  local result, thisArg, curCond
+  local result, argument, currentName
 
-  thisArg = self.lines[line_num].args[arg_num]
+  argument = self.lines[line_num].args[arg_num]
 
-  for count, conditional in ipairs(thisArg.conds) do
-    curCond = conditional.cond
+  -- support empty conditional
+  if (argument.conds.count == 1 and argument.conds[1] == nil) then
+    return "[]"
+  end
+
+  for count, conditional in ipairs(argument.conds) do
+    currentName = conditional.name
 
     if conditional.input then
-      curCond = curCond .. conditional.input
+      currentName = currentName .. conditional.input
     end
 
     if count == 1 then
-      result = "[" .. curCond
+      result = "[" .. currentName
     else
-      result = result .. ", " .. curCond
+      result = result .. ", " .. currentName
     end
 
-    if count == thisArg.conds.count then
+    if count == argument.conds.count then
       result = result .. "]"
     end
   end

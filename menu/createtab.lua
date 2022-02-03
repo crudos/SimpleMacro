@@ -229,20 +229,6 @@ function SM_DeleteButton_OnClick(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
-function SM_printall(table)
-  if table == nil then
-    print("nil value for SM_printall")
-    return
-  end
-
-  local tableContents = ""
-  for k, v in pairs(table) do
-    tableContents = tableContents .. " " .. k .. ": " .. tostring(v) .. ","
-  end
-
-  print(tostring(table) .. " {" .. tableContents .. " }")
-end
-
 function SM_ChangeButton_OnClick(_)
   SimpleMacroMenu.mode = "edit"
   SM_OpenPopupMenu(SimpleMacroChangeMenu)
@@ -498,9 +484,17 @@ function SM_MacroEditor_Update()
         if ac == 1 then
           macroEditorConds:SetPoint("LEFT", curLine, "RIGHT", 3, 0)
         else
-          macroEditorConds:SetPoint("LEFT", curLine .. "Arg" .. (ac - 1), "RIGHT", 3, 0)
-          G[curLine .. "Arg" .. (ac - 1) .. "Data"]:SetText(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetText() .. ";")
-          G[curLine .. "Arg" .. (ac - 1)]:SetSize(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetStringWidth(), editorHeight)
+          local argumentFrameId = curLine .. "Arg" .. (ac - 1)
+
+          macroEditorConds:SetPoint("LEFT", argumentFrameId, "RIGHT", 3, 0)
+
+          if (G[argumentFrameId .. "Data"]:GetText() == nil) then
+            G[argumentFrameId .. "Data"]:SetText(";")
+            G[argumentFrameId]:SetSize(G[argumentFrameId .. "Data"]:GetStringWidth(), editorHeight)
+          else
+            G[argumentFrameId .. "Data"]:SetText(G[argumentFrameId .. "Data"]:GetText() .. ";")
+            G[argumentFrameId]:SetSize(G[argumentFrameId .. "Data"]:GetStringWidth(), editorHeight)
+          end
         end
 
         if parsed:composeConditionals(lc, ac) then
@@ -942,7 +936,7 @@ end
 function SM_CondMenu_OnShow(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
-  local sLine, sArg, parse, cc, cur
+  local sLine, sArg, parse, cc, cur, conditionals
 
   sLine = SimpleMacroMenu.selectedLine
   sArg = SimpleMacroMenu.selectedArg
@@ -950,14 +944,15 @@ function SM_CondMenu_OnShow(_)
 
   cc = 1
   for cboxNum, cond in ipairs(L.CONDITIONAL_LIST) do
-    cur = parse:getConditionals(sLine, sArg)[cc]
+    conditionals = parse:getConditionals(sLine, sArg)
+    cur = conditionals[cc]
     G["SM_CondCbox" .. cboxNum]:SetChecked(false)
 
     if cond.INPUT == true then
       G["SM_CondCboxInput" .. cboxNum]:SetText("")
     end
 
-    if cur then
+    if conditionals.count > 0 and cur then
       if string.find(cur.cond, cond.DEFAULT) or (cond.ALTERNATE and string.find(cur.cond, cond.ALTERNATE)) then
         G["SM_CondCbox" .. cboxNum]:SetChecked(true)
         G["SM_CondCbox" .. cboxNum .. "Text"]:SetText(cur.cond)
