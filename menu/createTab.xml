@@ -181,8 +181,8 @@
           </OnLoad>
           <OnEnter>
             if not self.isDisabled then
-            GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-            GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+              GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+              GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
             end
           </OnEnter>
           <OnEvent function="SM_CategoryDropDown_OnEvent"/>
@@ -191,8 +191,7 @@
       </Frame>
       <Frame name="$parentCommandDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parentCategoryDropDown" relativePoint="BOTTOMLEFT" x="0"
-                  y="-18"/>
+          <Anchor point="TOPLEFT" relativeTo="$parentCategoryDropDown" relativePoint="BOTTOMLEFT" x="0" y="-18"/>
         </Anchors>
         <Layers>
           <Layer level="BACKGROUND">
@@ -209,8 +208,8 @@
           </OnLoad>
           <OnEnter>
             if not self.isDisabled then
-            GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-            GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+              GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+              GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
             end
           </OnEnter>
           <OnEvent function="SM_CommandDropDown_OnEvent"/>
@@ -286,7 +285,7 @@
 
   <!-- Conditionals menu -->
   <Frame name="SM_CondMenu" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-    <Size x="450" y="660"/>
+    <Size x="450" y="740"/>
     <KeyValues>
       <KeyValue key="OnCancel" value="SM_CondMenu_CancelButton_OnClick" type="global"/>
       <KeyValue key="OnOkay" value="SM_CondMenu_OkayButton_OnClick" type="global"/>

@@ -18,9 +18,9 @@
     <Scripts>
       <OnClick>
         if self:GetChecked() then
-        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+          PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
         else
-        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+          PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
         end
         SM_CheckButton_OnClick(self)
       </OnClick>
@@ -51,8 +51,9 @@
   <Frame name="SimpleMacroPopupFrameTemplate" virtual="true">
     <KeyValues>
       <!--
-      <KeyValue key="OnOkay" value="FooFrame_OnOkay" type="global"/>
       <KeyValue key="OnCancel" value="FooFrame_OnCancel" type="global"/>
+      <KeyValue key="OnOkay" value="FooFrame_OnOkay" type="global"/>
+      <KeyValue key="OnDelete" value="FooFrame_OnDelete" type="global"/>
       -->
     </KeyValues>
     <Layers>
@@ -82,6 +83,22 @@
             <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="TOPLEFT" x="0" y="0"/>
           </Anchors>
         </Texture>
+        <Texture atlas="_macropopup-top2" horizTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="TOPRIGHT" x="0" y="-23"/>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="TOPLEFT" x="0" y="-23"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="LeftIntersect" atlas="macropopup-intersect-left" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOP" relativeKey="$parent.TopLeft" relativePoint="BOTTOM" x="0" y="30"/>
+          </Anchors>
+        </Texture>
+        <Texture  parentKey="RightIntersect" atlas="macropopup-intersect-right" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOP" relativeKey="$parent.TopRight" relativePoint="BOTTOM" x="0" y="30"/>
+          </Anchors>
+        </Texture>
         <Texture parentKey="BottomLeft" atlas="macropopup-bottomleft" useAtlasSize="true">
           <Anchors>
             <Anchor point="BOTTOMLEFT" x="0" y="0"/>
@@ -100,13 +117,13 @@
         </Texture>
         <Texture atlas="!macropopup-left" vertTile="true" useAtlasSize="true">
           <Anchors>
-            <Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+            <Anchor point="TOPLEFT" relativeKey="$parent.LeftIntersect" relativePoint="BOTTOMLEFT" x="0" y="0"/>
             <Anchor point="BOTTOMLEFT" relativeKey="$parent.BottomLeft" relativePoint="TOPLEFT" x="0" y="0"/>
           </Anchors>
         </Texture>
         <Texture atlas="!macropopup-right" vertTile="true" useAtlasSize="true">
           <Anchors>
-            <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.RightIntersect" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
             <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="TOPRIGHT" x="0" y="0"/>
           </Anchors>
         </Texture>
@@ -213,4 +230,16 @@
       </OnClick>
     </Scripts>
   </CheckButton>
+  <Frame name="SimpleMacroEditorPopupDropDownTemplate" inherits="UIDropDownMenuTemplate" virtual="true">
+    <Scripts>
+      <OnLoad function="SimpleMacroEditorPopup_ConditionalDropDown_OnLoad" />
+      <OnEnter>
+        if not self.isDisabled then
+          GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+          GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+        end
+      </OnEnter>
+      <OnLeave function="GameTooltip_Hide"/>
+    </Scripts>
+  </Frame>
 </Ui>

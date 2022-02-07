@@ -41,3 +41,7 @@ function SM_ExitButton_OnClick(_)
   G["SM_MacroEditor_AddNewLine"]:Enable()
   HideUIPanel(SimpleMacroMenu)
 end
+
+function OpenEditorPopup_OnClick(_)
+  ShowUIPanel(SimpleMacroEditorPopup)
+end

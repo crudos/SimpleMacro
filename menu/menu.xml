@@ -54,6 +54,15 @@
           <OnClick function="SM_ExitButton_OnClick"/>
         </Scripts>
       </Button>
+      <Button parentKey="OpenEditorPopup" inherits="UIPanelButtonNoTooltipTemplate" text="Open editor popup">
+        <Size x="120" y="22"/>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parent" relativePoint="TOPRIGHT" x="0" y="0"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="OpenEditorPopup_OnClick"/>
+        </Scripts>
+      </Button>
     </Frames>
     <Scripts>
       <OnLoad function="SimpleMacroMenu_OnLoad"/>

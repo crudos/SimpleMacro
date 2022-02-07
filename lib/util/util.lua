@@ -4,6 +4,11 @@ function SM_printall(table)
     return
   end
 
+  if type(table) ~= "table" then
+    print("not a table: " .. table .. " (" .. type(table) .. ")")
+    return
+  end
+
   local tableContents = ""
   for k, v in pairs(table) do
     tableContents = tableContents .. " " .. k .. ": " .. tostring(v) .. ","
@@ -12,6 +17,12 @@ function SM_printall(table)
   print("{" .. tableContents .. " }")
 end
 
-function table.clone(org)
-  return { unpack(org) }
+function table.clone(tableToClone)
+  return { unpack(tableToClone) }
+end
+
+function Set(list)
+  local set = {}
+  for _, l in ipairs(list) do set[l] = true end
+  return set
 end

@@ -933,9 +933,9 @@ function SM_CondMenu_OnLoad(_)
       condEntryInput:SetSize(92, 22)
       condEntryInput:SetAutoFocus(false)
       condEntryInput:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
-      cond_cbox.tooltipText = cond.DESCRIPTION .. " (" .. cond.INPUT_HINT .. ")"
+      cond_cbox.tooltipText = L["CONDITIONAL_STRING"]["DESCRIPTION"][cboxNum] .. " (" .. cond.INPUT_HINT .. ")"
     else
-      cond_cbox.tooltipText = cond.DESCRIPTION
+      cond_cbox.tooltipText = L["CONDITIONAL_STRING"]["DESCRIPTION"][cboxNum]
     end
   end
 

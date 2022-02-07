@@ -7,15 +7,16 @@
 ## SavedVariablesPerCharacter: SimpleMacroDBC
 ## OptionalDeps: WoWUnit
 
-constant\constant.lua
-localization\localization.xml
-
 lib\util\util.lua
-lib\macroParser\macroParser.lua
+lib\parser\parser.lua
 lib\SMacro\SMacro.lua
+
+constant\constant.xml
+localization\localization.xml
 
 menu\templates\template.xml
 menu\menu.xml
+menu\macroEditor.xml
 menu\createTab.xml
 menu\groupTab.xml
 
@@ -24,4 +25,4 @@ settings\settings.xml
 SimpleMacro.xml
 
 test\SMacro\SMacroTest.lua
-test\macroParser\macroParserTest.lua
+test\parser\parserTest.lua

@@ -1,0 +1,49 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="macroEditor.lua"/>
+
+  <Frame name="SimpleMacroEditorPopup" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+    <Size x="300" y="416"/>
+    <KeyValues>
+<!--      <KeyValue key="OnCancel" value="SM_CondMenu_CancelButton_OnClick" type="global"/>-->
+<!--      <KeyValue key="OnOkay" value="SM_CondMenu_OkayButton_OnClick" type="global"/>-->
+<!--      <KeyValue key="OnDelete" value="SM_CondMenu_CancelButton_OnClick" type="global"/>-->
+    </KeyValues>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <FontString parentKey="Title" inherits="GameFontNormal" text="SIMPLE_MACRO_STRING_MACRO_EDITOR_TITLE">
+          <Anchors>
+            <Anchor point="TOP" relativePoint="TOP" x="0" y="-15"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Button parentKey="AddConditionalButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL">
+        <Size x="240" y="22"/>
+        <Anchors>
+          <Anchor point="TOP" relativeTo="$parent" relativePoint="TOP" x="0" y="-50"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroEditorPopup_AddConditionalButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button parentKey="AddConditionalGroupButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL_GROUP">
+        <Size x="240" y="22"/>
+        <Anchors>
+<!--          <Anchor point="TOP" relativeTo="$parentTitle" relativePoint="TOP" x="0" y="-8"/>-->
+        </Anchors>
+        <Scripts>
+<!--          <OnClick function="SimpleMacroEditorPopup_AddConditionalButton_OnClick"/>-->
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+<!--      <OnLoad function="SimpleMacroMenu_OnLoad"/>-->
+<!--      <OnShow function="SimpleMacroMenu_OnShow"/>-->
+<!--      <OnHide function="SimpleMacroMenu_OnHide"/>-->
+    </Scripts>
+  </Frame>
+</Ui>

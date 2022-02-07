@@ -2,6 +2,10 @@ local _, L = ...
 local C = L["settings"]
 local G = _G
 
+local function isContextMenuButtonEnabled()
+  return SimpleMacro.dba.settings.ContextMenu == true and #SimpleMacro.dbc.groupTable > 0
+end
+
 function SimpleMacroSettings_OnLoad(self)
   self.name = "Simple Macro";
   self.okay = function(this)
@@ -45,65 +49,55 @@ function SimpleMacroSettings_Save(self)
 end
 
 function SimpleMacroSettings_OnCancel()
+  -- Do nothing
 end
 
 function SimpleMacroSettings_Load()
-  SimpleMacroSettings_Teardown()
   SimpleMacroSettings_Setup()
 end
 
-function SimpleMacroSettings_Teardown()
-  SimpleMacroSettings_RemoveContext()
-end
-
-function SimpleMacroSettings_RemoveContext()
-  local existingIndex
-
-  for _, menu in ipairs(C["contextMenus"]) do
-    if UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] ~= nil then
-      for i, v in ipairs(UnitPopupMenus[menu]) do
-        if v == "SM_CHANGE_GROUP_TARGET" then
-          existingIndex = i
-          break
-        end
-      end
-    end
-
-    if existingIndex ~= nil then
-      tremove(UnitPopupMenus[menu], existingIndex)
-    end
-  end
-end
-
 function SimpleMacroSettings_Setup()
-  if SimpleMacro.dba.settings.ContextMenu == true and #SimpleMacro.dbc.groupTable > 0 then
+  if isContextMenuButtonEnabled() then
     SimpleMacroSettings_SetupContextMenu()
   end
 end
 
 function SimpleMacroSettings_SetupContextMenu()
-  UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
+  if (UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] == nil) then
+    UnitPopupMenus["SM_CHANGE_GROUP_TARGET"] = {}
+    UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
 
-  for i, _ in ipairs(SimpleMacro.dbc.groupTable) do
-    UnitPopupButtons["SM_GROUP_" .. i] = { text = L["CONTEXT"]["GROUP"] .. " " .. i }
-    tinsert(UnitPopupMenus["SM_CHANGE_GROUP_TARGET"], "SM_GROUP_" .. i)
+    for i, _ in ipairs(SimpleMacro.dbc.groupTable) do
+      UnitPopupButtons["SM_GROUP_" .. i] = { text = L["CONTEXT"]["GROUP"] .. " " .. i }
+      tinsert(UnitPopupMenus["SM_CHANGE_GROUP_TARGET"], "SM_GROUP_" .. i)
+    end
+
+    for menu, _ in pairs(C["contextMenus"]) do
+      tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
+    end
+
+    hooksecurefunc("UnitPopup_OnClick", SM_ContextMenuChangeGroup_OnClick)
+    hooksecurefunc("UnitPopup_HideButtons", SM_ContextMenuChangeGroup_HideButtons)
   end
-
-  UnitPopupButtons["SM_CHANGE_GROUP_TARGET"] = { text = L["CONTEXT"]["CHANGE_GROUP_TARGET"], nested = 1 }
-
-  for _, menu in ipairs(C["contextMenus"]) do
-    tinsert(UnitPopupMenus[menu], #UnitPopupMenus[menu], "SM_CHANGE_GROUP_TARGET")
-  end
-
-  hooksecurefunc("UnitPopup_OnClick", SM_ContextMenuChangeGroup_OnClick)
 end
 
 function SM_ContextMenuChangeGroup_OnClick(self)
-  if not string.match(self.value, "SM_GROUP_[0-9]*") then
-    return
+  if string.match(self.value, "SM_GROUP_[0-9]*") then
+    local newTarget = self:GetParent().parent.dropdown.name
+    SM_ChangeGroupTarget(self:GetID(), newTarget)
+    self:GetParent():Hide()
   end
+end
 
-  local newTarget = self:GetParent().parent.dropdown.name
-  SM_ChangeGroupTarget(self:GetID(), newTarget)
-  self:GetParent():Hide()
+function SM_ContextMenuChangeGroup_HideButtons()
+  local dropdownMenu = UIDropDownMenu_GetCurrentDropDown()
+  local dropdownLevel = 1
+
+  if (C["contextMenus"][dropdownMenu.which] ~= nil) then
+    for index, value in ipairs(UnitPopupMenus[dropdownMenu.which]) do
+      if value == "SM_CHANGE_GROUP_TARGET" then
+        UnitPopupShown[dropdownLevel][index] = isContextMenuButtonEnabled() and 1 or 0
+      end
+    end
+  end
 end
