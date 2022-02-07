@@ -1,4 +1,47 @@
 local _, L = ...
+local G = _G
+
+--[[
+    Global Strings: SIMPLE_MACRO_STRING_*
+  ]]
+
+-- Menu
+L["GLOBAL_STRING"] = {}
+L["GLOBAL_STRING"]["MENU_TITLE"] = "Simple Macro"
+L["GLOBAL_STRING"]["ACCOUNT_MACROS"] = "Account Macros"
+L["GLOBAL_STRING"]["CHARACTER_MACROS"] = "Character Macros"
+L["GLOBAL_STRING"]["CREATE"] = "Create"
+L["GLOBAL_STRING"]["GROUP"] = "Group"
+L["GLOBAL_STRING"]["CANCEL"] = "Cancel"
+L["GLOBAL_STRING"]["OKAY"] = "Okay"
+L["GLOBAL_STRING"]["EXIT"] = "Exit"
+
+-- Create
+L["GLOBAL_STRING"]["NEW"] = "New"
+L["GLOBAL_STRING"]["DELETE"] = "Delete"
+L["GLOBAL_STRING"]["CHANGE"] = "Change Name/Icon"
+L["GLOBAL_STRING"]["NUMBER"] = "number"
+L["GLOBAL_STRING"]["COMMAND"] = "command"
+L["GLOBAL_STRING"]["ADD_ARGUMENT"] = "Add Argument"
+L["GLOBAL_STRING"]["SET_CONDITIONALS"] = "Set Conditionals"
+L["GLOBAL_STRING"]["ERROR"] = "ERROR"
+
+-- Group
+L["GLOBAL_STRING"]["ADD_TO_GROUP"] = "Add to Group"
+L["GLOBAL_STRING"]["DELETE_FROM_GROUP"] = "Delete From Group"
+L["GLOBAL_STRING"]["CHANGE_TARGET"] = "Change Target"
+
+local function loadGlobalStrings()
+  for i, j in pairs(L["GLOBAL_STRING"]) do
+    G["SIMPLE_MACRO_STRING_" .. i] = j
+  end
+end
+
+loadGlobalStrings()
+
+--[[
+    Other strings
+  ]]
 
 -- Settings
 L["SETTINGS"] = {}
@@ -20,10 +63,6 @@ L["LINES_TITLE"] = "Lines"
 L["ARGS_TITLE"] = "Arguments"
 L["LINES_COMMAND_COLUMN"] = "Command"
 L["ARGS_ARGUMENT_COLUMN"] = "Argument"
-
--- Create tab
-L["CREATE_TAB"] = {}
-L["CREATE_TAB"]["Change"] = "Change Name/Icon"
 
 L["LINE_TYPE_DROPDOWN_LABEL"] = "Line Type"
 L["LINE_TYPE_CATEGORY_LABEL"] = "Category"

@@ -54,8 +54,6 @@ end
 function SM_CreateTab_OnLoad(_)
   PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
   PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
-
-  SimpleMacroMenuCreateTabChange:SetText(L["CREATE_TAB"]["Change"])
 end
 
 function SM_CreateTab_OnShow(_)
@@ -248,12 +246,32 @@ function SimpleMacro_IconScrollFrame_OnLoad(self)
   G[self:GetName() .. "ScrollBar"].scrollStep = C["iconRowHeight"]
 end
 
+function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
+  local button
+
+  for i = 1, totalButtons do
+    button = CreateFrame("CheckButton", name .. i, frame, "SimpleMacroButtonTemplate")
+    button:SetID(i)
+    if i == 1 then
+      button:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
+    elseif mod(i, buttonsPerRow) == 1 then
+      button:SetPoint("TOP", name .. (i - buttonsPerRow), "BOTTOM", 0, -10)
+
+      if totalButtons - buttonsPerRow < i then
+        SimpleMacroMenu[name .. "LastRow"] = button:GetName()
+      end
+    else
+      button:SetPoint("LEFT", name .. (i - 1), "RIGHT", 13, 0)
+    end
+  end
+end
+
 function SimpleMacroIcons_OnLoad(self)
   SimpleMacro_LoadButtons(self, "SMIconButton", C["iconsPerRow"], C["numIconFrames"])
 end
 
 function SM_ChangeMenu_NameChanged(self)
-  if strlen(self:GetText()) > 0 and SimpleMacroMenu.mode == "edit" then
+  if strlen(self:GetText()) > 0 then
     SimpleMacroChangeMenu.BorderBox.OkayButton:Enable()
   else
     SimpleMacroChangeMenu.BorderBox.OkayButton:Disable()
@@ -440,7 +458,7 @@ end
 
 function SM_MacroEditor_Update()
   local parsed, macroEditorLine, macroEditorArg, macroEditorConds, editorHeight
-  local _, _, _, curLine, curArg
+  local curLine, curArg
 
   editorHeight = C["editorHeight"]
   parsed = SimpleMacroMenu.createParse
@@ -794,7 +812,7 @@ end
 function SM_NewLineMenu_AddArgButton_OnClick(self)
   local lineNum, newArg
 
-  SM_NewLineMenu_AcceptButton_OnClick(SM_NewLineMenuAcceptButton)
+  SM_NewLineMenu_OkayButton_OnClick(SM_NewLineMenu.OkayButton)
   SM_MacroEditorLine_OnClick(G["SM_MacroEditorLine" .. SimpleMacroMenu.createParse.lines.count], nil, nil)
   lineNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d)")
   newArg = SimpleMacroMenu.createParse:addArgument(tonumber(lineNum), "~")
@@ -803,16 +821,11 @@ function SM_NewLineMenu_AddArgButton_OnClick(self)
   SM_MacroEditorArg_OnClick(G["SM_MacroEditorLine" .. lineNum .. "Arg" .. newArg], nil, nil)
 end
 
-function SM_NewLineMenu_DeleteButton_OnClick(self)
-  local lineNum
-
-  lineNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d)")
-  SimpleMacroMenu.createParse:removeLine(tonumber(lineNum))
-
+function SM_NewLineMenu_CancelButton_OnClick(self)
   SM_MenuButton_OnClick(self)
 end
 
-function SM_NewLineMenu_AcceptButton_OnClick(self)
+function SM_NewLineMenu_OkayButton_OnClick(self)
   local parsed, newLine, slashOrHash, value
 
   parsed = SimpleMacroMenu.createParse
@@ -830,6 +843,15 @@ function SM_NewLineMenu_AcceptButton_OnClick(self)
     newLine = parsed:addLine()
     parsed:setCommand(newLine, slashOrHash .. value)
   end
+
+  SM_MenuButton_OnClick(self)
+end
+
+function SM_NewLineMenu_DeleteButton_OnClick(self)
+  local lineNum
+
+  lineNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d)")
+  SimpleMacroMenu.createParse:removeLine(tonumber(lineNum))
 
   SM_MenuButton_OnClick(self)
 end
@@ -854,8 +876,24 @@ function SM_ArgMenu_SetCondButton_OnClick(_)
   SimpleMacroMenu.selectedLine = tonumber(sLine)
   SimpleMacroMenu.selectedArg = tonumber(sArg)
 
-  SM_ArgMenu_AcceptButton_OnClick(SM_ArgMenuAcceptButton)
+  SM_ArgMenu_OkayButton_OnClick(SM_ArgMenu.OkayButton)
   SM_MacroEditor_OnClick(nil, SM_CondMenu)
+end
+
+function SM_ArgMenu_CancelButton_OnClick(self)
+  SM_MenuButton_OnClick(self)
+end
+
+function SM_ArgMenu_OkayButton_OnClick(self)
+  local lineNum, argNum
+
+  lineNum, argNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d).-(%d).*")
+  lineNum = tonumber(lineNum)
+  argNum = tonumber(argNum)
+
+  SimpleMacroMenu.createParse:setArgument(lineNum, argNum, SM_ArgMenuEditBox:GetText())
+
+  SM_MenuButton_OnClick(self)
 end
 
 function SM_ArgMenu_DeleteButton_OnClick(self)
@@ -866,18 +904,6 @@ function SM_ArgMenu_DeleteButton_OnClick(self)
   argNum = tonumber(argNum)
 
   SimpleMacroMenu.createParse:removeArgument(lineNum, argNum)
-  SM_MenuButton_OnClick(self)
-end
-
-function SM_ArgMenu_AcceptButton_OnClick(self)
-  local lineNum, argNum
-
-  lineNum, argNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d).-(%d).*")
-  lineNum = tonumber(lineNum)
-  argNum = tonumber(argNum)
-
-  SimpleMacroMenu.createParse:setArgument(lineNum, argNum, SM_ArgMenuEditBox:GetText())
-
   SM_MenuButton_OnClick(self)
 end
 
@@ -906,9 +932,7 @@ function SM_CondMenu_OnLoad(_)
       condEntryInput:SetPoint("LEFT", cond_cbox, "RIGHT", cbox_text:GetStringWidth() + 10, 0)
       condEntryInput:SetSize(92, 22)
       condEntryInput:SetAutoFocus(false)
-      condEntryInput:SetScript("OnEnterPressed", function(self)
-        self:ClearFocus()
-      end)
+      condEntryInput:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
       cond_cbox.tooltipText = cond.DESCRIPTION .. " (" .. cond.INPUT_HINT .. ")"
     else
       cond_cbox.tooltipText = cond.DESCRIPTION
@@ -936,32 +960,41 @@ end
 function SM_CondMenu_OnShow(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
-  local sLine, sArg, parse, cc, cur, conditionals
+  local sLine, sArg, parseConditionals, conditionalArray, foundIndex
 
   sLine = SimpleMacroMenu.selectedLine
   sArg = SimpleMacroMenu.selectedArg
-  parse = SimpleMacroMenu.createParse
+  parseConditionals = SimpleMacroMenu.createParse:getConditionals(sLine, sArg)
+  conditionalArray = table.clone(parseConditionals)
 
-  cc = 1
-  for cboxNum, cond in ipairs(L.CONDITIONAL_LIST) do
-    conditionals = parse:getConditionals(sLine, sArg)
-    cur = conditionals[cc]
-    G["SM_CondCbox" .. cboxNum]:SetChecked(false)
+  for menuIndex, menuConditional in ipairs(L.CONDITIONAL_LIST) do
+    G["SM_CondCbox" .. menuIndex]:SetChecked(false)
 
-    if cond.INPUT == true then
-      G["SM_CondCboxInput" .. cboxNum]:SetText("")
+    if menuConditional.INPUT == true then
+      G["SM_CondCboxInput" .. menuIndex]:SetText("")
     end
 
-    if conditionals.count > 0 and cur then
-      if string.find(cur.cond, cond.DEFAULT) or (cond.ALTERNATE and string.find(cur.cond, cond.ALTERNATE)) then
-        G["SM_CondCbox" .. cboxNum]:SetChecked(true)
-        G["SM_CondCbox" .. cboxNum .. "Text"]:SetText(cur.cond)
+    for i, currentConditional in ipairs(conditionalArray) do
+      if string.find(currentConditional.name, menuConditional.DEFAULT)
+          or (menuConditional.ALTERNATE and string.find(currentConditional.name, menuConditional.ALTERNATE)) then
+        G["SM_CondCbox" .. menuIndex]:SetChecked(true)
+        G["SM_CondCbox" .. menuIndex .. "Text"]:SetText(currentConditional.name)
 
-        if cond.INPUT == true then
-          G["SM_CondCboxInput" .. cboxNum]:SetText(cur.input)
+        if menuConditional.INPUT == true then
+          G["SM_CondCboxInput" .. menuIndex]:SetText(currentConditional.input)
         end
 
-        cc = cc + 1
+        foundIndex = i
+        break
+      end
+    end
+
+    if (foundIndex ~= nil) then
+      table.remove(conditionalArray, foundIndex)
+      foundIndex = nil
+
+      if (conditionalArray[1] == nil) then
+        return
       end
     end
   end
@@ -987,7 +1020,7 @@ function SM_AlternateCheck_OnClick(self)
   end
 end
 
-function SM_CondMenu_SaveButton_OnClick(_)
+function SM_CondMenu_OkayButton_OnClick(_)
   local parse, sLine, sArg, input
 
   sLine = SimpleMacroMenu.selectedLine

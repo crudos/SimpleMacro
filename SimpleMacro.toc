@@ -2,7 +2,7 @@
 ## Title: SimpleMacro
 ## Author: Crudos
 ## Version: 9.0.0.1
-## Notes: Allows you to create and change macros easily.
+## Notes: An addon that simplifies the macro-making process.
 ## SavedVariables: SimpleMacroDBA
 ## SavedVariablesPerCharacter: SimpleMacroDBC
 ## OptionalDeps: WoWUnit
@@ -10,16 +10,16 @@
 constant\constant.lua
 localization\localization.xml
 
+lib\util\util.lua
 lib\macroParser\macroParser.lua
 lib\SMacro\SMacro.lua
 
+menu\templates\template.xml
 menu\menu.xml
 menu\createTab.xml
 menu\groupTab.xml
 
 settings\settings.xml
-
-util\util.lua
 
 SimpleMacro.xml
 

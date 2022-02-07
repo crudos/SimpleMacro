@@ -25,7 +25,7 @@
       count, int
 
    COND
-      cond, string
+      name, string
       input, string
 
    ]]

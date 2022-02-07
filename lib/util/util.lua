@@ -9,5 +9,9 @@ function SM_printall(table)
     tableContents = tableContents .. " " .. k .. ": " .. tostring(v) .. ","
   end
 
-  print(tostring(table) .. " {" .. tableContents .. " }")
+  print("{" .. tableContents .. " }")
+end
+
+function table.clone(org)
+  return { unpack(org) }
 end

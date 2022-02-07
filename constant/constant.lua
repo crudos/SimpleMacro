@@ -1,5 +1,7 @@
 local _, L = ...
 
+L["templateStrings"] = { "Cancel", "Okay", "Delete" }
+
 L["defaultsAccount"] = {
   settings = {
     ContextMenu = false,

@@ -1,24 +1,24 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="settings.lua"/>
-    <Frame name="SimpleMacroSettings">
-        <Frames>
-            <CheckButton name="$parentContextMenu" inherits="SimpleMacroCheckButtonTemplate">
-                <Anchors>
-                    <Anchor point="TOPLEFT">
-                        <Offset>
-                            <AbsDimension x="10" y="-10"/>
-                        </Offset>
-                    </Anchor>
-                </Anchors>
-            </CheckButton>
-        </Frames>
-        <Scripts>
-            <OnLoad>
-                SimpleMacroSettings_OnLoad(self)
-            </OnLoad>
-            <OnShow>
-                SimpleMacroSettings_OnShow(self)
-            </OnShow>
-        </Scripts>
-    </Frame>
+  <Script file="settings.lua"/>
+  <Frame name="SimpleMacroSettings">
+    <Frames>
+      <CheckButton name="$parentContextMenu" inherits="SimpleMacroCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT">
+            <Offset>
+              <AbsDimension x="10" y="-10"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+      </CheckButton>
+    </Frames>
+    <Scripts>
+      <OnLoad>
+        SimpleMacroSettings_OnLoad(self)
+      </OnLoad>
+      <OnShow>
+        SimpleMacroSettings_OnShow(self)
+      </OnShow>
+    </Scripts>
+  </Frame>
 </Ui>

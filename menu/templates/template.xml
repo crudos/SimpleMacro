@@ -1,0 +1,216 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="template.lua"/>
+  <!-- Templates -->
+  <CheckButton name="SimpleMacroButtonTemplate" inherits="PopupButtonTemplate" virtual="true">
+    <Scripts>
+      <OnLoad>
+        self:RegisterForDrag("LeftButton")
+      </OnLoad>
+      <OnClick>
+        SimpleMacroButton_OnClick(self, button, down)
+      </OnClick>
+      <OnDragStart>
+        SimplePickupMacro(self)
+      </OnDragStart>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SimpleMacroBaseCheckButtonTemplate" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        if self:GetChecked() then
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+        else
+        PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
+        end
+        SM_CheckButton_OnClick(self)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SimpleMacroCheckButtonTemplate" inherits="SimpleMacroBaseCheckButtonTemplate" virtual="true">
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="$parentText" inherits="GameFontHighlight">
+          <Anchors>
+            <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="1"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </CheckButton>
+  <CheckButton name="SimpleMacroSmallCheckButtonTemplate" inherits="SimpleMacroBaseCheckButtonTemplate" virtual="true">
+    <Layers>
+      <Layer level="ARTWORK">
+        <FontString name="$parentText" inherits="GameFontHighlightSmall">
+          <Anchors>
+            <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="4"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </CheckButton>
+  <Frame name="SimpleMacroPopupFrameTemplate" virtual="true">
+    <KeyValues>
+      <!--
+      <KeyValue key="OnOkay" value="FooFrame_OnOkay" type="global"/>
+      <KeyValue key="OnCancel" value="FooFrame_OnCancel" type="global"/>
+      -->
+    </KeyValues>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture parentKey="BG">
+          <Anchors>
+            <Anchor point="TOPLEFT" x="7" y="-7"/>
+            <Anchor point="BOTTOMRIGHT" x="-7" y="7"/>
+          </Anchors>
+          <Color r="0" g="0" b="0" a=".80"/>
+        </Texture>
+      </Layer>
+      <Layer level="BORDER">
+        <Texture parentKey="TopLeft" atlas="macropopup-topleft2" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="TopRight" atlas="macropopup-topright2" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPRIGHT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="_macropopup-top2" horizTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="TOPRIGHT" x="0" y="0"/>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="TOPLEFT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="BottomLeft" atlas="macropopup-bottomleft" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="BOTTOMLEFT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="BottomRight" atlas="macropopup-bottomright" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="BOTTOMRIGHT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="_macropopup-bottom" horizTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="BOTTOMLEFT" relativeKey="$parent.BottomLeft" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="!macropopup-left" vertTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+            <Anchor point="BOTTOMLEFT" relativeKey="$parent.BottomLeft" relativePoint="TOPLEFT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="!macropopup-right" vertTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="BOTTOMRIGHT" x="0" y="0"/>
+            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="TOPRIGHT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Button parentKey="CancelButton" inherits="UIPanelButtonNoTooltipTemplate" text="SIMPLE_MACRO_STRING_CANCEL">
+        <Size x="78" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMRIGHT" x="-11" y="13"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroPopupFrameCancelButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button parentKey="OkayButton" inherits="UIPanelButtonNoTooltipTemplate" text="SIMPLE_MACRO_STRING_OKAY">
+        <Size x="78" y="22"/>
+        <Anchors>
+          <Anchor point="RIGHT" relativeKey="$parent.CancelButton" relativePoint="LEFT" x="-2" y="0"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroPopupFrameOkayButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button parentKey="DeleteButton" inherits="UIPanelButtonNoTooltipTemplate" text="SIMPLE_MACRO_STRING_DELETE">
+        <Size x="78" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMLEFT" x="11" y="13"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroPopupFrameDeleteButton_OnClick"/>
+        </Scripts>
+      </Button>
+    </Frames>
+  </Frame>
+  <CheckButton name="SM_ListEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
+    <Size x="244" y="16"/>
+    <Layers>
+      <Layer level="CONTENT">
+        <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_NUMBER">
+          <Anchors>
+            <Anchor point="LEFT" x="16" y="0"/>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_COMMAND">
+          <Anchors>
+            <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT" x="24" y="0"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </CheckButton>
+  <CheckButton name="LineEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        LineListEntry_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="ArgEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        ArgListEntry_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="CondEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        <!-- CondListEntry_OnClick(self, button, down) -->
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
+    <Size x="92" y="16"/>
+    <Layers>
+      <Layer level="CONTENT">
+        <FontString name="$parentData" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_ERROR">
+          <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorLineEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        SM_MacroEditorLine_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorArgEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        SM_MacroEditorArg_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorCondEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        SM_MacroEditorCond_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+</Ui>

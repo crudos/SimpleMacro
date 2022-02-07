@@ -1,461 +1,440 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="createtab.lua"/>
-    <Frame name="$parentCreateTab" hidden="true" parent="SimpleMacroMenu">
-        <Anchors>
-            <Anchor point="TOPLEFT"/>
-            <Anchor point="BOTTOMRIGHT"/>
-        </Anchors>
-        <Frames>
-            <ScrollFrame name="$parentMacroScrollFrame" inherits="UIPanelScrollFrameTemplate">
-                <Size x="292" y="190"/>
-                <Anchors>
-                    <Anchor point="TOPRIGHT" x="-40" y="-64"/>
-                </Anchors>
-                <ScrollChild>
-                    <Frame name="SMCreateButtons">
-                        <Size x="200" y="10"/>
-                        <Anchors>
-                            <Anchor point="TOPLEFT"/>
-                        </Anchors>
-                        <Scripts>
-                            <OnLoad function="SMCreateButtons_OnLoad"/>
-                        </Scripts>
-                    </Frame>
-                </ScrollChild>
-                <Scripts>
-                    <OnLoad function="ScrollFrame_OnLoad"/>
-                </Scripts>
-            </ScrollFrame>
-            <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-20"/>
-                </Anchors>
-                <Layers>
-                    <Layer>
-                        <FontString name="$parentText" inherits="GameFontNormalLarge">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="12" y="6"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Scripts>
-                    <OnClick function="SimplePickupMacro"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentChange" inherits="UIPanelButtonTemplate">
-                <Size x="172" y="22"/>
-                <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentSelected" relativePoint="RIGHT" x="6" y="-8"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_ChangeButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Frame name="$parentMacroScrollBackground">
-                <Size x="328" y="156"/>
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="-7" y="5"/>
-                </Anchors>
-            </Frame>
-            <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Account Macros">
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="26"
-                            y="2"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>
-                        SM_CreateTab_MacroTab_OnClick(self)
-                        PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-                    </OnClick>
-                </Scripts>
-            </Button>
-            <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Character Macros">
-                <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>
-                        SM_CreateTab_MacroTab_OnClick(self)
-                        PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-                    </OnClick>
-                </Scripts>
-            </Button>
-            <ScrollFrame name="$parentMacroEditorScrollFrame" inherits="UIPanelScrollFrameTemplate">
-                <Size x="292" y="144"/>
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="0"
-                            y="-80"/>
-                </Anchors>
-                <ScrollChild>
-                    <Frame name="$parentChild">
-                        <Size x="200" y="10"/>
-                        <Anchors>
-                            <Anchor point="TOPLEFT"/>
-                        </Anchors>
-                        <Scripts>
-                            <OnLoad function="SM_MacroEditor_OnLoad"/>
-                        </Scripts>
-                    </Frame>
-                </ScrollChild>
-            </ScrollFrame>
-            <Frame name="$parentMacroEditorBackground" inherits="TooltipBackdropTemplate">
-                <Size x="328" y="154"/>
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentMacroEditorScrollFrame" relativePoint="TOPLEFT" x="-7"
-                            y="5"/>
-                </Anchors>
-            </Frame>
-            <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="Delete">
-                <Size x="86" y="22"/>
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="4" y="4"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_DeleteButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentNewButton" inherits="UIPanelButtonTemplate" text="New">
-                <Size x="86" y="22"/>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeTo="SimpleMacroMenuExitButton" relativePoint="LEFT" x="0" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_NewButton_OnClick"/>
-                </Scripts>
-            </Button>
-        </Frames>
-        <Scripts>
-            <OnLoad function="SM_CreateTab_OnLoad"/>
-            <OnShow function="SM_CreateTab_OnShow"/>
-            <OnHide function="SM_CreateTab_OnHide"/>
-        </Scripts>
-    </Frame>
+  <Script file="createtab.lua"/>
 
-    <!-- Line menu -->
-    <Frame name="SM_NewLineMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-        <Size x="238" y="206"/>
+  <!-- Create tab -->
+  <Frame name="$parentCreateTab" hidden="true" parent="SimpleMacroMenu">
+    <Anchors>
+      <Anchor point="TOPLEFT"/>
+      <Anchor point="BOTTOMRIGHT"/>
+    </Anchors>
+    <Layers>
+      <Layer level="ARTWORK">
+        <Texture name="SimpleMacroHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="256" y="16"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="2" y="-252"/>
+          </Anchors>
+          <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
+        </Texture>
+        <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="88" y="16"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeTo="SimpleMacroHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
+          </Anchors>
+          <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Frames>
+      <ScrollFrame name="$parentMacroScrollFrame" inherits="UIPanelScrollFrameTemplate">
+        <Size x="292" y="190"/>
         <Anchors>
-            <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+          <Anchor point="TOPRIGHT" x="-40" y="-64"/>
         </Anchors>
-        <Frames>
-            <Frame name="$parentCategoryDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
-                <Anchors>
-                    <Anchor point="TOP" x="0" y="-32"/>
-                </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="16" y="3"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Scripts>
-                    <OnLoad>
-                        self:RegisterEvent("PLAYER_ENTERING_WORLD")
-                    </OnLoad>
-                    <OnEnter>
-                        if not self.isDisabled then
-                        GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-                        GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
-                        end
-                    </OnEnter>
-                    <OnEvent function="SM_CategoryDropDown_OnEvent"/>
-                    <OnLeave function="GameTooltip_Hide"/>
-                </Scripts>
-            </Frame>
-            <Frame name="$parentCommandDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parentCategoryDropDown" relativePoint="BOTTOMLEFT" x="0"
-                            y="-18"/>
-                </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="16" y="3"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Scripts>
-                    <OnLoad>
-                        self:RegisterEvent("PLAYER_ENTERING_WORLD")
-                    </OnLoad>
-                    <OnEnter>
-                        if not self.isDisabled then
-                        GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
-                        GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
-                        end
-                    </OnEnter>
-                    <OnEvent function="SM_CommandDropDown_OnEvent"/>
-                    <OnLeave function="GameTooltip_Hide"/>
-                </Scripts>
-            </Frame>
-            <Button name="$parentAddArgButton" inherits="UIPanelButtonTemplate" text="Add Argument">
-                <Size x="138" y="22"/>
-                <Anchors>
-                    <Anchor point="TOP" relativeTo="$parentCommandDropDown" relativePoint="BOTTOM" x="0" y="-8"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_NewLineMenu_AddArgButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="Delete">
-                <Size x="104" y="22"/>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-14" y="14"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_NewLineMenu_DeleteButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
-                <Size x="104" y="22"/>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeTo="$parentDeleteButton" relativePoint="LEFT" x="-2" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_NewLineMenu_AcceptButton_OnClick"/>
-                </Scripts>
-            </Button>
-        </Frames>
+        <ScrollChild>
+          <Frame name="SMCreateButtons">
+            <Size x="200" y="10"/>
+            <Anchors>
+              <Anchor point="TOPLEFT"/>
+            </Anchors>
+            <Scripts>
+              <OnLoad function="SMCreateButtons_OnLoad"/>
+            </Scripts>
+          </Frame>
+        </ScrollChild>
         <Scripts>
-            <OnLoad function="SM_NewLineMenu_OnLoad"/>
-            <OnShow function="SM_NewLineMenu_OnShow"/>
-            <OnHide function="SM_MacroEditor_OnHide"/>
+          <OnLoad function="ScrollFrame_OnLoad"/>
         </Scripts>
-    </Frame>
-
-    <!-- Arguments menu -->
-    <Frame name="SM_ArgMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-        <Size x="238" y="164"/>
+      </ScrollFrame>
+      <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
         <Anchors>
-            <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
-        </Anchors>
-        <Frames>
-            <EditBox name="$parentEditBox" inherits="InputBoxTemplate">
-                <Size x="112" y="22"/>
-                <Anchors>
-                    <Anchor point="CENTER" x="0" y="18"/>
-                </Anchors>
-                <Layers>
-                    <Layer level="BACKGROUND">
-                        <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
-                            <Anchors>
-                                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="8"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <Scripts>
-                    <OnLoad>
-                        self:SetAutoFocus(false)
-                    </OnLoad>
-                    <OnEnterPressed function="SM_ArgMenu_AcceptButton_OnClick"/>
-                </Scripts>
-            </EditBox>
-            <Button name="$parentSetCondButton" inherits="UIPanelButtonTemplate" text="Conditionals">
-                <Size x="124" y="22"/>
-                <Anchors>
-                    <Anchor point="TOP" relativeTo="$parentEditBox" relativePoint="BOTTOM" x="-4" y="-8"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_ArgMenu_SetCondButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="Delete">
-                <Size x="104" y="22"/>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-14" y="14"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_ArgMenu_DeleteButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentAcceptButton" inherits="UIPanelButtonTemplate" text="Accept">
-                <Size x="104" y="22"/>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeTo="$parentDeleteButton" relativePoint="LEFT" x="-2" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_ArgMenu_AcceptButton_OnClick"/>
-                </Scripts>
-            </Button>
-        </Frames>
-        <Scripts>
-            <OnLoad function="SM_ArgMenu_OnLoad"/>
-            <OnShow function="SM_ArgMenu_OnShow"/>
-            <OnHide function="SM_MacroEditor_OnHide"/>
-        </Scripts>
-    </Frame>
-
-    <!-- Conditionals menu -->
-    <Frame name="SM_CondMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-        <Size x="450" y="660"/>
-        <Anchors>
-            <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
-        </Anchors>
-        <Frames>
-            <Button name="$parentCancelButton" inherits="UIPanelButtonTemplate" text="Cancel">
-                <Size x="104" y="22"/>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT" x="-14" y="14"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_CondMenu_CancelButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <Button name="$parentSaveButton" inherits="UIPanelButtonTemplate" text="Save">
-                <Size x="104" y="22"/>
-                <Anchors>
-                    <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT" x="-2" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_CondMenu_SaveButton_OnClick"/>
-                </Scripts>
-            </Button>
-            <CheckButton name="$parentAlternateCheckButton" inherits="SimpleMacroSmallCheckButtonTemplate">
-                <Anchors>
-                    <Anchor point="BOTTOMLEFT" x="10" y="14"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_AlternateCheck_OnClick"/>
-                </Scripts>
-            </CheckButton>
-        </Frames>
-        <Scripts>
-            <OnLoad function="SM_CondMenu_OnLoad"/>
-            <OnShow function="SM_CondMenu_OnShow"/>
-            <OnHide function="SM_MacroEditor_OnHide"/>
-        </Scripts>
-    </Frame>
-
-    <!-- Change menu -->
-    <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-        <Size x="550" y="450"/>
-        <Anchors>
-            <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+          <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-20"/>
         </Anchors>
         <Layers>
-            <Layer level="BACKGROUND">
-                <Texture parentKey="BG">
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="7" y="-7"/>
-                        <Anchor point="BOTTOMRIGHT" x="-7" y="7"/>
-                    </Anchors>
-                    <Color r="0" g="0" b="0" a=".80"/>
-                </Texture>
-            </Layer>
+          <Layer level="ARTWORK">
+            <FontString name="$parentText" inherits="GameFontNormalLarge">
+              <Anchors>
+                <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="12" y="5"/>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnClick function="SimplePickupMacro"/>
+        </Scripts>
+      </Button>
+      <Button name="$parentChange" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_CHANGE">
+        <Size x="172" y="22"/>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentSelected" relativePoint="RIGHT" x="6" y="-8"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SM_ChangeButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Frame name="$parentMacroScrollBackground">
+        <Size x="328" y="156"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="-7" y="5"/>
+        </Anchors>
+      </Frame>
+      <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
+        <Anchors>
+          <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            SM_CreateTab_MacroTab_OnClick(self)
+            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_CHARACTER_MACROS">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            SM_CreateTab_MacroTab_OnClick(self)
+            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+          </OnClick>
+        </Scripts>
+      </Button>
+      <ScrollFrame name="$parentMacroEditorScrollFrame" inherits="UIPanelScrollFrameTemplate">
+        <Size x="292" y="144"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="0" y="-80"/>
+        </Anchors>
+        <ScrollChild>
+          <Frame name="$parentChild">
+            <Size x="200" y="10"/>
+            <Anchors>
+              <Anchor point="TOPLEFT"/>
+            </Anchors>
+            <Scripts>
+              <OnLoad function="SM_MacroEditor_OnLoad"/>
+            </Scripts>
+          </Frame>
+        </ScrollChild>
+      </ScrollFrame>
+      <Frame name="$parentMacroEditorBackground" inherits="TooltipBackdropTemplate">
+        <Size x="328" y="154"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentMacroEditorScrollFrame" relativePoint="TOPLEFT" x="-7"
+                  y="5"/>
+        </Anchors>
+      </Frame>
+      <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
+        <Size x="86" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="4" y="4"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SM_DeleteButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button name="$parentNewButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_NEW">
+        <Size x="86" y="22"/>
+        <Anchors>
+          <Anchor point="RIGHT" relativeTo="SimpleMacroMenuExitButton" relativePoint="LEFT" x="0" y="0"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SM_NewButton_OnClick"/>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SM_CreateTab_OnLoad"/>
+      <OnShow function="SM_CreateTab_OnShow"/>
+      <OnHide function="SM_CreateTab_OnHide"/>
+    </Scripts>
+  </Frame>
+
+  <!-- Line menu -->
+  <Frame name="SM_NewLineMenu" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+    <Size x="340" y="206"/>
+    <KeyValues>
+      <KeyValue key="OnCancel" value="SM_NewLineMenu_CancelButton_OnClick" type="global"/>
+      <KeyValue key="OnOkay" value="SM_NewLineMenu_OkayButton_OnClick" type="global"/>
+      <KeyValue key="OnDelete" value="SM_NewLineMenu_DeleteButton_OnClick" type="global"/>
+    </KeyValues>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Frames>
+      <Frame name="$parentCategoryDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
+        <Anchors>
+          <Anchor point="TOP" x="0" y="-32"/>
+        </Anchors>
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
+              <Anchors>
+                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="16" y="3"/>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>
+            self:RegisterEvent("PLAYER_ENTERING_WORLD")
+          </OnLoad>
+          <OnEnter>
+            if not self.isDisabled then
+            GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+            GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+            end
+          </OnEnter>
+          <OnEvent function="SM_CategoryDropDown_OnEvent"/>
+          <OnLeave function="GameTooltip_Hide"/>
+        </Scripts>
+      </Frame>
+      <Frame name="$parentCommandDropDown" inherits="UIDropDownMenuTemplate" enableMouse="true">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentCategoryDropDown" relativePoint="BOTTOMLEFT" x="0"
+                  y="-18"/>
+        </Anchors>
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
+              <Anchors>
+                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="16" y="3"/>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>
+            self:RegisterEvent("PLAYER_ENTERING_WORLD")
+          </OnLoad>
+          <OnEnter>
+            if not self.isDisabled then
+            GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
+            GameTooltip:SetText(self.tooltip, nil, nil, nil, nil, 1)
+            end
+          </OnEnter>
+          <OnEvent function="SM_CommandDropDown_OnEvent"/>
+          <OnLeave function="GameTooltip_Hide"/>
+        </Scripts>
+      </Frame>
+      <Button name="$parentAddArgButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_ARGUMENT">
+        <Size x="138" y="22"/>
+        <Anchors>
+          <Anchor point="TOP" relativeTo="$parentCommandDropDown" relativePoint="BOTTOM" x="0" y="-8"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SM_NewLineMenu_AddArgButton_OnClick"/>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SM_NewLineMenu_OnLoad"/>
+      <OnShow function="SM_NewLineMenu_OnShow"/>
+      <OnHide function="SM_MacroEditor_OnHide"/>
+    </Scripts>
+  </Frame>
+
+  <!-- Arguments menu -->
+  <Frame name="SM_ArgMenu" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+    <Size x="340" y="164"/>
+    <KeyValues>
+      <KeyValue key="OnCancel" value="SM_ArgMenu_CancelButton_OnClick" type="global"/>
+      <KeyValue key="OnOkay" value="SM_ArgMenu_OkayButton_OnClick" type="global"/>
+      <KeyValue key="OnDelete" value="SM_ArgMenu_DeleteButton_OnClick" type="global"/>
+    </KeyValues>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Frames>
+      <EditBox name="$parentEditBox" inherits="InputBoxTemplate">
+        <Size x="112" y="22"/>
+        <Anchors>
+          <Anchor point="CENTER" x="0" y="18"/>
+        </Anchors>
+        <Layers>
+          <Layer level="BACKGROUND">
+            <FontString name="$parentLabel" inherits="GameFontHighlight" text="">
+              <Anchors>
+                <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="0" y="8"/>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <Scripts>
+          <OnLoad>
+            self:SetAutoFocus(false)
+          </OnLoad>
+          <OnEnterPressed function="SM_ArgMenu_OkayButton_OnClick"/>
+        </Scripts>
+      </EditBox>
+      <Button name="$parentSetCondButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_SET_CONDITIONALS">
+        <Size x="124" y="22"/>
+        <Anchors>
+          <Anchor point="TOP" relativeTo="$parentEditBox" relativePoint="BOTTOM" x="-4" y="-8"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SM_ArgMenu_SetCondButton_OnClick"/>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SM_ArgMenu_OnLoad"/>
+      <OnShow function="SM_ArgMenu_OnShow"/>
+      <OnHide function="SM_MacroEditor_OnHide"/>
+    </Scripts>
+  </Frame>
+
+  <!-- Conditionals menu -->
+  <Frame name="SM_CondMenu" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+    <Size x="450" y="660"/>
+    <KeyValues>
+      <KeyValue key="OnCancel" value="SM_CondMenu_CancelButton_OnClick" type="global"/>
+      <KeyValue key="OnOkay" value="SM_CondMenu_OkayButton_OnClick" type="global"/>
+<!--      <KeyValue key="OnDelete" value="SM_CondMenu_CancelButton_OnClick" type="global"/>-->
+    </KeyValues>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Frames>
+      <CheckButton name="$parentAlternateCheckButton" inherits="SimpleMacroSmallCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="BOTTOMLEFT" x="10" y="36"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SM_AlternateCheck_OnClick"/>
+        </Scripts>
+      </CheckButton>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SM_CondMenu_OnLoad"/>
+      <OnShow function="SM_CondMenu_OnShow"/>
+      <OnHide function="SM_MacroEditor_OnHide"/>
+    </Scripts>
+  </Frame>
+
+  <!-- Change menu -->
+  <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+    <Size x="550" y="450"/>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture parentKey="BG">
+          <Anchors>
+            <Anchor point="TOPLEFT" x="7" y="-7"/>
+            <Anchor point="BOTTOMRIGHT" x="-7" y="7"/>
+          </Anchors>
+          <Color r="0" g="0" b="0" a=".80"/>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Frame parentKey="BorderBox" inherits="SelectionFrameTemplate" frameLevel="50" hidden="false">
+        <KeyValues>
+          <KeyValue key="OnOkay" value="SimpleMacroChangeMenuOkay_OnClick" type="global"/>
+          <KeyValue key="OnCancel" value="SimpleMacroChangeMenuCancel_OnClick" type="global"/>
+        </KeyValues>
+        <Anchors>
+          <Anchor point="TOPLEFT"/>
+          <Anchor point="BOTTOMRIGHT"/>
+        </Anchors>
+        <Layers>
+          <Layer level="BORDER">
+            <FontString name="$parentCreateText" inherits="ChatFontNormal">
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parent" x="22" y="-16"/>
+              </Anchors>
+            </FontString>
+          </Layer>
+          <Layer level="BACKGROUND">
+            <Texture name="$parentNameLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+              <Size x="12" y="29"/>
+              <Anchors>
+                <Anchor point="TOPLEFT" x="18" y="-32"/>
+              </Anchors>
+              <TexCoords left="0" right="0.09375" top="0" bottom="1.0"/>
+            </Texture>
+            <Texture name="$parentNameMiddle"
+                     file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+              <Size x="175" y="29"/>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="RIGHT"/>
+              </Anchors>
+              <TexCoords left="0.09375" right="0.90625" top="0" bottom="1.0"/>
+            </Texture>
+            <Texture name="$parentNameRight"
+                     file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
+              <Size x="12" y="29"/>
+              <Anchors>
+                <Anchor point="LEFT" relativeTo="$parentNameMiddle" relativePoint="RIGHT"/>
+              </Anchors>
+              <TexCoords left="0.90625" right="1.0" top="0" bottom="1.0"/>
+            </Texture>
+          </Layer>
         </Layers>
         <Frames>
-            <Frame parentKey="BorderBox" inherits="SelectionFrameTemplate" frameLevel="50" hidden="false">
-                <KeyValues>
-                    <KeyValue key="OnOkay" value="SimpleMacroChangeMenuOkay_OnClick" type="global"/>
-                    <KeyValue key="OnCancel" value="SimpleMacroChangeMenuCancel_OnClick" type="global"/>
-                </KeyValues>
-                <Anchors>
-                    <Anchor point="TOPLEFT"/>
-                    <Anchor point="BOTTOMRIGHT"/>
-                </Anchors>
-                <Layers>
-                    <Layer level="BORDER">
-                        <FontString name="$parentCreateText" inherits="ChatFontNormal">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="$parent" x="22" y="-16"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                    <Layer level="BACKGROUND">
-                        <Texture name="$parentNameLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
-                            <Size x="12" y="29"/>
-                            <Anchors>
-                                <Anchor point="TOPLEFT" x="18" y="-32"/>
-                            </Anchors>
-                            <TexCoords left="0" right="0.09375" top="0" bottom="1.0"/>
-                        </Texture>
-                        <Texture name="$parentNameMiddle"
-                                 file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
-                            <Size x="175" y="29"/>
-                            <Anchors>
-                                <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="RIGHT"/>
-                            </Anchors>
-                            <TexCoords left="0.09375" right="0.90625" top="0" bottom="1.0"/>
-                        </Texture>
-                        <Texture name="$parentNameRight"
-                                 file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
-                            <Size x="12" y="29"/>
-                            <Anchors>
-                                <Anchor point="LEFT" relativeTo="$parentNameMiddle" relativePoint="RIGHT"/>
-                            </Anchors>
-                            <TexCoords left="0.90625" right="1.0" top="0" bottom="1.0"/>
-                        </Texture>
-                    </Layer>
-                </Layers>
-                <Frames>
-                    <EditBox name="$parentName" letters="16">
-                        <Size x="202" y="22"/>
-                        <Anchors>
-                            <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="LEFT" x="10" y="2"/>
-                        </Anchors>
-                        <Scripts>
-                            <OnLoad>
-                                self:SetAutoFocus(false)
-                            </OnLoad>
-                            <OnShow>
-                                self:SetFocus()
-                            </OnShow>
-                            <OnTextChanged function="SM_ChangeMenu_NameChanged"/>
-                            <OnEnterPressed>
-                                if SimpleMacroChangeMenu.BorderBox.OkayButton:IsEnabled() then
-                                SimpleMacroChangeMenuOkay_OnClick(SimpleMacroChangeMenu.BorderBox.OkayButton)
-                                end
-                            </OnEnterPressed>
-                            <OnEscapePressed function="SimpleMacroChangeMenuCancel_OnClick"/>
-                        </Scripts>
-                        <FontString name="$parentText" inherits="ChatFontNormal"/>
-                    </EditBox>
-                </Frames>
-            </Frame>
-            <ScrollFrame name="$parentIcons" inherits="FauxScrollFrameTemplate">
-                <Size x="492" y="344"/>
-                <Anchors>
-                    <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="20" y="-76"/>
-                </Anchors>
-                <Layers>
-                    <Layer level="BORDER">
-                        <FontString name="$parentChooseText" inherits="GameFontWhiteSmall">
-                            <Anchors>
-                                <Anchor point="TOPLEFT" relativeTo="$parent" x="4" y="8"/>
-                            </Anchors>
-                        </FontString>
-                    </Layer>
-                </Layers>
-                <ScrollChild>
-                    <Frame name="$parentScrollChildFrame">
-                        <Size x="200" y="10"/>
-                        <Anchors>
-                            <Anchor point="TOPLEFT"/>
-                        </Anchors>
-                        <Scripts>
-                            <OnLoad function="SimpleMacroIcons_OnLoad"/>
-                        </Scripts>
-                    </Frame>
-                </ScrollChild>
-                <Scripts>
-                    <OnVerticalScroll>
-                        SM_ChangeMenu_OnVerticalScroll(self, offset)
-                    </OnVerticalScroll>
-                    <OnLoad function="SimpleMacro_IconScrollFrame_OnLoad"/>
-                </Scripts>
-            </ScrollFrame>
+          <EditBox name="$parentName" letters="16">
+            <Size x="202" y="22"/>
+            <Anchors>
+              <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="LEFT" x="10" y="2"/>
+            </Anchors>
+            <Scripts>
+              <OnLoad>
+                self:SetAutoFocus(true)
+              </OnLoad>
+              <OnShow>
+                self:SetFocus()
+              </OnShow>
+              <OnTextChanged function="SM_ChangeMenu_NameChanged"/>
+              <OnEnterPressed>
+                if SimpleMacroChangeMenu.BorderBox.OkayButton:IsEnabled() then
+                  SimpleMacroChangeMenuOkay_OnClick(SimpleMacroChangeMenu.BorderBox.OkayButton)
+                end
+              </OnEnterPressed>
+              <OnEscapePressed function="SimpleMacroChangeMenuCancel_OnClick"/>
+            </Scripts>
+            <FontString name="$parentText" inherits="ChatFontNormal"/>
+          </EditBox>
         </Frames>
+      </Frame>
+      <ScrollFrame name="$parentIcons" inherits="FauxScrollFrameTemplate">
+        <Size x="492" y="344"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="20" y="-76"/>
+        </Anchors>
+        <Layers>
+          <Layer level="BORDER">
+            <FontString name="$parentChooseText" inherits="GameFontWhiteSmall">
+              <Anchors>
+                <Anchor point="TOPLEFT" relativeTo="$parent" x="4" y="8"/>
+              </Anchors>
+            </FontString>
+          </Layer>
+        </Layers>
+        <ScrollChild>
+          <Frame name="$parentScrollChildFrame">
+            <Size x="200" y="10"/>
+            <Anchors>
+              <Anchor point="TOPLEFT"/>
+            </Anchors>
+            <Scripts>
+              <OnLoad function="SimpleMacroIcons_OnLoad"/>
+            </Scripts>
+          </Frame>
+        </ScrollChild>
         <Scripts>
-            <OnLoad function="SimpleMacroChangeMenu_OnLoad"/>
-            <OnShow function="SimpleMacroChangeMenu_OnShow"/>
-            <OnHide function="SimpleMacroChangeMenu_OnHide"/>
+          <OnVerticalScroll>
+            SM_ChangeMenu_OnVerticalScroll(self, offset)
+          </OnVerticalScroll>
+          <OnLoad function="SimpleMacro_IconScrollFrame_OnLoad"/>
         </Scripts>
-    </Frame>
+      </ScrollFrame>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SimpleMacroChangeMenu_OnLoad"/>
+      <OnShow function="SimpleMacroChangeMenu_OnShow"/>
+      <OnHide function="SimpleMacroChangeMenu_OnHide"/>
+    </Scripts>
+  </Frame>
 </Ui>

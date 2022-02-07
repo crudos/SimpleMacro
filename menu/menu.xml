@@ -1,206 +1,70 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-    <Script file="menu.lua"/>
-    <!-- Templates -->
-    <CheckButton name="SimpleMacroButtonTemplate" inherits="PopupButtonTemplate" virtual="true">
+  <Script file="menu.lua"/>
+
+  <!-- Menu -->
+  <Frame name="SimpleMacroMenu" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate">
+    <Size x="350" y="524"/>
+    <Layers>
+      <Layer level="OVERLAY" textureSubLevel="-1">
+        <Texture name="MacroFramePortrait" file="Interface\MacroFrame\MacroFrame-Icon">
+          <Size x="60" y="60"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="-5" y="5"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <Layer level="BORDER">
+        <FontString inherits="GameFontNormal" text="SIMPLE_MACRO_STRING_MENU_TITLE">
+          <Anchors>
+            <Anchor point="TOP" relativeTo="SimpleMacroMenu" x="0" y="-5"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Frame name="$parentPanelContainer"/>
+      <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_CREATE">
+        <Anchors>
+          <Anchor point="TOPLEFT" x="54" y="-20"/>
+        </Anchors>
         <Scripts>
-            <OnLoad>
-                self:RegisterForDrag("LeftButton")
-            </OnLoad>
-            <OnClick>
-                SimpleMacroButton_OnClick(self, button, down)
-            </OnClick>
-            <OnDragStart>
-                SimplePickupMacro(self)
-            </OnDragStart>
+          <OnClick>
+            SimpleMacroMenuTab_OnClick(self)
+            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+          </OnClick>
         </Scripts>
-    </CheckButton>
-    <CheckButton name="SimpleMacroBaseCheckButtonTemplate" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
+      </Button>
+      <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_GROUP">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
+        </Anchors>
         <Scripts>
-            <OnClick>
-                if self:GetChecked() then
-                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-                else
-                PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_OFF)
-                end
-                SM_CheckButton_OnClick(self)
-            </OnClick>
+          <OnClick>
+            SimpleMacroMenuTab_OnClick(self)
+            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+          </OnClick>
         </Scripts>
-    </CheckButton>
-    <CheckButton name="SimpleMacroCheckButtonTemplate" inherits="SimpleMacroBaseCheckButtonTemplate" virtual="true">
-        <Layers>
-            <Layer level="ARTWORK">
-                <FontString name="$parentText" inherits="GameFontHighlight">
-                    <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="1"/>
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
-    </CheckButton>
-    <CheckButton name="SimpleMacroSmallCheckButtonTemplate" inherits="SimpleMacroBaseCheckButtonTemplate"
-                 virtual="true">
-        <Layers>
-            <Layer level="ARTWORK">
-                <FontString name="$parentText" inherits="GameFontHighlightSmall">
-                    <Anchors>
-                        <Anchor point="LEFT" relativePoint="RIGHT" x="0" y="4"/>
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
-    </CheckButton>
-    <CheckButton name="SM_ListEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
-        <Size x="244" y="16"/>
-        <Layers>
-            <Layer level="CONTENT">
-                <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="number">
-                    <Anchors>
-                        <Anchor point="LEFT" x="16" y="0"/>
-                    </Anchors>
-                </FontString>
-                <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="command">
-                    <Anchors>
-                        <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT" x="24" y="0"/>
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
-    </CheckButton>
-    <CheckButton name="LineEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+      </Button>
+      <Button name="$parentExitButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_EXIT">
+        <Size x="86" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="4"/>
+        </Anchors>
         <Scripts>
-            <OnClick>
-                LineListEntry_OnClick(self, button, down)
-            </OnClick>
+          <OnClick function="SM_ExitButton_OnClick"/>
         </Scripts>
-    </CheckButton>
-    <CheckButton name="ArgEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-        <Scripts>
-            <OnClick>
-                ArgListEntry_OnClick(self, button, down)
-            </OnClick>
-        </Scripts>
-    </CheckButton>
-    <CheckButton name="CondEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-        <Scripts>
-            <OnClick>
-                <!-- CondListEntry_OnClick(self, button, down) -->
-            </OnClick>
-        </Scripts>
-    </CheckButton>
-    <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
-        <Size x="92" y="16"/>
-        <Layers>
-            <Layer level="CONTENT">
-                <FontString name="$parentData" inherits="GameFontHighlightSmall" text="ERROR">
-                    <Anchors>
-                        <Anchor point="CENTER" x="0" y="0"/>
-                    </Anchors>
-                </FontString>
-            </Layer>
-        </Layers>
-    </CheckButton>
-    <CheckButton name="SM_MacroEditorLineEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-        <Scripts>
-            <OnClick>
-                SM_MacroEditorLine_OnClick(self, button, down)
-            </OnClick>
-        </Scripts>
-    </CheckButton>
-    <CheckButton name="SM_MacroEditorArgEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-        <Scripts>
-            <OnClick>
-                SM_MacroEditorArg_OnClick(self, button, down)
-            </OnClick>
-        </Scripts>
-    </CheckButton>
-    <CheckButton name="SM_MacroEditorCondEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-        <Scripts>
-            <OnClick>
-                SM_MacroEditorCond_OnClick(self, button, down)
-            </OnClick>
-        </Scripts>
-    </CheckButton>
-    <!-- Menu -->
-    <Frame name="SimpleMacroMenu" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true"
-           inherits="ButtonFrameTemplate">
-        <Size x="350" y="524"/>
-        <Layers>
-            <Layer level="OVERLAY" textureSubLevel="-1">
-                <Texture name="MacroFramePortrait" file="Interface\MacroFrame\MacroFrame-Icon">
-                    <Size x="60" y="60"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="-5" y="5"/>
-                    </Anchors>
-                </Texture>
-            </Layer>
-            <Layer level="BORDER">
-                <FontString inherits="GameFontNormal" text="Simple Macro">
-                    <Anchors>
-                        <Anchor point="TOP" relativeTo="SimpleMacroMenu" x="0" y="-5"/>
-                    </Anchors>
-                </FontString>
-            </Layer>
-            <Layer level="ARTWORK">
-                <Texture name="SimpleMacroHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
-                    <Size x="256" y="16"/>
-                    <Anchors>
-                        <Anchor point="TOPLEFT" x="2" y="-252"/>
-                    </Anchors>
-                    <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
-                </Texture>
-                <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
-                    <Size x="88" y="16"/>
-                    <Anchors>
-                        <Anchor point="LEFT" relativeTo="SimpleMacroHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
-                    </Anchors>
-                    <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
-                </Texture>
-            </Layer>
-        </Layers>
-        <Frames>
-            <Frame name="$parentPanelContainer"/>
-            <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="Create">
-                <Anchors>
-                    <Anchor point="TOPLEFT" x="54" y="-20"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>
-                        SimpleMacroMenuTab_OnClick(self)
-                        PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-                    </OnClick>
-                </Scripts>
-            </Button>
-            <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="Group">
-                <Anchors>
-                    <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick>
-                        SimpleMacroMenuTab_OnClick(self)
-                        PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-                    </OnClick>
-                </Scripts>
-            </Button>
-            <Button name="$parentExitButton" inherits="UIPanelButtonTemplate" text="Exit">
-                <Size x="86" y="22"/>
-                <Anchors>
-                    <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="4"/>
-                </Anchors>
-                <Scripts>
-                    <OnClick function="SM_ExitButton_OnClick"/>
-                </Scripts>
-            </Button>
-        </Frames>
-        <Scripts>
-            <OnLoad function="SimpleMacroMenu_OnLoad"/>
-            <OnShow function="SimpleMacroMenu_OnShow"/>
-            <OnHide function="SimpleMacroMenu_OnHide"/>
-            <OnDragStart>
-                self:StartMoving()
-            </OnDragStart>
-            <OnDragStop>
-                self:StopMovingOrSizing()
-            </OnDragStop>
-        </Scripts>
-    </Frame>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SimpleMacroMenu_OnLoad"/>
+      <OnShow function="SimpleMacroMenu_OnShow"/>
+      <OnHide function="SimpleMacroMenu_OnHide"/>
+      <OnDragStart>
+        self:StartMoving()
+      </OnDragStart>
+      <OnDragStop>
+        self:StopMovingOrSizing()
+      </OnDragStop>
+    </Scripts>
+  </Frame>
 </Ui>
