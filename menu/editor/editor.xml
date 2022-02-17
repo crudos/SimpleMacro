@@ -1,0 +1,65 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="editor.lua"/>
+
+  <Frame name="SimpleMacroEditorPopup" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+    <Size x="312" y="222"/>
+    <KeyValues>
+      <KeyValue key="OnCancel" value="SimpleMacroEditorPopup_CancelButton_OnClick" type="global"/>
+<!--      <KeyValue key="OnOkay" value="SimpleMacroEditorPopup_CancelButton_OnClick" type="global"/>-->
+<!--      <KeyValue key="OnDelete" value="SimpleMacroEditorPopup_DeleteButton_OnClick" type="global"/>-->
+    </KeyValues>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <FontString parentKey="Title" inherits="GameFontNormal" text="SIMPLE_MACRO_STRING_MACRO_EDITOR_TITLE">
+          <Anchors>
+            <Anchor point="TOP" relativePoint="TOP" x="0" y="-15"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Frame parentKey="CategoryDropDown" inherits="SimpleMacroEditorPopupDropDownTemplate" enableMouse="true">
+        <Anchors>
+          <Anchor point="TOPLEFT" x="-2" y="-40"/>
+        </Anchors>
+        <Scripts>
+          <OnEvent function="SimpleMacroEditorPopup_CategoryDropDown_OnEvent"/>
+        </Scripts>
+      </Frame>
+      <Frame parentKey="CommandDropDown" inherits="SimpleMacroEditorPopupDropDownTemplate" enableMouse="true">
+        <Anchors>
+          <Anchor point="TOPRIGHT" relativePoint="TOPRIGHT" x="0" y="-40"/>
+        </Anchors>
+        <Scripts>
+          <OnEvent function="SimpleMacroEditorPopup_CommandDropDown_OnEvent"/>
+        </Scripts>
+      </Frame>
+      <EditBox parentKey="ArgumentEditBox" inherits="SimpleMacroEditorPopupEditBoxTemplate">
+        <Size x="160" y="27"/>
+        <Anchors>
+          <Anchor point="TOP" relativePoint="TOP" x="0" y="-80"/>
+        </Anchors>
+        <Scripts>
+<!--          <OnEnterPressed function="SM_ArgMenu_OkayButton_OnClick"/>-->
+        </Scripts>
+      </EditBox>
+      <Button parentKey="AddConditionalGroupButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL_GROUP">
+        <Size x="240" y="22"/>
+        <Anchors>
+          <Anchor point="TOP" relativeKey="$parent.ArgumentEditBox" relativePoint="BOTTOM" x="0" y="-12"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroEditorPopup_AddConditionalGroupButton_OnClick"/>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SimpleMacroMenuPopup_OnLoad"/>
+      <OnShow function="SimpleMacroMenuPopup_OnShow"/>
+      <OnHide function="SimpleMacroMenuPopup_OnHide"/>
+    </Scripts>
+  </Frame>
+</Ui>

@@ -28,8 +28,10 @@ L["GLOBAL_STRING"]["ERROR"] = "ERROR"
 
 -- Macro Editor
 L["GLOBAL_STRING"]["MACRO_EDITOR_TITLE"] = "Macro Editor"
+L["GLOBAL_STRING"]["CONDITIONAL_EDITOR_TITLE"] = "Conditionals"
 L["GLOBAL_STRING"]["ADD_CONDITIONAL"] = "Add Conditional"
 L["GLOBAL_STRING"]["ADD_CONDITIONAL_GROUP"] = "Add Conditional Group"
+L["GLOBAL_STRING"]["CONDITIONAL_GROUP"] = "Conditional Group %d"
 
 -- Group
 L["GLOBAL_STRING"]["ADD_TO_GROUP"] = "Add to Group"
@@ -89,6 +91,7 @@ L["LINE_TYPE_TABLE"][10] = {}
 L["LINE_TYPE_TABLE"][11] = {}
 L["LINE_TYPE_TABLE"][12] = {}
 
+-- Command Categories
 L["LINE_TYPE_TABLE"][1]["CATEGORY"] = "PVP"
 L["LINE_TYPE_TABLE"][2]["CATEGORY"] = "Blizzard Interface"
 L["LINE_TYPE_TABLE"][3]["CATEGORY"] = "Chat"
@@ -103,12 +106,10 @@ L["LINE_TYPE_TABLE"][11]["CATEGORY"] = "Targeting"
 L["LINE_TYPE_TABLE"][12]["CATEGORY"] = "Metacommands"
 
 -- PVP Commands
-L["LINE_TYPE_TABLE"][1][1] = { COMMANDS = { "teamcaptain", "tcaptain" }, DESCRIPTION = "Sets the captain of an arena team you are in." }
-L["LINE_TYPE_TABLE"][1][2] = { COMMANDS = { "teamdisband", "tdisband" }, DESCRIPTION = "Disbands an arena team you are in." }
-L["LINE_TYPE_TABLE"][1][3] = { COMMANDS = { "teaminvite", "tinvite" }, DESCRIPTION = "Invites a member to your arena team." }
-L["LINE_TYPE_TABLE"][1][4] = { COMMANDS = { "teamquit", "tquit" }, DESCRIPTION = "Leaves an arena team you are in." }
-L["LINE_TYPE_TABLE"][1][5] = { COMMANDS = { "teamremove", "tremove" }, DESCRIPTION = "Removes a member of a team you are in from that team." }
-L["LINE_TYPE_TABLE"][1][6] = { COMMANDS = { "wargame", "wg" }, DESCRIPTION = "Starts a War Game." }
+L["LINE_TYPE_TABLE"][1][1] = { COMMANDS = { "duel" }, DESCRIPTION = "Challenge another player to a duel" }
+L["LINE_TYPE_TABLE"][1][2] = { COMMANDS = { "forfeit", "yield", "concede" }, DESCRIPTION = "Forfeit a duel." }
+L["LINE_TYPE_TABLE"][1][3] = { COMMANDS = { "pvp" }, DESCRIPTION = "Sets whether or not you are attackable by other players." }
+L["LINE_TYPE_TABLE"][1][4] = { COMMANDS = { "wargame", "wg" }, DESCRIPTION = "Starts a War Game." }
 
 -- Blizzard Interface Commands
 L["LINE_TYPE_TABLE"][2][1] = { COMMANDS = { "achievements", "ach", "achieve", "achievement" }, DESCRIPTION = "Opens the Achievements interface." }
@@ -182,13 +183,10 @@ L["LINE_TYPE_TABLE"][6][5] = { COMMANDS = { "castglyph" }, DESCRIPTION = "Activa
 L["LINE_TYPE_TABLE"][6][6] = { COMMANDS = { "castrandom", "userandom" }, DESCRIPTION = "Casts a random spell from the given list." }
 L["LINE_TYPE_TABLE"][6][7] = { COMMANDS = { "castsequence" }, DESCRIPTION = "Casts the given spells in sequential order." }
 L["LINE_TYPE_TABLE"][6][8] = { COMMANDS = { "changeactionbar" }, DESCRIPTION = "Changes your current action bar page." }
-L["LINE_TYPE_TABLE"][6][9] = { COMMANDS = { "duel" }, DESCRIPTION = "Challenge another player to a duel" }
-L["LINE_TYPE_TABLE"][6][10] = { COMMANDS = { "forfeit", "yield", "concede" }, DESCRIPTION = "Forfeit a duel." }
-L["LINE_TYPE_TABLE"][6][11] = { COMMANDS = { "pvp" }, DESCRIPTION = "Sets whether or not you are attackable by other players." }
-L["LINE_TYPE_TABLE"][6][12] = { COMMANDS = { "startattack" }, DESCRIPTION = "Turns on auto-attack." }
-L["LINE_TYPE_TABLE"][6][13] = { COMMANDS = { "stopattack" }, DESCRIPTION = "Turns off auto-attack." }
-L["LINE_TYPE_TABLE"][6][14] = { COMMANDS = { "stopcasting" }, DESCRIPTION = "Stops casting or channeling." }
-L["LINE_TYPE_TABLE"][6][15] = { COMMANDS = { "swapactionbar" }, DESCRIPTION = "Swaps between two given action bars." }
+L["LINE_TYPE_TABLE"][6][9] = { COMMANDS = { "startattack" }, DESCRIPTION = "Turns on auto-attack." }
+L["LINE_TYPE_TABLE"][6][10] = { COMMANDS = { "stopattack" }, DESCRIPTION = "Turns off auto-attack." }
+L["LINE_TYPE_TABLE"][6][11] = { COMMANDS = { "stopcasting" }, DESCRIPTION = "Stops casting or channeling." }
+L["LINE_TYPE_TABLE"][6][12] = { COMMANDS = { "swapactionbar" }, DESCRIPTION = "Swaps between two given action bars." }
 
 -- Guild Commands
 L["LINE_TYPE_TABLE"][7][1] = { COMMANDS = { "guilddemote", "gdemote" }, DESCRIPTION = "Demotes a guild-member." }

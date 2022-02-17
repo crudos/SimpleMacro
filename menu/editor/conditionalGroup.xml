@@ -1,0 +1,40 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="conditionalGroup.lua"/>
+
+  <Frame name="SimpleMacroEditorConditionalPopup" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroEditorPopup" enableMouse="true" hidden="true">
+    <Size x="272" y="160"/>
+    <KeyValues>
+      <KeyValue key="OnCancel" value="SimpleMacroEditorConditionalPopup_CancelButton_OnClick" type="global"/>
+      <KeyValue key="OnOkay" value="SimpleMacroEditorConditionalPopup_OkayButton_OnClick" type="global"/>
+      <KeyValue key="OnDelete" value="SimpleMacroEditorConditionalPopup_DeleteButton_OnClick" type="global"/>
+    </KeyValues>
+    <Anchors>
+      <Anchor point="LEFT" relativeTo="SimpleMacroEditorPopup" relativePoint="RIGHT" x="0" y="0"/>
+    </Anchors>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <FontString parentKey="Title" inherits="GameFontNormal" text="SIMPLE_MACRO_STRING_CONDITIONAL_EDITOR_TITLE">
+          <Anchors>
+            <Anchor point="TOP" relativePoint="TOP" x="0" y="-15"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <Frames>
+      <Button parentKey="AddConditionalButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL">
+        <Size x="210" y="22"/>
+        <Anchors>
+          <Anchor point="TOP" x="0" y="-48"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroEditorConditionalPopup_AddConditionalButton_OnClick"/>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad function="SimpleMacroEditorConditionalPopup_OnLoad"/>
+      <OnShow function="SimpleMacroEditorConditionalPopup_OnShow"/>
+      <OnHide function="SimpleMacroEditorConditionalPopup_OnHide"/>
+    </Scripts>
+  </Frame>
+</Ui>

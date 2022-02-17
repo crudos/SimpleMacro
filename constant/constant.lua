@@ -15,6 +15,11 @@ L["settings"]["contextMenus"] = Set { "TARGET", "PARTY", "PLAYER", "RAID_PLAYER"
 
 L["tabs"] = { "Create", "Group" }
 
+L["MACRO_EDITOR"] = {}
+L["MACRO_EDITOR"]["NUM_MACRO_CATEGORIES"] = 12
+L["MACRO_EDITOR"]["NUM_MACRO_COMMANDS"] = 32
+
+-- TODO REMOVE any unused "Create" entries already in "MACRO_EDITOR"
 L["Create"] = {}
 L["Create"]["popupMenus"] = { "SimpleMacroChangeMenu", "SM_NewLineMenu", "SM_ArgMenu", "SM_CondMenu" }
 L["Create"]["macrosPerRow"] = 6

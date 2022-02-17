@@ -16,7 +16,8 @@ localization\localization.xml
 
 menu\templates\template.xml
 menu\menu.xml
-menu\macroEditor.xml
+menu\editor\editor.xml
+menu\editor\conditionalGroup.xml
 menu\createTab.xml
 menu\groupTab.xml
 

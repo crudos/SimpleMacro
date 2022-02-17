@@ -48,6 +48,77 @@
       </Layer>
     </Layers>
   </CheckButton>
+  <CheckButton name="SM_ListEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
+    <Size x="244" y="16"/>
+    <Layers>
+      <Layer level="CONTENT">
+        <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_NUMBER">
+          <Anchors>
+            <Anchor point="LEFT" x="16" y="0"/>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_COMMAND">
+          <Anchors>
+            <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT" x="24" y="0"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </CheckButton>
+  <CheckButton name="LineEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        LineListEntry_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="ArgEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        ArgListEntry_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="CondEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        <!-- CondListEntry_OnClick(self, button, down) -->
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
+    <Size x="92" y="16"/>
+    <Layers>
+      <Layer level="CONTENT">
+        <FontString name="$parentData" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_ERROR">
+          <Anchors>
+            <Anchor point="CENTER" x="0" y="0"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorLineEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        SM_MacroEditorLine_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorArgEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        SM_MacroEditorArg_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
+  <CheckButton name="SM_MacroEditorCondEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
+    <Scripts>
+      <OnClick>
+        SM_MacroEditorCond_OnClick(self, button, down)
+      </OnClick>
+    </Scripts>
+  </CheckButton>
   <Frame name="SimpleMacroPopupFrameTemplate" virtual="true">
     <KeyValues>
       <!--
@@ -159,80 +230,17 @@
       </Button>
     </Frames>
   </Frame>
-  <CheckButton name="SM_ListEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
-    <Size x="244" y="16"/>
+  <Frame name="SimpleMacroDropDownTemplate" inherits="UIDropDownMenuTemplate" virtual="true">
     <Layers>
-      <Layer level="CONTENT">
-        <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_NUMBER">
+      <Layer level="BACKGROUND">
+        <FontString parentKey="Label" inherits="GameFontHighlight">
           <Anchors>
-            <Anchor point="LEFT" x="16" y="0"/>
-          </Anchors>
-        </FontString>
-        <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_COMMAND">
-          <Anchors>
-            <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT" x="24" y="0"/>
+            <Anchor point="BOTTOMLEFT" relativePoint="TOPLEFT" x="16" y="3"/>
           </Anchors>
         </FontString>
       </Layer>
     </Layers>
-  </CheckButton>
-  <CheckButton name="LineEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
     <Scripts>
-      <OnClick>
-        LineListEntry_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="ArgEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        ArgListEntry_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="CondEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        <!-- CondListEntry_OnClick(self, button, down) -->
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
-    <Size x="92" y="16"/>
-    <Layers>
-      <Layer level="CONTENT">
-        <FontString name="$parentData" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_ERROR">
-          <Anchors>
-            <Anchor point="CENTER" x="0" y="0"/>
-          </Anchors>
-        </FontString>
-      </Layer>
-    </Layers>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorLineEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        SM_MacroEditorLine_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorArgEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        SM_MacroEditorArg_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorCondEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        SM_MacroEditorCond_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <Frame name="SimpleMacroEditorPopupDropDownTemplate" inherits="UIDropDownMenuTemplate" virtual="true">
-    <Scripts>
-      <OnLoad function="SimpleMacroEditorPopup_ConditionalDropDown_OnLoad" />
       <OnEnter>
         if not self.isDisabled then
           GameTooltip:SetOwner(self, "ANCHOR_TOPRIGHT")
@@ -242,4 +250,72 @@
       <OnLeave function="GameTooltip_Hide"/>
     </Scripts>
   </Frame>
+  <Frame name="SimpleMacroEditorPopupDropDownTemplate" inherits="SimpleMacroDropDownTemplate" virtual="true">
+    <Scripts>
+      <OnLoad>
+        self:RegisterEvent("PLAYER_ENTERING_WORLD")
+      </OnLoad>
+    </Scripts>
+  </Frame>
+  <Frame name="SimpleMacroEditorPopupConditionalDropDownTemplate" inherits="SimpleMacroDropDownTemplate" virtual="true">
+    <Scripts>
+      <OnLoad function="SimpleMacroEditorConditionalPopup_DropDown_OnLoad" />
+    </Scripts>
+  </Frame>
+  <EditBox name="SimpleMacroEditorPopupEditBoxTemplate" inherits="AutoCompleteEditBoxTemplate" virtual="true">
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture parentKey="TopLeft" atlas="chatbubble-nineslice-cornertopleft" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT" x="-6" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="TopRight" atlas="chatbubble-nineslice-cornertopright" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPRIGHT" x="6" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="BottomLeft" atlas="chatbubble-nineslice-cornerbottomleft" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="BOTTOMLEFT" x="-6" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="BottomRight" atlas="chatbubble-nineslice-cornerbottomright" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="BOTTOMRIGHT" x="6" y="0"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="_chatbubble-nineslice-edgetop" horizTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="TOPRIGHT"/>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="TOPLEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="_chatbubble-nineslice-edgebottom" horizTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="BOTTOMLEFT" relativeKey="$parent.BottomLeft" relativePoint="BOTTOMRIGHT"/>
+            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="BOTTOMLEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="!chatbubble-nineslice-edgeleft" vertTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.TopLeft" relativePoint="BOTTOMLEFT"/>
+            <Anchor point="BOTTOMLEFT" relativeKey="$parent.BottomLeft" relativePoint="TOPLEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture atlas="!chatbubble-nineslice-edgeright" vertTile="true" useAtlasSize="true">
+          <Anchors>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.TopRight" relativePoint="BOTTOMRIGHT"/>
+            <Anchor point="BOTTOMRIGHT" relativeKey="$parent.BottomRight" relativePoint="TOPRIGHT"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+        self:SetAutoFocus(false)
+      </OnLoad>
+    </Scripts>
+    <FontString inherits="ChatFontNormal"/>
+  </EditBox>
 </Ui>
