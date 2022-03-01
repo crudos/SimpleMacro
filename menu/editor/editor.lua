@@ -4,16 +4,34 @@ local G = _G
 --[[
   SimpleMacroEditorPopup
 ]]
-function SimpleMacroMenuPopup_OnLoad(self)
+function SimpleMacroEditorPopup_OnLoad(self)
+  self.GetSelectedMacro = function(this)
+    return this.selectedMacro
+  end
+  self.GetSelectedParse = function(this)
+    return this.selectedMacro.parsed
+  end
+  self.SetSelectedMacro = function(this, id)
+    local name, texture, body = GetMacroInfo(id)
 
+    this.selectedMacro = { name = name, texture = texture, body = body }
+    this.selectedMacro.parsed = SMacro:new()
+    this.selectedMacro.parsed:set(id + SimpleMacroMenu.macroStart)
+  end
 end
 
-function SimpleMacroMenuPopup_OnShow(self)
-
+function SimpleMacroEditorPopup_OnShow(self)
+  -- set macro onto frame
+  self:SetSelectedMacro(125)
+  SM_printall(self:GetSelectedMacro())
 end
 
-function SimpleMacroMenuPopup_OnHide(self)
+function SimpleMacroEditorPopup_OnHide(_)
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
+end
 
+function SimpleMacroEditorPopup_Update()
+  -- update dropdowns, editbox, conditional groups with macro details
 end
 
 function SimpleMacroEditorPopup_CancelButton_OnClick(self)
@@ -25,7 +43,6 @@ end
 
 function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
 end
--- SimpleMacroEditorPopup_Update()
 
 --[[
   Category DropDown
@@ -33,7 +50,7 @@ end
 function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
   if event == "PLAYER_ENTERING_WORLD" then
     self.SetDefaultValue = function(this)
-      self.defaultValue = L["LINE_TYPE_TABLE"][6].CATEGORY
+      this.defaultValue = L["LINE_TYPE_TABLE"][6].CATEGORY
       this.value = this.defaultValue
       UIDropDownMenu_SetSelectedValue(this, this.value)
       this.tooltip = this.value .. " commands."
@@ -196,13 +213,17 @@ function SimpleMacroEditorPopup_AddConditionalGroupButton_OnClick(self)
 end
 
 function SimpleMacroEditorPopup_ConditionalGroupButton_OnClick(self)
+  SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(self)
   SimpleMacroEditorConditionalPopup:SetID(self:GetID())
+  SimpleMacroEditorConditionalPopup:Update()
   ShowUIPanel(SimpleMacroEditorConditionalPopup)
   self:SetScript("OnMouseUp", nil)
 end
 
-function SimpleMacroEditorPopup_ConditionalGroupButtons_Reset()
+function SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(ignoreButton)
   for _, button in ipairs(SimpleMacroEditorPopup.conditionalGroupButtons) do
-    UIPanelButton_OnMouseUp(button)
+    if ignoreButton == nil or button ~= ignoreButton then
+      UIPanelButton_OnMouseUp(button)
+    end
   end
 end

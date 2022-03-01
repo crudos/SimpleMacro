@@ -9,7 +9,7 @@
 <!--      <KeyValue key="OnDelete" value="SimpleMacroEditorPopup_DeleteButton_OnClick" type="global"/>-->
     </KeyValues>
     <Anchors>
-      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+      <Anchor point="LEFT" relativeTo="$parent" relativePoint="RIGHT" x="0" y="0"/>
     </Anchors>
     <Layers>
       <Layer level="BACKGROUND">
@@ -57,9 +57,9 @@
       </Button>
     </Frames>
     <Scripts>
-      <OnLoad function="SimpleMacroMenuPopup_OnLoad"/>
-      <OnShow function="SimpleMacroMenuPopup_OnShow"/>
-      <OnHide function="SimpleMacroMenuPopup_OnHide"/>
+      <OnLoad function="SimpleMacroEditorPopup_OnLoad"/>
+      <OnShow function="SimpleMacroEditorPopup_OnShow"/>
+      <OnHide function="SimpleMacroEditorPopup_OnHide"/>
     </Scripts>
   </Frame>
 </Ui>

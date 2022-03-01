@@ -9,7 +9,7 @@
       <KeyValue key="OnDelete" value="SimpleMacroEditorConditionalPopup_DeleteButton_OnClick" type="global"/>
     </KeyValues>
     <Anchors>
-      <Anchor point="LEFT" relativeTo="SimpleMacroEditorPopup" relativePoint="RIGHT" x="0" y="0"/>
+      <Anchor point="LEFT" relativeTo="$parent" relativePoint="RIGHT" x="0" y="0"/>
     </Anchors>
     <Layers>
       <Layer level="BACKGROUND">

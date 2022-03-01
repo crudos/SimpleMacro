@@ -266,7 +266,9 @@ function SM_GroupButton_Update()
     macroName = G[macroButtonName .. "Name"]
 
     if group and i <= #group then
-      --TODO what if group[i] doesn't exist anymore or is the wrong macro
+      --[[
+        TODO what if group[i] doesn't exist anymore or is the wrong macro. FIX: hook into Macro deletion to update group ids
+      ]]
       name, texture, body = GetMacroInfo(group[i])
       macroIcon:SetTexture(texture)
       macroName:SetText(name)

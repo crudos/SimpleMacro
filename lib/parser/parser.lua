@@ -1,35 +1,49 @@
 --[[
-   This library parses macros into a custom internal representation.
+  This library parses macros into an object representation.
 
-   Macro structure:
+  Macro structure:
 
-   LINES
-      #, {LINE}
-      count, int
 
-   LINE
-      type, string
-      cmd, string
-      args, {ARGS}
+  { count = <count>,
+    # = { type = <type>,
+          cmd = <command>,
+          args = { count = <count>,
+                   # = { arg = <argument>,
+                         conds = { count = <count>,
+                                   # = { name = <name>,
+                                         input = <input>
+                                       }
+                                 }
+                       }
+                 }
+        }
+  }
 
-   ARGS
-      #, {ARG}
-      count, int
+  LINES
+    #, {LINE}
+    count, int
 
-   ARG
-      arg, string
-      conds, {CONDS}
+  LINE
+    type, string
+    cmd, string
+    args, {ARGS}
 
-   CONDS
-      #, {COND}
-      count, int
+  ARGS
+    #, {ARG}
+    count, int
 
-   COND
-      name, string
-      input, string
+  ARG
+    arg, string
+    conds, {CONDS}
 
-   ]]
+  CONDS
+    #, {COND}
+    count, int
 
+  COND
+    name, string
+    input, string
+  ]]
 local _, L = ...
 
 local function isempty(s)
@@ -40,7 +54,7 @@ local function trim(s)
   return s:match '^()%s*$' and '' or s:match '^%s*(.*%S)'
 end
 
---[[
+--[[ TODO Handle multiple conditional groups
    params:
       cond_body: conditionals for an arg
    returns:

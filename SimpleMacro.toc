@@ -1,4 +1,4 @@
-## Interface: 90001
+## Interface: 90200
 ## Title: SimpleMacro
 ## Author: Crudos
 ## Version: 9.0.0.1
