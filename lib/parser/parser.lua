@@ -4,19 +4,22 @@
   Macro structure:
 
 
-  { count = <count>,
-    # = { type = <type>,
-          cmd = <command>,
-          args = { count = <count>,
-                   # = { arg = <argument>,
-                         conds = { count = <count>,
-                                   # = { name = <name>,
-                                         input = <input>
-                                       }
+  { lines = { count = <count>,
+              # = { type = <type>,
+                    cmd = <command>,
+                    args = { count = <count>,
+                             # = { arg = <argument>,
+                                   conds = { count = <count>,
+                                             # = { count = <count>,
+                                                   # = { name = <name>,
+                                                         input = <input>
+                                                       }
+                                                 }
+                                           }
                                  }
-                       }
-                 }
-        }
+                           }
+                  }
+            }
   }
 
   LINES
@@ -34,7 +37,11 @@
 
   ARG
     arg, string
-    conds, {CONDS}
+    conds, {COND_GROUPS}
+
+  COND_GROUPS
+    #, {CONDS}
+    count, int
 
   CONDS
     #, {COND}
@@ -54,17 +61,16 @@ local function trim(s)
   return s:match '^()%s*$' and '' or s:match '^%s*(.*%S)'
 end
 
---[[ TODO Handle multiple conditional groups
+--[[
    params:
-      cond_body: conditionals for an arg
+      cond_body: conditionals for a conditional group
    returns:
-      table: list of args for this line
+      table: list of conditionals for this group
    ]]
 local function parse_conds(cond_body)
-  local conds, i, cur, rest, temp, cond
+  local conds = {}
 
-  conds = {}
-
+  local rest
   if isempty(cond_body) then
     conds.count = 0
     return conds
@@ -78,10 +84,11 @@ local function parse_conds(cond_body)
     end
   end
 
-  i = 0
+  local i = 0
   while not isempty(rest) do
     i = i + 1
 
+    local cur
     if string.match(rest, "^.-(,).*") then
       cur, rest = string.match(rest, "^(.-),(.*)")
     else
@@ -93,8 +100,8 @@ local function parse_conds(cond_body)
       -- remove unnecessary conditionals [dead,   ] -> [dead]
       i = i - 1
     else
-      cond = {}
-      temp = trim(cur)
+      local cond = {}
+      local temp = trim(cur)
 
       if string.match(temp, ".-[@:=](.*)") then
         cond.name, cond.input = string.match(temp, "(.-[@:=])(.*)")
@@ -112,21 +119,45 @@ end
 
 --[[
    params:
-      arg_body: body of a line without the cmd
+      cond_group_body: conditional groups for an arg
    returns:
-      table: list of args for this line
+      table: list of conditional groups
    ]]
-local function parse_args(arg_body)
-  local text, conds, arg, args, i
+local function parse_cond_groups(cond_group_body)
+  local cond_groups = {}
+  local text = cond_group_body
 
-  args = {}
-  text = arg_body
-
-  i = 0
+  local i = 0
   while not isempty(text) do
     text = trim(text)
     i = i + 1
 
+    local group
+    if string.match(text, "^([%[]).*") then
+      group, text = string.match(text, "^([%[].-[%]])(.*)$")
+      cond_groups[i] = parse_conds(group)
+    end
+  end
+
+  return cond_groups
+end
+
+--[[
+   params:
+      arg_body: body of a line without the cmd
+   returns:
+      table: argument with conditional group table
+   ]]
+local function parse_args(arg_body)
+  local args = {}
+  local text = arg_body
+
+  local i = 0
+  while not isempty(text) do
+    text = trim(text)
+    i = i + 1
+
+    local conds
     if string.match(text, "^([%[]).*") then
       -- check for bracket
       conds, text = string.match(text, "^(.-[%]])(.*)")
@@ -134,6 +165,7 @@ local function parse_args(arg_body)
       conds = ""
     end
 
+    local arg
     if string.match(text, "^.-([;])") ~= nil then
       arg, text = string.match(text, "^(.-)[;](.*)")
     else
@@ -143,7 +175,7 @@ local function parse_args(arg_body)
 
     args[i] = {}
     args[i].arg = trim(arg)
-    args[i].conds = parse_conds(conds)
+    args[i].conds = parse_cond_groups(conds)
   end
 
   args.count = i
@@ -159,10 +191,7 @@ end
       string: rest of the line
    ]]
 local function parse_cmd(line_body)
-  local type, cmd, text
-
-  type, cmd, text = string.match(line_body, "([/#])([^ ]*)(.-)$") -- grabs '/ or #', (non spaces), (the rest)
-
+  local type, cmd, text = string.match(line_body, "([/#])([^ ]*)(.-)$") -- grabs '/ or #', (non spaces), (the rest)
   return type, cmd, trim(text)
 end
 
@@ -173,10 +202,8 @@ end
       table: parsed line
    ]]
 local function parse_line(line_body)
-  local line_data, text
-
-  line_data = {}
-  text = line_body
+  local line_data = {}
+  local text = line_body
 
   line_data.type, line_data.cmd, text = parse_cmd(text)
   line_data.args = parse_args(text)

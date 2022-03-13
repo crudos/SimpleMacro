@@ -158,7 +158,7 @@ function SM_CreateTab_Update()
   end
 
   if createSelect ~= nil then
-    SM_MacroEditor_Update()
+    --SM_MacroEditor_Update()
   end
 
   SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Show()
@@ -491,7 +491,10 @@ function SM_MacroEditor_Update()
         macroEditorArg:Show()
       end
 
-      if parsed.lines[lc].args[ac].conds.count > 0 then
+      --TODO add cond groups
+      local conditionalGroups = parsed.lines[lc].args[ac].conds
+
+      if #conditionalGroups > 0 then
         if G[curArg .. "Conds"] == nil then
           macroEditorConds = CreateFrame("CheckButton", curArg .. "Conds", SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorCondEntryTemplate")
         else

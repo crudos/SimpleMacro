@@ -8,7 +8,7 @@ function SimpleMacroEditorPopup_OnLoad(self)
   self.GetSelectedMacro = function(this)
     return this.selectedMacro
   end
-  self.GetSelectedParse = function(this)
+  self.GetParsed = function(this)
     return this.selectedMacro.parsed
   end
   self.SetSelectedMacro = function(this, id)
@@ -18,20 +18,38 @@ function SimpleMacroEditorPopup_OnLoad(self)
     this.selectedMacro.parsed = SMacro:new()
     this.selectedMacro.parsed:set(id + SimpleMacroMenu.macroStart)
   end
+  self.GetSelectedLine = function(this)
+    return this.selectedLine
+  end
+  self.SetSelectedLine = function(this, id)
+    this.selectedLine = id
+  end
+  self.GetSelectedArgument = function(this)
+    return this.selectedArgument
+  end
+  self.SetSelectedArgument = function(this, id)
+    this.selectedArgument = id
+  end
+  self.GetConditionalGroupButtons = function(this)
+    return this.conditionalGroupButtons
+  end
+  self.InsertConditionalGroupButton = function(this, groupButton)
+    if this.conditionalGroupButtons == nil then
+      this.conditionalGroupButtons = {}
+    end
+    tinsert(this.conditionalGroupButtons, groupButton)
+  end
 end
 
 function SimpleMacroEditorPopup_OnShow(self)
-  -- set macro onto frame
-  self:SetSelectedMacro(125)
-  SM_printall(self:GetSelectedMacro())
+  self:SetSelectedMacro(126)
+  self:SetSelectedLine(2) -- temp
+  self:SetSelectedArgument(1) -- temp
+  SimpleMacroEditorPopup_Update(self)
 end
 
 function SimpleMacroEditorPopup_OnHide(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
-end
-
-function SimpleMacroEditorPopup_Update()
-  -- update dropdowns, editbox, conditional groups with macro details
 end
 
 function SimpleMacroEditorPopup_CancelButton_OnClick(self)
@@ -49,6 +67,10 @@ end
 ]]
 function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
   if event == "PLAYER_ENTERING_WORLD" then
+    self.RefreshValue = function(this)
+      UIDropDownMenu_Initialize(this, SimpleMacroEditorPopup_CategoryDropDown_Initialize)
+      UIDropDownMenu_SetSelectedValue(this, this.value)
+    end
     self.SetDefaultValue = function(this)
       this.defaultValue = L["LINE_TYPE_TABLE"][6].CATEGORY
       this.value = this.defaultValue
@@ -57,8 +79,9 @@ function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
     end
     self.SetValue = function(this, value)
       this.value = value
-      UIDropDownMenu_SetSelectedValue(this, value)
       this.tooltip = value .. " commands."
+      UIDropDownMenu_SetSelectedValue(this, value)
+      this:RefreshValue()
     end
     self.GetValue = function(this)
       return UIDropDownMenu_GetSelectedValue(this)
@@ -69,10 +92,6 @@ function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
           return i
         end
       end
-    end
-    self.RefreshValue = function(this)
-      UIDropDownMenu_Initialize(this, SimpleMacroEditorPopup_CategoryDropDown_Initialize)
-      UIDropDownMenu_SetSelectedValue(this, this.value)
     end
 
     self:SetDefaultValue()
@@ -112,19 +131,23 @@ end
 ]]
 function SimpleMacroEditorPopup_CommandDropDown_OnEvent(self, event, ...)
   if event == "PLAYER_ENTERING_WORLD" then
+    self.RefreshValue = function(this)
+      UIDropDownMenu_Initialize(this, SimpleMacroEditorPopup_CommandDropDown_Initialize)
+      UIDropDownMenu_SetSelectedValue(this, this.value)
+    end
     self.SetDefaultValue = function(this)
       this.defaultValue = L["LINE_TYPE_TABLE"][6][4].COMMANDS[1]
       this.value = this.defaultValue
-      UIDropDownMenu_SetSelectedValue(this, this.value)
       this.tooltip = L["LINE_TYPE_TABLE"][6][4].DESCRIPTION
+      UIDropDownMenu_SetSelectedValue(this, this.value)
     end
     self.SetValue = function(this, value)
-      local categoryID, commandID
+      local categoryID = SimpleMacroEditorPopup.CategoryDropDown:GetID()
+      local commandID = SimpleMacroEditorPopup.CommandDropDown:GetID() or 1
+      this.tooltip = L["LINE_TYPE_TABLE"][categoryID][commandID].DESCRIPTION
       this.value = value
       UIDropDownMenu_SetSelectedValue(this, value)
-      categoryID = SimpleMacroEditorPopup.CategoryDropDown:GetID()
-      commandID = SimpleMacroEditorPopup.CommandDropDown:GetID() or 1
-      this.tooltip = L["LINE_TYPE_TABLE"][categoryID][commandID].DESCRIPTION
+      this:RefreshValue()
     end
     self.GetValue = function(this)
       return UIDropDownMenu_GetSelectedValue(this)
@@ -141,10 +164,6 @@ function SimpleMacroEditorPopup_CommandDropDown_OnEvent(self, event, ...)
         end
       end
     end
-    self.RefreshValue = function(this)
-      UIDropDownMenu_Initialize(this, SimpleMacroEditorPopup_CommandDropDown_Initialize)
-      UIDropDownMenu_SetSelectedValue(this, this.value)
-    end
 
     self:SetDefaultValue()
     self:UnregisterEvent(event)
@@ -156,7 +175,7 @@ function SimpleMacroEditorPopup_CommandDropDown_OnEvent(self, event, ...)
 end
 
 function SimpleMacroEditorPopup_CommandDropDown_OnClick(self)
-  SimpleMacroEditorPopup.CommandDropDown:SetValue(self.value)
+  self:GetParent()["dropdown"]:SetValue(self.value)
 end
 
 function SimpleMacroEditorPopup_CommandDropDown_Initialize()
@@ -179,17 +198,33 @@ end
   Conditionals
 ]]
 local function createConditionalGroupButton(addButton, index)
-  local conditionalGroupButton  = CreateFrame("Button",
-                                              "SimpleMacroEditorPopup.ConditionalGroup" .. index .. "Button",
-                                              addButton:GetParent(),
-                                              "UIPanelButtonTemplate")
-  conditionalGroupButton:SetText(string.format(G["SIMPLE_MACRO_STRING_CONDITIONAL_GROUP"], index))
-  conditionalGroupButton:SetPoint(addButton:GetPoint())
-  conditionalGroupButton:SetSize(addButton:GetSize())
-  conditionalGroupButton:SetScript("OnClick", SimpleMacroEditorPopup_ConditionalGroupButton_OnClick)
-  conditionalGroupButton:SetScript("OnMouseUp", nil)
-  conditionalGroupButton:SetID(index)
-  addButton:SetPoint("TOP", conditionalGroupButton, "BOTTOM", 0, -6)
+  local parentFrame = addButton:GetParent()
+  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup" .. index .. "Button"
+  local conditionalGroupButton
+
+  if G[conditionalGroupButtonName] ~= nil then
+    conditionalGroupButton = G[conditionalGroupButtonName]
+    conditionalGroupButton:Show()
+  else
+    conditionalGroupButton = CreateFrame("Button",
+                                         conditionalGroupButtonName,
+                                         parentFrame,
+                                         "UIPanelButtonTemplate")
+    conditionalGroupButton:SetText(string.format(G["SIMPLE_MACRO_STRING_CONDITIONAL_GROUP"], index))
+    conditionalGroupButton:SetPoint(addButton:GetPoint())
+    conditionalGroupButton:SetSize(addButton:GetSize())
+    conditionalGroupButton:SetScript("OnClick", SimpleMacroEditorPopup_ConditionalGroupButton_OnClick)
+    conditionalGroupButton:SetScript("OnMouseUp", nil)
+    conditionalGroupButton:SetID(index)
+    addButton:SetPoint("TOP", conditionalGroupButton, "BOTTOM", 0, -6)
+
+    -- resize parent
+    local parentX, parentY = parentFrame:GetSize()
+    local _, buttonY = addButton:GetSize()
+    parentFrame:SetSize(parentX, parentY + buttonY + 4)
+
+    parentFrame:InsertConditionalGroupButton(conditionalGroupButton)
+  end
 
   return conditionalGroupButton
 end
@@ -200,16 +235,21 @@ local function openConditionalGroup(button)
 end
 
 function SimpleMacroEditorPopup_AddConditionalGroupButton_OnClick(self)
-  local conditionalGroups = SimpleMacroEditorPopup.conditionalGroupButtons
+  -- Add new group to parsed macro
+  local parentFrame = self:GetParent()
+  local line = parentFrame:GetSelectedLine()
+  local argument = parentFrame:GetSelectedArgument()
+  parentFrame:GetParsed():addConditionalGroup(line, argument)
 
-  if conditionalGroups == nil then
-    SimpleMacroEditorPopup.conditionalGroupButtons = {}
-    conditionalGroups = SimpleMacroEditorPopup.conditionalGroupButtons
-  end
-
-  local newConditionalGroupButton = createConditionalGroupButton(self, #conditionalGroups + 1)
-  table.insert(SimpleMacroEditorPopup.conditionalGroupButtons, newConditionalGroupButton)
+  -- Create Button and open conditional popup
+  local conditionalGroupButtons = SimpleMacroEditorPopup:GetConditionalGroupButtons()
+  local conditionalGroupCount = conditionalGroupButtons ~= nil and #conditionalGroupButtons or 0
+  local newConditionalGroupButton = createConditionalGroupButton(self, conditionalGroupCount + 1)
   openConditionalGroup(newConditionalGroupButton)
+
+  if #SimpleMacroEditorPopup:GetConditionalGroupButtons() >= L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] then
+    self:Disable()
+  end
 end
 
 function SimpleMacroEditorPopup_ConditionalGroupButton_OnClick(self)
@@ -221,9 +261,45 @@ function SimpleMacroEditorPopup_ConditionalGroupButton_OnClick(self)
 end
 
 function SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(ignoreButton)
-  for _, button in ipairs(SimpleMacroEditorPopup.conditionalGroupButtons) do
+  for _, button in ipairs(SimpleMacroEditorPopup:GetConditionalGroupButtons()) do
     if ignoreButton == nil or button ~= ignoreButton then
       UIPanelButton_OnMouseUp(button)
     end
   end
+end
+
+local function getCommandIds(command)
+  local checkString = string.match(command, "[/#]?(.*)")
+
+  for categoryID, categoryData in ipairs(L["LINE_TYPE_TABLE"]) do
+    for commandID, commandData in ipairs(categoryData) do
+      for nameID, nameData in ipairs(commandData["COMMANDS"]) do
+        if nameData == checkString then
+          return categoryID, commandID, nameID
+        end
+      end
+    end
+  end
+end
+
+function SimpleMacroEditorPopup_Update(self)
+  local parsedMacro = self:GetParsed()
+  local currentLine = self:GetSelectedLine()
+  local currentArgument = self:GetSelectedArgument()
+
+  -- dropdowns
+  local categoryID, commandID, nameID = getCommandIds(parsedMacro:getCommand(currentLine))
+  SimpleMacroEditorPopup.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
+  SimpleMacroEditorPopup.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
+
+  -- editbox
+  local lineArguments = parsedMacro:getArguments(currentLine)
+  SimpleMacroEditorPopup.ArgumentEditBox:SetText(lineArguments[currentArgument].arg)
+
+  -- conditionals
+  local conditionalGroups = parsedMacro:getConditionalGroups(currentLine, currentArgument)
+  for i, _ in ipairs(conditionalGroups) do
+    createConditionalGroupButton(SimpleMacroEditorPopup.AddConditionalGroupButton, i)
+  end
+
 end

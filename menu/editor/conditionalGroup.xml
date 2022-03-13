@@ -2,7 +2,7 @@
   <Script file="conditionalGroup.lua"/>
 
   <Frame name="SimpleMacroEditorConditionalPopup" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroEditorPopup" enableMouse="true" hidden="true">
-    <Size x="272" y="160"/>
+    <Size x="272" y="108"/>
     <KeyValues>
       <KeyValue key="OnCancel" value="SimpleMacroEditorConditionalPopup_CancelButton_OnClick" type="global"/>
       <KeyValue key="OnOkay" value="SimpleMacroEditorConditionalPopup_OkayButton_OnClick" type="global"/>
@@ -24,7 +24,7 @@
       <Button parentKey="AddConditionalButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL">
         <Size x="210" y="22"/>
         <Anchors>
-          <Anchor point="TOP" x="0" y="-48"/>
+          <Anchor point="TOP" x="0" y="-40"/>
         </Anchors>
         <Scripts>
           <OnClick function="SimpleMacroEditorConditionalPopup_AddConditionalButton_OnClick"/>

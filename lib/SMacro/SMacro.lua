@@ -40,15 +40,13 @@ end
       string: text representing the macro's body joined with \n
   ]]
 function SMacro:compose()
-  local lines, result
-
-  lines = self.lines
+  local lines = self.lines
 
   if lines[1] == nil then
     return nil
   end
 
-  result = ""
+  local result = ""
   for i = 1, lines.count, 1 do
     result = result .. self:getLine(i)
 
@@ -170,34 +168,37 @@ function SMacro:getLine(line_num)
   for ac = 1, currentLine.args.count, 1 do
     -- add each argument
     local currentArgument = currentLine.args[ac]
+    local conditionalGroups = currentArgument.conds
 
-    if currentArgument.conds.count > 0 then
-      -- add conditionals if they exist
-      body = body .. '['
+    -- add conditionals if they exist
+    if #conditionalGroups > 0 then
+      for _, conditionals in ipairs(conditionalGroups) do
+        if #conditionals > 0 then
+          body = body .. '['
 
-      for cc = 1, currentArgument.conds.count, 1 do
-        local currentConditional = currentArgument.conds[cc]
+          for j, currentConditional in ipairs(conditionals) do
+            if (currentConditional == nil) then
+              body = body .. ''
+            else
+              body = body .. currentConditional.name
 
-        if (currentConditional == nil) then
-          body = body .. ''
-        else
-          body = body .. currentConditional.name
+              if currentConditional.input then
+                body = body .. currentConditional.input
+              end
 
-          if currentConditional.input then
-            body = body .. currentConditional.input
+              -- add commas until last conditional
+              if j < #conditionals then
+                body = body .. ', '
+              end
+            end
           end
 
-          -- add commas until last conditional
-          if cc ~= currentArgument.conds.count then
-            body = body .. ', '
-          end
+          body = body .. ']'
         end
       end
-
-      body = body .. '] '
     end
 
-    body = body .. currentArgument.arg
+    body = body .. " " .. currentArgument.arg
 
     if ac ~= currentLine.args.count then
       body = body .. '; ' -- add semicolons after each arg until the last
@@ -228,9 +229,6 @@ function SMacro:addArgument(line_num, argument)
   self.lines[line_num].args[new_arg] = {}
   self.lines[line_num].args[new_arg].arg = argument
   self.lines[line_num].args.count = new_arg
-
-  self.lines[line_num].args[new_arg].conds = {}
-  self.lines[line_num].args[new_arg].conds.count = 0
 
   return new_arg
 end
@@ -288,6 +286,8 @@ function SMacro:getArguments(line_num)
 end
 
 --[[
+    SMacro:addConditionalGroup
+    SMacro:getConditionalGroups
     SMacro:addConditional
     SMacro:setConditional
     SMacro:removeConditional
@@ -298,24 +298,56 @@ end
   ]]
 
 --[[
+    Adds a new conditional group
+
+    params:
+      line_num: row number for the line
+      arg_num: index of the arg
+    returns:
+      number: index of recently added conditional group
+  ]]
+function SMacro:addConditionalGroup(line_num, arg_num)
+  local cond_groups = self.lines[line_num].args[arg_num].conds
+
+  if cond_groups == nil then
+    self.lines[line_num].args[arg_num].conds = {}
+    self.lines[line_num].args[arg_num].conds[1] = {}
+  else
+    self.lines[line_num].args[arg_num].conds[#cond_groups + 1] = {}
+  end
+
+  return #self.lines[line_num].args[arg_num].conds
+end
+
+--[[
+    Adds a new conditional group
+
+    params:
+      line_num: row number for the line
+      arg_num: index of the arg
+    returns:
+      number: index of recently added conditional group
+  ]]
+function SMacro:getConditionalGroups(line_num, arg_num)
+  return self.lines[line_num].args[arg_num].conds
+end
+
+--[[
     Adds a new conditional
 
     params:
       line_num: row number for the line
       arg_num: index of the arg
+      cond_num: index of conditional_group
       conditional: conditional to add
       input: optional data for a conditional
   ]]
-function SMacro:addConditional(line_num, arg_num, conditional, input)
-  local cond_count, cond
-
-  cond = {}
+function SMacro:addConditional(line_num, arg_num, cond_num, conditional, input)
+  local cond_count = #self.lines[line_num].args[arg_num].conds[cond_num]
+  local cond = {}
   cond.name = conditional
   cond.input = input
-  cond_count = self.lines[line_num].args[arg_num].conds.count
-
-  self.lines[line_num].args[arg_num].conds[cond_count + 1] = cond
-  self.lines[line_num].args[arg_num].conds.count = cond_count + 1;
+  self.lines[line_num].args[arg_num].conds[cond_num][cond_count + 1] = cond
 end
 
 --[[
@@ -324,17 +356,16 @@ end
     params:
       line_num: row number for the line
       arg_num: index of the arg
-      cond_num: index of the conditional
+      cond_num: index of conditional group
       conditional: conditional to add
       input: optional data for a conditional
   ]]
-function SMacro:setConditional(line_num, arg_num, cond_num, conditional, input)
-  if self.lines[line_num].args[arg_num].conds[cond_num] ~= nil then
+function SMacro:setConditional(line_num, arg_num, cond_num, index, conditional, input)
+  if self.lines[line_num].args[arg_num].conds[cond_num][index] ~= nil then
     local cond = {}
-
     cond.name = conditional
     cond.input = input
-    self.lines[line_num].args[arg_num].conds[cond_num] = cond
+    self.lines[line_num].args[arg_num].conds[cond_num][index] = cond
   end
 end
 
@@ -344,25 +375,23 @@ end
     params:
       line_num: row number for the line
       arg_num: index of the arg
-      cond_num: index of the conditional
+      cond_num: index of the conditional group
+      index: index of conditional in group
     returns:
       boolean: if the conditional was removed
   ]]
-function SMacro:removeConditional(line_num, arg_num, cond_num)
-  local conditionals, cond_count, isRemoved
+function SMacro:removeConditional(line_num, arg_num, cond_num, index)
+  local conditionals = self.lines[line_num].args[arg_num].conds[cond_num]
+  local cond_count = #conditionals
+  local isRemoved = false
 
-  conditionals = self.lines[line_num].args[arg_num].conds
-  cond_count = self.lines[line_num].args[arg_num].conds.count
-  isRemoved = false
-
-  for cur = cond_num, cond_count - 1, 1 do
-    self.lines[line_num].args[arg_num].conds[cur] = conditionals[cur + 1]
+  for cur = index, cond_count - 1, 1 do
+    self.lines[line_num].args[arg_num].conds[cond_num][cur] = conditionals[cur + 1]
   end
-
-  self.lines[line_num].args[arg_num].conds[cond_count] = nil
+  self.lines[line_num].args[arg_num].conds[cond_num][cond_count] = nil
 
   if cond_count ~= 0 then
-    self.lines[line_num].args[arg_num].conds.count = cond_count - 1
+    self.lines[line_num].args[arg_num].conds[cond_num].count = cond_count - 1
     isRemoved = true
   end
 
@@ -378,7 +407,6 @@ end
   ]]
 function SMacro:resetConditionals(line_num, arg_num)
   self.lines[line_num].args[arg_num].conds = {}
-  self.lines[line_num].args[arg_num].conds.count = 0
 end
 
 --[[
@@ -387,9 +415,10 @@ end
     params:
       line_num: row number for the line
       arg_num: index of the arg
+      cond_num: index of conditional group
   ]]
-function SMacro:getConditionals(line_num, arg_num)
-  return self.lines[line_num].args[arg_num].conds
+function SMacro:getConditionals(line_num, arg_num, cond_num)
+  return self.lines[line_num].args[arg_num].conds[cond_num]
 end
 
 --[[
@@ -398,18 +427,18 @@ end
     params:
       line_num: row number for the line
       arg_num: index of the arg
+      cond_num: index of conditional group
   ]]
-function SMacro:composeConditionals(line_num, arg_num)
-  local result, argument, currentName
-
-  argument = self.lines[line_num].args[arg_num]
+function SMacro:composeConditionals(line_num, arg_num, cond_num)
+  local conditionals = self.lines[line_num].args[arg_num].conds[cond_num]
 
   -- support empty conditional
-  if (argument.conds.count == 1 and argument.conds[1] == nil) then
+  if #conditionals == 1 and conditionals[1] == nil then
     return "[]"
   end
 
-  for count, conditional in ipairs(argument.conds) do
+  local result, currentName
+  for count, conditional in ipairs(conditionals) do
     currentName = conditional.name
 
     if conditional.input then
@@ -422,7 +451,7 @@ function SMacro:composeConditionals(line_num, arg_num)
       result = result .. ", " .. currentName
     end
 
-    if count == argument.conds.count then
+    if count == #conditionals then
       result = result .. "]"
     end
   end

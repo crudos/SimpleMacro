@@ -40,8 +40,8 @@ if WoWUnit ~= nil then
     macro:addArgument(1, 'arg2')
     macro:setArgument(1, 2, 'set')
 
-    AreEqual({ { arg = 'arg1', conds = { count = 0 } },
-               { arg = 'set', conds = { count = 0 } },
+    AreEqual({ { arg = 'arg1' },
+               { arg = 'set' },
                count = 2 },
         macro:getArguments(1))
   end
@@ -59,56 +59,62 @@ if WoWUnit ~= nil then
     local macro = SMacro:new()
     macro:addLine()
     macro:addArgument(1, 'arg1')
-    macro:addConditional(1, 1, 'harm', nil)
-    macro:setConditional(1, 1, 1, 'dead', nil)
+    macro:addConditionalGroup(1, 1)
+    macro:addConditional(1, 1, 1, 'harm', nil)
+    macro:setConditional(1, 1, 1, 1, 'dead', nil)
 
-    AreEqual({ { name = 'dead' }, count = 1 }, macro:getConditionals(1, 1))
+    AreEqual({ { name = 'dead' } }, macro:getConditionals(1, 1, 1))
   end
 
   function SMacroTest:RemoveConditionalTest()
     local macro = SMacro:new()
     macro:addLine()
     macro:addArgument(1, 'arg1')
-    macro:addConditional(1, 1, 'harm', nil)
+    macro:addConditionalGroup(1, 1)
+    macro:addConditional(1, 1, 1, 'harm', nil)
 
-    IsTrue(macro:removeConditional(1, 1, 1))
-    IsFalse(macro:getConditionals(1, 1)[1])
+    IsTrue(macro:removeConditional(1, 1, 1, 1))
+    IsFalse(macro:getConditionals(1, 1, 1)[1])
   end
 
   function SMacroTest:ResetConditionalTest()
     local macro = SMacro:new()
     macro:addLine()
     macro:addArgument(1, 'arg1')
-    macro:addConditional(1, 1, 'harm', nil)
+    macro:addConditionalGroup(1, 1)
+    macro:addConditional(1, 1, 1,'harm', nil)
     macro:resetConditionals(1, 1)
 
-    AreEqual({ count = 0 }, macro:getConditionals(1, 1))
+    AreEqual(nil, macro:getConditionals(1, 1, 1))
   end
 
   function SMacroTest:GetConditionalTest()
     local macro = SMacro:new()
     macro:addLine()
     macro:addArgument(1, 'arg1')
-    macro:addConditional(1, 1, 'harm', nil)
+    macro:addConditionalGroup(1, 1)
+    macro:addConditional(1, 1, 1,'harm', nil)
 
-    AreEqual({ { name = 'harm' }, count = 1 }, macro:getConditionals(1, 1))
+    AreEqual({ { name = 'harm' } }, macro:getConditionals(1, 1, 1))
   end
 
   function SMacroTest:ComposeConditionalTest()
     local macro = SMacro:new()
     macro:addLine()
     macro:addArgument(1, 'arg1')
-    macro:addConditional(1, 1, 'harm', nil)
+    macro:addConditionalGroup(1, 1)
+    macro:addConditional(1, 1, 1, 'harm', nil)
 
-    AreEqual('[harm]', macro:composeConditionals(1, 1))
+    AreEqual('[harm]', macro:composeConditionals(1, 1, 1))
   end
 
   function SMacroTest:ComposeEmptyConditionalTest()
     local macro = SMacro:new()
     macro:addLine()
     macro:addArgument(1, 'arg1')
-    macro:addConditional(1, 1, '', nil)
+    macro:addConditionalGroup(1, 1)
+    macro:addConditional(1, 1, 1, '', nil)
 
-    AreEqual('[]', macro:composeConditionals(1, 1))
+    AreEqual('[]', macro:composeConditionals(1, 1, 1))
   end
 end

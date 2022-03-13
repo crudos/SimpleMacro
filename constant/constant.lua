@@ -18,6 +18,8 @@ L["tabs"] = { "Create", "Group" }
 L["MACRO_EDITOR"] = {}
 L["MACRO_EDITOR"]["NUM_MACRO_CATEGORIES"] = 12
 L["MACRO_EDITOR"]["NUM_MACRO_COMMANDS"] = 32
+L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] = 5
+L["MACRO_EDITOR"]["MAX_CONDITIONALS"] = 5
 
 -- TODO REMOVE any unused "Create" entries already in "MACRO_EDITOR"
 L["Create"] = {}

@@ -2,7 +2,7 @@
   <Script file="editor.lua"/>
 
   <Frame name="SimpleMacroEditorPopup" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
-    <Size x="312" y="222"/>
+    <Size x="312" y="208"/>
     <KeyValues>
       <KeyValue key="OnCancel" value="SimpleMacroEditorPopup_CancelButton_OnClick" type="global"/>
 <!--      <KeyValue key="OnOkay" value="SimpleMacroEditorPopup_CancelButton_OnClick" type="global"/>-->
