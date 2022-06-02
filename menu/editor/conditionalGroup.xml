@@ -24,7 +24,7 @@
       <Button parentKey="AddConditionalButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL">
         <Size x="210" y="22"/>
         <Anchors>
-          <Anchor point="TOP" x="0" y="-40"/>
+          <Anchor point="BOTTOM" relativePoint="BOTTOM" x="0" y="45"/>
         </Anchors>
         <Scripts>
           <OnClick function="SimpleMacroEditorConditionalPopup_AddConditionalButton_OnClick"/>

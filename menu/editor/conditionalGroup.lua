@@ -100,7 +100,7 @@ end
 
 local function hideLastConditionalDropDown()
   local popupFrame = SimpleMacroEditorConditionalPopup
-  local addButton = popupFrame.AddConditionalGroupButton
+  local addButton = popupFrame.AddConditionalButton
   local conditionalDropDownName = popupFrame:GetName() .. ".ConditionalDropDown" .. #popupFrame:GetConditionalDropDowns()
 
   if G[conditionalDropDownName] ~= nil then
@@ -119,7 +119,8 @@ end
 
 local function createConditionalDropDown(index)
   local popupFrame = SimpleMacroEditorConditionalPopup
-  local addButton = popupFrame.AddConditionalGroupButton
+  local addButton = popupFrame.AddConditionalButton
+  local _, buttonY = addButton:GetSize()
   local conditionalDropDownName = popupFrame:GetName() .. ".ConditionalDropDown" .. index
   local shouldResize = false
 
@@ -133,28 +134,41 @@ local function createConditionalDropDown(index)
       shouldResize = true
     end
   else
+    -- has input
+    local hasInput = index == 1
+
     conditionalDropDown = CreateFrame("Frame",
                                       conditionalDropDownName,
                                       popupFrame,
                                       "SimpleMacroEditorPopupConditionalDropDownTemplate")
     conditionalDropDown:SetID(index)
-    conditionalDropDown:SetPoint(addButton:GetPoint())
+    conditionalDropDown:SetPoint("TOP", popupFrame, "TOP", hasInput and -60 or 0, -10 - ((buttonY + 10) * index))
+    local x, y = conditionalDropDown:GetSize()
+    conditionalDropDown:SetSize(x, y)
+
+    local editBox = CreateFrame("EditBox",
+                                conditionalDropDown:GetName() .. ".EditBox",
+                                conditionalDropDown,
+                                "SimpleMacroEditorPopupEditBoxTemplate")
+    editBox:SetPoint("LEFT", conditionalDropDown, "RIGHT", -3, 2)
+    editBox:SetSize(80, 27)
 
     local deleteConditionalButton = CreateFrame("Button",
                                                 conditionalDropDown:GetName() .. ".DeleteButton",
                                                 conditionalDropDown,
                                                 "UIPanelCloseButtonNoScripts")
-    deleteConditionalButton:SetPoint("LEFT", conditionalDropDown, "RIGHT", -10, 3)
+    deleteConditionalButton:SetPoint("LEFT", not hasInput and conditionalDropDown or editBox, "RIGHT", hasInput and 4 or -16, 2)
     deleteConditionalButton:SetScript("OnClick", SimpleMacroEditorConditionalPopup_ConditionalDropDownDeleteButton_OnClick)
     shouldResize = true
   end
 
   -- resize parent, move add button, store dropdown
   if shouldResize then
+    local p1, p2, p3, p4, p5 = addButton:GetPoint() -- store location before resize
     local parentX, parentY = popupFrame:GetSize()
-    local _, buttonY = addButton:GetSize()
     popupFrame:SetSize(parentX, parentY + buttonY + 10)
-    addButton:SetPoint("TOP", conditionalDropDown, "BOTTOM", 0, 0)
+    addButton:SetPoint(p1, p2, p3, p4, p5)
+
     popupFrame:InsertConditionalDropDown(conditionalDropDown)
   end
 

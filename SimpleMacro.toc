@@ -1,7 +1,7 @@
-## Interface: 90200
+## Interface: 90205
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 9.0.0.1
+## Version: 9.0.0.2
 ## Notes: An addon that simplifies the macro-making process.
 ## SavedVariables: SimpleMacroDBA
 ## SavedVariablesPerCharacter: SimpleMacroDBC

@@ -11,11 +11,11 @@ function listener:OnEvent(event, arg1)
       and SimpleMacro.loaded == nil then
 
     if SimpleMacroDBA == nil then
-      SimpleMacroDBA = L["defaultsAccount"]
+      SimpleMacroDBA = L["DEFAULTS_ACCOUNT"]
     end
 
     if SimpleMacroDBC == nil then
-      SimpleMacroDBC = L["defaultsCharacter"]
+      SimpleMacroDBC = L["DEFAULTS_CHARACTER"]
     end
 
     SimpleMacro.dba = SimpleMacroDBA
@@ -43,8 +43,8 @@ local function slashCmdHandler(msg, _)
     InterfaceOptionsFrame_OpenToCategory("Simple Macro")
     InterfaceOptionsFrame_OpenToCategory("Simple Macro")
   elseif msg == "rdb" then
-    SimpleMacro.dba = L["defaultsAccount"]
-    SimpleMacro.dbc = L["defaultsCharacter"]
+    SimpleMacro.dba = L["DEFAULTS_ACCOUNT"]
+    SimpleMacro.dbc = L["DEFAULTS_CHARACTER"]
   elseif msg == "rg" then
     SimpleMacro.dbc.groupTable = {}
     print("The group table has been reset.")

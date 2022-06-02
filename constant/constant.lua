@@ -1,17 +1,17 @@
 local _, L = ...
 
-L["defaultsAccount"] = {
+L["DEFAULTS_ACCOUNT"] = {
   settings = {
     ContextMenu = false,
   },
 }
-L["defaultsCharacter"] = {
+L["DEFAULTS_CHARACTER"] = {
   groupTable = {},
   tab = 1,
 }
 
-L["settings"] = {}
-L["settings"]["contextMenus"] = Set { "TARGET", "PARTY", "PLAYER", "RAID_PLAYER" }
+L["SETTINGS"] = {}
+L["SETTINGS"]["CHANGE_BUTTON_ADDED"] = "SimpleMacroChangeButtonAdded"
 
 L["tabs"] = { "Create", "Group" }
 
