@@ -1,5 +1,5 @@
 local _, L = ...
-local C = L["Create"]
+local C = L["CREATE_TAB"]
 local G = _G
 
 local function setAccountMacros()

@@ -71,6 +71,7 @@ end
 --[[
     SMacro:setCommand
     SMacro:getCommand
+    SMacro:getCommandType
 
   ]]
 
@@ -93,6 +94,16 @@ end
   ]]
 function SMacro:getCommand(line_num)
   return self.lines[line_num].type .. self.lines[line_num].cmd
+end
+
+--[[
+    Gets the command type for a given line
+
+    params:
+      line_num: the line number of the command
+  ]]
+function SMacro:getCommandType(line_num)
+  return self.lines[line_num].type .. self.lines[line_num].type
 end
 
 --[[

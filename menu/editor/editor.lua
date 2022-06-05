@@ -8,6 +8,19 @@ local function generateCommandString(category, command)
   return (category == L["MACRO_EDITOR"]["HASH_CATEGORY"] and '#' or '/') .. command
 end
 
+local function saveArgumentAndCommand(editor)
+  local parsed = editor:GetParsed()
+  local selectedLine = editor:GetSelectedLine()
+
+  parsed:setCommand(selectedLine,
+                    generateCommandString(editor.CategoryDropDown:GetValue(),
+                                          editor.CommandDropDown:GetValue()))
+  parsed:setArgument(selectedLine,
+                     editor:GetSelectedArgument(),
+                     editor.ArgumentEditBox:GetText())
+  EditMacro(parsed:getID(), nil, nil, parsed:compose())
+end
+
 function SimpleMacroEditorPopup_OnLoad(self)
   self.GetSelectedMacro = function(this)
     return this.selectedMacro
@@ -49,6 +62,7 @@ function SimpleMacroEditorPopup_OnLoad(self)
 end
 
 function SimpleMacroEditorPopup_OnShow(self)
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
   self:SetSelectedMacro(126)
   self:SetSelectedLine(2) -- temp
   self:SetSelectedArgument(1) -- temp
@@ -65,18 +79,8 @@ end
 
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local editor = self:GetParent()
-  local parsed = editor:GetParsed()
-  local selectedLine = editor:GetSelectedLine()
-
-  parsed:setCommand(selectedLine,
-                    generateCommandString(editor.CategoryDropDown:GetValue(),
-                                          editor.CommandDropDown:GetValue()))
-  parsed:setArgument(selectedLine,
-                     editor:GetSelectedArgument(),
-                     editor.ArgumentEditBox:GetText())
-  EditMacro(parsed:getID(), nil, nil, parsed:compose())
-
-  HideUIPanel(self:GetParent())
+  saveArgumentAndCommand(editor)
+  HideUIPanel(editor)
 end
 
 function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
@@ -273,6 +277,9 @@ function SimpleMacroEditorPopup_AddConditionalGroupButton_OnClick(self)
   end
 end
 
+-- TODO: Update as follows:
+-- 1. Always save last button clicked
+-- 2. Unclick last button that was clicked
 function SimpleMacroEditorPopup_ConditionalGroupButton_OnClick(self)
   SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(self)
   SimpleMacroEditorConditionalPopup:SetID(self:GetID())
@@ -287,6 +294,10 @@ function SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(ignoreButton)
       UIPanelButton_OnMouseUp(button)
     end
   end
+end
+
+function SimpleMacroEditorPopup_ConditionalGroupButton_Unclick(id)
+  UIPanelButton_OnMouseUp(SimpleMacroEditorPopup:GetConditionalGroupButtons()[id])
 end
 
 local function getCommandIds(command)
@@ -322,5 +333,4 @@ function SimpleMacroEditorPopup_Update(self)
   for i, _ in ipairs(conditionalGroups) do
     createConditionalGroupButton(SimpleMacroEditorPopup.AddConditionalGroupButton, i)
   end
-
 end
