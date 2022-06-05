@@ -4,6 +4,10 @@ local G = _G
 --[[
   SimpleMacroEditorPopup
 ]]
+local function generateCommandString(category, command)
+  return (category == L["MACRO_EDITOR"]["HASH_CATEGORY"] and '#' or '/') .. command
+end
+
 function SimpleMacroEditorPopup_OnLoad(self)
   self.GetSelectedMacro = function(this)
     return this.selectedMacro
@@ -31,6 +35,9 @@ function SimpleMacroEditorPopup_OnLoad(self)
     this.selectedArgument = id
   end
   self.GetConditionalGroupButtons = function(this)
+    if this.conditionalGroupButtons == nil then
+      this.conditionalGroupButtons = {}
+    end
     return this.conditionalGroupButtons
   end
   self.InsertConditionalGroupButton = function(this, groupButton)
@@ -57,9 +64,23 @@ function SimpleMacroEditorPopup_CancelButton_OnClick(self)
 end
 
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
+  local editor = self:GetParent()
+  local parsed = editor:GetParsed()
+  local selectedLine = editor:GetSelectedLine()
+
+  parsed:setCommand(selectedLine,
+                    generateCommandString(editor.CategoryDropDown:GetValue(),
+                                          editor.CommandDropDown:GetValue()))
+  parsed:setArgument(selectedLine,
+                     editor:GetSelectedArgument(),
+                     editor.ArgumentEditBox:GetText())
+  EditMacro(parsed:getID(), nil, nil, parsed:compose())
+
+  HideUIPanel(self:GetParent())
 end
 
 function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
+  HideUIPanel(self:GetParent())
 end
 
 --[[

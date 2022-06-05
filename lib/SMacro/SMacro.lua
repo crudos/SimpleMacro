@@ -7,6 +7,7 @@ SMacro = {
 --[[
     SMacro:new
     SMacro:set
+    SMacro:getID
     SMacro:compose
 
   ]]
@@ -31,6 +32,15 @@ end
 function SMacro:set(macro_id)
   local _, _, body = GetMacroInfo(macro_id)
   self.lines = L['parse_lines'](body)
+  self.id = macro_id
+end
+
+--[[
+   Returns macro id
+
+   ]]
+function SMacro:getID()
+  return self.id
 end
 
 --[[
