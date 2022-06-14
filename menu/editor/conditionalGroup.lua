@@ -2,31 +2,55 @@ local _, L = ...
 local G = _G
 
 local function saveConditionalGroups(conditionalPopup)
-  local editor = conditionalPopup.editor
   local dropDowns = conditionalPopup:GetConditionalDropDowns()
+  local editor = conditionalPopup.editor
   local parsed = editor:GetParsed()
   local selectedLine = editor:GetSelectedLine()
   local selectedArgument = editor:GetSelectedArgument()
   local selectedConditionalGroup = conditionalPopup:GetID()
+  local parsedConditionalCount = #parsed:getConditionals(selectedLine, selectedArgument, selectedConditionalGroup)
 
   for i, dropDown in ipairs(dropDowns) do
-    if #dropDowns > #parsed:getConditionals(selectedLine, selectedArgument, selectedConditionalGroup) then
-      parsed:addConditional(selectedLine,
-                            selectedArgument,
-                            selectedConditionalGroup,
-                            dropDown:GetValue(),
-                            dropDown:GetInputValue())
-    else
+    if i <= parsedConditionalCount then
       parsed:setConditional(selectedLine,
                             selectedArgument,
                             selectedConditionalGroup,
                             i,
                             dropDown:GetValue(),
                             dropDown:GetInputValue())
+    else
+      parsed:addConditional(selectedLine,
+                            selectedArgument,
+                            selectedConditionalGroup,
+                            dropDown:GetValue(),
+                            dropDown:GetInputValue())
     end
-
-    EditMacro(parsed:getID(), nil, nil, parsed:compose())
   end
+
+  if parsedConditionalCount - #dropDowns > 0 then
+    for i = #dropDowns + 1, parsedConditionalCount do
+      parsed:removeConditional(selectedLine,
+                               selectedArgument,
+                               selectedConditionalGroup,
+                               i)
+    end
+  end
+
+  EditMacro(parsed:getID(), nil, nil, parsed:compose())
+end
+
+local function deleteConditionalGroup(conditionalPopup)
+  local editor = conditionalPopup.editor
+  local parsed = editor:GetParsed()
+  local selectedLine = editor:GetSelectedLine()
+  local selectedArgument = editor:GetSelectedArgument()
+  local selectedConditionalGroup = conditionalPopup:GetID()
+
+  parsed:removeConditionalGroup(selectedLine,
+                                selectedArgument,
+                                selectedConditionalGroup)
+
+  EditMacro(parsed:getID(), nil, nil, parsed:compose())
 end
 
 function SimpleMacroEditorConditionalPopup_OnLoad(self)
@@ -37,7 +61,7 @@ function SimpleMacroEditorConditionalPopup_OnLoad(self)
     end
     return this.conditionalDropDowns
   end
-  self.InsertConditionalDropDown = function(this, dropDown)
+  self.AddConditionalDropDown = function(this, dropDown)
     if this.conditionalDropDowns == nil then
       this.conditionalDropDowns = {}
     end
@@ -46,7 +70,7 @@ function SimpleMacroEditorConditionalPopup_OnLoad(self)
   self.RemoveConditionalDropDown = function(this)
     tremove(this.conditionalDropDowns, #this.conditionalDropDowns)
   end
-  self.editor = self:GetParent()
+  self.editor = SimpleMacroEditorPopup
 end
 
 function SimpleMacroEditorConditionalPopup_OnShow(_)
@@ -71,6 +95,7 @@ end
 
 function SimpleMacroEditorConditionalPopup_DeleteButton_OnClick(self)
   -- TODO re-enable add group button if disabled
+  --deleteConditionalGroup(self:GetParent())
   HideUIPanel(self:GetParent())
 end
 
@@ -101,12 +126,6 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
     UIDropDownMenu_Initialize(self, SimpleMacroEditorConditionalPopup_DropDown_Initialize)
     UIDropDownMenu_SetSelectedValue(this, this.value)
   end
-  self.SetDefaultValue = function(this)
-    this.id = 1
-    this.value = L["CONDITIONAL_LIST"][1]["ALIASES"][1]
-    this.tooltip = L["CONDITIONAL_STRING"]["DESCRIPTION"][1]
-    UIDropDownMenu_SetSelectedValue(this, this.value)
-  end
   self.SetValue = function(this, value)
     for i, conditionalData in ipairs(L["CONDITIONAL_LIST"]) do
       for _, alias in ipairs(conditionalData["ALIASES"]) do
@@ -134,6 +153,9 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
   self.GetValue = function(this)
     return UIDropDownMenu_GetSelectedValue(this)
   end
+  self.SetID = function(this, value)
+    this.id = value
+  end
   self.GetID = function(this)
     return this.id
   end
@@ -142,12 +164,19 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
   end
   self.SetInputValue = function(this, value)
     local editBox = this.editBox
-    if editBox:IsShown() then
+    if editBox and editBox:IsShown() then
       editBox:SetText(value)
     end
   end
   self.GetInputValue = function(this)
     return this.editBox:GetText()
+  end
+  self.SetDefaultValue = function(this)
+    this.id = 1
+    this.value = L["CONDITIONAL_LIST"][1]["ALIASES"][1]
+    this.tooltip = L["CONDITIONAL_STRING"]["DESCRIPTION"][1]
+    this:SetInputValue("")
+    UIDropDownMenu_SetSelectedValue(this, this.value)
   end
 
   self:SetDefaultValue()
@@ -166,6 +195,7 @@ local function hideLastConditionalDropDown()
     local conditionalDropDown = G[conditionalDropDownName]
     conditionalDropDown:Hide()
     G[conditionalDropDown:GetName() .. ".DeleteButton"]:Hide()
+    conditionalDropDown:SetDefaultValue()
 
     -- resize parent, move add button, remove dropdown
     local parentX, parentY = popupFrame:GetSize()
@@ -196,7 +226,7 @@ local function createConditionalDropDown(index)
                                       conditionalDropDownName,
                                       popupFrame,
                                       "SimpleMacroEditorPopupConditionalDropDownTemplate")
-    conditionalDropDown:SetID(index)
+    conditionalDropDown:SetID(index) -- doesn't work?
     conditionalDropDown:SetPoint("TOP", popupFrame, "TOP", -60, -10 - ((buttonY + 10) * index))
     local x, y = conditionalDropDown:GetSize()
     conditionalDropDown:SetSize(x, y)
@@ -215,6 +245,7 @@ local function createConditionalDropDown(index)
                                                 "UIPanelCloseButtonNoScripts")
     deleteConditionalButton:SetPoint("LEFT", editBox, "RIGHT", 4, 2)
     deleteConditionalButton:SetScript("OnClick", SimpleMacroEditorConditionalPopup_ConditionalDropDownDeleteButton_OnClick)
+    deleteConditionalButton:SetID(index)
 
     shouldResize = true
   end
@@ -225,7 +256,7 @@ local function createConditionalDropDown(index)
     local parentX, parentY = popupFrame:GetSize()
     popupFrame:SetSize(parentX, parentY + buttonY + 10)
     addButton:SetPoint(p1, p2, p3, p4, p5)
-    popupFrame:InsertConditionalDropDown(conditionalDropDown)
+    popupFrame:AddConditionalDropDown(conditionalDropDown)
   end
 
   return conditionalDropDown
@@ -250,7 +281,17 @@ function SimpleMacroEditorConditionalPopup_AddConditionalButton_OnClick()
   addConditionalButtonUpdate()
 end
 
-function SimpleMacroEditorConditionalPopup_ConditionalDropDownDeleteButton_OnClick()
+function SimpleMacroEditorConditionalPopup_ConditionalDropDownDeleteButton_OnClick(self)
+  local conditionalDropDowns = SimpleMacroEditorConditionalPopup:GetConditionalDropDowns()
+  local currentDropDownId = self:GetID()
+
+  for i, conditionalDropDown in ipairs(conditionalDropDowns) do
+    if i >= currentDropDownId and conditionalDropDowns[i+1] ~= nil then
+      conditionalDropDown:SetValue(conditionalDropDowns[i+1]:GetValue())
+      conditionalDropDown:SetInputValue(conditionalDropDowns[i+1]:GetInputValue())
+    end
+  end
+
   hideLastConditionalDropDown()
   addConditionalButtonUpdate()
 end

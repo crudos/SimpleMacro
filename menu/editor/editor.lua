@@ -18,6 +18,7 @@ local function saveArgumentAndCommand(editor)
   parsed:setArgument(selectedLine,
                      editor:GetSelectedArgument(),
                      editor.ArgumentEditBox:GetText())
+
   EditMacro(parsed:getID(), nil, nil, parsed:compose())
 end
 

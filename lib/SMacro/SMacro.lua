@@ -341,16 +341,30 @@ function SMacro:addConditionalGroup(line_num, arg_num)
 end
 
 --[[
-    Adds a new conditional group
+    Gets conditional groups
 
     params:
       line_num: row number for the line
       arg_num: index of the arg
     returns:
-      number: index of recently added conditional group
+      conditional_groups: list of conditional groups for the provided line and argument
   ]]
 function SMacro:getConditionalGroups(line_num, arg_num)
   return self.lines[line_num].args[arg_num].conds
+end
+
+--[[
+    Remove conditional group
+
+    params:
+      line_num: row number for the line
+      arg_num: index of the arg
+      cond_num: index of conditional_group
+    returns:
+      conditional_group: conditional group that was removed
+  ]]
+function SMacro:removeConditionalGroup(line_num, arg_num, cond_num)
+  return tremove(self.lines[line_num].args[arg_num].conds, cond_num)
 end
 
 --[[
@@ -369,6 +383,7 @@ function SMacro:addConditional(line_num, arg_num, cond_num, conditional, input)
   cond.name = conditional
   cond.input = input
   self.lines[line_num].args[arg_num].conds[cond_num][cond_count + 1] = cond
+  self.lines[line_num].args[arg_num].conds[cond_num].count = cond_count + 1
 end
 
 --[[
