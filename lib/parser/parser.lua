@@ -157,12 +157,13 @@ local function parse_args(arg_body)
     text = trim(text)
     i = i + 1
 
-    local conds
-    if string.match(text, "^([%[]).*") then
-      -- check for bracket
-      conds, text = string.match(text, "^(.-[%]])(.*)")
-    else
-      conds = ""
+    local conds = ""
+    -- match one cond group at a time
+    while string.match(text, "^([%[]).*")
+    do
+      local condition
+      condition, text = string.match(text, "^(.-[%]])(.*)")
+      conds = conds .. condition
     end
 
     local arg

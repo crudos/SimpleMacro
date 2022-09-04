@@ -63,7 +63,7 @@ if WoWUnit ~= nil then
     macro:addConditional(1, 1, 1, 'harm', nil)
     macro:setConditional(1, 1, 1, 1, 'dead', nil)
 
-    AreEqual({ { name = 'dead' } }, macro:getConditionals(1, 1, 1))
+    AreEqual({ { name = 'dead' }, count = 1 }, macro:getConditionals(1, 1, 1))
   end
 
   function SMacroTest:RemoveConditionalTest()
@@ -95,7 +95,7 @@ if WoWUnit ~= nil then
     macro:addConditionalGroup(1, 1)
     macro:addConditional(1, 1, 1,'harm', nil)
 
-    AreEqual({ { name = 'harm' } }, macro:getConditionals(1, 1, 1))
+    AreEqual({ { name = 'harm' }, count = 1 }, macro:getConditionals(1, 1, 1))
   end
 
   function SMacroTest:ComposeConditionalTest()
