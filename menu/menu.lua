@@ -22,6 +22,7 @@ end
 
 function SimpleMacroMenu_OnHide(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
+  HideUIPanel(SimpleMacroEditorPopup)
 end
 
 function SimpleMacroMenuTab_OnClick(self)

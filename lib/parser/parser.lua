@@ -9,7 +9,7 @@
                     cmd = <command>,
                     args = { count = <count>,
                              # = { arg = <argument>,
-                                   conds = { count = <count>,
+                                   conds = { ,count = <count>
                                              # = { count = <count>,
                                                    # = { name = <name>,
                                                          input = <input>

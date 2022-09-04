@@ -34,7 +34,7 @@ function SimpleMacroEditorPopup_OnLoad(self)
 
     this.selectedMacro = { name = name, texture = texture, body = body }
     this.selectedMacro.parsed = SMacro:new()
-    this.selectedMacro.parsed:set(id + SimpleMacroMenu.macroStart)
+    this.selectedMacro.parsed:set(id)
   end
   self.GetSelectedLine = function(this)
     return this.selectedLine
@@ -62,16 +62,13 @@ function SimpleMacroEditorPopup_OnLoad(self)
   end
 end
 
-function SimpleMacroEditorPopup_OnShow(self)
+function SimpleMacroEditorPopup_OnShow(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-  self:SetSelectedMacro(126)
-  self:SetSelectedLine(2) -- temp
-  self:SetSelectedArgument(1) -- temp
-  SimpleMacroEditorPopup_Update(self)
 end
 
 function SimpleMacroEditorPopup_OnHide(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
+  SM_MacroEditor_Update()
 end
 
 function SimpleMacroEditorPopup_CancelButton_OnClick(self)
@@ -315,23 +312,25 @@ local function getCommandIds(command)
   end
 end
 
-function SimpleMacroEditorPopup_Update(self)
-  local parsedMacro = self:GetParsed()
-  local currentLine = self:GetSelectedLine()
-  local currentArgument = self:GetSelectedArgument()
+function SimpleMacroEditorPopup_Update()
+  local parsedMacro = SimpleMacroEditorPopup:GetParsed()
+  local currentLine = SimpleMacroEditorPopup:GetSelectedLine()
+  local currentArgument = SimpleMacroEditorPopup:GetSelectedArgument()
 
   -- dropdowns
   local categoryID, commandID, nameID = getCommandIds(parsedMacro:getCommand(currentLine))
   SimpleMacroEditorPopup.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
   SimpleMacroEditorPopup.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
 
-  -- editbox
-  local lineArguments = parsedMacro:getArguments(currentLine)
-  SimpleMacroEditorPopup.ArgumentEditBox:SetText(lineArguments[currentArgument].arg)
+  if currentArgument ~= nil then
+    -- editbox
+    local lineArguments = parsedMacro:getArguments(currentLine)
+    SimpleMacroEditorPopup.ArgumentEditBox:SetText(lineArguments[currentArgument].arg)
 
-  -- conditionals
-  local conditionalGroups = parsedMacro:getConditionalGroups(currentLine, currentArgument)
-  for i, _ in ipairs(conditionalGroups) do
-    createConditionalGroupButton(SimpleMacroEditorPopup.AddConditionalGroupButton, i)
+    -- conditionals
+    local conditionalGroups = parsedMacro:getConditionalGroups(currentLine, currentArgument)
+    for i, _ in ipairs(conditionalGroups) do
+      createConditionalGroupButton(SimpleMacroEditorPopup.AddConditionalGroupButton, i)
+    end
   end
 end

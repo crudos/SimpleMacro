@@ -112,13 +112,6 @@
       </OnClick>
     </Scripts>
   </CheckButton>
-  <CheckButton name="SM_MacroEditorCondEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        SM_MacroEditorCond_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
   <Frame name="SimpleMacroPopupFrameTemplate" virtual="true">
     <KeyValues>
       <!--

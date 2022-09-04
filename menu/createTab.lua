@@ -53,7 +53,7 @@ end
 -- Create tab
 function SM_CreateTab_OnLoad(_)
   PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
-  PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 1)
+  PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 2) -- TODO set to first tab
 end
 
 function SM_CreateTab_OnShow(_)
@@ -158,7 +158,7 @@ function SM_CreateTab_Update()
   end
 
   if createSelect ~= nil then
-    --SM_MacroEditor_Update()
+    SM_MacroEditor_Update()
   end
 
   SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Show()
@@ -187,6 +187,15 @@ function SM_CreateTab_SelectMacro(id)
     SimpleMacroMenu.createParse = SMacro:new()
     SimpleMacroMenu.createParse:set(id + SimpleMacroMenu.macroStart)
   end
+end
+
+function SM_CreateTab_GetSelectedMacro()
+  if SimpleMacroMenu.createSelect then
+    SimpleMacroMenu.createParse = SMacro:new()
+    SimpleMacroMenu.createParse:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+  end
+
+  return SimpleMacroMenu.createParse
 end
 
 function SM_CreateTab_EnableButtons()
@@ -444,24 +453,25 @@ end
 
 local function SM_HideEditorArgs(entry_name, num)
   local ac = num
-
   while G[entry_name .. ac] do
     G[entry_name .. ac]:Hide()
-
-    if G[entry_name .. ac .. "Conds"] then
-      G[entry_name .. ac .. "Conds"]:Hide()
-    end
-
     ac = ac + 1
   end
 end
 
+local function unlockHighlight(editorEntry)
+  if editorEntry ~= nil then
+    editorEntry.highlight:SetVertexColor(0.196, 0.388, 0.8) -- default highlight color, light blue
+    editorEntry:UnlockHighlight()
+  end
+end
+
 function SM_MacroEditor_Update()
-  local parsed, macroEditorLine, macroEditorArg, macroEditorConds, editorHeight
+  local parsed, macroEditorLine, macroEditorArg, editorHeight
   local curLine, curArg
 
   editorHeight = C["editorHeight"]
-  parsed = SimpleMacroMenu.createParse
+  parsed = SM_CreateTab_GetSelectedMacro()
 
   for lc = 1, parsed.lines.count, 1 do
     curLine = "SM_MacroEditorLine" .. lc
@@ -491,97 +501,44 @@ function SM_MacroEditor_Update()
         macroEditorArg:Show()
       end
 
-      --TODO add cond groups
-      local conditionalGroups = parsed.lines[lc].args[ac].conds
-
-      if #conditionalGroups > 0 then
-        if G[curArg .. "Conds"] == nil then
-          macroEditorConds = CreateFrame("CheckButton", curArg .. "Conds", SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorCondEntryTemplate")
-        else
-          macroEditorConds = G[curArg .. "Conds"]
-          macroEditorConds:Show()
-        end
-
-        if ac == 1 then
-          macroEditorConds:SetPoint("LEFT", curLine, "RIGHT", 3, 0)
-        else
-          local argumentFrameId = curLine .. "Arg" .. (ac - 1)
-
-          macroEditorConds:SetPoint("LEFT", argumentFrameId, "RIGHT", 3, 0)
-
-          if (G[argumentFrameId .. "Data"]:GetText() == nil) then
-            G[argumentFrameId .. "Data"]:SetText(";")
-            G[argumentFrameId]:SetSize(G[argumentFrameId .. "Data"]:GetStringWidth(), editorHeight)
-          else
-            G[argumentFrameId .. "Data"]:SetText(G[argumentFrameId .. "Data"]:GetText() .. ";")
-            G[argumentFrameId]:SetSize(G[argumentFrameId .. "Data"]:GetStringWidth(), editorHeight)
-          end
-        end
-
-        if parsed:composeConditionals(lc, ac) then
-          G[curArg .. "CondsData"]:SetText(parsed:composeConditionals(lc, ac))
-          macroEditorConds:SetSize(G[curArg .. "CondsData"]:GetStringWidth(), editorHeight)
-          macroEditorArg:SetPoint("LEFT", macroEditorConds, "RIGHT", 3, 0)
-        else
-          G[curArg .. "Conds"]:Hide()
-          macroEditorArg:SetPoint("LEFT", curLine, "RIGHT", 3, 0)
-        end
-      else
-        if ac == 1 then
-          macroEditorArg:SetPoint("LEFT", curLine, "RIGHT", 3, 0)
-        else
-          macroEditorArg:SetPoint("LEFT", curLine .. "Arg" .. (ac - 1), "RIGHT", 3, 0)
-          G[curLine .. "Arg" .. (ac - 1) .. "Data"]:SetText(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetText() .. ";")
-          G[curLine .. "Arg" .. (ac - 1)]:SetSize(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetStringWidth(), editorHeight)
-        end
-
-        if G[curArg .. "Conds"] then
-          G[curArg .. "Conds"]:Hide()
-        end
-      end
-
-      G[curArg .. "Data"]:SetText(parsed:getArguments(lc)[ac].arg)
+      local argumentWithConditionals = parsed:composeAllConditionals(lc, ac) .. ' ' .. parsed:getArgument(lc, ac)
+      G[curArg .. "Data"]:SetText(argumentWithConditionals)
       macroEditorArg:SetSize(G[curArg .. "Data"]:GetStringWidth(), editorHeight)
-      macroEditorArg:SetID(lc)
+      macroEditorArg:SetID(ac)
+
+      if ac == 1 then
+        macroEditorArg:SetPoint("LEFT", curLine, "RIGHT", 3, 0)
+      else
+        macroEditorArg:SetPoint("LEFT", curLine .. "Arg" .. (ac - 1), "RIGHT", 3, 0)
+        G[curLine .. "Arg" .. (ac - 1) .. "Data"]:SetText(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetText() .. ";")
+        G[curLine .. "Arg" .. (ac - 1)]:SetSize(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetStringWidth(), editorHeight)
+      end
     end
 
     SM_HideEditorArgs(curLine .. "Arg", parsed.lines[lc].args.count + 1)
   end
 
   SM_HideEditorLines(parsed.lines.count + 1)
+  unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
 end
 
-local function SearchLineTable(command)
-  local checkString
-
-  checkString = string.match(command, "[/#]?(.*)")
-
-  for categoryID, categoryData in ipairs(L.LINE_TYPE_TABLE) do
-    for commandID, commandData in ipairs(categoryData) do
-      for nameID, nameData in ipairs(commandData.COMMANDS) do
-        if nameData == checkString then
-          return categoryID, commandID, nameID
-        end
-      end
-    end
-  end
+local function lockHighlight(editorEntry)
+  editorEntry.highlight:SetVertexColor(1, 1, 0, 0.6) -- selectedLine, yellow
+  editorEntry:LockHighlight()
+  SimpleMacroMenu.selectedEditorEntry = editorEntry
 end
 
-local function SM_MacroEditor_OnClick(self, menuToShow)
-  SM_OpenPopupMenu(menuToShow)
-
+local function SM_MacroEditor_OnClick(self)
   G["SM_MacroEditor_AddNewLine"]:Disable()
 
-  if SimpleMacroMenu.selectedEditorEntry ~= nil then
-    SimpleMacroMenu.selectedEditorEntry.highlight:SetVertexColor(0.196, 0.388, 0.8) -- default highlight color, light blue
-    SimpleMacroMenu.selectedEditorEntry:UnlockHighlight()
-  end
+  unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
+  lockHighlight(self)
 
-  if self ~= nil then
-    self.highlight:SetVertexColor(1, 1, 0, 0.6) -- selectedLine, yellow
-    self:LockHighlight()
-    SimpleMacroMenu.selectedEditorEntry = self
-  end
+  SimpleMacroEditorPopup:SetSelectedMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+  SimpleMacroEditorPopup:SetSelectedLine(SimpleMacroMenu.selectedLine)
+  SimpleMacroEditorPopup:SetSelectedArgument(SimpleMacroMenu.selectedArgument)
+  ShowUIPanel(SimpleMacroEditorPopup)
+  SimpleMacroEditorPopup_Update()
 end
 
 function SM_MacroEditor_OnHide(_)
@@ -591,39 +548,17 @@ function SM_MacroEditor_OnHide(_)
 end
 
 function SM_MacroEditorLine_OnClick(self, _, _)
-  local parsed, categoryID, commandID, nameID
-
-  parsed = SimpleMacroMenu.createParse
-  categoryID, commandID, nameID = SearchLineTable(parsed:getCommand(self:GetID()))
-
-  SM_NewLineMenuCategoryDropDown:SetValue(L.LINE_TYPE_TABLE[categoryID].CATEGORY)
-  SM_NewLineMenuCommandDropDown:SetValue(L.LINE_TYPE_TABLE[categoryID][commandID].COMMANDS[nameID])
-
-  SM_NewLineMenu.isEdit = true
-  SM_NewLineMenu.selectedLine = self:GetID()
-
-  SM_NewLineMenuCategoryDropDown:RefreshValue()
-  SM_NewLineMenuCommandDropDown:RefreshValue()
+  local lineNum = string.match(self:GetName(), ".-(%d).*")
+  SimpleMacroMenu.selectedLine = tonumber(lineNum)
+  SimpleMacroMenu.selectedArgument = nil
   SM_MacroEditor_OnClick(self, SM_NewLineMenu)
 end
 
 function SM_MacroEditorArg_OnClick(self, _, _)
-  local parsed, lineNum, argNum
-
-  parsed = SimpleMacroMenu.createParse
-  lineNum, argNum = string.match(self:GetName(), ".-(%d).-(%d).*")
-
-  SM_ArgMenuEditBox:SetText(parsed:getArguments(tonumber(lineNum))[tonumber(argNum)].arg)
+  local lineNum, argNum = string.match(self:GetName(), ".-(%d).-(%d).*")
+  SimpleMacroMenu.selectedLine = tonumber(lineNum)
+  SimpleMacroMenu.selectedArgument = tonumber(argNum)
   SM_MacroEditor_OnClick(self, SM_ArgMenu)
-end
-
-function SM_MacroEditorCond_OnClick(self, _, _)
-  SimpleMacroMenu.selectedLine, SimpleMacroMenu.selectedArg = string.match(self:GetName(), ".-(%d).-(%d).*")
-
-  SimpleMacroMenu.selectedLine = tonumber(SimpleMacroMenu.selectedLine)
-  SimpleMacroMenu.selectedArg = tonumber(SimpleMacroMenu.selectedArg)
-
-  SM_MacroEditor_OnClick(self, SM_CondMenu)
 end
 
 function SM_MacroEditor_OnLoad(self)
@@ -803,11 +738,6 @@ function SM_CommandDropDown_Initialize()
 end
 
 local function SM_MenuButton_OnClick(self)
-  if SimpleMacroMenu.selectedEditorEntry ~= nil then
-    SimpleMacroMenu.selectedEditorEntry.highlight:SetVertexColor(0.196, 0.388, 0.8) -- default highlight color, light blue
-    SimpleMacroMenu.selectedEditorEntry:UnlockHighlight()
-  end
-
   HideUIPanel(self:GetParent())
   SM_CreateTab_Update()
 end
@@ -859,150 +789,6 @@ function SM_NewLineMenu_DeleteButton_OnClick(self)
   SM_MenuButton_OnClick(self)
 end
 
--- Arguments
-function SM_ArgMenu_OnLoad(_)
-  SM_ArgMenuEditBoxLabel:SetText("Enter argument:")
-end
-
-function SM_ArgMenu_OnShow(_)
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-
-  SM_ArgMenuEditBox:SetFocus()
-end
-
-function SM_ArgMenu_SetCondButton_OnClick(_)
-  local entry_name, sLine, sArg
-
-  entry_name = SimpleMacroMenu.selectedEditorEntry:GetName()
-  sLine, sArg = string.match(entry_name, ".-(%d).-(%d).*")
-
-  SimpleMacroMenu.selectedLine = tonumber(sLine)
-  SimpleMacroMenu.selectedArg = tonumber(sArg)
-
-  SM_ArgMenu_OkayButton_OnClick(SM_ArgMenu.OkayButton)
-  SM_MacroEditor_OnClick(nil, SM_CondMenu)
-end
-
-function SM_ArgMenu_CancelButton_OnClick(self)
-  SM_MenuButton_OnClick(self)
-end
-
-function SM_ArgMenu_OkayButton_OnClick(self)
-  local lineNum, argNum
-
-  lineNum, argNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d).-(%d).*")
-  lineNum = tonumber(lineNum)
-  argNum = tonumber(argNum)
-
-  SimpleMacroMenu.createParse:setArgument(lineNum, argNum, SM_ArgMenuEditBox:GetText())
-
-  SM_MenuButton_OnClick(self)
-end
-
-function SM_ArgMenu_DeleteButton_OnClick(self)
-  local lineNum, argNum
-
-  lineNum, argNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d).-(%d).*")
-  lineNum = tonumber(lineNum)
-  argNum = tonumber(argNum)
-
-  SimpleMacroMenu.createParse:removeArgument(lineNum, argNum)
-  SM_MenuButton_OnClick(self)
-end
-
--- Conditionals
-function SM_CondMenu_OnLoad(_)
-  local cond_cbox, condEntryInput, cbox_text
-  local conditionalsPerCol = C["conditionalsPerCol"]
-  local conditionalSpacing = C["conditionalSpacing"]
-
-  for cboxNum, cond in ipairs(L.CONDITIONAL_LIST) do
-    cond_cbox = CreateFrame("CheckButton", "SM_CondCbox" .. cboxNum, SM_CondMenu, "SimpleMacroCheckButtonTemplate")
-    cond_cbox:SetID(cboxNum)
-    cbox_text = G["SM_CondCbox" .. cboxNum .. "Text"]
-    cbox_text:SetText(cond.DEFAULT)
-
-    if cboxNum == 1 then
-      cond_cbox:SetPoint("TOPLEFT", SM_CondMenu, "TOPLEFT", 10, -10)
-    elseif cboxNum % conditionalsPerCol == 1 then
-      cond_cbox:SetPoint("LEFT", "SM_CondCbox" .. (cboxNum - conditionalsPerCol), "RIGHT", conditionalSpacing, 0)
-    else
-      cond_cbox:SetPoint("TOPLEFT", "SM_CondCbox" .. (cboxNum - 1), "BOTTOMLEFT", 0, -6)
-    end
-
-    if cond.INPUT == true then
-      condEntryInput = CreateFrame("EditBox", "SM_CondCboxInput" .. cboxNum, SM_CondMenu, "InputBoxTemplate")
-      condEntryInput:SetPoint("LEFT", cond_cbox, "RIGHT", cbox_text:GetStringWidth() + 10, 0)
-      condEntryInput:SetSize(92, 22)
-      condEntryInput:SetAutoFocus(false)
-      condEntryInput:SetScript("OnEnterPressed", function(self) self:ClearFocus() end)
-      cond_cbox.tooltipText = L["CONDITIONAL_STRING"]["DESCRIPTION"][cboxNum] .. " (" .. cond.INPUT_HINT .. ")"
-    else
-      cond_cbox.tooltipText = L["CONDITIONAL_STRING"]["DESCRIPTION"][cboxNum]
-    end
-  end
-
-  G["SM_CondMenuAlternateCheckButtonText"]:SetText(L.USE_ALTERNATES)
-  SM_CondMenuAlternateCheckButton.tooltipText = L.USE_ALTERNATES_DESC
-end
-
-function SM_CondCheckButton_OnClick(checkButton)
-  local cboxNum = checkButton:GetID()
-
-  if L.CONDITIONAL_LIST[cboxNum].INPUT == true then
-    if checkButton:GetChecked() then
-      G["SM_CondCboxInput" .. cboxNum]:SetFocus()
-    else
-      G["SM_CondCboxInput" .. cboxNum]:ClearFocus()
-    end
-  end
-
-  SM_CheckButton_OnClick(checkButton)
-end
-
-function SM_CondMenu_OnShow(_)
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-
-  local sLine, sArg, parseConditionals, conditionalArray, foundIndex
-
-  sLine = SimpleMacroMenu.selectedLine
-  sArg = SimpleMacroMenu.selectedArg
-  parseConditionals = SimpleMacroMenu.createParse:getConditionals(sLine, sArg)
-  conditionalArray = table.clone(parseConditionals)
-
-  for menuIndex, menuConditional in ipairs(L.CONDITIONAL_LIST) do
-    G["SM_CondCbox" .. menuIndex]:SetChecked(false)
-
-    if menuConditional.INPUT == true then
-      G["SM_CondCboxInput" .. menuIndex]:SetText("")
-    end
-
-    for i, currentConditional in ipairs(conditionalArray) do
-      if string.find(currentConditional.name, menuConditional.DEFAULT)
-          or (menuConditional.ALTERNATE and string.find(currentConditional.name, menuConditional.ALTERNATE)) then
-        G["SM_CondCbox" .. menuIndex]:SetChecked(true)
-        G["SM_CondCbox" .. menuIndex .. "Text"]:SetText(currentConditional.name)
-
-        if menuConditional.INPUT == true then
-          G["SM_CondCboxInput" .. menuIndex]:SetText(currentConditional.input)
-        end
-
-        foundIndex = i
-        break
-      end
-    end
-
-    if (foundIndex ~= nil) then
-      table.remove(conditionalArray, foundIndex)
-      foundIndex = nil
-
-      if (conditionalArray[1] == nil) then
-        return
-      end
-    end
-  end
-end
-
 function SM_AlternateCheck_OnClick(self)
   local cbox_text
 
@@ -1046,8 +832,4 @@ function SM_CondMenu_OkayButton_OnClick(_)
   end
 
   SM_CreateTab_Update()
-end
-
-function SM_CondMenu_CancelButton_OnClick(self)
-  SM_MenuButton_OnClick(self)
 end

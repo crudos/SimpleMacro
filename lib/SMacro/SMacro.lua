@@ -231,6 +231,7 @@ end
 
 --[[
     SMacro:addArgument
+    SMacro:getArgument
     SMacro:setArgument
     SMacro:removeArgument
     SMacro:getArguments
@@ -252,6 +253,17 @@ function SMacro:addArgument(line_num, argument)
   self.lines[line_num].args.count = new_arg
 
   return new_arg
+end
+
+--[[
+    Gets the text of the specified argument
+
+    params:
+      line_num: row number for the line
+      arg_num: index of the arg
+  ]]
+function SMacro:getArgument(line_num, arg_num)
+  return self.lines[line_num].args[arg_num].arg
 end
 
 --[[
@@ -315,6 +327,7 @@ end
     SMacro:resetConditionals
     SMacro:getConditionals
     SMacro:composeConditionals
+    SMacro:composeAllConditionals
 
   ]]
 
@@ -458,7 +471,8 @@ function SMacro:getConditionals(line_num, arg_num, cond_num)
 end
 
 --[[
-    Retrieve string representation of all conditionals for a given line and argument
+    Retrieve string representation of all conditionals
+    for a given line, argument, and conditional group
 
     params:
       line_num: row number for the line
@@ -493,4 +507,27 @@ function SMacro:composeConditionals(line_num, arg_num, cond_num)
   end
 
   return result
+end
+
+--[[
+    Retrieve string representation of all conditionals
+    for a given line and argument
+
+    params:
+      line_num: row number for the line
+      arg_num: index of the arg
+  ]]
+function SMacro:composeAllConditionals(line_num, arg_num)
+  local condGroups = self.lines[line_num].args[arg_num].conds
+
+  if #condGroups > 0 then
+    local conditionalString = ""
+    for i, _ in ipairs(condGroups) do
+      conditionalString = conditionalString .. self:composeConditionals(line_num, arg_num, i)
+    end
+
+    return conditionalString
+  end
+
+  return ""
 end
