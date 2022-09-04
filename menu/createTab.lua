@@ -104,7 +104,7 @@ function SM_CreateTab_Update()
   local macroMax = SimpleMacroMenu.macroMax
 
   if createSelect then
-    EditMacro(createSelect + macroStart, nil, nil, SimpleMacroMenu.createParse:compose())
+    EditMacro(createSelect + macroStart, nil, nil, SM_CreateTab_GetSelectedMacroParse():compose())
   end
 
   if macroStart == 0 then
@@ -182,20 +182,16 @@ function SM_CreateTab_SelectMacro(id)
 
   SimpleMacroMenu.createSelect = id
   SimpleMacroMenu.selectedLine = 1
-
-  if id then
-    SimpleMacroMenu.createParse = SMacro:new()
-    SimpleMacroMenu.createParse:set(id + SimpleMacroMenu.macroStart)
-  end
 end
 
-function SM_CreateTab_GetSelectedMacro()
+function SM_CreateTab_GetSelectedMacroParse()
   if SimpleMacroMenu.createSelect then
-    SimpleMacroMenu.createParse = SMacro:new()
-    SimpleMacroMenu.createParse:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+    local macro = SMacro:new()
+    macro:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+    return macro
   end
 
-  return SimpleMacroMenu.createParse
+  return nil
 end
 
 function SM_CreateTab_EnableButtons()
@@ -471,7 +467,7 @@ function SM_MacroEditor_Update()
   local curLine, curArg
 
   editorHeight = C["editorHeight"]
-  parsed = SM_CreateTab_GetSelectedMacro()
+  parsed = SM_CreateTab_GetSelectedMacroParse()
 
   for lc = 1, parsed.lines.count, 1 do
     curLine = "SM_MacroEditorLine" .. lc
@@ -574,6 +570,7 @@ function SM_MacroEditor_OnLoad(self)
   G["SM_MacroEditor_AddNewLineData"]:SetText("+ add new line +")
 end
 
+-- TODO delete or re use?
 function MacroEditor_AddNewLine_OnClick(self, _, _)
   SM_NewLineMenu.isEdit = false
 
@@ -583,253 +580,3 @@ function MacroEditor_AddNewLine_OnClick(self, _, _)
   self:Disable()
 end
 
--- Lines
-function SM_NewLineMenu_OnLoad(_)
-  SM_NewLineMenu.isEdit = false
-  SM_NewLineMenu.selectedLine = 1
-end
-
-function SM_NewLineMenu_OnShow(_)
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-  SM_NewLineMenuCategoryDropDown:RefreshValue()
-  SM_NewLineMenuCommandDropDown:RefreshValue()
-end
-
-function SM_CategoryDropDown_OnEvent(self, event, ...)
-  if event == "PLAYER_ENTERING_WORLD" then
-    self.defaultValue = L.LINE_TYPE_TABLE[1].CATEGORY
-    self.value = self.defaultValue
-    self.tooltip = self.defaultValue .. " commands."
-
-    self.SetDefaultValue = function(this)
-      this.value = this.defaultValue
-      UIDropDownMenu_SetSelectedValue(this, this.value)
-      this.tooltip = this.value .. " commands."
-    end
-    self.SetValue = function(this, value)
-      this.value = value
-      UIDropDownMenu_SetSelectedValue(this, value)
-      this.tooltip = value .. " commands."
-    end
-    self.GetValue = function(this)
-      return UIDropDownMenu_GetSelectedValue(this)
-    end
-    self.GetID = function(this)
-      for i = 1, C["maxMacroCategories"] do
-        if this:GetValue() == L.LINE_TYPE_TABLE[i].CATEGORY then
-          return i
-        end
-      end
-    end
-    self.RefreshValue = function(this)
-      UIDropDownMenu_Initialize(this, SM_CategoryDropDown_Initialize)
-      UIDropDownMenu_SetSelectedValue(this, this.value)
-    end
-
-    UIDropDownMenu_SetWidth(self, 120)
-    UIDropDownMenu_Initialize(self, SM_CategoryDropDown_Initialize)
-    UIDropDownMenu_SetSelectedValue(self, self.value)
-
-    G[self:GetName() .. "Label"]:SetText(L.LINE_TYPE_CATEGORY_LABEL)
-    self:UnregisterEvent(event)
-  end
-end
-
-function SM_CategoryDropDown_OnClick(self)
-  SM_NewLineMenuCategoryDropDown:SetValue(self.value)
-
-  local categoryID = SM_NewLineMenuCategoryDropDown:GetID()
-  SM_CommandDropDown_Initialize()
-  SM_NewLineMenuCommandDropDown:SetValue(L.LINE_TYPE_TABLE[categoryID][1].COMMANDS[1])
-end
-
-function SM_CategoryDropDown_Initialize()
-  local selectedValue = SM_NewLineMenuCategoryDropDown:GetValue()
-  local info = UIDropDownMenu_CreateInfo()
-
-  for _, entry in ipairs(L.LINE_TYPE_TABLE) do
-    info.text = entry.CATEGORY
-    info.func = SM_CategoryDropDown_OnClick
-    info.value = entry.CATEGORY
-    if info.value == selectedValue then
-      info.checked = 1
-    else
-      info.checked = nil
-    end
-    info.tooltipTitle = entry.CATEGORY
-    info.tooltipText = entry.CATEGORY .. " commands."
-    UIDropDownMenu_AddButton(info)
-  end
-end
-
-function SM_CommandDropDown_OnEvent(self, event, ...)
-  if event == "PLAYER_ENTERING_WORLD" then
-    self.defaultValue = L.LINE_TYPE_TABLE[1][1].COMMANDS[1]
-    self.value = self.defaultValue
-    self.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
-
-    self.SetDefaultValue = function(this)
-      this.value = this.defaultValue
-      UIDropDownMenu_SetSelectedValue(this, this.value)
-      this.tooltip = L.LINE_TYPE_TABLE[1][1].DESCRIPTION
-    end
-    self.SetValue = function(this, value)
-      local categoryID, commandID
-
-      this.value = value
-      UIDropDownMenu_SetSelectedValue(this, value)
-      categoryID = SM_NewLineMenuCategoryDropDown:GetID()
-      commandID = SM_NewLineMenuCommandDropDown:GetID() or 1
-
-      this.tooltip = L.LINE_TYPE_TABLE[categoryID][commandID].DESCRIPTION
-    end
-    self.GetValue = function(this)
-      return UIDropDownMenu_GetSelectedValue(this)
-    end
-    self.GetID = function(_)
-      local category = SM_NewLineMenuCategoryDropDown:GetID()
-
-      for i = 1, C["maxMacroCommands"] do
-        if L.LINE_TYPE_TABLE[category][i] ~= nil then
-          for _, cmd in pairs(L.LINE_TYPE_TABLE[category][i].COMMANDS) do
-            if SM_NewLineMenuCommandDropDown:GetValue() == cmd then
-              return i
-            end
-          end
-        end
-      end
-    end
-    self.RefreshValue = function(this)
-      UIDropDownMenu_Initialize(this, SM_CommandDropDown_Initialize)
-      UIDropDownMenu_SetSelectedValue(this, this.value)
-    end
-
-    UIDropDownMenu_SetWidth(self, 120)
-    UIDropDownMenu_Initialize(self, SM_CommandDropDown_Initialize)
-    UIDropDownMenu_SetSelectedValue(self, self.value)
-
-    G[self:GetName() .. "Label"]:SetText(L.LINE_TYPE_COMMAND_LABEL)
-    self:UnregisterEvent(event)
-  end
-end
-
-function SM_CommandDropDown_OnClick(self)
-  SM_NewLineMenuCommandDropDown:SetValue(self.value)
-end
-
-function SM_CommandDropDown_Initialize()
-  local categoryID = SM_NewLineMenuCategoryDropDown:GetID()
-  local selectedValue = SM_NewLineMenuCommandDropDown:GetValue()
-  local info = UIDropDownMenu_CreateInfo()
-
-  for _, entry in ipairs(L.LINE_TYPE_TABLE[categoryID]) do
-    info.text = entry.COMMANDS[1]
-    info.func = SM_CommandDropDown_OnClick
-    info.value = entry.COMMANDS[1]
-    if info.value == selectedValue then
-      info.checked = 1
-    else
-      info.checked = nil
-    end
-    info.tooltipTitle = entry.COMMANDS[1]
-    info.tooltipText = entry.DESCRIPTION
-    UIDropDownMenu_AddButton(info)
-  end
-end
-
-local function SM_MenuButton_OnClick(self)
-  HideUIPanel(self:GetParent())
-  SM_CreateTab_Update()
-end
-
-function SM_NewLineMenu_AddArgButton_OnClick(self)
-  local lineNum, newArg
-
-  SM_NewLineMenu_OkayButton_OnClick(SM_NewLineMenu.OkayButton)
-  SM_MacroEditorLine_OnClick(G["SM_MacroEditorLine" .. SimpleMacroMenu.createParse.lines.count], nil, nil)
-  lineNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d)")
-  newArg = SimpleMacroMenu.createParse:addArgument(tonumber(lineNum), "~")
-
-  SM_MenuButton_OnClick(self)
-  SM_MacroEditorArg_OnClick(G["SM_MacroEditorLine" .. lineNum .. "Arg" .. newArg], nil, nil)
-end
-
-function SM_NewLineMenu_CancelButton_OnClick(self)
-  SM_MenuButton_OnClick(self)
-end
-
-function SM_NewLineMenu_OkayButton_OnClick(self)
-  local parsed, newLine, slashOrHash, value
-
-  parsed = SimpleMacroMenu.createParse
-  value = SM_NewLineMenuCommandDropDown:GetValue()
-
-  if SM_NewLineMenuCategoryDropDown:GetValue() == "Metacommands" then
-    slashOrHash = "#"
-  else
-    slashOrHash = "/"
-  end
-
-  if SM_NewLineMenu.isEdit == true then
-    parsed:setCommand(SM_NewLineMenu.selectedLine, slashOrHash .. value)
-  else
-    newLine = parsed:addLine()
-    parsed:setCommand(newLine, slashOrHash .. value)
-  end
-
-  SM_MenuButton_OnClick(self)
-end
-
-function SM_NewLineMenu_DeleteButton_OnClick(self)
-  local lineNum
-
-  lineNum = string.match(SimpleMacroMenu.selectedEditorEntry:GetName(), ".-(%d)")
-  SimpleMacroMenu.createParse:removeLine(tonumber(lineNum))
-
-  SM_MenuButton_OnClick(self)
-end
-
-function SM_AlternateCheck_OnClick(self)
-  local cbox_text
-
-  for cboxNum, cond in ipairs(L.CONDITIONAL_LIST) do
-    cbox_text = G["SM_CondCbox" .. cboxNum .. "Text"]
-
-    if not G["SM_CondCbox" .. cboxNum]:GetChecked() then
-      if self:GetChecked() and cond.ALTERNATE then
-        cbox_text:SetText(cond.ALTERNATE)
-      else
-        cbox_text:SetText(cond.DEFAULT)
-      end
-
-      if cond.INPUT == true then
-        G["SM_CondCboxInput" .. cboxNum]:SetPoint("LEFT", G["SM_CondCbox" .. cboxNum], "RIGHT", cbox_text:GetStringWidth() + 8, 0)
-      end
-    end
-  end
-end
-
-function SM_CondMenu_OkayButton_OnClick(_)
-  local parse, sLine, sArg, input
-
-  sLine = SimpleMacroMenu.selectedLine
-  sArg = SimpleMacroMenu.selectedArg
-  parse = SimpleMacroMenu.createParse
-
-  parse:resetConditionals(sLine, sArg)
-
-  for cboxNum, cond in ipairs(L.CONDITIONAL_LIST) do
-    if G["SM_CondCbox" .. cboxNum]:GetChecked() then
-
-      if cond.INPUT == true then
-        input = G["SM_CondCboxInput" .. cboxNum]:GetText()
-      else
-        input = nil
-      end
-
-      parse:addConditional(sLine, sArg, G["SM_CondCbox" .. cboxNum .. "Text"]:GetText(), input)
-    end
-  end
-
-  SM_CreateTab_Update()
-end
