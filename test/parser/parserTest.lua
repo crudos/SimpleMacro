@@ -6,13 +6,13 @@ if WoWUnit ~= nil then
   local mockEmptyConditional = '/focus [@mouseover, exists, nodead] ; []'
 
   function SMacroTest:ParseLinesTest()
-    lines = parse_lines(mockBody)
+    local lines = parse_lines(mockBody)
 
     AreEqual(2, lines.count)
   end
 
   function SMacroTest:ParseLinesEmptyConditionalTest()
-    lines = parse_lines(mockEmptyConditional)
+    local lines = parse_lines(mockEmptyConditional)
 
     AreEqual(1, lines.count)
   end

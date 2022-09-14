@@ -332,5 +332,8 @@ function SimpleMacroEditorPopup_Update()
     for i, _ in ipairs(conditionalGroups) do
       createConditionalGroupButton(SimpleMacroEditorPopup.AddConditionalGroupButton, i)
     end
+  else
+    SimpleMacroEditorPopup.ArgumentEditBox:SetText("")
+    SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
   end
 end

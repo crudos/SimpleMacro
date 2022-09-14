@@ -4,13 +4,15 @@ if WoWUnit ~= nil then
   local mockBody = '#showtooltip [equipped:Two-Hand] 16; [noequipped:Two-Hand] 17\n/equipset [noequipped:Two-Hand] 2h; [equipped:Two-Hand] 1hsh'
 
   function mockGetMacroInfo(id)
-    if (id == 123) then
+    if id == 123 then
       return '', '', mockBody
+    elseif id == 111 then
+      return '', '', 'bad macro text'
     end
     return nil
   end
 
-  function SMacroTest:ComposeTest()
+  function SMacroTest:SetTest()
     Replace('GetMacroInfo', mockGetMacroInfo)
     local macro = SMacro:new()
     macro:set(123)
@@ -18,11 +20,18 @@ if WoWUnit ~= nil then
     AreEqual(mockBody, macro:compose())
   end
 
+  function SMacroTest:SetHandlesErrorTest()
+    local macro = SMacro:new()
+    macro:set(111)
+
+    IsFalse(macro:compose())
+  end
+
   function SMacroTest:AddLineTest()
     local macro = SMacro:new()
     macro:addLine()
 
-    AreEqual('', macro:getLine(1))
+    AreEqual('/cast ', macro:getLine(1))
   end
 
   function SMacroTest:RemoveLineTest()

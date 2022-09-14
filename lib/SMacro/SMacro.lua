@@ -31,9 +31,17 @@ end
    ]]
 function SMacro:set(macro_id)
   local _, _, body = GetMacroInfo(macro_id)
-  self.lines = L['parse_lines'](body)
+  local success, ret = pcall(L['parse_lines'], body)
+
+  if success then
+    self.lines = ret
+  else
+    print('ERROR in parse_lines:')
+    print(ret)
+  end
+
   self.id = macro_id
-end
+  end
 
 --[[
    Returns macro id
@@ -52,7 +60,7 @@ end
 function SMacro:compose()
   local lines = self.lines
 
-  if lines[1] == nil then
+  if lines == nil or lines[1] == nil then
     return nil
   end
 
@@ -121,8 +129,8 @@ function SMacro:addLine()
   local new_line = self.lines.count + 1
 
   self.lines[new_line] = {}
-  self.lines[new_line].type = ""
-  self.lines[new_line].cmd = L.LINE_TYPE_TABLE.NONE
+  self.lines[new_line].type = "/" -- DEFAULT to /cast
+  self.lines[new_line].cmd = "cast"
   self.lines.count = new_line
 
   self.lines[new_line].args = {}
@@ -192,7 +200,7 @@ function SMacro:getLine(line_num)
     local conditionalGroups = currentArgument.conds
 
     -- add conditionals if they exist
-    if #conditionalGroups > 0 then
+    if conditionalGroups and #conditionalGroups > 0 then
       for _, conditionals in ipairs(conditionalGroups) do
         if #conditionals > 0 then
           body = body .. '['
@@ -244,6 +252,8 @@ end
     params:
       line_num: row number for the line
       argument: text of argument
+    returns:
+      string: text of added argument
   ]]
 function SMacro:addArgument(line_num, argument)
   local new_arg = self.lines[line_num].args.count + 1
@@ -261,6 +271,8 @@ end
     params:
       line_num: row number for the line
       arg_num: index of the arg
+    returns:
+      string: text of argument
   ]]
 function SMacro:getArgument(line_num, arg_num)
   return self.lines[line_num].args[arg_num].arg
@@ -273,11 +285,16 @@ end
       line_num: row number for the line
       arg_num: index of the arg
       argument: text of argument
+    returns:
+      boolean: if the argument was set
   ]]
 function SMacro:setArgument(line_num, arg_num, argument)
   if self.lines[line_num].args[arg_num] ~= nil then
     self.lines[line_num].args[arg_num].arg = argument
+    return true
   end
+
+  return false
 end
 
 --[[
@@ -286,6 +303,8 @@ end
     params:
       line_num: row number for the line
       arg_num: index of the arg
+    returns:
+      boolean: if the argument was removed
   ]]
 function SMacro:removeArgument(line_num, arg_num)
   local arguments, arg_count, isRemoved
@@ -313,6 +332,8 @@ end
 
     params:
       line_num: row number for the line
+    returns:
+      table: arguments for this line
   ]]
 function SMacro:getArguments(line_num)
   return self.lines[line_num].args

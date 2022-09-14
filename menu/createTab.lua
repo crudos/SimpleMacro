@@ -96,23 +96,23 @@ function SMCreateButtons_OnLoad(self)
 end
 
 function SM_CreateTab_Update()
-  local numAccountMacros, numCharacterMacros = GetNumMacros()
-  local macroButtonName, macroButton, macroIcon, macroName
-  local name, texture, body
   local createSelect = SimpleMacroMenu.createSelect
   local macroStart = SimpleMacroMenu.macroStart
-  local macroMax = SimpleMacroMenu.macroMax
-
+  local currentMacro = SM_CreateTab_GetCurrentMacro()
   if createSelect then
-    EditMacro(createSelect + macroStart, nil, nil, SM_CreateTab_GetSelectedMacroParse():compose())
+    EditMacro(createSelect + macroStart, nil, nil, currentMacro:compose())
   end
 
+  local numAccountMacros, numCharacterMacros = GetNumMacros()
+  local numMacros
   if macroStart == 0 then
     numMacros = numAccountMacros
   else
     numMacros = numCharacterMacros
   end
 
+  local macroButtonName, macroButton, macroIcon, macroName
+  local macroMax = SimpleMacroMenu.macroMax
   for i = 1, MAX_ACCOUNT_MACROS do
     macroButtonName = "SMCreateButton" .. i
     macroButton = G[macroButtonName]
@@ -121,7 +121,7 @@ function SM_CreateTab_Update()
 
     if i <= macroMax then
       if i <= numMacros then
-        name, texture, body = GetMacroInfo(i + macroStart)
+        local name, texture, _ = GetMacroInfo(i + macroStart)
         macroIcon:SetTexture(texture)
         macroName:SetText(name)
         macroButton:Enable()
@@ -180,18 +180,29 @@ function SM_CreateTab_SelectMacro(id)
     SimpleMacroMenu.selectedEditorEntry:UnlockHighlight()
   end
 
-  SimpleMacroMenu.createSelect = id
-  SimpleMacroMenu.selectedLine = 1
+  SM_CreateTab_SetCurrentMacro(id)
 end
 
-function SM_CreateTab_GetSelectedMacroParse()
-  if SimpleMacroMenu.createSelect then
-    local macro = SMacro:new()
-    macro:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
-    return macro
-  end
+function SM_CreateTab_SetCurrentMacro(id)
+  SimpleMacroMenu.createSelect = id
+  SimpleMacroMenu.selectedLine = 1
 
-  return nil
+  local currentMacro = SMacro:new()
+  currentMacro:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+  SimpleMacroMenu.currentMacro = currentMacro
+end
+
+function SM_CreateTab_GetCurrentMacro()
+  if SimpleMacroMenu.currentMacro then
+    return SimpleMacroMenu.currentMacro
+  elseif SimpleMacroMenu.createSelect then
+    local currentMacro = SMacro:new()
+    currentMacro:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+    SimpleMacroMenu.currentMacro = currentMacro
+    return currentMacro
+  else
+    return nil
+  end
 end
 
 function SM_CreateTab_EnableButtons()
@@ -463,13 +474,10 @@ local function unlockHighlight(editorEntry)
 end
 
 function SM_MacroEditor_Update()
-  local parsed, macroEditorLine, macroEditorArg, editorHeight
-  local curLine, curArg
-
-  editorHeight = C["editorHeight"]
-  parsed = SM_CreateTab_GetSelectedMacroParse()
-
-  for lc = 1, parsed.lines.count, 1 do
+  local currentMacro = SM_CreateTab_GetCurrentMacro()
+  local curLine, macroEditorLine
+  local editorHeight = C["editorHeight"]
+  for lc = 1, currentMacro.lines.count, 1 do
     curLine = "SM_MacroEditorLine" .. lc
     if G[curLine] == nil then
       macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
@@ -484,11 +492,12 @@ function SM_MacroEditor_Update()
       macroEditorLine:Show()
     end
 
-    G[curLine .. "Data"]:SetText(parsed:getCommand(lc))
+    G[curLine .. "Data"]:SetText(currentMacro:getCommand(lc))
     macroEditorLine:SetSize(G[curLine .. "Data"]:GetStringWidth(), editorHeight)
     macroEditorLine:SetID(lc)
 
-    for ac = 1, parsed.lines[lc].args.count do
+    local curArg, macroEditorArg
+    for ac = 1, currentMacro.lines[lc].args.count do
       curArg = curLine .. "Arg" .. ac
       if G[curArg] == nil then
         macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
@@ -497,7 +506,7 @@ function SM_MacroEditor_Update()
         macroEditorArg:Show()
       end
 
-      local argumentWithConditionals = parsed:composeAllConditionals(lc, ac) .. ' ' .. parsed:getArgument(lc, ac)
+      local argumentWithConditionals = currentMacro:composeAllConditionals(lc, ac) .. ' ' .. currentMacro:getArgument(lc, ac)
       G[curArg .. "Data"]:SetText(argumentWithConditionals)
       macroEditorArg:SetSize(G[curArg .. "Data"]:GetStringWidth(), editorHeight)
       macroEditorArg:SetID(ac)
@@ -511,10 +520,10 @@ function SM_MacroEditor_Update()
       end
     end
 
-    SM_HideEditorArgs(curLine .. "Arg", parsed.lines[lc].args.count + 1)
+    SM_HideEditorArgs(curLine .. "Arg", currentMacro.lines[lc].args.count + 1)
   end
 
-  SM_HideEditorLines(parsed.lines.count + 1)
+  SM_HideEditorLines(currentMacro.lines.count + 1)
   unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
 end
 
@@ -570,13 +579,11 @@ function SM_MacroEditor_OnLoad(self)
   G["SM_MacroEditor_AddNewLineData"]:SetText("+ add new line +")
 end
 
--- TODO delete or re use?
 function MacroEditor_AddNewLine_OnClick(self, _, _)
-  SM_NewLineMenu.isEdit = false
-
-  SM_NewLineMenuCategoryDropDown:SetDefaultValue()
-  SM_NewLineMenuCommandDropDown:SetDefaultValue()
-  ShowUIPanel(SM_NewLineMenu)
-  self:Disable()
+  print('onclick')
+  local currentMacro = SM_CreateTab_GetCurrentMacro()
+  currentMacro:addLine()
+  print(currentMacro:compose())
+  SM_CreateTab_Update()
 end
 
