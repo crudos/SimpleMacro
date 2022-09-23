@@ -168,19 +168,9 @@ function SM_CreateTab_Update()
 end
 
 function SM_CreateTab_SelectMacro(id)
-  if SimpleMacroMenu.selectedLine then
-    if G["LineEntry" .. SimpleMacroMenu.selectedLine] then
-      G["LineEntry" .. SimpleMacroMenu.selectedLine].highlight:SetVertexColor(0.196, 0.388, 0.8) -- default highlight color, light blue
-      G["LineEntry" .. SimpleMacroMenu.selectedLine]:UnlockHighlight()
-    end
-  end
-
-  if SimpleMacroMenu.selectedEditorEntry ~= nil then
-    SimpleMacroMenu.selectedEditorEntry.highlight:SetVertexColor(0.196, 0.388, 0.8) -- default highlight color, light blue
-    SimpleMacroMenu.selectedEditorEntry:UnlockHighlight()
-  end
-
   SM_CreateTab_SetCurrentMacro(id)
+  SM_MacroEditor_UnlockHighlights()
+  HideUIPanel(SimpleMacroEditorPopup)
 end
 
 function SM_CreateTab_SetCurrentMacro(id)
@@ -434,16 +424,18 @@ function SimpleMacroChangeMenuOkay_OnClick(_)
   SimpleMacroChangeMenu:Hide()
 end
 
--- Macro editor
+
+--[[
+  Macro edit box
+
+  ]]
+
 local function SM_HideEditorLines(num)
-  local lc, ac
-
-  lc = num
-
+  local lc = num
   while G["SM_MacroEditorLine" .. lc] do
     G["SM_MacroEditorLine" .. lc]:Hide()
 
-    ac = 1
+    local ac = 1
     while G["SM_MacroEditorLine" .. lc .. "Arg" .. ac] do
       G["SM_MacroEditorLine" .. lc .. "Arg" .. ac]:Hide()
 
@@ -473,64 +465,88 @@ local function unlockHighlight(editorEntry)
   end
 end
 
-function SM_MacroEditor_Update()
-  local currentMacro = SM_CreateTab_GetCurrentMacro()
-  local curLine, macroEditorLine
-  local editorHeight = C["editorHeight"]
-  for lc = 1, currentMacro.lines.count, 1 do
-    curLine = "SM_MacroEditorLine" .. lc
-    if G[curLine] == nil then
-      macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
-
-      if lc == 1 then
-        macroEditorLine:SetPoint("TOPLEFT", SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
-      else
-        macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine" .. (lc - 1), "BOTTOMLEFT", 0, 0)
-      end
-    else
-      macroEditorLine = G[curLine]
-      macroEditorLine:Show()
-    end
-
-    G[curLine .. "Data"]:SetText(currentMacro:getCommand(lc))
-    macroEditorLine:SetSize(G[curLine .. "Data"]:GetStringWidth(), editorHeight)
-    macroEditorLine:SetID(lc)
-
-    local curArg, macroEditorArg
-    for ac = 1, currentMacro.lines[lc].args.count do
-      curArg = curLine .. "Arg" .. ac
-      if G[curArg] == nil then
-        macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
-      else
-        macroEditorArg = G[curArg]
-        macroEditorArg:Show()
-      end
-
-      local argumentWithConditionals = currentMacro:composeAllConditionals(lc, ac) .. ' ' .. currentMacro:getArgument(lc, ac)
-      G[curArg .. "Data"]:SetText(argumentWithConditionals)
-      macroEditorArg:SetSize(G[curArg .. "Data"]:GetStringWidth(), editorHeight)
-      macroEditorArg:SetID(ac)
-
-      if ac == 1 then
-        macroEditorArg:SetPoint("LEFT", curLine, "RIGHT", 3, 0)
-      else
-        macroEditorArg:SetPoint("LEFT", curLine .. "Arg" .. (ac - 1), "RIGHT", 3, 0)
-        G[curLine .. "Arg" .. (ac - 1) .. "Data"]:SetText(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetText() .. ";")
-        G[curLine .. "Arg" .. (ac - 1)]:SetSize(G[curLine .. "Arg" .. (ac - 1) .. "Data"]:GetStringWidth(), editorHeight)
-      end
-    end
-
-    SM_HideEditorArgs(curLine .. "Arg", currentMacro.lines[lc].args.count + 1)
-  end
-
-  SM_HideEditorLines(currentMacro.lines.count + 1)
-  unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
-end
-
 local function lockHighlight(editorEntry)
   editorEntry.highlight:SetVertexColor(1, 1, 0, 0.6) -- selectedLine, yellow
   editorEntry:LockHighlight()
   SimpleMacroMenu.selectedEditorEntry = editorEntry
+end
+
+function SM_MacroEditor_UnlockHighlights()
+  if SimpleMacroMenu.selectedLine and G["LineEntry" .. SimpleMacroMenu.selectedLine] then
+    unlockHighlight(G["LineEntry" .. SimpleMacroMenu.selectedLine])
+  end
+
+  if SimpleMacroMenu.selectedEditorEntry ~= nil then
+    unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
+  end
+end
+
+function SM_MacroEditor_CreateLineFrame(lineNum)
+  local macroEditorLine
+  local curLine = "SM_MacroEditorLine" .. lineNum
+  if G[curLine] == nil then
+    macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
+
+    if lineNum == 1 then
+      macroEditorLine:SetPoint("TOPLEFT", SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
+    else
+      macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine" .. (lineNum - 1), "BOTTOMLEFT", 0, 0)
+    end
+  else
+    macroEditorLine = G[curLine]
+    macroEditorLine:Show()
+  end
+
+  local currentMacro = SM_CreateTab_GetCurrentMacro()
+  G[curLine .. "Data"]:SetText(currentMacro:getCommand(lineNum))
+  macroEditorLine:SetSize(G[curLine .. "Data"]:GetStringWidth(), C["editorHeight"])
+  macroEditorLine:SetID(lineNum)
+
+  return curLine
+end
+
+function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
+  local macroEditorArg
+  local curArg = currentLine .. "Arg" .. argumentNum
+  if G[curArg] == nil then
+    macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
+  else
+    macroEditorArg = G[curArg]
+    macroEditorArg:Show()
+  end
+
+  local currentMacro = SM_CreateTab_GetCurrentMacro()
+  local argumentWithConditionals = currentMacro:composeAllConditionals(lineNum, argumentNum) .. ' ' .. currentMacro:getArgument(lineNum, argumentNum)
+  G[curArg .. "Data"]:SetText(argumentWithConditionals)
+  macroEditorArg:SetSize(G[curArg .. "Data"]:GetStringWidth(), C["editorHeight"])
+  macroEditorArg:SetID(argumentNum)
+
+  if argumentNum == 1 then
+    macroEditorArg:SetPoint("LEFT", currentLine, "RIGHT", 2, 0)
+  else
+    local previousArg = currentLine .. "Arg" .. (argumentNum - 1)
+    macroEditorArg:SetPoint("LEFT", previousArg, "RIGHT", 2, 0)
+    G[previousArg .. "Data"]:SetText(G[previousArg .. "Data"]:GetText() .. ";")
+    G[previousArg]:SetSize(G[previousArg .. "Data"]:GetStringWidth(), C["editorHeight"])
+  end
+
+  return curArg
+end
+
+function SM_MacroEditor_Update()
+  local currentMacro = SM_CreateTab_GetCurrentMacro()
+  for lc = 1, currentMacro.lines.count, 1 do
+    local currentLine = SM_MacroEditor_CreateLineFrame(lc)
+
+    for ac = 1, currentMacro.lines[lc].args.count do
+      SM_MacroEditor_CreateArgumentFrame(currentLine, lc, ac)
+    end
+
+    SM_HideEditorArgs(currentLine .. "Arg", currentMacro.lines[lc].args.count + 1)
+  end
+
+  SM_HideEditorLines(currentMacro.lines.count + 1)
+  unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
 end
 
 local function SM_MacroEditor_OnClick(self)
@@ -567,11 +583,9 @@ function SM_MacroEditorArg_OnClick(self, _, _)
 end
 
 function SM_MacroEditor_OnLoad(self)
-  local addLineFrame, height, width
+  local width, _ = self:GetSize()
 
-  width, height = self:GetSize()
-
-  addLineFrame = CreateFrame("CheckButton", "SM_MacroEditor_AddNewLine", self, "SM_MacroEditorLineEntryTemplate")
+  local addLineFrame = CreateFrame("CheckButton", "SM_MacroEditor_AddNewLine", self, "SM_MacroEditorLineEntryTemplate")
   addLineFrame:SetPoint("BOTTOM", self:GetParent(), "BOTTOM", 0, 0)
   addLineFrame:SetSize(width, 16)
   addLineFrame:SetScript("OnClick", MacroEditor_AddNewLine_OnClick)
@@ -579,11 +593,9 @@ function SM_MacroEditor_OnLoad(self)
   G["SM_MacroEditor_AddNewLineData"]:SetText("+ add new line +")
 end
 
-function MacroEditor_AddNewLine_OnClick(self, _, _)
-  print('onclick')
+function MacroEditor_AddNewLine_OnClick(_, _, _)
   local currentMacro = SM_CreateTab_GetCurrentMacro()
   currentMacro:addLine()
-  print(currentMacro:compose())
   SM_CreateTab_Update()
 end
 

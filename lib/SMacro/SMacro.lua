@@ -66,7 +66,7 @@ function SMacro:compose()
 
   local result = ""
   for i = 1, lines.count, 1 do
-    result = result .. self:getLine(i)
+    result = result .. self:composeLine(i)
 
     if i ~= lines.count then
       result = result .. "\n" -- add newlines after each line until the last
@@ -117,7 +117,7 @@ end
 --[[
     SMacro:addLine
     SMacro:removeLine
-    SMacro:getLine
+    SMacro:composeLine
 
   ]]
 
@@ -174,15 +174,17 @@ end
 
     params:
       line_num: row number for the line
+    returns:
+      string: text representing line
   ]]
-function SMacro:getLine(line_num)
+function SMacro:composeLine(line_num)
   local body, lines, currentLine
 
   body = ''
   lines = self.lines
   currentLine = lines[line_num]
 
-  if (currentLine == nil) then
+  if currentLine == nil then
     return nil
   end
 
@@ -190,7 +192,7 @@ function SMacro:getLine(line_num)
     body = body .. currentLine.type
 
     if currentLine.cmd then
-      body = body .. currentLine.cmd .. ' '
+      body = body .. currentLine.cmd
     end
   end
 
@@ -203,10 +205,10 @@ function SMacro:getLine(line_num)
     if conditionalGroups and #conditionalGroups > 0 then
       for _, conditionals in ipairs(conditionalGroups) do
         if #conditionals > 0 then
-          body = body .. '['
+          body = body .. ' ['
 
           for j, currentConditional in ipairs(conditionals) do
-            if (currentConditional == nil) then
+            if currentConditional == nil then
               body = body .. ''
             else
               body = body .. currentConditional.name
@@ -230,7 +232,7 @@ function SMacro:getLine(line_num)
     body = body .. " " .. currentArgument.arg
 
     if ac ~= currentLine.args.count then
-      body = body .. '; ' -- add semicolons after each arg until the last
+      body = body .. ';' -- add semicolons after each arg until the last
     end
   end
 

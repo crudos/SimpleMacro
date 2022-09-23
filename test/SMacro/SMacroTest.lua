@@ -31,7 +31,7 @@ if WoWUnit ~= nil then
     local macro = SMacro:new()
     macro:addLine()
 
-    AreEqual('/cast ', macro:getLine(1))
+    AreEqual('/cast', macro:composeLine(1))
   end
 
   function SMacroTest:RemoveLineTest()
@@ -39,7 +39,7 @@ if WoWUnit ~= nil then
     macro:addLine()
     macro:removeLine(1)
 
-    IsFalse(macro:getLine(1))
+    IsFalse(macro:composeLine(1))
   end
 
   function SMacroTest:SetArgumentTest()
