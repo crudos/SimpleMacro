@@ -40,7 +40,7 @@ L["GLOBAL_STRING"]["CHANGE_TARGET"] = "Change Target"
 
 local function loadGlobalStrings()
   for i, j in pairs(L["GLOBAL_STRING"]) do
-    G["SIMPLE_MACRO_STRING_" .. i] = j
+    G["SIMPLE_MACRO_STRING_"..i] = j
   end
 end
 

@@ -83,14 +83,14 @@ function SMCreateButtons_OnLoad(self)
   local macrosPerRow = C["macrosPerRow"]
 
   for i = 1, MAX_ACCOUNT_MACROS do
-    button = CreateFrame("CheckButton", "SMCreateButton" .. i, self, "SimpleMacroButtonTemplate")
+    button = CreateFrame("CheckButton", "SMCreateButton"..i, self, "SimpleMacroButtonTemplate")
     button:SetID(i)
     if i == 1 then
       button:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -6)
     elseif mod(i, macrosPerRow) == 1 then
-      button:SetPoint("TOP", "SMCreateButton" .. (i - macrosPerRow), "BOTTOM", 0, -10);
+      button:SetPoint("TOP", "SMCreateButton"..(i - macrosPerRow), "BOTTOM", 0, -10);
     else
-      button:SetPoint("LEFT", "SMCreateButton" .. (i - 1), "RIGHT", 13, 0);
+      button:SetPoint("LEFT", "SMCreateButton"..(i - 1), "RIGHT", 13, 0);
     end
   end
 end
@@ -114,10 +114,10 @@ function SM_CreateTab_Update()
   local macroButtonName, macroButton, macroIcon, macroName
   local macroMax = SimpleMacroMenu.macroMax
   for i = 1, MAX_ACCOUNT_MACROS do
-    macroButtonName = "SMCreateButton" .. i
+    macroButtonName = "SMCreateButton"..i
     macroButton = G[macroButtonName]
-    macroIcon = G[macroButtonName .. "Icon"]
-    macroName = G[macroButtonName .. "Name"]
+    macroIcon = G[macroButtonName.."Icon"]
+    macroName = G[macroButtonName.."Name"]
 
     if i <= macroMax then
       if i <= numMacros then
@@ -170,7 +170,7 @@ end
 function SM_CreateTab_SelectMacro(id)
   SM_CreateTab_SetCurrentMacro(id)
   SM_MacroEditor_UnlockHighlights()
-  HideUIPanel(SimpleMacroEditorPopup)
+  SimpleMacroEditorPopup:Close()
 end
 
 function SM_CreateTab_SetCurrentMacro(id)
@@ -249,25 +249,23 @@ function SimpleMacroChangeMenu_OnLoad(_)
 end
 
 function SimpleMacro_IconScrollFrame_OnLoad(self)
-  G[self:GetName() .. "ScrollBar"].scrollStep = C["iconRowHeight"]
+  G[self:GetName().."ScrollBar"].scrollStep = C["iconRowHeight"]
 end
 
 function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
-  local button
-
   for i = 1, totalButtons do
-    button = CreateFrame("CheckButton", name .. i, frame, "SimpleMacroButtonTemplate")
+    local button = CreateFrame("CheckButton", name..i, frame, "SimpleMacroButtonTemplate")
     button:SetID(i)
     if i == 1 then
       button:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
     elseif mod(i, buttonsPerRow) == 1 then
-      button:SetPoint("TOP", name .. (i - buttonsPerRow), "BOTTOM", 0, -10)
+      button:SetPoint("TOP", name..(i - buttonsPerRow), "BOTTOM", 0, -10)
 
       if totalButtons - buttonsPerRow < i then
-        SimpleMacroMenu[name .. "LastRow"] = button:GetName()
+        SimpleMacroMenu[name.."LastRow"] = button:GetName()
       end
     else
-      button:SetPoint("LEFT", name .. (i - 1), "RIGHT", 13, 0)
+      button:SetPoint("LEFT", name..(i - 1), "RIGHT", 13, 0)
     end
   end
 end
@@ -287,7 +285,7 @@ function SM_ChangeMenu_NameChanged(self)
 end
 
 function SM_ChangeMenu_SelectIcon(id, texture)
-  SimpleMacroMenu.selectedTexture = texture or G["SMIconButton" .. id .. "Icon"]:GetTexture()
+  SimpleMacroMenu.selectedTexture = texture or G["SMIconButton"..id.."Icon"]:GetTexture()
 end
 
 function SimpleMacroChangeMenu_OnShow(_)
@@ -334,16 +332,16 @@ local function SimpleMacro_ArrangeButtons(frame, name, prevOffset, offset, numRo
     return
   end
 
-  local newLeader = G[name .. (offsetMod * numPerRow + 1)]
+  local newLeader = G[name..(offsetMod * numPerRow + 1)]
   local _, follower, _, _, _ = newLeader:GetPoint("TOP")
   newLeader:ClearAllPoints()
 
-  local prevLeader = G[name .. (prevOffsetMod * numPerRow + 1)]
+  local prevLeader = G[name..(prevOffsetMod * numPerRow + 1)]
   prevLeader:ClearAllPoints()
 
   newLeader:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
-  prevLeader:SetPoint("TOP", G[SimpleMacroMenu[name .. "LastRow"]], "BOTTOM", 0, -10)
-  SimpleMacroMenu[name .. "LastRow"] = follower:GetName()
+  prevLeader:SetPoint("TOP", G[SimpleMacroMenu[name.."LastRow"]], "BOTTOM", 0, -10)
+  SimpleMacroMenu[name.."LastRow"] = follower:GetName()
 end
 
 function SimpleMacroChangeMenu_Update()
@@ -362,9 +360,9 @@ function SimpleMacroChangeMenu_Update()
   for i = 1, numIconFrames do
     local index = i + offset * iconsPerRow
     local indexMod = mod(index - 1, numIconFrames) + 1
-    buttonName = "SMIconButton" .. indexMod
+    buttonName = "SMIconButton"..indexMod
     button = G[buttonName]
-    buttonIcon = G[buttonName .. "Icon"]
+    buttonIcon = G[buttonName.."Icon"]
 
     local texture = iconTable[i + offset * iconsPerRow]
     if index <= #iconTable then
@@ -432,15 +430,15 @@ end
 
 local function SM_HideEditorLines(num)
   local lc = num
-  while G["SM_MacroEditorLine" .. lc] do
-    G["SM_MacroEditorLine" .. lc]:Hide()
+  while G["SM_MacroEditorLine"..lc] do
+    G["SM_MacroEditorLine"..lc]:Hide()
 
     local ac = 1
-    while G["SM_MacroEditorLine" .. lc .. "Arg" .. ac] do
-      G["SM_MacroEditorLine" .. lc .. "Arg" .. ac]:Hide()
+    while G["SM_MacroEditorLine"..lc.."Arg"..ac] do
+      G["SM_MacroEditorLine"..lc.."Arg"..ac]:Hide()
 
-      if G["SM_MacroEditorLine" .. lc .. "Arg" .. ac .. "Conds"] then
-        G["SM_MacroEditorLine" .. lc .. "Arg" .. ac .. "Conds"]:Hide()
+      if G["SM_MacroEditorLine"..lc.."Arg"..ac.."Conds"] then
+        G["SM_MacroEditorLine"..lc.."Arg"..ac.."Conds"]:Hide()
       end
 
       ac = ac + 1
@@ -452,8 +450,8 @@ end
 
 local function SM_HideEditorArgs(entry_name, num)
   local ac = num
-  while G[entry_name .. ac] do
-    G[entry_name .. ac]:Hide()
+  while G[entry_name..ac] do
+    G[entry_name..ac]:Hide()
     ac = ac + 1
   end
 end
@@ -472,8 +470,8 @@ local function lockHighlight(editorEntry)
 end
 
 function SM_MacroEditor_UnlockHighlights()
-  if SimpleMacroMenu.selectedLine and G["LineEntry" .. SimpleMacroMenu.selectedLine] then
-    unlockHighlight(G["LineEntry" .. SimpleMacroMenu.selectedLine])
+  if SimpleMacroMenu.selectedLine and G["LineEntry"..SimpleMacroMenu.selectedLine] then
+    unlockHighlight(G["LineEntry"..SimpleMacroMenu.selectedLine])
   end
 
   if SimpleMacroMenu.selectedEditorEntry ~= nil then
@@ -483,14 +481,14 @@ end
 
 function SM_MacroEditor_CreateLineFrame(lineNum)
   local macroEditorLine
-  local curLine = "SM_MacroEditorLine" .. lineNum
+  local curLine = "SM_MacroEditorLine"..lineNum
   if G[curLine] == nil then
     macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
 
     if lineNum == 1 then
       macroEditorLine:SetPoint("TOPLEFT", SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
     else
-      macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine" .. (lineNum - 1), "BOTTOMLEFT", 0, 0)
+      macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine"..(lineNum - 1), "BOTTOMLEFT", 0, 0)
     end
   else
     macroEditorLine = G[curLine]
@@ -498,8 +496,8 @@ function SM_MacroEditor_CreateLineFrame(lineNum)
   end
 
   local currentMacro = SM_CreateTab_GetCurrentMacro()
-  G[curLine .. "Data"]:SetText(currentMacro:getCommand(lineNum))
-  macroEditorLine:SetSize(G[curLine .. "Data"]:GetStringWidth(), C["editorHeight"])
+  G[curLine.."Data"]:SetText(currentMacro:getCommand(lineNum))
+  macroEditorLine:SetSize(G[curLine.."Data"]:GetStringWidth(), C["editorHeight"])
   macroEditorLine:SetID(lineNum)
 
   return curLine
@@ -507,7 +505,7 @@ end
 
 function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   local macroEditorArg
-  local curArg = currentLine .. "Arg" .. argumentNum
+  local curArg = currentLine.."Arg"..argumentNum
   if G[curArg] == nil then
     macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
   else
@@ -516,18 +514,18 @@ function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   end
 
   local currentMacro = SM_CreateTab_GetCurrentMacro()
-  local argumentWithConditionals = currentMacro:composeAllConditionals(lineNum, argumentNum) .. ' ' .. currentMacro:getArgument(lineNum, argumentNum)
-  G[curArg .. "Data"]:SetText(argumentWithConditionals)
-  macroEditorArg:SetSize(G[curArg .. "Data"]:GetStringWidth(), C["editorHeight"])
+  local argumentWithConditionals = currentMacro:composeAllConditionals(lineNum, argumentNum)..' '..currentMacro:getArgument(lineNum, argumentNum)
+  G[curArg.."Data"]:SetText(argumentWithConditionals)
+  macroEditorArg:SetSize(G[curArg.."Data"]:GetStringWidth(), C["editorHeight"])
   macroEditorArg:SetID(argumentNum)
 
   if argumentNum == 1 then
     macroEditorArg:SetPoint("LEFT", currentLine, "RIGHT", 2, 0)
   else
-    local previousArg = currentLine .. "Arg" .. (argumentNum - 1)
+    local previousArg = currentLine.."Arg"..(argumentNum - 1)
     macroEditorArg:SetPoint("LEFT", previousArg, "RIGHT", 2, 0)
-    G[previousArg .. "Data"]:SetText(G[previousArg .. "Data"]:GetText() .. ";")
-    G[previousArg]:SetSize(G[previousArg .. "Data"]:GetStringWidth(), C["editorHeight"])
+    G[previousArg.."Data"]:SetText(G[previousArg.."Data"]:GetText()..";")
+    G[previousArg]:SetSize(G[previousArg.."Data"]:GetStringWidth(), C["editorHeight"])
   end
 
   return curArg
@@ -542,7 +540,7 @@ function SM_MacroEditor_Update()
       SM_MacroEditor_CreateArgumentFrame(currentLine, lc, ac)
     end
 
-    SM_HideEditorArgs(currentLine .. "Arg", currentMacro.lines[lc].args.count + 1)
+    SM_HideEditorArgs(currentLine.."Arg", currentMacro.lines[lc].args.count + 1)
   end
 
   SM_HideEditorLines(currentMacro.lines.count + 1)

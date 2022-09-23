@@ -66,10 +66,10 @@ function SMacro:compose()
 
   local result = ""
   for i = 1, lines.count, 1 do
-    result = result .. self:composeLine(i)
+    result = result..self:composeLine(i)
 
     if i ~= lines.count then
-      result = result .. "\n" -- add newlines after each line until the last
+      result = result.."\n" -- add newlines after each line until the last
     end
   end
 
@@ -101,7 +101,7 @@ end
       line_num: the line number of the command
   ]]
 function SMacro:getCommand(line_num)
-  return self.lines[line_num].type .. self.lines[line_num].cmd
+  return self.lines[line_num].type..self.lines[line_num].cmd
 end
 
 --[[
@@ -111,7 +111,7 @@ end
       line_num: the line number of the command
   ]]
 function SMacro:getCommandType(line_num)
-  return self.lines[line_num].type .. self.lines[line_num].type
+  return self.lines[line_num].type..self.lines[line_num].type
 end
 
 --[[
@@ -189,10 +189,10 @@ function SMacro:composeLine(line_num)
   end
 
   if currentLine.type then
-    body = body .. currentLine.type
+    body = body..currentLine.type
 
     if currentLine.cmd then
-      body = body .. currentLine.cmd
+      body = body..currentLine.cmd
     end
   end
 
@@ -205,34 +205,34 @@ function SMacro:composeLine(line_num)
     if conditionalGroups and #conditionalGroups > 0 then
       for _, conditionals in ipairs(conditionalGroups) do
         if #conditionals > 0 then
-          body = body .. ' ['
+          body = body..' ['
 
           for j, currentConditional in ipairs(conditionals) do
             if currentConditional == nil then
-              body = body .. ''
+              body = body..''
             else
-              body = body .. currentConditional.name
+              body = body..currentConditional.name
 
               if currentConditional.input then
-                body = body .. currentConditional.input
+                body = body..currentConditional.input
               end
 
               -- add commas until last conditional
               if j < #conditionals then
-                body = body .. ', '
+                body = body..', '
               end
             end
           end
 
-          body = body .. ']'
+          body = body..']'
         end
       end
     end
 
-    body = body .. " " .. currentArgument.arg
+    body = body.." "..currentArgument.arg
 
     if ac ~= currentLine.args.count then
-      body = body .. ';' -- add semicolons after each arg until the last
+      body = body..';' -- add semicolons after each arg until the last
     end
   end
 
@@ -515,17 +515,17 @@ function SMacro:composeConditionals(line_num, arg_num, cond_num)
     currentName = conditional.name
 
     if conditional.input then
-      currentName = currentName .. conditional.input
+      currentName = currentName..conditional.input
     end
 
     if count == 1 then
-      result = "[" .. currentName
+      result = "["..currentName
     else
-      result = result .. ", " .. currentName
+      result = result..", "..currentName
     end
 
     if count == #conditionals then
-      result = result .. "]"
+      result = result.."]"
     end
   end
 
@@ -546,7 +546,7 @@ function SMacro:composeAllConditionals(line_num, arg_num)
   if #condGroups > 0 then
     local conditionalString = ""
     for i, _ in ipairs(condGroups) do
-      conditionalString = conditionalString .. self:composeConditionals(line_num, arg_num, i)
+      conditionalString = conditionalString..self:composeConditionals(line_num, arg_num, i)
     end
 
     return conditionalString

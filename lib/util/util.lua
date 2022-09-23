@@ -5,16 +5,16 @@ function SM_printall(table)
   end
 
   if type(table) ~= "table" then
-    print("not a table: " .. table .. " (" .. type(table) .. ")")
+    print("not a table: "..table.." ("..type(table)..")")
     return
   end
 
   local tableContents = ""
   for k, v in pairs(table) do
-    tableContents = tableContents .. " " .. k .. ": " .. tostring(v) .. ","
+    tableContents = tableContents.." "..k..": "..tostring(v)..","
   end
 
-  print("{" .. tableContents .. " }")
+  print("{"..tableContents.." }")
 end
 
 function table.clone(tableToClone)

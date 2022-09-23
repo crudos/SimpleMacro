@@ -17,7 +17,7 @@ function SimpleMacroMenu_OnShow(_)
   local tabNum = SimpleMacro.dbc.tab
 
   PanelTemplates_SetTab(SimpleMacroMenu, tabNum)
-  G["SimpleMacroMenu" .. L["tabs"][tabNum] .. "Tab"]:Show()
+  G["SimpleMacroMenu"..L["tabs"][tabNum].."Tab"]:Show()
 end
 
 function SimpleMacroMenu_OnHide(_)
@@ -30,10 +30,10 @@ function SimpleMacroMenuTab_OnClick(self)
 
   for i, tab in ipairs(L["tabs"]) do
     if i == self:GetID() then
-      G["SimpleMacroMenu" .. tab .. "Tab"]:Show()
+      G["SimpleMacroMenu"..tab.."Tab"]:Show()
       SimpleMacro.dbc.tab = self:GetID()
     else
-      G["SimpleMacroMenu" .. tab .. "Tab"]:Hide()
+      G["SimpleMacroMenu"..tab.."Tab"]:Hide()
     end
   end
 end

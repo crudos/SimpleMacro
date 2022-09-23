@@ -22,14 +22,14 @@ end
 
 function SimpleMacroSettings_LoadText(self)
   for setting, _ in pairs(L["DEFAULTS_ACCOUNT"].settings) do
-    G[self:GetName() .. setting .. "Text"]:SetText(C[setting])
-    G[self:GetName() .. setting].tooltipText = C[setting .. "Tooltip"]
+    G[self:GetName()..setting.."Text"]:SetText(C[setting])
+    G[self:GetName()..setting].tooltipText = C[setting.."Tooltip"]
   end
 end
 
 function SimpleMacroSettings_OnShow(self)
   for setting, isChecked in pairs(SimpleMacro.dba.settings) do
-    G[self:GetName() .. setting]:SetChecked(isChecked)
+    G[self:GetName()..setting]:SetChecked(isChecked)
   end
 end
 
@@ -40,7 +40,7 @@ end
 
 function SimpleMacroSettings_Save(self)
   for setting, _ in pairs(L["DEFAULTS_ACCOUNT"].settings) do
-    if G[self:GetName() .. setting]:GetChecked() == true then
+    if G[self:GetName()..setting]:GetChecked() == true then
       SimpleMacro.dba.settings[setting] = true
     else
       SimpleMacro.dba.settings[setting] = false
@@ -82,7 +82,7 @@ function SimpleMacroSettings_SetupContextMenu()
     local SimpleMacroGroupButton = CreateFromMixins(UnitPopupButtonBaseMixin)
 
     SimpleMacroGroupButton.GetText = function()
-      return L["CONTEXT"]["GROUP"] .. " " .. i
+      return L["CONTEXT"]["GROUP"].." "..i
     end
 
     SimpleMacroGroupButton.GetID = function()

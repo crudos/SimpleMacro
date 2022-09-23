@@ -51,7 +51,7 @@ local function loadGroupTabs()
   local inheritFrame = "OptionsFrameTabButtonTemplate"
 
   for i = 1, C["maxTabs"] do
-    CreateFrame("CheckButton", "$parentTab" .. i, parentFrame, inheritFrame, i)
+    CreateFrame("CheckButton", "$parentTab"..i, parentFrame, inheritFrame, i)
   end
 end
 
@@ -85,7 +85,7 @@ function SM_SetGroupTabs()
   local tab
 
   for i = 1, C["maxTabs"] do
-    tab = G[groupTabName .. i]
+    tab = G[groupTabName..i]
 
     -- + 1 allows for the "+" button to be added at the end
     if i <= #groupTable + 1 then
@@ -94,14 +94,14 @@ function SM_SetGroupTabs()
           tab:SetText("+")
           tab:SetScript("OnClick", SM_GroupTab_AddGroup_OnClick)
         else
-          tab:SetText(L["GROUP_TAB"]["TAB_TEXT"] .. " " .. i)
+          tab:SetText(L["GROUP_TAB"]["TAB_TEXT"].." "..i)
           tab:SetScript("OnClick", SM_GroupTab_Group_OnClick)
         end
 
         if i == 1 then
           tab:SetPoint("BOTTOMLEFT", parentFrame, "TOPLEFT", 2, 2)
         else
-          tab:SetPoint("LEFT", G[groupTabName .. (i - 1)], "RIGHT", -16, 0)
+          tab:SetPoint("LEFT", G[groupTabName..(i - 1)], "RIGHT", -16, 0)
         end
 
         tab:Hide()
@@ -168,14 +168,14 @@ function SM_UserButtons_OnLoad(self)
   local macrosPerRow = C["macrosPerRow"]
 
   for i = 1, MAX_ACCOUNT_MACROS do
-    button = CreateFrame("CheckButton", "SMUserButton" .. i, self, "SimpleMacroButtonTemplate")
+    button = CreateFrame("CheckButton", "SMUserButton"..i, self, "SimpleMacroButtonTemplate")
     button:SetID(i)
     if i == 1 then
       button:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -6)
     elseif mod(i, macrosPerRow) == 1 then
-      button:SetPoint("TOP", "SMUserButton" .. (i - macrosPerRow), "BOTTOM", 0, -10);
+      button:SetPoint("TOP", "SMUserButton"..(i - macrosPerRow), "BOTTOM", 0, -10);
     else
-      button:SetPoint("LEFT", "SMUserButton" .. (i - 1), "RIGHT", 13, 0);
+      button:SetPoint("LEFT", "SMUserButton"..(i - 1), "RIGHT", 13, 0);
     end
   end
 end
@@ -197,14 +197,14 @@ function SM_GroupButtons_OnLoad(self)
   local macrosPerRow = C["macrosPerRow"]
 
   for i = 1, MAX_ACCOUNT_MACROS do
-    button = CreateFrame("CheckButton", "SMGroupButton" .. i, self, "SimpleMacroButtonTemplate")
+    button = CreateFrame("CheckButton", "SMGroupButton"..i, self, "SimpleMacroButtonTemplate")
     button:SetID(i)
     if i == 1 then
       button:SetPoint("TOPLEFT", self, "TOPLEFT", 6, -6)
     elseif mod(i, macrosPerRow) == 1 then
-      button:SetPoint("TOP", "SMGroupButton" .. (i - macrosPerRow), "BOTTOM", 0, -10)
+      button:SetPoint("TOP", "SMGroupButton"..(i - macrosPerRow), "BOTTOM", 0, -10)
     else
-      button:SetPoint("LEFT", "SMGroupButton" .. (i - 1), "RIGHT", 13, 0)
+      button:SetPoint("LEFT", "SMGroupButton"..(i - 1), "RIGHT", 13, 0)
     end
   end
 end
@@ -221,10 +221,10 @@ function SM_UserButton_Update()
   end
 
   for i = 1, MAX_ACCOUNT_MACROS do
-    macroButtonName = "SMUserButton" .. i
+    macroButtonName = "SMUserButton"..i
     macroButton = G[macroButtonName]
-    macroIcon = G[macroButtonName .. "Icon"]
-    macroName = G[macroButtonName .. "Name"]
+    macroIcon = G[macroButtonName.."Icon"]
+    macroName = G[macroButtonName.."Name"]
 
     if i <= SimpleMacroMenu.macroMax then
       if i <= numMacros then
@@ -260,10 +260,10 @@ function SM_GroupButton_Update()
   local group = groupTable[groupTable.selected]
 
   for i = 1, MAX_ACCOUNT_MACROS do
-    macroButtonName = "SMGroupButton" .. i
+    macroButtonName = "SMGroupButton"..i
     macroButton = G[macroButtonName]
-    macroIcon = G[macroButtonName .. "Icon"]
-    macroName = G[macroButtonName .. "Name"]
+    macroIcon = G[macroButtonName.."Icon"]
+    macroName = G[macroButtonName.."Name"]
 
     if group and i <= #group then
       --[[
@@ -364,13 +364,13 @@ local function changeTargets(index, target)
     atStart, atEnd = string.find(macroText, "@")
     if not isempty(atStart) then
       oldTar = string.match(string.sub(macroText, atEnd + 1), targetPattern)
-      macroText = string.sub(macroText, 1, atEnd) .. target .. string.sub(macroText, atEnd + string.len(oldTar) + 1)
+      macroText = string.sub(macroText, 1, atEnd)..target..string.sub(macroText, atEnd + string.len(oldTar) + 1)
     end
 
     tarStart, tarEnd = string.find(macroText, "target=")
     if not isempty(tarStart) then
       oldTar = string.match(string.sub(macroText, tarEnd + 1), targetPattern)
-      macroText = string.sub(macroText, 1, tarEnd) .. target .. string.sub(macroText, tarEnd + string.len(oldTar) + 1)
+      macroText = string.sub(macroText, 1, tarEnd)..target..string.sub(macroText, tarEnd + string.len(oldTar) + 1)
     end
 
     EditMacro(idx, nil, nil, macroText)
@@ -389,7 +389,7 @@ function SM_ChangeGroupTarget(groupNum, newTarget)
     end
   end
 
-  print("Set target of Group " .. groupNum .. " to " .. newTarget)
+  print("Set target of Group "..groupNum.." to "..newTarget)
 end
 
 function SM_GroupTargetButton_OnClick(_)

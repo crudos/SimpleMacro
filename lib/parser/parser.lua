@@ -163,7 +163,7 @@ local function parse_args(arg_body)
     do
       local condition
       condition, text = string.match(text, "^(.-[%]])(.*)")
-      conds = conds .. condition
+      conds = conds..condition
     end
 
     local arg

@@ -5,7 +5,7 @@ local G = _G
   SimpleMacroEditorPopup
 ]]
 local function generateCommandString(category, command)
-  return (category == L["MACRO_EDITOR"]["HASH_CATEGORY"] and '#' or '/') .. command
+  return (category == L["MACRO_EDITOR"]["HASH_CATEGORY"] and '#' or '/')..command
 end
 
 local function saveArgumentAndCommand(editor)
@@ -60,6 +60,10 @@ function SimpleMacroEditorPopup_OnLoad(self)
     end
     tinsert(this.conditionalGroupButtons, groupButton)
   end
+  self.Close = function(this)
+    HideUIPanel(this)
+    HideUIPanel(SimpleMacroEditorConditionalPopup)
+  end
 end
 
 function SimpleMacroEditorPopup_OnShow(_)
@@ -72,17 +76,17 @@ function SimpleMacroEditorPopup_OnHide(_)
 end
 
 function SimpleMacroEditorPopup_CancelButton_OnClick(self)
-  HideUIPanel(self:GetParent())
+  self:GetParent():Close()
 end
 
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local editor = self:GetParent()
   saveArgumentAndCommand(editor)
-  HideUIPanel(editor)
+  editor:Close()
 end
 
 function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
-  HideUIPanel(self:GetParent())
+  self:GetParent():Close()
 end
 
 --[[
@@ -98,11 +102,11 @@ function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
       this.defaultValue = L["LINE_TYPE_TABLE"][6].CATEGORY
       this.value = this.defaultValue
       UIDropDownMenu_SetSelectedValue(this, this.value)
-      this.tooltip = this.value .. " commands."
+      this.tooltip = this.value.." commands."
     end
     self.SetValue = function(this, value)
       this.value = value
-      this.tooltip = value .. " commands."
+      this.tooltip = value.." commands."
       UIDropDownMenu_SetSelectedValue(this, value)
       this:RefreshValue()
     end
@@ -144,7 +148,7 @@ function SimpleMacroEditorPopup_CategoryDropDown_Initialize()
     info.value = entry.CATEGORY
     info.checked = info.value == selectedValue and 1 or nil
     info.tooltipTitle = entry.CATEGORY
-    info.tooltipText = entry.CATEGORY .. " commands."
+    info.tooltipText = entry.CATEGORY.." commands."
     UIDropDownMenu_AddButton(info)
   end
 end
@@ -222,7 +226,7 @@ end
 ]]
 local function createConditionalGroupButton(addButton, index)
   local parentFrame = addButton:GetParent()
-  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup" .. index .. "Button"
+  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup"..index.."Button"
   local conditionalGroupButton
 
   if G[conditionalGroupButtonName] ~= nil then

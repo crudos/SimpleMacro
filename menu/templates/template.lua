@@ -6,16 +6,16 @@ function SimpleMacroButton_OnClick(self, _, _)
   local name = self:GetName()
   local id = self:GetID()
 
-  if name == "SMUserButton" .. id then
+  if name == "SMUserButton"..id then
     SM_UserButton_SelectMacro(id)
     SM_UserButton_Update()
-  elseif name == "SMGroupButton" .. id then
+  elseif name == "SMGroupButton"..id then
     SM_GroupButton_SelectMacro(id)
     SM_GroupButton_Update()
-  elseif name == "SMCreateButton" .. id then
+  elseif name == "SMCreateButton"..id then
     SM_CreateTab_SelectMacro(id)
     SM_CreateTab_Update()
-  elseif name == "SMIconButton" .. id then
+  elseif name == "SMIconButton"..id then
     SM_ChangeMenu_SelectIcon(id, nil)
     SimpleMacroChangeMenu_Update()
   end
@@ -38,7 +38,7 @@ function SimplePickupMacro(self)
   local name = self:GetName()
   local id = self:GetID()
 
-  if name == "SMGroupButton" .. id then
+  if name == "SMGroupButton"..id then
     PickupMacro(SimpleMacroMenu.groupTable[id])
   else
     -- SMUserButton and SMCreateButton
