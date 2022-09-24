@@ -170,7 +170,7 @@ end
 function SM_CreateTab_SelectMacro(id)
   SM_CreateTab_SetCurrentMacro(id)
   SM_MacroEditor_UnlockHighlights()
-  SimpleMacroEditorPopup:Close()
+  HideUIPanel(SimpleMacroEditorPopup)
 end
 
 function SM_CreateTab_SetCurrentMacro(id)

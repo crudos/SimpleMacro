@@ -41,7 +41,7 @@ function SMacro:set(macro_id)
   end
 
   self.id = macro_id
-  end
+end
 
 --[[
    Returns macro id
@@ -482,7 +482,7 @@ function SMacro:resetConditionals(line_num, arg_num)
 end
 
 --[[
-    Retrieve all conditionals for a given line and argument
+    Retrieve all conditionals for a given line, argument, and conditional group
 
     params:
       line_num: row number for the line
