@@ -86,6 +86,7 @@ function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local editor = self:GetParent()
   saveArgumentAndCommand(editor)
   HideUIPanel(editor)
+  SM_CreateTab_Update()
 end
 
 function SimpleMacroEditorPopup_DeleteButton_OnClick(self)

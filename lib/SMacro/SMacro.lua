@@ -197,39 +197,7 @@ function SMacro:composeLine(line_num)
   end
 
   for ac = 1, currentLine.args.count, 1 do
-    -- add each argument
-    local currentArgument = currentLine.args[ac]
-    local conditionalGroups = currentArgument.conds
-
-    -- add conditionals if they exist
-    if conditionalGroups and #conditionalGroups > 0 then
-      for _, conditionals in ipairs(conditionalGroups) do
-        if #conditionals > 0 then
-          body = body..' ['
-
-          for j, currentConditional in ipairs(conditionals) do
-            if currentConditional == nil then
-              body = body..''
-            else
-              body = body..currentConditional.name
-
-              if currentConditional.input then
-                body = body..currentConditional.input
-              end
-
-              -- add commas until last conditional
-              if j < #conditionals then
-                body = body..', '
-              end
-            end
-          end
-
-          body = body..']'
-        end
-      end
-    end
-
-    body = body.." "..currentArgument.arg
+    body = body..' '..self:composeAllConditionals(line_num, ac)..' '..currentLine.args[ac].arg
 
     if ac ~= currentLine.args.count then
       body = body..';' -- add semicolons after each arg until the last
@@ -506,7 +474,7 @@ function SMacro:composeConditionals(line_num, arg_num, cond_num)
   local conditionals = self.lines[line_num].args[arg_num].conds[cond_num]
 
   -- support empty conditional
-  if #conditionals == 1 and conditionals[1] == nil then
+  if conditionals.count == 0 then
     return "[]"
   end
 

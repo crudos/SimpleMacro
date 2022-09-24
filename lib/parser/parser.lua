@@ -79,7 +79,7 @@ local function parse_conds(cond_body)
 
     -- Found an empty conditional
     if isempty(trim(rest)) then
-      conds.count = 1
+      conds.count = 0
       return conds
     end
   end
@@ -126,7 +126,6 @@ end
 local function parse_cond_groups(cond_group_body)
   local cond_groups = {}
   local text = cond_group_body
-
   local i = 0
   while not isempty(text) do
     text = trim(text)
@@ -151,15 +150,15 @@ end
 local function parse_args(arg_body)
   local args = {}
   local text = arg_body
-
   local i = 0
+
   while not isempty(text) do
     text = trim(text)
     i = i + 1
 
     local conds = ""
-    -- match one cond group at a time
-    while string.match(text, "^([%[]).*")
+    -- parse all cond groups
+    while string.match(text, "^%s?([%[]).*")
     do
       local condition
       condition, text = string.match(text, "^(.-[%]])(.*)")
