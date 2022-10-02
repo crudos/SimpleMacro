@@ -50,7 +50,7 @@ local function loadGroupTabs()
   local parentFrame = SimpleMacroMenuGroupTabGroupScrollFrame
   local inheritFrame = "OptionsFrameTabButtonTemplate"
 
-  for i = 1, C["maxTabs"] do
+  for i = 1, C["MAX_TABS"] do
     CreateFrame("CheckButton", "$parentTab"..i, parentFrame, inheritFrame, i)
   end
 end
@@ -84,7 +84,7 @@ function SM_SetGroupTabs()
   local groupTable = SimpleMacro.dbc.groupTable
   local tab
 
-  for i = 1, C["maxTabs"] do
+  for i = 1, C["MAX_TABS"] do
     tab = G[groupTabName..i]
 
     -- + 1 allows for the "+" button to be added at the end
@@ -113,7 +113,7 @@ function SM_SetGroupTabs()
     end
   end
 
-  PanelTemplates_SetNumTabs(parentFrame, C["maxTabs"])
+  PanelTemplates_SetNumTabs(parentFrame, C["MAX_TABS"])
 
   if groupTable.selected then
     PanelTemplates_SetTab(parentFrame, groupTable.selected)
@@ -125,7 +125,7 @@ end
 function SM_GroupTab_AddGroup_OnClick(self)
   local groupTable = SimpleMacro.dbc.groupTable
 
-  if self:GetID() <= C["maxTabs"] then
+  if self:GetID() <= C["MAX_TABS"] then
     groupTable[self:GetID()] = {}
     groupTable.selected = self:GetID()
 
@@ -165,7 +165,7 @@ end
 -- create buttons containers
 function SM_UserButtons_OnLoad(self)
   local button
-  local macrosPerRow = C["macrosPerRow"]
+  local macrosPerRow = C["MACROS_PER_ROW"]
 
   for i = 1, MAX_ACCOUNT_MACROS do
     button = CreateFrame("CheckButton", "SMUserButton"..i, self, "SimpleMacroButtonTemplate")
@@ -194,7 +194,7 @@ end
 
 function SM_GroupButtons_OnLoad(self)
   local button
-  local macrosPerRow = C["macrosPerRow"]
+  local macrosPerRow = C["MACROS_PER_ROW"]
 
   for i = 1, MAX_ACCOUNT_MACROS do
     button = CreateFrame("CheckButton", "SMGroupButton"..i, self, "SimpleMacroButtonTemplate")

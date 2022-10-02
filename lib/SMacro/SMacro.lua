@@ -336,9 +336,9 @@ function SMacro:addConditionalGroup(line_num, arg_num)
 
   if cond_groups == nil then
     self.lines[line_num].args[arg_num].conds = {}
-    self.lines[line_num].args[arg_num].conds[1] = {}
+    self.lines[line_num].args[arg_num].conds[1] = { count = 0 }
   else
-    self.lines[line_num].args[arg_num].conds[#cond_groups + 1] = {}
+    self.lines[line_num].args[arg_num].conds[#cond_groups + 1] = { count = 0 }
   end
 
   return #self.lines[line_num].args[arg_num].conds

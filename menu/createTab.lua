@@ -38,7 +38,7 @@ end
 
 -- opens the selected popup menu and closes the others
 local function SM_OpenPopupMenu(menuToShow)
-  local menus = C["popupMenus"]
+  local menus = C["POPUP_MENUS"]
 
   for _, menu in ipairs(menus) do
     local panel = G[menu]
@@ -80,7 +80,7 @@ end
 
 function SMCreateButtons_OnLoad(self)
   local button
-  local macrosPerRow = C["macrosPerRow"]
+  local macrosPerRow = C["MACROS_PER_ROW"]
 
   for i = 1, MAX_ACCOUNT_MACROS do
     button = CreateFrame("CheckButton", "SMCreateButton"..i, self, "SimpleMacroButtonTemplate")
@@ -249,7 +249,7 @@ function SimpleMacroChangeMenu_OnLoad(_)
 end
 
 function SimpleMacro_IconScrollFrame_OnLoad(self)
-  G[self:GetName().."ScrollBar"].scrollStep = C["iconRowHeight"]
+  G[self:GetName().."ScrollBar"].scrollStep = C["ICON_ROW_HEIGHT"]
 end
 
 function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
@@ -271,7 +271,7 @@ function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
 end
 
 function SimpleMacroIcons_OnLoad(self)
-  SimpleMacro_LoadButtons(self, "SMIconButton", C["iconsPerRow"], C["numIconFrames"])
+  SimpleMacro_LoadButtons(self, "SMIconButton", C["ICONS_PER_ROW"], C["NUM_ICON_FRAMES"])
 end
 
 function SM_ChangeMenu_NameChanged(self)
@@ -297,17 +297,17 @@ function SimpleMacroChangeMenu_OnShow(_)
 
   if mode == "new" then
     SimpleMacroChangeMenuName:SetText("")
-    SM_ChangeMenu_SelectIcon(nil, C["iconTable"][1])
+    SM_ChangeMenu_SelectIcon(nil, C["ICON_TABLE"][1])
     SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Hide()
     SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, 0)
   elseif mode == "edit" then
     local name, texture, _ = GetMacroInfo(createSelect + macroStart)
     SimpleMacroChangeMenuName:SetText(name)
-    local iconIndex = C["rIconTable"][texture] - 1
-    local iconOffset = floor(iconIndex / C["iconsPerRow"])
+    local iconIndex = C["R_ICON_TABLE"][texture] - 1
+    local iconOffset = floor(iconIndex / C["ICONS_PER_ROW"])
     FauxScrollFrame_SetOffset(SimpleMacroChangeMenuIcons, iconOffset)
     SM_ChangeMenu_SelectIcon(nil, texture)
-    SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["iconRowHeight"] * iconOffset)
+    SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, C["ICON_ROW_HEIGHT"] * iconOffset)
   end
 
   SimpleMacroChangeMenu_Update()
@@ -320,8 +320,8 @@ end
 
 function SM_ChangeMenu_OnVerticalScroll(self, offset)
   -- for some reason having this twice properly sets the frame up
-  FauxScrollFrame_OnVerticalScroll(self, offset, C["iconRowHeight"], SimpleMacroChangeMenu_Update)
-  FauxScrollFrame_OnVerticalScroll(self, offset, C["iconRowHeight"], SimpleMacroChangeMenu_Update)
+  FauxScrollFrame_OnVerticalScroll(self, offset, C["ICON_ROW_HEIGHT"], SimpleMacroChangeMenu_Update)
+  FauxScrollFrame_OnVerticalScroll(self, offset, C["ICON_ROW_HEIGHT"], SimpleMacroChangeMenu_Update)
 end
 
 local function SimpleMacro_ArrangeButtons(frame, name, prevOffset, offset, numRows, numPerRow, _)
@@ -345,9 +345,9 @@ local function SimpleMacro_ArrangeButtons(frame, name, prevOffset, offset, numRo
 end
 
 function SimpleMacroChangeMenu_Update()
-  local numIconFrames = C["numIconFrames"]
-  local iconsPerRow = C["iconsPerRow"]
-  local iconTable = C["iconTable"]
+  local numIconFrames = C["NUM_ICON_FRAMES"]
+  local iconsPerRow = C["ICONS_PER_ROW"]
+  local iconTable = C["ICON_TABLE"]
   local numIconRows = numIconFrames / iconsPerRow
   local selectedTexture = SimpleMacroMenu.selectedTexture
   local offset = FauxScrollFrame_GetOffset(SimpleMacroChangeMenuIcons) or 0
@@ -383,8 +383,8 @@ function SimpleMacroChangeMenu_Update()
   FauxScrollFrame_Update(
       SimpleMacroChangeMenuIcons,
       ceil(#iconTable / iconsPerRow),
-      floor(SimpleMacroChangeMenuIcons:GetHeight() / C["iconRowHeight"]),
-      C["iconRowHeight"])
+      floor(SimpleMacroChangeMenuIcons:GetHeight() / C["ICON_ROW_HEIGHT"]),
+      C["ICON_ROW_HEIGHT"])
 end
 
 function SimpleMacroChangeMenu_OnHide(_)
@@ -497,7 +497,7 @@ function SM_MacroEditor_CreateLineFrame(lineNum)
 
   local currentMacro = SM_CreateTab_GetCurrentMacro()
   G[curLine.."Data"]:SetText(currentMacro:getCommand(lineNum))
-  macroEditorLine:SetSize(G[curLine.."Data"]:GetStringWidth(), C["editorHeight"])
+  macroEditorLine:SetSize(G[curLine.."Data"]:GetStringWidth(), C["EDITOR_HEIGHT"])
   macroEditorLine:SetID(lineNum)
 
   return curLine
@@ -516,7 +516,7 @@ function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   local currentMacro = SM_CreateTab_GetCurrentMacro()
   local argumentWithConditionals = currentMacro:composeAllConditionals(lineNum, argumentNum)..' '..currentMacro:getArgument(lineNum, argumentNum)
   G[curArg.."Data"]:SetText(argumentWithConditionals)
-  macroEditorArg:SetSize(G[curArg.."Data"]:GetStringWidth(), C["editorHeight"])
+  macroEditorArg:SetSize(G[curArg.."Data"]:GetStringWidth(), C["EDITOR_HEIGHT"])
   macroEditorArg:SetID(argumentNum)
 
   if argumentNum == 1 then
@@ -525,7 +525,7 @@ function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
     local previousArg = currentLine.."Arg"..(argumentNum - 1)
     macroEditorArg:SetPoint("LEFT", previousArg, "RIGHT", 2, 0)
     G[previousArg.."Data"]:SetText(G[previousArg.."Data"]:GetText()..";")
-    G[previousArg]:SetSize(G[previousArg.."Data"]:GetStringWidth(), C["editorHeight"])
+    G[previousArg]:SetSize(G[previousArg.."Data"]:GetStringWidth(), C["EDITOR_HEIGHT"])
   end
 
   return curArg
@@ -535,11 +535,9 @@ function SM_MacroEditor_Update()
   local currentMacro = SM_CreateTab_GetCurrentMacro()
   for lc = 1, currentMacro.lines.count, 1 do
     local currentLine = SM_MacroEditor_CreateLineFrame(lc)
-
     for ac = 1, currentMacro.lines[lc].args.count do
       SM_MacroEditor_CreateArgumentFrame(currentLine, lc, ac)
     end
-
     SM_HideEditorArgs(currentLine.."Arg", currentMacro.lines[lc].args.count + 1)
   end
 

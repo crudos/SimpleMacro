@@ -94,9 +94,11 @@ function SimpleMacroEditorConditionalPopup_OkayButton_OnClick(self)
 end
 
 function SimpleMacroEditorConditionalPopup_DeleteButton_OnClick(self)
-  -- TODO re-enable add group button if disabled
-  --deleteConditionalGroup(self:GetParent())
-  HideUIPanel(self:GetParent())
+  local conditionalPopup = self:GetParent()
+  deleteConditionalGroup(conditionalPopup)
+  HideUIPanel(conditionalPopup)
+  SimpleMacroEditorPopup_Update()
+  SM_MacroEditor_Update()
 end
 
 function SimpleMacroEditorConditionalPopup_DropDown_Initialize(self)

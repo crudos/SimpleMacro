@@ -85,8 +85,9 @@ end
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local editor = self:GetParent()
   saveArgumentAndCommand(editor)
+  SimpleMacroMenu.currentMacro = nil --clear state to reload
+  SM_MacroEditor_Update()
   HideUIPanel(editor)
-  SM_CreateTab_Update()
 end
 
 function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
@@ -365,6 +366,7 @@ function SimpleMacroEditorPopup_Update()
   popupFrame.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
   popupFrame.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
 
+  -- TODO Fix for empty argument. This currently hides the edit box and conditional group buttons.
   local conditionalGroups
   if currentArgument ~= nil then
     -- editbox
