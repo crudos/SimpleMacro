@@ -385,7 +385,7 @@ function SimpleMacroEditorPopup_Update()
 
   hideConditionalGroupButtons(conditionalGroups and #conditionalGroups or 0)
 
-  if #popupFrame:GetConditionalGroupButtons() <= L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] then
+  if #popupFrame:GetConditionalGroupButtons() < L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] then
     popupFrame.AddConditionalGroupButton:Enable()
   end
 end

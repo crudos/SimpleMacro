@@ -96,9 +96,8 @@ end
 function SimpleMacroEditorConditionalPopup_DeleteButton_OnClick(self)
   local conditionalPopup = self:GetParent()
   deleteConditionalGroup(conditionalPopup)
-  HideUIPanel(conditionalPopup)
-  SimpleMacroEditorPopup_Update()
   SM_MacroEditor_Update()
+  HideUIPanel(conditionalPopup)
 end
 
 function SimpleMacroEditorConditionalPopup_DropDown_Initialize(self)
