@@ -23,7 +23,7 @@
     </Layers>
     <Frames>
       <Frame name="$parentPanelContainer"/>
-      <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_CREATE">
+      <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_CREATE">
         <Anchors>
           <Anchor point="TOPLEFT" x="54" y="-20"/>
         </Anchors>
@@ -34,7 +34,7 @@
           </OnClick>
         </Scripts>
       </Button>
-      <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_GROUP">
+      <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_GROUP">
         <Anchors>
           <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
         </Anchors>

@@ -48,7 +48,7 @@ end
 
 local function loadGroupTabs()
   local parentFrame = SimpleMacroMenuGroupTabGroupScrollFrame
-  local inheritFrame = "OptionsFrameTabButtonTemplate"
+  local inheritFrame = "PanelTabButtonTemplate"
 
   for i = 1, C["MAX_TABS"] do
     CreateFrame("CheckButton", "$parentTab"..i, parentFrame, inheritFrame, i)
@@ -229,8 +229,8 @@ function SM_UserButton_Update()
     if i <= SimpleMacroMenu.macroMax then
       if i <= numMacros then
         name, texture, body = GetMacroInfo(i + SimpleMacroMenu.macroStart)
-        macroIcon:SetTexture(texture)
-        macroName:SetText(name)
+        macroButton:SetIconTexture(texture)
+        macroButton.Name:SetText(name)
         macroButton:Enable()
 
         if SimpleMacroMenu.userSelect and SimpleMacroMenu.userSelect == i then
@@ -239,9 +239,9 @@ function SM_UserButton_Update()
           macroButton:SetChecked(false)
         end
       else
-        macroIcon:SetTexture("");
-        macroName:SetText("");
-        macroButton:Disable();
+        macroButton:SetIconTexture("")
+        macroButton.Name:SetText("")
+        macroButton:Disable()
         macroButton:SetChecked(false)
       end
 
@@ -270,8 +270,8 @@ function SM_GroupButton_Update()
         TODO what if group[i] doesn't exist anymore or is the wrong macro. FIX: hook into Macro deletion to update group ids
       ]]
       name, texture, body = GetMacroInfo(group[i])
-      macroIcon:SetTexture(texture)
-      macroName:SetText(name)
+      macroButton:SetIconTexture(texture)
+      macroButton.Name:SetText(name)
       macroButton:Enable()
 
       if SimpleMacroMenu.groupSelect and SimpleMacroMenu.groupSelect == i then
@@ -280,9 +280,9 @@ function SM_GroupButton_Update()
         macroButton:SetChecked(false)
       end
     else
-      macroIcon:SetTexture("");
-      macroName:SetText("");
-      macroButton:Disable();
+      macroButton:SetIconTexture("")
+      macroButton.Name:SetText("")
+      macroButton:Disable()
       macroButton:SetChecked(false)
     end
   end

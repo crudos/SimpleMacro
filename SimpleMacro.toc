@@ -1,8 +1,8 @@
-## Interface: 90207
+## Interface: 100000
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 9.2.7.0
-## Notes: An addon that simplifies the macro-making process.
+## Version: 10.0.0.0
+## Notes: An addon that simplifies the macro-making process adds functionality for making updates across macros.
 ## SavedVariables: SimpleMacroDBA
 ## SavedVariablesPerCharacter: SimpleMacroDBC
 ## OptionalDeps: WoWUnit

@@ -1,8 +1,17 @@
 local _, L = ...
 local G = _G
 
+
+SimpleMacroButtonMixin = {};
+
+function SimpleMacroButtonMixin:OnLoad()
+  self:RegisterForDrag("LeftButton");
+end
+
 -- sets the selected macro button
-function SimpleMacroButton_OnClick(self, _, _)
+function SimpleMacroButtonMixin:OnClick()
+  SelectorButtonMixin.OnClick(self);
+
   local name = self:GetName()
   local id = self:GetID()
 
@@ -21,6 +30,19 @@ function SimpleMacroButton_OnClick(self, _, _)
   end
 end
 
+-- picks up the correct macro when its in the group list
+function SimpleMacroButtonMixin:OnDragStart()
+  local name = self:GetName()
+  local id = self:GetID()
+
+  if name == "SMGroupButton"..id then
+    PickupMacro(SimpleMacroMenu.groupTable[id])
+  else
+    -- SMUserButton and SMCreateButton
+    PickupMacro(id + SimpleMacroMenu.macroStart)
+  end
+end
+
 function SM_CheckButton_OnClick(checkButton)
   if checkButton:GetChecked() and checkButton.interruptCheck then
     checkButton.interruptCheck(checkButton)
@@ -30,19 +52,6 @@ function SM_CheckButton_OnClick(checkButton)
     checkButton.interruptUncheck(checkButton)
     checkButton:SetChecked(true)
     return
-  end
-end
-
--- picks up the correct macro when its in the group list
-function SimplePickupMacro(self)
-  local name = self:GetName()
-  local id = self:GetID()
-
-  if name == "SMGroupButton"..id then
-    PickupMacro(SimpleMacroMenu.groupTable[id])
-  else
-    -- SMUserButton and SMCreateButton
-    PickupMacro(id + SimpleMacroMenu.macroStart)
   end
 end
 

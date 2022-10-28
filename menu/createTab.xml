@@ -23,6 +23,12 @@
           </Anchors>
           <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
         </Texture>
+        <Texture name="MacroFrameSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
+          <Size x="64" y="64"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="5" y="-218"/>
+          </Anchors>
+        </Texture>
       </Layer>
     </Layers>
     <Frames>
@@ -46,7 +52,7 @@
           <OnLoad function="ScrollFrame_OnLoad"/>
         </Scripts>
       </ScrollFrame>
-      <Button name="$parentSelected" inherits="SimpleMacroButtonTemplate">
+      <CheckButton name="$parentSelected" inherits="SimpleMacroButtonTemplate">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-20"/>
         </Anchors>
@@ -59,10 +65,27 @@
             </FontString>
           </Layer>
         </Layers>
+      </CheckButton>
+      <CheckButton parentKey="SelectedMacroButton" name="MacroFrameSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="MacroFrameSelectedMacroBackground" x="14" y="-14"/>
+        </Anchors>
         <Scripts>
-          <OnClick function="SimplePickupMacro"/>
+          <OnClick>
+            self:SetChecked(false);
+            PickupMacro(MacroFrame.selectedMacro);
+          </OnClick>
         </Scripts>
-      </Button>
+      </CheckButton>
+      <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
+        <KeyValues>
+          <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
+        </KeyValues>
+        <Size x="319" y="146"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" x="12" y="-66"/>
+        </Anchors>
+      </Frame>
       <Button name="$parentChange" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_CHANGE">
         <Size x="172" y="22"/>
         <Anchors>
@@ -78,7 +101,7 @@
           <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="-7" y="5"/>
         </Anchors>
       </Frame>
-      <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
+      <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
         <Anchors>
           <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
         </Anchors>
@@ -89,7 +112,7 @@
           </OnClick>
         </Scripts>
       </Button>
-      <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_CHARACTER_MACROS">
+      <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_CHARACTER_MACROS">
         <Anchors>
           <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
         </Anchors>

@@ -26,7 +26,7 @@
                     <OnLoad function="ScrollFrame_OnLoad"/>
                 </Scripts>
             </ScrollFrame>
-            <Button name="$parentTab1" inherits="OptionsFrameTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
+            <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
                 <Anchors>
                     <Anchor point="BOTTOMLEFT" relativeTo="$parentUserScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
                 </Anchors>
@@ -37,7 +37,7 @@
                     </OnClick>
                 </Scripts>
             </Button>
-            <Button name="$parentTab2" inherits="OptionsFrameTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_CHARACTER_MACROS">
+            <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_CHARACTER_MACROS">
                 <Anchors>
                     <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
                 </Anchors>

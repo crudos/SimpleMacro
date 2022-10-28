@@ -122,24 +122,24 @@ function SM_CreateTab_Update()
     if i <= macroMax then
       if i <= numMacros then
         local name, texture, _ = GetMacroInfo(i + macroStart)
-        macroIcon:SetTexture(texture)
-        macroName:SetText(name)
+        macroButton:SetIconTexture(texture)
+        macroButton.Name:SetText(name)
         macroButton:Enable()
 
         if createSelect and createSelect == i then
           macroButton:SetChecked(true)
-
-          G["SimpleMacroMenuCreateTabSelected"]:SetID(i)
-          G["SimpleMacroMenuCreateTabSelectedText"]:SetText(name)
-          G["SimpleMacroMenuCreateTabSelectedIcon"]:SetTexture(texture)
+          local selectedIcon = G["SimpleMacroMenuCreateTabSelected"]
+          selectedIcon:SetID(i)
+          selectedIcon.Name:SetText(name)
+          selectedIcon:SetIconTexture(texture)
           SimpleMacroMenu.selectedTexture = texture
         else
           macroButton:SetChecked(false)
         end
       else
-        macroIcon:SetTexture("");
-        macroName:SetText("");
-        macroButton:Disable();
+        macroButton:SetIconTexture("")
+        macroButton.Name:SetText("")
+        macroButton:Disable()
         macroButton:SetChecked(false)
       end
 

@@ -1,17 +1,21 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="template.lua"/>
   <!-- Templates -->
-  <CheckButton name="SimpleMacroButtonTemplate" inherits="PopupButtonTemplate" virtual="true">
+  <CheckButton name="SimpleMacroButtonTemplate" mixin="SimpleMacroButtonMixin" inherits="SelectorButtonTemplate" virtual="true">
+    <Layers>
+      <Layer level="OVERLAY">
+        <FontString parentKey="Name" inherits="GameFontHighlightSmallOutline">
+          <Size x="36" y="10"/>
+          <Anchors>
+            <Anchor point="BOTTOM" x="0" y="2"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
     <Scripts>
-      <OnLoad>
-        self:RegisterForDrag("LeftButton")
-      </OnLoad>
-      <OnClick>
-        SimpleMacroButton_OnClick(self, button, down)
-      </OnClick>
-      <OnDragStart>
-        SimplePickupMacro(self)
-      </OnDragStart>
+      <OnClick method="OnClick"/>
+      <OnLoad method="OnLoad"/>
+      <OnDragStart method="OnDragStart"/>
     </Scripts>
   </CheckButton>
   <CheckButton name="SimpleMacroBaseCheckButtonTemplate" inherits="OptionsBaseCheckButtonTemplate" virtual="true">
