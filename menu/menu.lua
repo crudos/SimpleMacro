@@ -10,6 +10,7 @@ end
 SimpleMacroFrameMixin = {};
 
 function SimpleMacroFrameMixin:OnLoad()
+  self:RegisterForDrag("LeftButton")
   --tinsert(UISpecialFrames, self:GetName())
   PanelTemplates_SetNumTabs(self, 2)
   PanelTemplates_SetTab(self, 1)

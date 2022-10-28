@@ -70,6 +70,12 @@
       <OnLoad method="OnLoad"/>
       <OnShow method="OnShow"/>
       <OnHide method="OnHide"/>
+      <OnDragStart>
+        self:StartMoving()
+      </OnDragStart>
+      <OnDragStop>
+        self:StopMovingOrSizing()
+      </OnDragStop>
     </Scripts>
   </Frame>
 </Ui>
