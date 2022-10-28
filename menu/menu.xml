@@ -2,10 +2,14 @@
   <Script file="menu.lua"/>
 
   <!-- Menu -->
-  <Frame name="SimpleMacroMenu" toplevel="true" movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate">
+  <Frame name="SimpleMacroFrame" mixin="SimpleMacroFrameMixin" toplevel="true"
+         movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate">
     <Size x="350" y="524"/>
+    <KeyValues>
+      <KeyValue key="maxTabWidth" value="140" type="number"/>
+    </KeyValues>
     <Layers>
-      <Layer level="OVERLAY" textureSubLevel="-1">
+      <Layer level="OVERLAY">
         <Texture name="MacroFramePortrait" file="Interface\MacroFrame\MacroFrame-Icon">
           <Size x="60" y="60"/>
           <Anchors>
@@ -13,12 +17,21 @@
           </Anchors>
         </Texture>
       </Layer>
-      <Layer level="BORDER">
-        <FontString inherits="GameFontNormal" text="SIMPLE_MACRO_STRING_MENU_TITLE">
+      <Layer level="ARTWORK">
+        <Texture name="SimpleMacroHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="256" y="16"/>
           <Anchors>
-            <Anchor point="TOP" relativeTo="SimpleMacroMenu" x="0" y="-5"/>
+            <Anchor point="TOPLEFT" x="2" y="-210"/>
           </Anchors>
-        </FontString>
+          <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
+        </Texture>
+        <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="75" y="16"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeTo="SimpleMacroHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
+          </Anchors>
+          <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
+        </Texture>
       </Layer>
     </Layers>
     <Frames>
@@ -29,8 +42,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            SimpleMacroMenuTab_OnClick(self)
-            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+            self:GetParent():SelectTab(self);
           </OnClick>
         </Scripts>
       </Button>
@@ -40,8 +52,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            SimpleMacroMenuTab_OnClick(self)
-            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+            self:GetParent():SelectTab(self);
           </OnClick>
         </Scripts>
       </Button>
@@ -51,20 +62,14 @@
           <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="4"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SM_ExitButton_OnClick"/>
+          <OnClick function="HideParentPanel"/>
         </Scripts>
       </Button>
     </Frames>
     <Scripts>
-      <OnLoad function="SimpleMacroMenu_OnLoad"/>
-      <OnShow function="SimpleMacroMenu_OnShow"/>
-      <OnHide function="SimpleMacroMenu_OnHide"/>
-      <OnDragStart>
-        self:StartMoving()
-      </OnDragStart>
-      <OnDragStop>
-        self:StopMovingOrSizing()
-      </OnDragStop>
+      <OnLoad method="OnLoad"/>
+      <OnShow method="OnShow"/>
+      <OnHide method="OnHide"/>
     </Scripts>
   </Frame>
 </Ui>

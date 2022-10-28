@@ -2,7 +2,7 @@
   <Script file="createtab.lua"/>
 
   <!-- Create tab -->
-  <Frame name="$parentCreateTab" hidden="true" parent="SimpleMacroMenu">
+  <Frame name="$parentCreateTab" hidden="true" parent="SimpleMacroFrame">
     <Anchors>
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
@@ -23,7 +23,7 @@
           </Anchors>
           <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
         </Texture>
-        <Texture name="MacroFrameSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
+        <Texture name="SimpleMacroFrameSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
           <Size x="64" y="64"/>
           <Anchors>
             <Anchor point="TOPLEFT" x="5" y="-218"/>
@@ -68,7 +68,7 @@
       </CheckButton>
       <CheckButton parentKey="SelectedMacroButton" name="MacroFrameSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="MacroFrameSelectedMacroBackground" x="14" y="-14"/>
+          <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" x="14" y="-14"/>
         </Anchors>
         <Scripts>
           <OnClick>
@@ -174,10 +174,10 @@
   </Frame>
 
   <!-- Change menu -->
-  <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroMenu" enableMouse="true" hidden="true">
+  <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroFrame" enableMouse="true" hidden="true">
     <Size x="550" y="450"/>
     <Anchors>
-      <Anchor point="LEFT" relativeTo="SimpleMacroMenu" relativePoint="RIGHT" x="0" y="0"/>
+      <Anchor point="LEFT" relativeTo="SimpleMacroFrame" relativePoint="RIGHT" x="0" y="0"/>
     </Anchors>
     <Layers>
       <Layer level="BACKGROUND">

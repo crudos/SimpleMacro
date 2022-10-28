@@ -1,48 +1,43 @@
 local _, L = ...
 local G = _G
 
-UIPanelWindows["SimpleMacroMenu"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };
+UIPanelWindows["SimpleMacroFrame"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };
 
-function SimpleMacroMenu_OnLoad(self)
-  tinsert(UISpecialFrames, self:GetName())
-  self:RegisterForDrag("LeftButton")
-  self.name = "SimpleMacro"
-  self.elapsed = 0
-
-  PanelTemplates_SetNumTabs(SimpleMacroMenu, 2)
+local function getGlobalString(stringID)
+  return G["SIMPLE_MACRO_STRING_"..stringID]
 end
 
-function SimpleMacroMenu_OnShow(_)
+SimpleMacroFrameMixin = {};
+
+function SimpleMacroFrameMixin:OnLoad()
+  --tinsert(UISpecialFrames, self:GetName())
+  PanelTemplates_SetNumTabs(self, 2)
+  PanelTemplates_SetTab(self, 1)
+  self:SetTitle(getGlobalString"MENU_TITLE")
+end
+
+function SimpleMacroFrameMixin:OnShow()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-  local tabNum = SimpleMacro.dbc.tab
-
-  PanelTemplates_SetTab(SimpleMacroMenu, tabNum)
-  G["SimpleMacroMenu"..L["tabs"][tabNum].."Tab"]:Show()
 end
 
-function SimpleMacroMenu_OnHide(_)
+function SimpleMacroFrameMixin:OnHide()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
   HideUIPanel(SimpleMacroEditorPopup)
 end
 
-function SimpleMacroMenuTab_OnClick(self)
-  PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
+function SimpleMacroFrameMixin:SelectTab(tab)
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 
-  for i, tab in ipairs(L["tabs"]) do
-    if i == self:GetID() then
-      G["SimpleMacroMenu"..tab.."Tab"]:Show()
-      SimpleMacro.dbc.tab = self:GetID()
-    else
-      G["SimpleMacroMenu"..tab.."Tab"]:Hide()
-    end
+  local tabID = tab:GetID()
+  self:ChangeTab(tabID);
+end
+
+function SimpleMacroFrameMixin:ChangeTab(tabID)
+  PanelTemplates_SetTab(self, tabID)
+
+  if tabID == 1 then
+    -- Create tab
+  elseif tabID == 2 then
+    -- Group tab
   end
-end
-
-function SM_ExitButton_OnClick(_)
-  G["SM_MacroEditor_AddNewLine"]:Enable()
-  HideUIPanel(SimpleMacroMenu)
-end
-
-function OpenEditorPopup_OnClick(_)
-  ShowUIPanel(SimpleMacroEditorPopup)
 end

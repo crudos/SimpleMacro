@@ -85,7 +85,7 @@ end
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local editor = self:GetParent()
   saveArgumentAndCommand(editor)
-  SimpleMacroMenu.currentMacro = nil --clear state to reload
+  SimpleMacroFrame.currentMacro = nil --clear state to reload
   SM_MacroEditor_Update()
   HideUIPanel(editor)
 end

@@ -36,10 +36,10 @@ function SimpleMacroButtonMixin:OnDragStart()
   local id = self:GetID()
 
   if name == "SMGroupButton"..id then
-    PickupMacro(SimpleMacroMenu.groupTable[id])
+    PickupMacro(SimpleMacroFrame.groupTable[id])
   else
     -- SMUserButton and SMCreateButton
-    PickupMacro(id + SimpleMacroMenu.macroStart)
+    PickupMacro(id + SimpleMacroFrame.macroStart)
   end
 end
 

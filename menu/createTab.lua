@@ -3,8 +3,8 @@ local C = L["CREATE_TAB"]
 local G = _G
 
 local function setAccountMacros()
-  SimpleMacroMenu.macroStart = 0
-  SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
+  SimpleMacroFrame.macroStart = 0
+  SimpleMacroFrame.macroMax = MAX_ACCOUNT_MACROS
 
   local numAccountMacros, _ = GetNumMacros()
 
@@ -16,8 +16,8 @@ local function setAccountMacros()
 end
 
 local function setCharacterMacros()
-  SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
-  SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
+  SimpleMacroFrame.macroStart = MAX_ACCOUNT_MACROS
+  SimpleMacroFrame.macroMax = MAX_CHARACTER_MACROS
 
   local _, numCharacterMacros = GetNumMacros()
 
@@ -96,8 +96,8 @@ function SMCreateButtons_OnLoad(self)
 end
 
 function SM_CreateTab_Update()
-  local createSelect = SimpleMacroMenu.createSelect
-  local macroStart = SimpleMacroMenu.macroStart
+  local createSelect = SimpleMacroFrame.createSelect
+  local macroStart = SimpleMacroFrame.macroStart
   local currentMacro = SM_CreateTab_GetCurrentMacro()
   if createSelect then
     EditMacro(createSelect + macroStart, nil, nil, currentMacro:compose())
@@ -112,7 +112,7 @@ function SM_CreateTab_Update()
   end
 
   local macroButtonName, macroButton, macroIcon, macroName
-  local macroMax = SimpleMacroMenu.macroMax
+  local macroMax = SimpleMacroFrame.macroMax
   for i = 1, MAX_ACCOUNT_MACROS do
     macroButtonName = "SMCreateButton"..i
     macroButton = G[macroButtonName]
@@ -132,7 +132,7 @@ function SM_CreateTab_Update()
           selectedIcon:SetID(i)
           selectedIcon.Name:SetText(name)
           selectedIcon:SetIconTexture(texture)
-          SimpleMacroMenu.selectedTexture = texture
+          SimpleMacroFrame.selectedTexture = texture
         else
           macroButton:SetChecked(false)
         end
@@ -162,7 +162,7 @@ function SM_CreateTab_Update()
   end
 
   SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Show()
-  PanelTemplates_UpdateTabs(SimpleMacroMenu)
+  PanelTemplates_UpdateTabs(SimpleMacroFrame)
   PanelTemplates_UpdateTabs(SimpleMacroMenuCreateTab)
   SM_OpenPopupMenu(nil)
 end
@@ -174,21 +174,21 @@ function SM_CreateTab_SelectMacro(id)
 end
 
 function SM_CreateTab_SetCurrentMacro(id)
-  SimpleMacroMenu.createSelect = id
-  SimpleMacroMenu.selectedLine = 1
+  SimpleMacroFrame.createSelect = id
+  SimpleMacroFrame.selectedLine = 1
 
   local currentMacro = SMacro:new()
-  currentMacro:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
-  SimpleMacroMenu.currentMacro = currentMacro
+  currentMacro:set(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
+  SimpleMacroFrame.currentMacro = currentMacro
 end
 
 function SM_CreateTab_GetCurrentMacro()
-  if SimpleMacroMenu.currentMacro then
-    return SimpleMacroMenu.currentMacro
-  elseif SimpleMacroMenu.createSelect then
+  if SimpleMacroFrame.currentMacro then
+    return SimpleMacroFrame.currentMacro
+  elseif SimpleMacroFrame.createSelect then
     local currentMacro = SMacro:new()
-    currentMacro:set(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
-    SimpleMacroMenu.currentMacro = currentMacro
+    currentMacro:set(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
+    SimpleMacroFrame.currentMacro = currentMacro
     return currentMacro
   else
     return nil
@@ -219,14 +219,14 @@ function SM_DeleteButton_OnClick(_)
   local numAccountMacros, numCharacterMacros
   numAccountMacros, numCharacterMacros = GetNumMacros()
 
-  DeleteMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
+  DeleteMacro(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
 
-  if SimpleMacroMenu.macroStart == 0 and SimpleMacroMenu.createSelect == numAccountMacros then
-    SM_CreateTab_SelectMacro(SimpleMacroMenu.createSelect - 1)
-  elseif SimpleMacroMenu.macroStart ~= 0 and SimpleMacroMenu.createSelect == numCharacterMacros then
-    SM_CreateTab_SelectMacro(SimpleMacroMenu.createSelect - 1)
+  if SimpleMacroFrame.macroStart == 0 and SimpleMacroFrame.createSelect == numAccountMacros then
+    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect - 1)
+  elseif SimpleMacroFrame.macroStart ~= 0 and SimpleMacroFrame.createSelect == numCharacterMacros then
+    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect - 1)
   else
-    SM_CreateTab_SelectMacro(SimpleMacroMenu.createSelect)
+    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect)
   end
 
   SM_CreateTab_Update()
@@ -234,12 +234,12 @@ function SM_DeleteButton_OnClick(_)
 end
 
 function SM_ChangeButton_OnClick(_)
-  SimpleMacroMenu.mode = "edit"
+  SimpleMacroFrame.mode = "edit"
   SM_OpenPopupMenu(SimpleMacroChangeMenu)
 end
 
 function SM_NewButton_OnClick(_)
-  SimpleMacroMenu.mode = "new"
+  SimpleMacroFrame.mode = "new"
   SM_OpenPopupMenu(SimpleMacroChangeMenu)
 end
 
@@ -262,7 +262,7 @@ function SimpleMacro_LoadButtons(frame, name, buttonsPerRow, totalButtons)
       button:SetPoint("TOP", name..(i - buttonsPerRow), "BOTTOM", 0, -10)
 
       if totalButtons - buttonsPerRow < i then
-        SimpleMacroMenu[name.."LastRow"] = button:GetName()
+        SimpleMacroFrame[name.."LastRow"] = button:GetName()
       end
     else
       button:SetPoint("LEFT", name..(i - 1), "RIGHT", 13, 0)
@@ -285,15 +285,15 @@ function SM_ChangeMenu_NameChanged(self)
 end
 
 function SM_ChangeMenu_SelectIcon(id, texture)
-  SimpleMacroMenu.selectedTexture = texture or G["SMIconButton"..id.."Icon"]:GetTexture()
+  SimpleMacroFrame.selectedTexture = texture or G["SMIconButton"..id.."Icon"]:GetTexture()
 end
 
 function SimpleMacroChangeMenu_OnShow(_)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 
-  local createSelect = SimpleMacroMenu.createSelect
-  local macroStart = SimpleMacroMenu.macroStart
-  local mode = SimpleMacroMenu.mode
+  local createSelect = SimpleMacroFrame.createSelect
+  local macroStart = SimpleMacroFrame.macroStart
+  local mode = SimpleMacroFrame.mode
 
   if mode == "new" then
     SimpleMacroChangeMenuName:SetText("")
@@ -340,8 +340,8 @@ local function SimpleMacro_ArrangeButtons(frame, name, prevOffset, offset, numRo
   prevLeader:ClearAllPoints()
 
   newLeader:SetPoint("TOPLEFT", frame, "TOPLEFT", 6, -6)
-  prevLeader:SetPoint("TOP", G[SimpleMacroMenu[name.."LastRow"]], "BOTTOM", 0, -10)
-  SimpleMacroMenu[name.."LastRow"] = follower:GetName()
+  prevLeader:SetPoint("TOP", G[SimpleMacroFrame[name.."LastRow"]], "BOTTOM", 0, -10)
+  SimpleMacroFrame[name.."LastRow"] = follower:GetName()
 end
 
 function SimpleMacroChangeMenu_Update()
@@ -349,13 +349,13 @@ function SimpleMacroChangeMenu_Update()
   local iconsPerRow = C["ICONS_PER_ROW"]
   local iconTable = C["ICON_TABLE"]
   local numIconRows = numIconFrames / iconsPerRow
-  local selectedTexture = SimpleMacroMenu.selectedTexture
+  local selectedTexture = SimpleMacroFrame.selectedTexture
   local offset = FauxScrollFrame_GetOffset(SimpleMacroChangeMenuIcons) or 0
   local scrollFrame = SimpleMacroChangeMenuIconsScrollChildFrame
   local buttonName, button, buttonIcon
 
-  SimpleMacro_ArrangeButtons(scrollFrame, "SMIconButton", SimpleMacroMenu.prevOffset, offset, numIconRows, iconsPerRow, numIconFrames)
-  SimpleMacroMenu.prevOffset = offset
+  SimpleMacro_ArrangeButtons(scrollFrame, "SMIconButton", SimpleMacroFrame.prevOffset, offset, numIconRows, iconsPerRow, numIconFrames)
+  SimpleMacroFrame.prevOffset = offset
 
   for i = 1, numIconFrames do
     local index = i + offset * iconsPerRow
@@ -398,13 +398,13 @@ function SimpleMacroChangeMenuCancel_OnClick(_)
 end
 
 function SimpleMacroChangeMenuOkay_OnClick(_)
-  local selectedTexture = SimpleMacroMenu.selectedTexture
-  local createSelect = SimpleMacroMenu.createSelect
-  local macroStart = SimpleMacroMenu.macroStart
-  local mode = SimpleMacroMenu.mode
+  local selectedTexture = SimpleMacroFrame.selectedTexture
+  local createSelect = SimpleMacroFrame.createSelect
+  local macroStart = SimpleMacroFrame.macroStart
+  local mode = SimpleMacroFrame.mode
   local name, texture, isCharacter
 
-  if SimpleMacroMenu.macroStart ~= 0 then
+  if SimpleMacroFrame.macroStart ~= 0 then
     isCharacter = 1
   end
 
@@ -466,16 +466,16 @@ end
 local function lockHighlight(editorEntry)
   editorEntry.highlight:SetVertexColor(1, 1, 0, 0.6) -- selectedLine, yellow
   editorEntry:LockHighlight()
-  SimpleMacroMenu.selectedEditorEntry = editorEntry
+  SimpleMacroFrame.selectedEditorEntry = editorEntry
 end
 
 function SM_MacroEditor_UnlockHighlights()
-  if SimpleMacroMenu.selectedLine and G["LineEntry"..SimpleMacroMenu.selectedLine] then
-    unlockHighlight(G["LineEntry"..SimpleMacroMenu.selectedLine])
+  if SimpleMacroFrame.selectedLine and G["LineEntry"..SimpleMacroFrame.selectedLine] then
+    unlockHighlight(G["LineEntry"..SimpleMacroFrame.selectedLine])
   end
 
-  if SimpleMacroMenu.selectedEditorEntry ~= nil then
-    unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
+  if SimpleMacroFrame.selectedEditorEntry ~= nil then
+    unlockHighlight(SimpleMacroFrame.selectedEditorEntry)
   end
 end
 
@@ -542,18 +542,18 @@ function SM_MacroEditor_Update()
   end
 
   SM_HideEditorLines(currentMacro.lines.count + 1)
-  unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
+  unlockHighlight(SimpleMacroFrame.selectedEditorEntry)
 end
 
 local function SM_MacroEditor_OnClick(self)
   G["SM_MacroEditor_AddNewLine"]:Disable()
 
-  unlockHighlight(SimpleMacroMenu.selectedEditorEntry)
+  unlockHighlight(SimpleMacroFrame.selectedEditorEntry)
   lockHighlight(self)
 
-  SimpleMacroEditorPopup:SetSelectedMacro(SimpleMacroMenu.createSelect + SimpleMacroMenu.macroStart)
-  SimpleMacroEditorPopup:SetSelectedLine(SimpleMacroMenu.selectedLine)
-  SimpleMacroEditorPopup:SetSelectedArgument(SimpleMacroMenu.selectedArgument)
+  SimpleMacroEditorPopup:SetSelectedMacro(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
+  SimpleMacroEditorPopup:SetSelectedLine(SimpleMacroFrame.selectedLine)
+  SimpleMacroEditorPopup:SetSelectedArgument(SimpleMacroFrame.selectedArgument)
   ShowUIPanel(SimpleMacroEditorPopup)
   SimpleMacroEditorPopup_Update()
 end
@@ -566,15 +566,15 @@ end
 
 function SM_MacroEditorLine_OnClick(self, _, _)
   local lineNum = string.match(self:GetName(), ".-(%d).*")
-  SimpleMacroMenu.selectedLine = tonumber(lineNum)
-  SimpleMacroMenu.selectedArgument = nil
+  SimpleMacroFrame.selectedLine = tonumber(lineNum)
+  SimpleMacroFrame.selectedArgument = nil
   SM_MacroEditor_OnClick(self, SM_NewLineMenu)
 end
 
 function SM_MacroEditorArg_OnClick(self, _, _)
   local lineNum, argNum = string.match(self:GetName(), ".-(%d).-(%d).*")
-  SimpleMacroMenu.selectedLine = tonumber(lineNum)
-  SimpleMacroMenu.selectedArgument = tonumber(argNum)
+  SimpleMacroFrame.selectedLine = tonumber(lineNum)
+  SimpleMacroFrame.selectedArgument = tonumber(argNum)
   SM_MacroEditor_OnClick(self, SM_ArgMenu)
 end
 

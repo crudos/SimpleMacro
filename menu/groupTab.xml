@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
     <Script file="grouptab.lua"/>
-    <Frame name="$parentGroupTab" hidden="true" parent="SimpleMacroMenu">
+    <Frame name="$parentGroupTab" hidden="true" parent="SimpleMacroFrame">
         <Anchors>
             <Anchor point="TOPLEFT"/>
             <Anchor point="BOTTOMRIGHT"/>

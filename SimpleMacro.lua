@@ -62,9 +62,9 @@ end
 SlashCmdList["SIMPLEMACRO"] = slashCmdHandler
 
 function SimpleMacro_Show()
-  ShowUIPanel(SimpleMacroMenu)
+  ShowUIPanel(SimpleMacroFrame)
 end
 
 function SimpleMacro_Hide(_)
-  HideUIPanel(SimpleMacroMenu)
+  HideUIPanel(SimpleMacroFrame)
 end

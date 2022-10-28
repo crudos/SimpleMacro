@@ -7,8 +7,8 @@ local function isempty(s)
 end
 
 local function setAccountMacros()
-  SimpleMacroMenu.macroStart = 0
-  SimpleMacroMenu.macroMax = MAX_ACCOUNT_MACROS
+  SimpleMacroFrame.macroStart = 0
+  SimpleMacroFrame.macroMax = MAX_ACCOUNT_MACROS
 
   local numAccountMacros, _ = GetNumMacros()
 
@@ -20,8 +20,8 @@ local function setAccountMacros()
 end
 
 local function setCharacterMacros()
-  SimpleMacroMenu.macroStart = MAX_ACCOUNT_MACROS
-  SimpleMacroMenu.macroMax = MAX_CHARACTER_MACROS
+  SimpleMacroFrame.macroStart = MAX_ACCOUNT_MACROS
+  SimpleMacroFrame.macroMax = MAX_CHARACTER_MACROS
 
   local _, numCharacterMacros = GetNumMacros()
 
@@ -37,7 +37,7 @@ local function setGroupMacros()
   local group = groupTable[groupTable.selected]
 
   if group and #group > 0 then
-    -- possibly save the last selected macro in the group in SimpleMacroMenu.groupTable[#].selected
+    -- possibly save the last selected macro in the group in SimpleMacroFrame.groupTable[#].selected
     SM_GroupButton_SelectMacro(1)
   else
     SM_GroupButton_SelectMacro(nil)
@@ -157,7 +157,7 @@ function SM_GroupTab_Group_OnClick(self)
 end
 
 function SimpleMacroMenuGroupTab_OnClick(self)
-  PanelTemplates_SetTab(SimpleMacroMenu, self:GetID())
+  PanelTemplates_SetTab(SimpleMacroFrame, self:GetID())
   SimpleMacroMenuCreateTab:Hide()
   SimpleMacroMenuGroupTab:Show()
 end
@@ -214,7 +214,7 @@ function SM_UserButton_Update()
   local macroButtonName, macroButton, macroIcon, macroName
   local name, texture, body
 
-  if SimpleMacroMenu.macroStart == 0 then
+  if SimpleMacroFrame.macroStart == 0 then
     numMacros = numAccountMacros
   else
     numMacros = numCharacterMacros
@@ -226,14 +226,14 @@ function SM_UserButton_Update()
     macroIcon = G[macroButtonName.."Icon"]
     macroName = G[macroButtonName.."Name"]
 
-    if i <= SimpleMacroMenu.macroMax then
+    if i <= SimpleMacroFrame.macroMax then
       if i <= numMacros then
-        name, texture, body = GetMacroInfo(i + SimpleMacroMenu.macroStart)
+        name, texture, body = GetMacroInfo(i + SimpleMacroFrame.macroStart)
         macroButton:SetIconTexture(texture)
         macroButton.Name:SetText(name)
         macroButton:Enable()
 
-        if SimpleMacroMenu.userSelect and SimpleMacroMenu.userSelect == i then
+        if SimpleMacroFrame.userSelect and SimpleMacroFrame.userSelect == i then
           macroButton:SetChecked(true)
         else
           macroButton:SetChecked(false)
@@ -274,7 +274,7 @@ function SM_GroupButton_Update()
       macroButton.Name:SetText(name)
       macroButton:Enable()
 
-      if SimpleMacroMenu.groupSelect and SimpleMacroMenu.groupSelect == i then
+      if SimpleMacroFrame.groupSelect and SimpleMacroFrame.groupSelect == i then
         macroButton:SetChecked(true)
       else
         macroButton:SetChecked(false)
@@ -305,15 +305,15 @@ function SM_GroupButton_Update()
 end
 
 function SM_UserButton_SelectMacro(id)
-  SimpleMacroMenu.userSelect = id
+  SimpleMacroFrame.userSelect = id
 end
 
 function SM_GroupButton_SelectMacro(id)
-  SimpleMacroMenu.groupSelect = id
+  SimpleMacroFrame.groupSelect = id
 end
 
 function SM_GroupAddButton_OnClick(_)
-  local buttonId = SimpleMacroMenu.userSelect + SimpleMacroMenu.macroStart
+  local buttonId = SimpleMacroFrame.userSelect + SimpleMacroFrame.macroStart
   local groupTable = SimpleMacro.dbc.groupTable
   local group = groupTable[groupTable.selected]
   local isFound = false
@@ -333,7 +333,7 @@ function SM_GroupAddButton_OnClick(_)
 end
 
 function SM_GroupDeleteButton_OnClick(_)
-  local id = SimpleMacroMenu.groupSelect
+  local id = SimpleMacroFrame.groupSelect
   local groupTable = SimpleMacro.dbc.groupTable
   local group = groupTable[groupTable.selected]
 
