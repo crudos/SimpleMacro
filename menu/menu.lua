@@ -10,10 +10,9 @@ end
 SimpleMacroFrameMixin = {};
 
 function SimpleMacroFrameMixin:OnLoad()
-  self:RegisterForDrag("LeftButton")
-  --tinsert(UISpecialFrames, self:GetName())
   PanelTemplates_SetNumTabs(self, 2)
   PanelTemplates_SetTab(self, 1)
+  self:RegisterForDrag("LeftButton")
   self:SetTitle(getGlobalString"MENU_TITLE")
 end
 
@@ -37,7 +36,7 @@ function SimpleMacroFrameMixin:ChangeTab(tabID)
   PanelTemplates_SetTab(self, tabID)
 
   if tabID == 1 then
-    -- Create tab
+    ShowUIPanel(SimpleMacroFrameCreateTab)
   elseif tabID == 2 then
     -- Group tab
   end

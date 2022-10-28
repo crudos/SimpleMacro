@@ -52,12 +52,12 @@ end
 
 -- Create tab
 function SM_CreateTab_OnLoad(_)
-  PanelTemplates_SetNumTabs(SimpleMacroMenuCreateTab, 2)
-  PanelTemplates_SetTab(SimpleMacroMenuCreateTab, 2) -- TODO set to first tab
+  PanelTemplates_SetNumTabs(SimpleMacroFrameCreateTab, 2)
+  PanelTemplates_SetTab(SimpleMacroFrameCreateTab, 2) -- TODO set to first tab
 end
 
 function SM_CreateTab_OnShow(_)
-  if PanelTemplates_GetSelectedTab(SimpleMacroMenuCreateTab) == 1 then
+  if PanelTemplates_GetSelectedTab(SimpleMacroFrameCreateTab) == 1 then
     setAccountMacros()
   else
     setCharacterMacros()
@@ -73,7 +73,7 @@ end
 function SM_CreateTab_MacroTab_OnClick(self)
   local tabNum = self:GetID()
 
-  PanelTemplates_SetTab(SimpleMacroMenuCreateTab, tabNum)
+  PanelTemplates_SetTab(SimpleMacroFrameCreateTab, tabNum)
   setMacros(tabNum)
   SM_CreateTab_Update()
 end
@@ -128,7 +128,7 @@ function SM_CreateTab_Update()
 
         if createSelect and createSelect == i then
           macroButton:SetChecked(true)
-          local selectedIcon = G["SimpleMacroMenuCreateTabSelected"]
+          local selectedIcon = G["SimpleMacroFrameCreateTabSelected"]
           selectedIcon:SetID(i)
           selectedIcon.Name:SetText(name)
           selectedIcon:SetIconTexture(texture)
@@ -152,18 +152,18 @@ function SM_CreateTab_Update()
   -- make any button/text field updates
 
   if numMacros < macroMax then
-    SimpleMacroMenuCreateTabNewButton:Enable()
+    SimpleMacroFrameCreateTabNewButton:Enable()
   else
-    SimpleMacroMenuCreateTabNewButton:Disable()
+    SimpleMacroFrameCreateTabNewButton:Disable()
   end
 
   if createSelect ~= nil then
     SM_MacroEditor_Update()
   end
 
-  SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Show()
+  SimpleMacroFrameCreateTabMacroEditorScrollFrameChild:Show()
   PanelTemplates_UpdateTabs(SimpleMacroFrame)
-  PanelTemplates_UpdateTabs(SimpleMacroMenuCreateTab)
+  PanelTemplates_UpdateTabs(SimpleMacroFrameCreateTab)
   SM_OpenPopupMenu(nil)
 end
 
@@ -196,14 +196,14 @@ function SM_CreateTab_GetCurrentMacro()
 end
 
 function SM_CreateTab_EnableButtons()
-  SimpleMacroMenuCreateTabChange:Enable()
-  SimpleMacroMenuCreateTabDeleteButton:Enable()
+  SimpleMacroFrameCreateTabChange:Enable()
+  SimpleMacroFrameCreateTabDeleteButton:Enable()
 end
 
 function SM_CreateTab_DisableButtons()
-  SimpleMacroMenuCreateTabChange:Disable()
-  SimpleMacroMenuCreateTabDeleteButton:Disable()
-  SimpleMacroMenuCreateTabNewButton:Disable()
+  SimpleMacroFrameCreateTabChange:Disable()
+  SimpleMacroFrameCreateTabDeleteButton:Disable()
+  SimpleMacroFrameCreateTabNewButton:Disable()
 end
 
 function SM_SaveButton_OnClick(_)
@@ -281,7 +281,7 @@ function SM_ChangeMenu_NameChanged(self)
     SimpleMacroChangeMenu.BorderBox.OkayButton:Disable()
   end
 
-  SimpleMacroMenuCreateTabSelectedText:SetText(self:GetText())
+  SimpleMacroFrameCreateTabSelectedText:SetText(self:GetText())
 end
 
 function SM_ChangeMenu_SelectIcon(id, texture)
@@ -298,7 +298,7 @@ function SimpleMacroChangeMenu_OnShow(_)
   if mode == "new" then
     SimpleMacroChangeMenuName:SetText("")
     SM_ChangeMenu_SelectIcon(nil, C["ICON_TABLE"][1])
-    SimpleMacroMenuCreateTabMacroEditorScrollFrameChild:Hide()
+    SimpleMacroFrameCreateTabMacroEditorScrollFrameChild:Hide()
     SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, 0)
   elseif mode == "edit" then
     local name, texture, _ = GetMacroInfo(createSelect + macroStart)
@@ -312,10 +312,10 @@ function SimpleMacroChangeMenu_OnShow(_)
 
   SimpleMacroChangeMenu_Update()
   SM_CreateTab_DisableButtons()
-  SimpleMacroMenuTab1:Disable()
-  SimpleMacroMenuTab2:Disable()
-  SimpleMacroMenuCreateTabTab1:Disable()
-  SimpleMacroMenuCreateTabTab2:Disable()
+  SimpleMacroFrameTab1:Disable()
+  SimpleMacroFrameTab2:Disable()
+  SimpleMacroFrameCreateTabTab1:Disable()
+  SimpleMacroFrameCreateTabTab2:Disable()
 end
 
 function SM_ChangeMenu_OnVerticalScroll(self, offset)
@@ -374,7 +374,7 @@ function SimpleMacroChangeMenu_Update()
 
     if selectedTexture and selectedTexture == texture then
       button:SetChecked(1)
-      G["SimpleMacroMenuCreateTabSelectedIcon"]:SetTexture(texture)
+      G["SimpleMacroFrameCreateTabSelectedIcon"]:SetTexture(texture)
     else
       button:SetChecked(nil)
     end
@@ -483,10 +483,10 @@ function SM_MacroEditor_CreateLineFrame(lineNum)
   local macroEditorLine
   local curLine = "SM_MacroEditorLine"..lineNum
   if G[curLine] == nil then
-    macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
+    macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroFrameCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
 
     if lineNum == 1 then
-      macroEditorLine:SetPoint("TOPLEFT", SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
+      macroEditorLine:SetPoint("TOPLEFT", SimpleMacroFrameCreateTabMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
     else
       macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine"..(lineNum - 1), "BOTTOMLEFT", 0, 0)
     end
@@ -507,7 +507,7 @@ function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   local macroEditorArg
   local curArg = currentLine.."Arg"..argumentNum
   if G[curArg] == nil then
-    macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroMenuCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
+    macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroFrameCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
   else
     macroEditorArg = G[curArg]
     macroEditorArg:Show()

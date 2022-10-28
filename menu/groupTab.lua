@@ -47,7 +47,7 @@ end
 -- GROUP TAB
 
 local function loadGroupTabs()
-  local parentFrame = SimpleMacroMenuGroupTabGroupScrollFrame
+  local parentFrame = SimpleMacroFrameGroupTabGroupScrollFrame
   local inheritFrame = "PanelTabButtonTemplate"
 
   for i = 1, C["MAX_TABS"] do
@@ -63,7 +63,7 @@ function SM_GroupTab_OnLoad(panel)
 end
 
 function SM_GroupTab_OnShow(_)
-  if PanelTemplates_GetSelectedTab(SimpleMacroMenuGroupTab) == 1 then
+  if PanelTemplates_GetSelectedTab(SimpleMacroFrameGroupTab) == 1 then
     setAccountMacros()
   else
     setCharacterMacros()
@@ -79,8 +79,8 @@ function SM_GroupTab_OnShow(_)
 end
 
 function SM_SetGroupTabs()
-  local parentFrame = SimpleMacroMenuGroupTabGroupScrollFrame
-  local groupTabName = "SimpleMacroMenuGroupTabGroupScrollFrameTab"
+  local parentFrame = SimpleMacroFrameGroupTabGroupScrollFrame
+  local groupTabName = "SimpleMacroFrameGroupTabGroupScrollFrameTab"
   local groupTable = SimpleMacro.dbc.groupTable
   local tab
 
@@ -142,7 +142,7 @@ end
 function SM_GroupTab_Group_OnClick(self)
   local groupTable = SimpleMacro.dbc.groupTable
 
-  PanelTemplates_SetTab(SimpleMacroMenuGroupTabGroupScrollFrame, self:GetID())
+  PanelTemplates_SetTab(SimpleMacroFrameGroupTabGroupScrollFrame, self:GetID())
   groupTable.selected = self:GetID()
 
   if #groupTable[groupTable.selected] > 0 then
@@ -156,10 +156,10 @@ function SM_GroupTab_Group_OnClick(self)
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
 end
 
-function SimpleMacroMenuGroupTab_OnClick(self)
+function SimpleMacroFrameGroupTab_OnClick(self)
   PanelTemplates_SetTab(SimpleMacroFrame, self:GetID())
-  SimpleMacroMenuCreateTab:Hide()
-  SimpleMacroMenuGroupTab:Show()
+  SimpleMacroFrameCreateTab:Hide()
+  SimpleMacroFrameGroupTab:Show()
 end
 
 -- create buttons containers
@@ -181,13 +181,13 @@ function SM_UserButtons_OnLoad(self)
 end
 
 function SM_GroupTabAccountMacroTab_OnClick(self)
-  PanelTemplates_SetTab(SimpleMacroMenuGroupTab, self:GetID())
+  PanelTemplates_SetTab(SimpleMacroFrameGroupTab, self:GetID())
   setAccountMacros()
   SM_UserButton_Update()
 end
 
 function SM_GroupTabCharacterMacroTab_OnClick(self)
-  PanelTemplates_SetTab(SimpleMacroMenuGroupTab, self:GetID())
+  PanelTemplates_SetTab(SimpleMacroFrameGroupTab, self:GetID())
   setCharacterMacros()
   SM_UserButton_Update()
 end
