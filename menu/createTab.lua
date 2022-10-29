@@ -52,12 +52,12 @@ end
 
 -- Create tab
 function SM_CreateTab_OnLoad(_)
-  PanelTemplates_SetNumTabs(SimpleMacroFrameCreateTab, 2)
-  PanelTemplates_SetTab(SimpleMacroFrameCreateTab, 2) -- TODO set to first tab
+  PanelTemplates_SetNumTabs(SMCreateFrame, 2)
+  PanelTemplates_SetTab(SMCreateFrame, 2) -- TODO set to first tab
 end
 
 function SM_CreateTab_OnShow(_)
-  if PanelTemplates_GetSelectedTab(SimpleMacroFrameCreateTab) == 1 then
+  if PanelTemplates_GetSelectedTab(SMCreateFrame) == 1 then
     setAccountMacros()
   else
     setCharacterMacros()
@@ -73,7 +73,7 @@ end
 function SM_CreateTab_MacroTab_OnClick(self)
   local tabNum = self:GetID()
 
-  PanelTemplates_SetTab(SimpleMacroFrameCreateTab, tabNum)
+  PanelTemplates_SetTab(SMCreateFrame, tabNum)
   setMacros(tabNum)
   SM_CreateTab_Update()
 end
@@ -96,75 +96,7 @@ function SMCreateButtons_OnLoad(self)
 end
 
 function SM_CreateTab_Update()
-  local createSelect = SimpleMacroFrame.createSelect
-  local macroStart = SimpleMacroFrame.macroStart
-  local currentMacro = SM_CreateTab_GetCurrentMacro()
-  if createSelect then
-    EditMacro(createSelect + macroStart, nil, nil, currentMacro:compose())
-  end
-
-  local numAccountMacros, numCharacterMacros = GetNumMacros()
-  local numMacros
-  if macroStart == 0 then
-    numMacros = numAccountMacros
-  else
-    numMacros = numCharacterMacros
-  end
-
-  local macroButtonName, macroButton, macroIcon, macroName
-  local macroMax = SimpleMacroFrame.macroMax
-  for i = 1, MAX_ACCOUNT_MACROS do
-    macroButtonName = "SMCreateButton"..i
-    macroButton = G[macroButtonName]
-    macroIcon = G[macroButtonName.."Icon"]
-    macroName = G[macroButtonName.."Name"]
-
-    if i <= macroMax then
-      if i <= numMacros then
-        local name, texture, _ = GetMacroInfo(i + macroStart)
-        macroButton:SetIconTexture(texture)
-        macroButton.Name:SetText(name)
-        macroButton:Enable()
-
-        if createSelect and createSelect == i then
-          macroButton:SetChecked(true)
-          local selectedIcon = G["SimpleMacroFrameCreateTabSelected"]
-          selectedIcon:SetID(i)
-          selectedIcon.Name:SetText(name)
-          selectedIcon:SetIconTexture(texture)
-          SimpleMacroFrame.selectedTexture = texture
-        else
-          macroButton:SetChecked(false)
-        end
-      else
-        macroButton:SetIconTexture("")
-        macroButton.Name:SetText("")
-        macroButton:Disable()
-        macroButton:SetChecked(false)
-      end
-
-      macroButton:Show()
-    else
-      macroButton:Hide()
-    end
-  end
-
-  -- make any button/text field updates
-
-  if numMacros < macroMax then
-    SimpleMacroFrameCreateTabNewButton:Enable()
-  else
-    SimpleMacroFrameCreateTabNewButton:Disable()
-  end
-
-  if createSelect ~= nil then
-    SM_MacroEditor_Update()
-  end
-
-  SimpleMacroFrameCreateTabMacroEditorScrollFrameChild:Show()
-  PanelTemplates_UpdateTabs(SimpleMacroFrame)
-  PanelTemplates_UpdateTabs(SimpleMacroFrameCreateTab)
-  SM_OpenPopupMenu(nil)
+  -- todo
 end
 
 function SM_CreateTab_SelectMacro(id)
@@ -196,14 +128,14 @@ function SM_CreateTab_GetCurrentMacro()
 end
 
 function SM_CreateTab_EnableButtons()
-  SimpleMacroFrameCreateTabChange:Enable()
-  SimpleMacroFrameCreateTabDeleteButton:Enable()
+  SMCreateFrameChange:Enable()
+  SMCreateFrameDeleteButton:Enable()
 end
 
 function SM_CreateTab_DisableButtons()
-  SimpleMacroFrameCreateTabChange:Disable()
-  SimpleMacroFrameCreateTabDeleteButton:Disable()
-  SimpleMacroFrameCreateTabNewButton:Disable()
+  SMCreateFrameChange:Disable()
+  SMCreateFrame.DeleteButton:Disable()
+  SMCreateFrame.NewButton:Disable()
 end
 
 function SM_SaveButton_OnClick(_)
@@ -213,34 +145,6 @@ end
 
 function SM_SaveMacro()
   --
-end
-
-function SM_DeleteButton_OnClick(_)
-  local numAccountMacros, numCharacterMacros
-  numAccountMacros, numCharacterMacros = GetNumMacros()
-
-  DeleteMacro(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
-
-  if SimpleMacroFrame.macroStart == 0 and SimpleMacroFrame.createSelect == numAccountMacros then
-    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect - 1)
-  elseif SimpleMacroFrame.macroStart ~= 0 and SimpleMacroFrame.createSelect == numCharacterMacros then
-    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect - 1)
-  else
-    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect)
-  end
-
-  SM_CreateTab_Update()
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-end
-
-function SM_ChangeButton_OnClick(_)
-  SimpleMacroFrame.mode = "edit"
-  SM_OpenPopupMenu(SimpleMacroChangeMenu)
-end
-
-function SM_NewButton_OnClick(_)
-  SimpleMacroFrame.mode = "new"
-  SM_OpenPopupMenu(SimpleMacroChangeMenu)
 end
 
 function SimpleMacroChangeMenu_OnLoad(_)
@@ -281,7 +185,7 @@ function SM_ChangeMenu_NameChanged(self)
     SimpleMacroChangeMenu.BorderBox.OkayButton:Disable()
   end
 
-  SimpleMacroFrameCreateTabSelectedText:SetText(self:GetText())
+  SMCreateFrameSelectedText:SetText(self:GetText())
 end
 
 function SM_ChangeMenu_SelectIcon(id, texture)
@@ -298,7 +202,7 @@ function SimpleMacroChangeMenu_OnShow(_)
   if mode == "new" then
     SimpleMacroChangeMenuName:SetText("")
     SM_ChangeMenu_SelectIcon(nil, C["ICON_TABLE"][1])
-    SimpleMacroFrameCreateTabMacroEditorScrollFrameChild:Hide()
+    SMCreateFrameMacroEditorScrollFrameChild:Hide()
     SM_ChangeMenu_OnVerticalScroll(SimpleMacroChangeMenuIcons, 0)
   elseif mode == "edit" then
     local name, texture, _ = GetMacroInfo(createSelect + macroStart)
@@ -314,8 +218,8 @@ function SimpleMacroChangeMenu_OnShow(_)
   SM_CreateTab_DisableButtons()
   SimpleMacroFrameTab1:Disable()
   SimpleMacroFrameTab2:Disable()
-  SimpleMacroFrameCreateTabTab1:Disable()
-  SimpleMacroFrameCreateTabTab2:Disable()
+  SMCreateFrameTab1:Disable()
+  SMCreateFrameTab2:Disable()
 end
 
 function SM_ChangeMenu_OnVerticalScroll(self, offset)
@@ -374,7 +278,7 @@ function SimpleMacroChangeMenu_Update()
 
     if selectedTexture and selectedTexture == texture then
       button:SetChecked(1)
-      G["SimpleMacroFrameCreateTabSelectedIcon"]:SetTexture(texture)
+      G["SMCreateFrameSelectedIcon"]:SetTexture(texture)
     else
       button:SetChecked(nil)
     end
@@ -483,10 +387,10 @@ function SM_MacroEditor_CreateLineFrame(lineNum)
   local macroEditorLine
   local curLine = "SM_MacroEditorLine"..lineNum
   if G[curLine] == nil then
-    macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroFrameCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
+    macroEditorLine = CreateFrame("CheckButton", curLine, SMCreateFrameMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
 
     if lineNum == 1 then
-      macroEditorLine:SetPoint("TOPLEFT", SimpleMacroFrameCreateTabMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
+      macroEditorLine:SetPoint("TOPLEFT", SMCreateFrameMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
     else
       macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine"..(lineNum - 1), "BOTTOMLEFT", 0, 0)
     end
@@ -507,7 +411,7 @@ function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   local macroEditorArg
   local curArg = currentLine.."Arg"..argumentNum
   if G[curArg] == nil then
-    macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroFrameCreateTabMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
+    macroEditorArg = CreateFrame("CheckButton", curArg, SMCreateFrameMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
   else
     macroEditorArg = G[curArg]
     macroEditorArg:Show()
@@ -595,3 +499,56 @@ function MacroEditor_AddNewLine_OnClick(_, _, _)
   SM_CreateTab_Update()
 end
 
+
+
+
+-- new shit
+
+function SMCreateFrame_NewButton_OnClick(_)
+  SimpleMacroFrame.mode = "new"
+  SM_OpenPopupMenu(SimpleMacroChangeMenu)
+end
+
+function SMCreateFrame_ChangeButton_OnClick(_)
+  SimpleMacroFrame.mode = "edit"
+  SM_OpenPopupMenu(SimpleMacroChangeMenu)
+end
+
+function SMCreateFrame_SaveButton_OnClick()
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+  SMCreateFrame:SaveMacro();
+
+  local retainScrollPosition = true;
+  SMCreateFrame:Update(retainScrollPosition);
+
+  --MacroPopupFrame:Hide();
+  SMCreateFrameText:ClearFocus();
+end
+
+function SMCreateFrame_CancelButton_OnClick()
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+
+  --local retainScrollPosition = true;
+  --MacroFrame:Update(retainScrollPosition);
+
+  --MacroPopupFrame:Hide();
+  SMCreateFrameText:ClearFocus();
+end
+
+function SMCreateFrame_DeleteButton_OnClick(_)
+  local numAccountMacros, numCharacterMacros
+  numAccountMacros, numCharacterMacros = GetNumMacros()
+
+  DeleteMacro(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
+
+  if SimpleMacroFrame.macroStart == 0 and SimpleMacroFrame.createSelect == numAccountMacros then
+    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect - 1)
+  elseif SimpleMacroFrame.macroStart ~= 0 and SimpleMacroFrame.createSelect == numCharacterMacros then
+    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect - 1)
+  else
+    SM_CreateTab_SelectMacro(SimpleMacroFrame.createSelect)
+  end
+
+  SM_CreateTab_Update()
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+end

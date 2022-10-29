@@ -40,7 +40,7 @@
           </OnClick>
         </Scripts>
       </Button>
-      <Button name="$parentExitButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_EXIT">
+      <Button parentKey="ExitButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_EXIT">
         <Size x="86" y="22"/>
         <Anchors>
           <Anchor point="BOTTOMRIGHT" relativePoint="BOTTOMRIGHT" x="-5" y="4"/>

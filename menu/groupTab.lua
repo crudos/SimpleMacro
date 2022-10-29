@@ -158,7 +158,7 @@ end
 
 function SimpleMacroFrameGroupTab_OnClick(self)
   PanelTemplates_SetTab(SimpleMacroFrame, self:GetID())
-  SimpleMacroFrameCreateTab:Hide()
+  SMCreateFrame:Hide()
   SimpleMacroFrameGroupTab:Show()
 end
 

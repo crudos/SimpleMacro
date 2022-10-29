@@ -2,14 +2,14 @@
   <Script file="createtab.lua"/>
 
   <!-- Create tab -->
-  <Frame name="$parentCreateTab" hidden="false" parent="SimpleMacroFrame">
+  <Frame name="SMCreateFrame" mixin="SimpleMacroTabFrameMixin" hidden="false" parent="SimpleMacroFrame">
     <Anchors>
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
     </Anchors>
     <Layers>
       <Layer level="ARTWORK">
-        <Texture name="SimpleMacroHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+        <Texture name="$parentHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
           <Size x="256" y="16"/>
           <Anchors>
             <Anchor point="TOPLEFT" x="2" y="-252"/>
@@ -19,96 +19,43 @@
         <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
           <Size x="88" y="16"/>
           <Anchors>
-            <Anchor point="LEFT" relativeTo="SimpleMacroHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
+            <Anchor point="LEFT" relativeTo="$parentHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
           </Anchors>
           <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
         </Texture>
-        <Texture name="SimpleMacroFrameSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
+        <Texture name="$parentSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
           <Size x="64" y="64"/>
           <Anchors>
             <Anchor point="TOPLEFT" x="5" y="-218"/>
           </Anchors>
         </Texture>
+        <FontString name="$parentSelectedMacroName" inherits="GameFontNormalLarge" justifyH="LEFT">
+          <Size x="256" y="16"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" relativePoint="TOPRIGHT" x="-4" y="-10"/>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentEnterMacroText" inherits="GameFontHighlightSmall" text="ENTER_MACRO_LABEL">
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="8" y="3"/>
+          </Anchors>
+        </FontString>
+        <FontString name="$parentCharLimitText" inherits="GameFontHighlightSmall">
+          <Size x="0" y="10"/>
+          <Anchors>
+            <Anchor point="BOTTOM" x="-15" y="30"/>
+          </Anchors>
+        </FontString>
       </Layer>
     </Layers>
     <Frames>
-      <ScrollFrame name="$parentMacroScrollFrame" inherits="UIPanelScrollFrameTemplate">
-        <Size x="292" y="190"/>
-        <Anchors>
-          <Anchor point="TOPRIGHT" x="-40" y="-64"/>
-        </Anchors>
-        <ScrollChild>
-          <Frame name="SMCreateButtons">
-            <Size x="200" y="10"/>
-            <Anchors>
-              <Anchor point="TOPLEFT"/>
-            </Anchors>
-            <Scripts>
-              <OnLoad function="SMCreateButtons_OnLoad"/>
-            </Scripts>
-          </Frame>
-        </ScrollChild>
-        <Scripts>
-          <OnLoad function="ScrollFrame_OnLoad"/>
-        </Scripts>
-      </ScrollFrame>
-      <CheckButton name="$parentSelected" inherits="SimpleMacroButtonTemplate">
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="6" y="-20"/>
-        </Anchors>
-        <Layers>
-          <Layer level="ARTWORK">
-            <FontString name="$parentText" inherits="GameFontNormalLarge">
-              <Anchors>
-                <Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="12" y="5"/>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-      </CheckButton>
-      <CheckButton parentKey="SelectedMacroButton" name="MacroFrameSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" x="14" y="-14"/>
-        </Anchors>
-        <Scripts>
-          <OnClick>
-            self:SetChecked(false);
-            PickupMacro(MacroFrame.selectedMacro);
-          </OnClick>
-        </Scripts>
-      </CheckButton>
-      <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
-        <KeyValues>
-          <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
-        </KeyValues>
-        <Size x="319" y="146"/>
-        <Anchors>
-          <Anchor point="TOPLEFT" x="12" y="-66"/>
-        </Anchors>
-      </Frame>
-      <Button name="$parentChange" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_CHANGE">
-        <Size x="172" y="22"/>
-        <Anchors>
-          <Anchor point="LEFT" relativeTo="$parentSelected" relativePoint="RIGHT" x="6" y="-8"/>
-        </Anchors>
-        <Scripts>
-          <OnClick function="SM_ChangeButton_OnClick"/>
-        </Scripts>
-      </Button>
-      <Frame name="$parentMacroScrollBackground">
-        <Size x="328" y="156"/>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="-7" y="5"/>
-        </Anchors>
-      </Frame>
       <Button name="$parentTab1" inherits="PanelTopTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
         <Anchors>
-          <Anchor point="BOTTOMLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="TOPLEFT" x="26" y="2"/>
+          <Anchor point="TOPLEFT" x="51" y="-28"/>
         </Anchors>
         <Scripts>
           <OnClick>
-            SM_CreateTab_MacroTab_OnClick(self)
-            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+            self:GetParent():SelectTab(self);
           </OnClick>
         </Scripts>
       </Button>
@@ -118,33 +65,103 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            SM_CreateTab_MacroTab_OnClick(self)
-            PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
+            self:GetParent():SelectTab(self);
           </OnClick>
         </Scripts>
       </Button>
-      <ScrollFrame name="$parentMacroEditorScrollFrame" inherits="UIPanelScrollFrameTemplate">
-        <Size x="292" y="144"/>
+      <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
+        <KeyValues>
+          <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
+        </KeyValues>
+        <Size x="319" y="146"/>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parentMacroScrollFrame" relativePoint="BOTTOMLEFT" x="0" y="-80"/>
+          <Anchor point="TOPLEFT" x="12" y="-66"/>
+        </Anchors>
+      </Frame>
+      <CheckButton name="$parentSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" x="14" y="-14"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            self:SetChecked(false);
+            PickupMacro(MacroFrame.selectedMacro);
+          </OnClick>
+        </Scripts>
+      </CheckButton>
+      <Button name="$parentChangeButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_CHANGE">
+        <Size x="172" y="22"/>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentSelectedMacroButton" relativePoint="RIGHT" x="6" y="-8"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SMCreateFrame_ChangeButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
+        <Size x="286" y="85"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="11" y="-13"/>
         </Anchors>
         <ScrollChild>
-          <Frame name="$parentChild">
-            <Size x="200" y="10"/>
-            <Anchors>
-              <Anchor point="TOPLEFT"/>
-            </Anchors>
+          <EditBox name="SMCreateFrameText" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
+            <Size x="286" y="85"/>
             <Scripts>
-              <OnLoad function="SM_MacroEditor_OnLoad"/>
+              <OnLoad>
+                ScrollingEdit_OnCursorChanged(self, 0, 0, 0, 0);
+              </OnLoad>
+              <OnTextChanged>
+                SMCreateFrame.textChanged = 1;
+                --if ( MacroPopupFrame.mode == "new" ) then
+                --  MacroPopupFrame:Hide();
+                --end
+                SMCreateFrameCharLimitText:SetFormattedText(MACROFRAME_CHAR_LIMIT, SMCreateFrameText:GetNumLetters());
+
+                ScrollingEdit_OnTextChanged(self, self:GetParent());
+              </OnTextChanged>
+              <OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
+              <OnUpdate>
+                ScrollingEdit_OnUpdate(self, elapsed, self:GetParent());
+              </OnUpdate>
+              <OnEscapePressed function="EditBox_ClearFocus"/>
             </Scripts>
-          </Frame>
+            <FontString inherits="GameFontHighlightSmall"/>
+          </EditBox>
         </ScrollChild>
       </ScrollFrame>
-      <Frame name="$parentMacroEditorBackground" inherits="TooltipBackdropTemplate">
-        <Size x="328" y="154"/>
+      <Button name="$parentTextButton">
+        <Size x="286" y="85"/>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parentMacroEditorScrollFrame" relativePoint="TOPLEFT" x="-7"
-                  y="5"/>
+          <Anchor point="TOPLEFT" relativeTo="$parentText"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            SMCreateFrameText:SetFocus();
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="CANCEL">
+        <Size x="80" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMRIGHT" relativeTo="$parentScrollFrame" relativePoint="TOPRIGHT" x="25" y="10"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SMCreateFrame_CancelButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SAVE">
+        <Size x="80" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOM" relativeTo="$parentCancelButton" relativePoint="TOP" x="0" y="15"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SMCreateFrame_SaveButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Frame name="$parentTextBackground" inherits="TooltipBackdropTemplate">
+        <Size x="322" y="95"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="SMCreateFrame" x="6" y="-289"/>
         </Anchors>
       </Frame>
       <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
@@ -153,16 +170,16 @@
           <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="4" y="4"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SM_DeleteButton_OnClick"/>
+          <OnClick function="SMCreateFrame_DeleteButton_OnClick"/>
         </Scripts>
       </Button>
       <Button name="$parentNewButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_NEW">
         <Size x="86" y="22"/>
         <Anchors>
-          <Anchor point="RIGHT" relativeTo="SimpleMacroFrameExitButton" relativePoint="LEFT" x="0" y="0"/>
+          <Anchor point="BOTTOMRIGHT" x="-88" y="4"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SM_NewButton_OnClick"/>
+          <OnClick function="SMCreateFrame_NewButton_OnClick"/>
         </Scripts>
       </Button>
     </Frames>
@@ -255,7 +272,7 @@
               </OnEnterPressed>
               <OnEscapePressed function="SimpleMacroChangeMenuCancel_OnClick"/>
             </Scripts>
-            <FontString name="$parentText" inherits="ChatFontNormal"/>
+            <FontString name="$parentTexte" inherits="ChatFontNormal"/>
           </EditBox>
         </Frames>
       </Frame>
