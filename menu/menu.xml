@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="menu.lua"/>
 
-  <!-- Menu -->
+  <!-- SimpleMacroUI -->
   <Frame name="SimpleMacroFrame" mixin="SimpleMacroFrameMixin" toplevel="true"
          movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate">
     <Size x="350" y="524"/>

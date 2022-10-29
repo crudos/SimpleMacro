@@ -78,7 +78,7 @@
           <Anchor point="TOPLEFT" x="12" y="-66"/>
         </Anchors>
       </Frame>
-      <CheckButton name="$parentSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
+      <CheckButton parentKey="SelectedMacroButton" name="$parentSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" x="14" y="-14"/>
         </Anchors>
@@ -184,9 +184,9 @@
       </Button>
     </Frames>
     <Scripts>
-      <OnLoad function="SM_CreateTab_OnLoad"/>
-      <OnShow function="SM_CreateTab_OnShow"/>
-      <OnHide function="SM_CreateTab_OnHide"/>
+      <OnLoad method="OnLoad"/>
+      <OnShow method="OnShow"/>
+      <OnHide method="OnHide"/>
     </Scripts>
   </Frame>
 
