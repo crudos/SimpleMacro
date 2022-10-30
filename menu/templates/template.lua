@@ -26,7 +26,7 @@ function SimpleMacroButtonMixin:OnClick()
     SM_CreateTab_Update()
   elseif name == "SMIconButton"..id then
     SM_ChangeMenu_SelectIcon(id, nil)
-    SimpleMacroChangeMenu_Update()
+    SMChangeFrame_Update()
   end
 end
 

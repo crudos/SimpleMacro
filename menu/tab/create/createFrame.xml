@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-  <Script file="createtab.lua"/>
+  <Script file="createFrame.lua"/>
 
   <!-- Create tab -->
   <Frame name="SMCreateFrame" mixin="SimpleMacroTabFrameMixin" hidden="false" parent="SimpleMacroFrame">
@@ -10,9 +10,9 @@
     <Layers>
       <Layer level="ARTWORK">
         <Texture name="$parentHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
-          <Size x="256" y="16"/>
+          <Size x="342" y="16"/>
           <Anchors>
-            <Anchor point="TOPLEFT" x="2" y="-252"/>
+            <Anchor point="TOPLEFT" x="2" y="-212"/>
           </Anchors>
           <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
         </Texture>
@@ -73,7 +73,7 @@
         <KeyValues>
           <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
         </KeyValues>
-        <Size x="319" y="146"/>
+        <Size x="416" y="146"/>
         <Anchors>
           <Anchor point="TOPLEFT" x="12" y="-66"/>
         </Anchors>
@@ -99,13 +99,13 @@
         </Scripts>
       </Button>
       <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
-        <Size x="286" y="85"/>
+        <Size x="383" y="85"/>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="11" y="-13"/>
         </Anchors>
         <ScrollChild>
           <EditBox name="SMCreateFrameText" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
-            <Size x="286" y="85"/>
+            <Size x="383" y="85"/>
             <Scripts>
               <OnLoad>
                 ScrollingEdit_OnCursorChanged(self, 0, 0, 0, 0);
@@ -130,7 +130,7 @@
         </ScrollChild>
       </ScrollFrame>
       <Button name="$parentTextButton">
-        <Size x="286" y="85"/>
+        <Size x="383" y="85"/>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="$parentText"/>
         </Anchors>
@@ -159,7 +159,7 @@
         </Scripts>
       </Button>
       <Frame name="$parentTextBackground" inherits="TooltipBackdropTemplate">
-        <Size x="322" y="95"/>
+        <Size x="419" y="95"/>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="SMCreateFrame" x="6" y="-289"/>
         </Anchors>
@@ -170,7 +170,10 @@
           <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="4" y="4"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SMCreateFrame_DeleteButton_OnClick"/>
+          <OnClick>
+            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+            StaticPopup_Show("SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO");
+          </OnClick>
         </Scripts>
       </Button>
       <Button name="$parentNewButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_NEW">
@@ -187,132 +190,6 @@
       <OnLoad method="OnLoad"/>
       <OnShow method="OnShow"/>
       <OnHide method="OnHide"/>
-    </Scripts>
-  </Frame>
-
-  <!-- Change menu -->
-  <Frame name="SimpleMacroChangeMenu" toplevel="true" parent="SimpleMacroFrame" enableMouse="true" hidden="true">
-    <Size x="550" y="450"/>
-    <Anchors>
-      <Anchor point="LEFT" relativeTo="SimpleMacroFrame" relativePoint="RIGHT" x="0" y="0"/>
-    </Anchors>
-    <Layers>
-      <Layer level="BACKGROUND">
-        <Texture parentKey="BG">
-          <Anchors>
-            <Anchor point="TOPLEFT" x="7" y="-7"/>
-            <Anchor point="BOTTOMRIGHT" x="-7" y="7"/>
-          </Anchors>
-          <Color r="0" g="0" b="0" a=".80"/>
-        </Texture>
-      </Layer>
-    </Layers>
-    <Frames>
-      <Frame parentKey="BorderBox" inherits="SelectionFrameTemplate" frameLevel="50" hidden="false">
-        <KeyValues>
-          <KeyValue key="OnOkay" value="SimpleMacroChangeMenuOkay_OnClick" type="global"/>
-          <KeyValue key="OnCancel" value="SimpleMacroChangeMenuCancel_OnClick" type="global"/>
-        </KeyValues>
-        <Anchors>
-          <Anchor point="TOPLEFT"/>
-          <Anchor point="BOTTOMRIGHT"/>
-        </Anchors>
-        <Layers>
-          <Layer level="BORDER">
-            <FontString name="$parentCreateText" inherits="ChatFontNormal">
-              <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parent" x="22" y="-16"/>
-              </Anchors>
-            </FontString>
-          </Layer>
-          <Layer level="BACKGROUND">
-            <Texture name="$parentNameLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
-              <Size x="12" y="29"/>
-              <Anchors>
-                <Anchor point="TOPLEFT" x="18" y="-32"/>
-              </Anchors>
-              <TexCoords left="0" right="0.09375" top="0" bottom="1.0"/>
-            </Texture>
-            <Texture name="$parentNameMiddle"
-                     file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
-              <Size x="175" y="29"/>
-              <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="RIGHT"/>
-              </Anchors>
-              <TexCoords left="0.09375" right="0.90625" top="0" bottom="1.0"/>
-            </Texture>
-            <Texture name="$parentNameRight"
-                     file="Interface\ClassTrainerFrame\UI-ClassTrainer-FilterBorder">
-              <Size x="12" y="29"/>
-              <Anchors>
-                <Anchor point="LEFT" relativeTo="$parentNameMiddle" relativePoint="RIGHT"/>
-              </Anchors>
-              <TexCoords left="0.90625" right="1.0" top="0" bottom="1.0"/>
-            </Texture>
-          </Layer>
-        </Layers>
-        <Frames>
-          <EditBox name="$parentName" letters="16">
-            <Size x="202" y="22"/>
-            <Anchors>
-              <Anchor point="LEFT" relativeTo="$parentNameLeft" relativePoint="LEFT" x="10" y="2"/>
-            </Anchors>
-            <Scripts>
-              <OnLoad>
-                self:SetAutoFocus(true)
-              </OnLoad>
-              <OnShow>
-                self:SetFocus()
-              </OnShow>
-              <OnTextChanged function="SM_ChangeMenu_NameChanged"/>
-              <OnEnterPressed>
-                if SimpleMacroChangeMenu.BorderBox.OkayButton:IsEnabled() then
-                  SimpleMacroChangeMenuOkay_OnClick(SimpleMacroChangeMenu.BorderBox.OkayButton)
-                end
-              </OnEnterPressed>
-              <OnEscapePressed function="SimpleMacroChangeMenuCancel_OnClick"/>
-            </Scripts>
-            <FontString name="$parentTexte" inherits="ChatFontNormal"/>
-          </EditBox>
-        </Frames>
-      </Frame>
-      <ScrollFrame name="$parentIcons" inherits="FauxScrollFrameTemplate">
-        <Size x="492" y="344"/>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parent" relativePoint="TOPLEFT" x="20" y="-76"/>
-        </Anchors>
-        <Layers>
-          <Layer level="BORDER">
-            <FontString name="$parentChooseText" inherits="GameFontWhiteSmall">
-              <Anchors>
-                <Anchor point="TOPLEFT" relativeTo="$parent" x="4" y="8"/>
-              </Anchors>
-            </FontString>
-          </Layer>
-        </Layers>
-        <ScrollChild>
-          <Frame name="$parentScrollChildFrame">
-            <Size x="200" y="10"/>
-            <Anchors>
-              <Anchor point="TOPLEFT"/>
-            </Anchors>
-            <Scripts>
-              <OnLoad function="SimpleMacroIcons_OnLoad"/>
-            </Scripts>
-          </Frame>
-        </ScrollChild>
-        <Scripts>
-          <OnVerticalScroll>
-            SM_ChangeMenu_OnVerticalScroll(self, offset)
-          </OnVerticalScroll>
-          <OnLoad function="SimpleMacro_IconScrollFrame_OnLoad"/>
-        </Scripts>
-      </ScrollFrame>
-    </Frames>
-    <Scripts>
-      <OnLoad function="SimpleMacroChangeMenu_OnLoad"/>
-      <OnShow function="SimpleMacroChangeMenu_OnShow"/>
-      <OnHide function="SimpleMacroChangeMenu_OnHide"/>
     </Scripts>
   </Frame>
 </Ui>

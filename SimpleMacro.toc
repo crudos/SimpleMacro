@@ -15,11 +15,12 @@ constant\constant.xml
 localization\localization.xml
 
 menu\templates\template.xml
-menu\menu.xml
+menu\macroFrame.xml
 menu\editor\editor.xml
 menu\editor\conditionalGroup.xml
-menu\createTab.xml
-menu\groupTab.xml
+menu\tab\create\changeFrame.xml
+menu\tab\create\createFrame.xml
+menu\tab\group\groupFrame.xml
 
 settings\settings.xml
 

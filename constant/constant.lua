@@ -23,19 +23,21 @@ L["MACRO_EDITOR"]["MAX_CONDITIONALS"] = 5
 L["MACRO_EDITOR"]["HASH_CATEGORY"] = "Metacommands"
 
 L["CREATE_TAB"] = {}
-L["CREATE_TAB"]["POPUP_MENUS"] = { "SimpleMacroChangeMenu" }
+L["CREATE_TAB"]["POPUP_MENUS"] = { "SMChangeFrame" }
 L["CREATE_TAB"]["MACROS_PER_ROW"] = 6
-L["CREATE_TAB"]["ICON_ROW_HEIGHT"] = 46
-L["CREATE_TAB"]["ICONS_PER_ROW"] = 10
-L["CREATE_TAB"]["NUM_ICON_FRAMES"] = 100
-L["CREATE_TAB"]["ICON_TABLE"] = {}
-GetMacroIcons(L["CREATE_TAB"]["ICON_TABLE"])
-GetMacroItemIcons(L["CREATE_TAB"]["ICON_TABLE"])
-L["CREATE_TAB"]["R_ICON_TABLE"] = {}
-for k, v in pairs(L["CREATE_TAB"]["ICON_TABLE"]) do
-  L["CREATE_TAB"]["R_ICON_TABLE"][v] = k
-end
 L["CREATE_TAB"]["EDITOR_HEIGHT"] = 14
+
+L["CHANGE_FRAME"] = {}
+L["CHANGE_FRAME"]["ICON_ROW_HEIGHT"] = 46
+L["CHANGE_FRAME"]["ICONS_PER_ROW"] = 10
+L["CHANGE_FRAME"]["NUM_ICON_FRAMES"] = 100
+L["CHANGE_FRAME"]["ICON_TABLE"] = {}
+GetMacroIcons(L["CHANGE_FRAME"]["ICON_TABLE"])
+GetMacroItemIcons(L["CHANGE_FRAME"]["ICON_TABLE"])
+L["CHANGE_FRAME"]["R_ICON_TABLE"] = {}
+for k, v in pairs(L["CHANGE_FRAME"]["ICON_TABLE"]) do
+  L["CHANGE_FRAME"]["R_ICON_TABLE"][v] = k
+end
 
 L["Group"] = {}
 L["Group"]["MACROS_PER_ROW"] = 6
