@@ -192,7 +192,7 @@ function SM_GroupTabCharacterMacroTab_OnClick(self)
   SM_UserButton_Update()
 end
 
-function SM_GroupButtons_OnLoad(self)
+function GroupButtons_OnLoad(self)
   local button
   local macrosPerRow = C["MACROS_PER_ROW"]
 
@@ -353,7 +353,6 @@ function SM_GroupDeleteButton_OnClick(_)
 end
 
 local function changeTargets(index, target)
-  local _, _ = GetNumMacros() -- API for users current # of macros
   local idx = tonumber(index)
   local targetPattern = '([^,%]]*).-$'
   local macroText = GetMacroBody(idx)
@@ -397,4 +396,18 @@ function SM_GroupTargetButton_OnClick(_)
   local newTarget = SM_GroupTargetText:GetText()
 
   SM_ChangeGroupTarget(groupNum, newTarget)
+end
+
+
+-- new shit
+
+SimpleMacroGroupTabMixin = {}
+
+function SimpleMacroGroupTabMixin:OnLoad()
+end
+
+function SimpleMacroGroupTabMixin:OnShow()
+end
+
+function SimpleMacroGroupTabMixin:OnHide()
 end

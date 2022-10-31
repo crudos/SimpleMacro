@@ -13,7 +13,7 @@
         <Texture name="MacroFramePortrait" file="Interface\MacroFrame\MacroFrame-Icon">
           <Size x="60" y="60"/>
           <Anchors>
-            <Anchor point="TOPLEFT" x="-5" y="5"/>
+            <Anchor point="TOPLEFT" x="-5" y="6"/>
           </Anchors>
         </Texture>
       </Layer>

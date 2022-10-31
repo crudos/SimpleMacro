@@ -6,7 +6,7 @@ function SimpleMacroNavigationMixin:OnLoad()
 end
 
 function SimpleMacroNavigationMixin:OnShow()
-  --
+  self:ChangeTab(1)
 end
 
 function SimpleMacroNavigationMixin:SelectTab(tab)
@@ -19,9 +19,9 @@ function SimpleMacroNavigationMixin:ChangeTab(tabID)
 
   if tabID == 1 then
     ShowUIPanel(SMCreateFrame)
-    HideUIPanel(SimpleMacroFrameGroupTab)
+    HideUIPanel(SimpleMacroGroupFrame)
   elseif tabID == 2 then
-    ShowUIPanel(SimpleMacroFrameGroupTab)
+    ShowUIPanel(SimpleMacroGroupFrame)
     HideUIPanel(SMCreateFrame)
   end
 end

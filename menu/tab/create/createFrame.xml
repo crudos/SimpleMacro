@@ -1,7 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="createFrame.lua"/>
 
-  <!-- Create tab -->
   <Frame name="SMCreateFrame" mixin="SimpleMacroTabFrameMixin" hidden="false" parent="SimpleMacroFrame">
     <Anchors>
       <Anchor point="TOPLEFT"/>
