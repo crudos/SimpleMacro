@@ -16,10 +16,11 @@ localization\localization.xml
 
 menu\templates\template.xml
 menu\macroFrame.xml
+menu\navFrame.xml
 menu\editor\editor.xml
 menu\editor\conditionalGroup.xml
-menu\tab\create\changeFrame.xml
 menu\tab\create\createFrame.xml
+menu\tab\create\changeFrame.xml
 menu\tab\group\groupFrame.xml
 
 settings\settings.xml

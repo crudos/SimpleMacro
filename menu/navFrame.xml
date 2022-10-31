@@ -1,0 +1,38 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Script file="navFrame.lua"/>
+  <Frame name="SimpleMacroNavigationFrame" mixin="SimpleMacroNavigationMixin" parent="SimpleMacroFrame" toplevel="true" enableMouse="true">
+    <Size x="50" y="50"/>
+    <Anchors>
+      <Anchor point="TOPRIGHT" x="-104" y="-10"/>
+    </Anchors>
+    <KeyValues>
+      <KeyValue key="maxTabWidth" value="140" type="number"/>
+    </KeyValues>
+    <Frames>
+      <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_CREATE">
+        <Anchors>
+          <Anchor point="LEFT"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            self:GetParent():SelectTab(self);
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_GROUP">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            self:GetParent():SelectTab(self);
+          </OnClick>
+        </Scripts>
+      </Button>
+    </Frames>
+    <Scripts>
+      <OnLoad method="OnLoad"/>
+      <OnShow method="OnShow"/>
+    </Scripts>
+  </Frame>
+</Ui>

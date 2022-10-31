@@ -340,209 +340,33 @@ StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
 SimpleMacroTabFrameMixin = {};
 
 function SimpleMacroTabFrameMixin:OnLoad()
-  PanelTemplates_SetNumTabs(self, 2);
-  PanelTemplates_SetTab(self, 1);
-
-  self.MacroSelector:AdjustScrollBarOffsets(0, 5, -4);
-
-  local function SMCreateFrameInitMacroButton(macroButton, selectionIndex, name, texture, body)
-    if name ~= nil then
-      macroButton:SetIconTexture(texture);
-      macroButton.Name:SetText(name);
-      macroButton:Enable();
-    else
-      macroButton:SetIconTexture("");
-      macroButton.Name:SetText("");
-      macroButton:Disable();
-    end
-  end
-
-  self.MacroSelector:SetSetupCallback(SMCreateFrameInitMacroButton);
-  self.MacroSelector:SetCustomStride(9);
-  self.MacroSelector:SetCustomPadding(5, 5, 5, 5, 13, 13);
-
-  local function SMCreateFrameMacroButtonSelectedCallback(selectionIndex)
-    SMCreateFrame:SaveMacro();
-    SMCreateFrame:SelectMacro(selectionIndex);
-    --MacroPopupFrame:Hide();
-    SMCreateFrameText:ClearFocus();
-  end
-
-  self.MacroSelector:SetSelectedCallback(SMCreateFrameMacroButtonSelectedCallback);
-  self.SelectedMacroButton:SetScript("OnDragStart", function()
-    local selectedMacroIndex = self:GetSelectedIndex();
-    if selectedMacroIndex ~= nil then
-      local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
-      PickupMacro(actualIndex);
-    end
-  end)
-
-  EventRegistry:RegisterCallback("ClickBindingFrame.UpdateFrames", self.UpdateButtons, self);
 end
 
 function SimpleMacroTabFrameMixin:OnShow()
-  --self:SetAccountMacros();
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN);
-
-  self:ChangeTab(1);
 end
 
 function SimpleMacroTabFrameMixin:OnHide()
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE);
-  --MacroPopupFrame:Hide();
   self:SaveMacro();
-
-  if self.iconDataProvider ~= nil then
-    self.iconDataProvider:Release();
-    self.iconDataProvider = nil;
-  end
-end
-
-function SimpleMacroTabFrameMixin:RefreshIconDataProvider()
-  if self.iconDataProvider == nil then
-    self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spell);
-  end
-
-  return self.iconDataProvider;
-end
-
-function SimpleMacroTabFrameMixin:SelectTab(tab)
-  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-
-  local tabID = tab:GetID()
-  self:ChangeTab(tabID);
-end
-
-function SimpleMacroTabFrameMixin:ChangeTab(tabID)
-  PanelTemplates_SetTab(self, tabID)
-
-  if tabID == 1 then
-    self:SetAccountMacros()
-  elseif tabID == 2 then
-    self:SetCharacterMacros()
-  end
-end
-
-function SimpleMacroTabFrameMixin:SetAccountMacros()
-  self.macroBase = 0;
-  self.macroMax = MAX_ACCOUNT_MACROS;
-  self:Update();
-  self:SelectMacro(1);
-end
-
-function SimpleMacroTabFrameMixin:SetCharacterMacros()
-  self.macroBase = MAX_ACCOUNT_MACROS;
-  self.macroMax = MAX_CHARACTER_MACROS;
-  self:Update();
-  self:SelectMacro(1);
-end
-
-function SimpleMacroTabFrameMixin:Update()
-  local useAccountMacros = PanelTemplates_GetSelectedTab(self) == 1;
-  local numAccountMacros, numCharacterMacros = GetNumMacros();
-
-  local function MacroFrameGetMacroInfo(selectionIndex)
-    if selectionIndex > self.MacroSelector.numMacros then
-      return nil;
-    end
-
-    local actualIndex = self:GetMacroDataIndex(selectionIndex);
-    return GetMacroInfo(actualIndex);
-  end
-
-  local function MacroFrameGetNumMacros()
-    return useAccountMacros and MAX_ACCOUNT_MACROS or MAX_CHARACTER_MACROS;
-  end
-
-  self.MacroSelector.numMacros = useAccountMacros and numAccountMacros or numCharacterMacros;
-  self.MacroSelector:SetSelectionsDataProvider(MacroFrameGetMacroInfo, MacroFrameGetNumMacros);
-
-  self:UpdateButtons();
-end
-
-function SimpleMacroTabFrameMixin:UpdateButtons()
-  local hasSelectedMacro = self:GetSelectedIndex() ~= nil;
-  if hasSelectedMacro then
-    self:ShowDetails();
-    SMCreateFrameDeleteButton:Enable();
-  else
-    self:HideDetails();
-    SMCreateFrameDeleteButton:Disable();
-  end
-
-  local inClickBinding = InClickBindingMode();
-
-  --Update New Button
-  local numMacros = self.MacroSelector.numMacros;
-  SMCreateFrameNewButton:SetEnabled(numMacros and (numMacros < self.macroMax) and not inClickBinding);
-
-  -- Disable Buttons
-  --if ( MacroPopupFrame:IsShown() or inClickBinding ) then
-  --  SMCreateFrameChangeButton:Disable();
-  --  SMCreateFrameDeleteButton:Disable();
-  --else
-  --  SMCreateFrameChangeButton:Enable();
-  --  SMCreateFrameDeleteButton:Enable();
-  --end
-
-  if not hasSelectedMacro then
-    SMCreateFrameDeleteButton:Disable();
-  end
-
-  -- Add disabled tooltip if in click binding mode
-  local disabledInClickBinding = {
-    SMCreateFrameChangeButton,
-    SMCreateFrameDeleteButton,
-    SMCreateFrameNewButton,
-  };
-  local onEnterFunction, onLeaveFunction;
-  if inClickBinding then
-    onEnterFunction = function(button)
-      GameTooltip:SetOwner(button, "ANCHOR_RIGHT");
-      GameTooltip:AddLine(CLICK_BINDING_BUTTON_DISABLED, RED_FONT_COLOR.r, RED_FONT_COLOR.g, RED_FONT_COLOR.b);
-      GameTooltip:Show();
-    end;
-    onLeaveFunction = function()
-      GameTooltip:Hide();
-    end;
-  end
-  for _, button in ipairs(disabledInClickBinding) do
-    button:SetScript("OnEnter", onEnterFunction);
-    button:SetScript("OnLeave", onLeaveFunction);
-  end
-
-  self.MacroSelector:UpdateAllSelectedTextures();
 end
 
 function SimpleMacroTabFrameMixin:GetMacroDataIndex(index)
-  return self.macroBase + index;
+  return SimpleMacroFrame:GetMacroDataIndex(index);
+end
+
+function SimpleMacroTabFrameMixin:SetText(index)
+  local actualIndex = self:GetMacroDataIndex(index);
+  local name, _, body = GetMacroInfo(actualIndex);
+  if name then
+    SMCreateFrameText:SetText(body);
+  end
 end
 
 function SimpleMacroTabFrameMixin:SelectMacro(index)
-  if index then
-    local macroCount = select(PanelTemplates_GetSelectedTab(self), GetNumMacros());
-    if macroCount < index then
-      index = nil;
-    end
-  end
-
-  self.MacroSelector:SetSelectedIndex(index);
-
-  if index then
-    local actualIndex = self:GetMacroDataIndex(index);
-    local name, texture, body = GetMacroInfo(actualIndex);
-    if name then
-      SMCreateFrameSelectedMacroName:SetText(name);
-      SMCreateFrameText:SetText(body);
-      self.SelectedMacroButton.Icon:SetTexture(texture);
-    end
-  end
-
-  self:UpdateButtons();
+  return SimpleMacroFrame:SelectMacro(index);
 end
 
 function SimpleMacroTabFrameMixin:GetSelectedIndex()
-  return self.MacroSelector:GetSelectedIndex();
+  return SimpleMacroFrame:GetSelectedIndex();
 end
 
 function SimpleMacroTabFrameMixin:DeleteMacro()
@@ -555,17 +379,16 @@ function SimpleMacroTabFrameMixin:DeleteMacro()
   self:SelectMacro(newMacroIndex > 0 and newMacroIndex or nil);
 
   local retainScrollPosition = true;
-  self:Update(retainScrollPosition);
+  SimpleMacroFrame:Update(retainScrollPosition);
 
   SMCreateFrameText:ClearFocus();
 end
 
-function SimpleMacroTabFrameMixin:SaveMacro()
-  local selectedMacroIndex = self:GetSelectedIndex();
+function SimpleMacroTabFrameMixin:SaveMacro(selectedMacroIndex)
   if self.textChanged and (selectedMacroIndex ~= nil) then
     local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
     EditMacro(actualIndex, nil, nil, SMCreateFrameText:GetText());
-    self:SelectMacro(selectedMacroIndex); -- Make sure we update the selected icon art if needed (default overridden icon case).
+    self:SelectMacro(selectedMacroIndex);
     self.textChanged = nil;
   end
 end
@@ -574,9 +397,6 @@ function SimpleMacroTabFrameMixin:HideDetails()
   SMCreateFrameChangeButton:Hide();
   SMCreateFrameCharLimitText:Hide();
   SMCreateFrameText:Hide();
-  SMCreateFrameSelectedMacroBackground:Hide();
-  SMCreateFrameSelectedMacroName:Hide();
-  self.SelectedMacroButton:Hide();
 end
 
 function SimpleMacroTabFrameMixin:ShowDetails()
@@ -584,30 +404,29 @@ function SimpleMacroTabFrameMixin:ShowDetails()
   SMCreateFrameCharLimitText:Show();
   SMCreateFrameEnterMacroText:Show();
   SMCreateFrameText:Show();
-  SMCreateFrameSelectedMacroBackground:Show();
-  SMCreateFrameSelectedMacroName:Show();
-  self.SelectedMacroButton:Show();
 end
 
 -- OnClick functions
 function SMCreateFrame_NewButton_OnClick()
-  SMChangeFrame.mode = "new"
-  SM_OpenPopupMenu(SMChangeFrame)
+  SimpleMacroFrame:SaveMacro();
+  SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.New;
+  SimpleMacroChangeFrame:Show();
 end
 
 function SMCreateFrame_ChangeButton_OnClick()
-  SMChangeFrame.mode = "edit"
-  SM_OpenPopupMenu(SMChangeFrame)
+  SimpleMacroFrame:SaveMacro();
+  SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.Edit;
+  SimpleMacroChangeFrame:Show()
 end
 
 function SMCreateFrame_SaveButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-  SMCreateFrame:SaveMacro();
+  SimpleMacroFrame:SaveMacro();
 
   local retainScrollPosition = true;
-  SMCreateFrame:Update(retainScrollPosition);
+  SimpleMacroFrame:Update(retainScrollPosition);
 
-  --MacroPopupFrame:Hide();
+  SimpleMacroChangeFrame:Hide();
   SMCreateFrameText:ClearFocus();
 end
 
@@ -615,8 +434,8 @@ function SMCreateFrame_CancelButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 
   local retainScrollPosition = true;
-  SMCreateFrame:Update(retainScrollPosition);
+  SimpleMacroFrame:Update(retainScrollPosition);
 
-  --MacroPopupFrame:Hide();
+  SimpleMacroChangeFrame:Hide();
   SMCreateFrameText:ClearFocus();
 end

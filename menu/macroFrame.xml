@@ -17,12 +17,40 @@
           </Anchors>
         </Texture>
       </Layer>
+      <Layer level="ARTWORK">
+        <Texture name="$parentHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="342" y="16"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="2" y="-212"/>
+          </Anchors>
+          <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
+        </Texture>
+        <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="88" y="16"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeTo="$parentHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
+          </Anchors>
+          <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
+        </Texture>
+        <Texture name="$parentSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
+          <Size x="64" y="64"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="5" y="-218"/>
+          </Anchors>
+        </Texture>
+        <FontString name="$parentSelectedMacroName" inherits="GameFontNormalLarge" justifyH="LEFT">
+          <Size x="256" y="16"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" relativePoint="TOPRIGHT" x="-4" y="-10"/>
+          </Anchors>
+        </FontString>
+      </Layer>
     </Layers>
     <Frames>
       <Frame name="$parentPanelContainer"/>
-      <Button name="$parentTab1" inherits="PanelTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_CREATE">
+      <Button name="$parentTab1" inherits="PanelTopTabButtonTemplate" id="1" text="SIMPLE_MACRO_STRING_ACCOUNT_MACROS">
         <Anchors>
-          <Anchor point="TOPLEFT" x="54" y="-20"/>
+          <Anchor point="TOPLEFT" x="51" y="-28"/>
         </Anchors>
         <Scripts>
           <OnClick>
@@ -30,7 +58,7 @@
           </OnClick>
         </Scripts>
       </Button>
-      <Button name="$parentTab2" inherits="PanelTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_GROUP">
+      <Button name="$parentTab2" inherits="PanelTopTabButtonTemplate" id="2" text="SIMPLE_MACRO_STRING_CHARACTER_MACROS">
         <Anchors>
           <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT" x="-16" y="0"/>
         </Anchors>
@@ -40,6 +68,26 @@
           </OnClick>
         </Scripts>
       </Button>
+      <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
+        <KeyValues>
+          <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
+        </KeyValues>
+        <Size x="416" y="146"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" x="12" y="-66"/>
+        </Anchors>
+      </Frame>
+      <CheckButton parentKey="SelectedMacroButton" name="$parentSelectedMacroButton" frameStrata="HIGH" inherits="SimpleMacroButtonTemplate" id="0">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentSelectedMacroBackground" x="14" y="-14"/>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            self:SetChecked(false);
+            PickupMacro(SMCreateFrame.selectedMacro);
+          </OnClick>
+        </Scripts>
+      </CheckButton>
       <Button parentKey="ExitButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_EXIT">
         <Size x="86" y="22"/>
         <Anchors>
