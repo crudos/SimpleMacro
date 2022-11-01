@@ -3,8 +3,8 @@
 ## Author: Crudos
 ## Version: 10.0.0.0
 ## Notes: An addon that simplifies the macro-making process adds functionality for making updates across macros.
-## SavedVariables: SimpleMacroDBA
-## SavedVariablesPerCharacter: SimpleMacroDBC
+## SavedVariables: SimpleMacroAccountDB
+## SavedVariablesPerCharacter: SimpleMacroCharacterDB
 ## OptionalDeps: WoWUnit
 
 lib\util\util.lua

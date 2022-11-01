@@ -6,6 +6,24 @@
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
     </Anchors>
+    <Layers>
+      <Layer level="ARTWORK">
+        <Texture name="$parentHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="342" y="16"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="2" y="-274"/>
+          </Anchors>
+          <TexCoords left="0" right="1.0" top="0" bottom="0.25"/>
+        </Texture>
+        <Texture file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">
+          <Size x="88" y="16"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeTo="$parentHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
+          </Anchors>
+          <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
+        </Texture>
+      </Layer>
+    </Layers>
     <Frames>
       <Button name="$parentAddButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_TO_GROUP">
         <Size x="172" y="22"/>
@@ -13,48 +31,25 @@
           <Anchor point="LEFT" relativeTo="SimpleMacroFrameSelectedMacroButton" relativePoint="RIGHT" x="6" y="-8"/>
         </Anchors>
         <Scripts>
-<!--          <OnClick function="SMCreateFrame_ChangeButton_OnClick"/>-->
+          <OnClick function="SimpleMacroGroupFrame_AddButton_OnClick"/>
         </Scripts>
       </Button>
       <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
+        <Size x="416" y="50"/>
+        <Anchors>
+          <Anchor point="TOPLEFT" x="12" y="-290"/>
+        </Anchors>
         <KeyValues>
           <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
         </KeyValues>
-        <Size x="319" y="100"/>
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroButton" relativePoint="BOTTOMLEFT" x="0" y="-20"/>
-        </Anchors>
       </Frame>
-<!--      <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">-->
-<!--        <Size x="292" y="102"/>-->
-<!--        <Anchors>-->
-<!--          <Anchor point="TOP" relativeTo="$parentAddButton" relativePoint="BOTTOM" x="60" y="-5"/>-->
-<!--        </Anchors>-->
-<!--        <ScrollChild>-->
-<!--          <Frame name="SM_GroupButtons">-->
-<!--            <Size x="235" y="10"/>-->
-<!--            <Anchors>-->
-<!--              <Anchor point="TOPLEFT"/>-->
-<!--            </Anchors>-->
-<!--            <Scripts>-->
-<!--              <OnLoad function="GroupButtons_OnLoad"/>-->
-<!--            </Scripts>-->
-<!--          </Frame>-->
-<!--        </ScrollChild>-->
-<!--        <Scripts>-->
-<!--          <OnLoad function="ScrollFrame_OnLoad"/>-->
-<!--        </Scripts>-->
-<!--      </ScrollFrame>-->
       <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
         <Size x="86" y="22"/>
         <Anchors>
           <Anchor point="BOTTOMLEFT" relativePoint="BOTTOMLEFT" x="4" y="4"/>
         </Anchors>
         <Scripts>
-<!--          <OnClick>-->
-<!--            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);-->
-<!--            StaticPopup_Show("SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO");-->
-<!--          </OnClick>-->
+          <OnClick function="SimpleMacroGroupFrame_DeleteButton_OnClick"/>
         </Scripts>
       </Button>
     </Frames>

@@ -21,13 +21,6 @@ function table.clone(tableToClone)
   return { unpack(tableToClone) }
 end
 
-function Set(list)
-  local set = {}
-  for _, l in ipairs(list) do set[l] = true end
-  return set
-end
-
-
 --[[
 Most pure lua print table functions I've seen have a problem with deep recursion and tend to cause a stack overflow when
 going too deep. This print table function that I've written does not have this problem. It should also be capable of handling

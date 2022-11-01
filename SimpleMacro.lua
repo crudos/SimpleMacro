@@ -10,24 +10,24 @@ function listener:OnEvent(event, arg1)
       and arg1 == addonName
       and SimpleMacro.loaded == nil then
 
-    if SimpleMacroDBA == nil then
-      SimpleMacroDBA = L["DEFAULTS_ACCOUNT"]
+    if SimpleMacroAccountDB == nil then
+      SimpleMacroAccountDB = L["DEFAULTS_ACCOUNT"]
     end
 
-    if SimpleMacroDBC == nil then
-      SimpleMacroDBC = L["DEFAULTS_CHARACTER"]
+    if SimpleMacroCharacterDB == nil then
+      SimpleMacroCharacterDB = L["DEFAULTS_CHARACTER"]
     end
 
-    SimpleMacro.dba = SimpleMacroDBA
-    SimpleMacro.dbc = SimpleMacroDBC
+    SimpleMacro.dba = SimpleMacroAccountDB
+    SimpleMacro.dbc = SimpleMacroCharacterDB
 
     SimpleMacroSettings_Setup()
     SimpleMacro.loaded = true
   end
 
   if event == "PLAYER_LOGOUT" then
-    SimpleMacroDBA = SimpleMacro.dba
-    SimpleMacroDBC = SimpleMacro.dbc
+    SimpleMacroAccountDB = SimpleMacro.dba
+    SimpleMacroCharacterDB = SimpleMacro.dbc
   end
 end
 
@@ -46,7 +46,7 @@ local function slashCmdHandler(msg, _)
     SimpleMacro.dba = L["DEFAULTS_ACCOUNT"]
     SimpleMacro.dbc = L["DEFAULTS_CHARACTER"]
   elseif msg == "rg" then
-    SimpleMacro.dbc.groupTable = {}
+    SimpleMacro.dbc.GroupTable = {}
     print("The group table has been reset.")
   else
     print("usage: /sm [option]")

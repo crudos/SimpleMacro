@@ -3,7 +3,7 @@ local C = L["SETTINGS"]
 local G = _G
 
 local function isContextMenuButtonEnabled()
-  return SimpleMacro.dba.settings.ContextMenu == true and #SimpleMacro.dbc.groupTable > 0
+  return SimpleMacro.dba.settings.ContextMenu == true and #SimpleMacro.dbc.GroupTable > 0
 end
 
 function SimpleMacroSettings_OnLoad(self)
@@ -78,7 +78,7 @@ end
 function SimpleMacroSettings_SetupContextMenu()
   local SimpleMacroGroupButtons = {}
 
-  for i, _ in ipairs(SimpleMacro.dbc.groupTable) do
+  for i, _ in ipairs(SimpleMacro.dbc.GroupTable) do
     local SimpleMacroGroupButton = CreateFromMixins(UnitPopupButtonBaseMixin)
 
     SimpleMacroGroupButton.GetText = function()

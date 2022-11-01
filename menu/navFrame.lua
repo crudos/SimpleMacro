@@ -32,6 +32,6 @@ function SimpleMacroNavigationMixin:GetMenu()
   if tabID == 1 then
     return SMCreateFrame
   elseif tabID == 2 then
-    return SimpleMacroFrameGroupTab
+    return SimpleMacroGroupFrame
   end
 end
