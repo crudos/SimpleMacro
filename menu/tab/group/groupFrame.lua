@@ -411,3 +411,7 @@ end
 
 function SimpleMacroGroupTabMixin:OnHide()
 end
+
+function SimpleMacroGroupTabMixin:SaveMacro()
+  -- do nothing
+end

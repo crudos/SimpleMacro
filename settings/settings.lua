@@ -1,4 +1,4 @@
-local _, L = ...
+local addonName, L = ...
 local C = L["SETTINGS"]
 local G = _G
 
@@ -7,7 +7,7 @@ local function isContextMenuButtonEnabled()
 end
 
 function SimpleMacroSettings_OnLoad(self)
-  self.name = "Simple Macro";
+  self.name = addonName;
   self.okay = function(this)
     SimpleMacroSettings_OnOkay(this)
   end

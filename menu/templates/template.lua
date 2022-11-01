@@ -8,39 +8,18 @@ function SimpleMacroButtonMixin:OnLoad()
   self:RegisterForDrag("LeftButton");
 end
 
--- sets the selected macro button
 function SimpleMacroButtonMixin:OnClick()
   SelectorButtonMixin.OnClick(self);
 
-  local name = self:GetName()
-  local id = self:GetID()
-
-  if name == "SMUserButton"..id then
-    SM_UserButton_SelectMacro(id)
-    SM_UserButton_Update()
-  elseif name == "SMGroupButton"..id then
-    SM_GroupButton_SelectMacro(id)
-    SM_GroupButton_Update()
-  elseif name == "SMCreateButton"..id then
-    SM_CreateTab_SelectMacro(id)
-    SM_CreateTab_Update()
-  elseif name == "SMIconButton"..id then
-    SM_ChangeMenu_SelectIcon(id, nil)
-    SMChangeFrame_Update()
+  if InClickBindingMode() and ClickBindingFrame:HasNewSlot() then
+    local actualIndex = SimpleMacroFrame:GetMacroDataIndex(self:GetElementData());
+    ClickBindingFrame:AddNewAction(Enum.ClickBindingType.Macro, actualIndex);
   end
 end
 
--- picks up the correct macro when its in the group list
 function SimpleMacroButtonMixin:OnDragStart()
-  local name = self:GetName()
-  local id = self:GetID()
-
-  if name == "SMGroupButton"..id then
-    PickupMacro(SimpleMacroFrame.groupTable[id])
-  else
-    -- SMUserButton and SMCreateButton
-    PickupMacro(id + SimpleMacroFrame.macroStart)
-  end
+  local actualIndex = SimpleMacroFrame:GetMacroDataIndex(self:GetElementData());
+  PickupMacro(actualIndex);
 end
 
 function SM_CheckButton_OnClick(checkButton)

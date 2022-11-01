@@ -38,7 +38,7 @@ SLASH_SIMPLEMACRO2 = '/smacro'
 SLASH_SIMPLEMACRO3 = '/simplemacro'
 local function slashCmdHandler(msg, _)
   if msg == "open" or msg == "o" or msg == "" then
-    SimpleMacro_Show()
+    ShowUIPanel(SimpleMacroFrame)
   elseif msg == "settings" or msg == "s" then
     InterfaceOptionsFrame_OpenToCategory("Simple Macro")
     InterfaceOptionsFrame_OpenToCategory("Simple Macro")
@@ -48,7 +48,6 @@ local function slashCmdHandler(msg, _)
   elseif msg == "rg" then
     SimpleMacro.dbc.groupTable = {}
     print("The group table has been reset.")
-
   else
     print("usage: /sm [option]")
     print("  options:")
@@ -60,11 +59,3 @@ local function slashCmdHandler(msg, _)
   end
 end
 SlashCmdList["SIMPLEMACRO"] = slashCmdHandler
-
-function SimpleMacro_Show()
-  ShowUIPanel(SimpleMacroFrame)
-end
-
-function SimpleMacro_Hide(_)
-  HideUIPanel(SimpleMacroFrame)
-end

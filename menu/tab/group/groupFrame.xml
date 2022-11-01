@@ -16,26 +16,35 @@
 <!--          <OnClick function="SMCreateFrame_ChangeButton_OnClick"/>-->
         </Scripts>
       </Button>
-      <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
-        <Size x="292" y="102"/>
+      <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
+        <KeyValues>
+          <KeyValue key="buttonTemplate" value="SimpleMacroButtonTemplate" type="string"/>
+        </KeyValues>
+        <Size x="319" y="100"/>
         <Anchors>
-          <Anchor point="TOP" relativeTo="$parentAddButton" relativePoint="BOTTOM" x="60" y="-5"/>
+          <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroButton" relativePoint="BOTTOMLEFT" x="0" y="-20"/>
         </Anchors>
-        <ScrollChild>
-          <Frame name="SM_GroupButtons">
-            <Size x="235" y="10"/>
-            <Anchors>
-              <Anchor point="TOPLEFT"/>
-            </Anchors>
-            <Scripts>
-              <OnLoad function="GroupButtons_OnLoad"/>
-            </Scripts>
-          </Frame>
-        </ScrollChild>
-        <Scripts>
-          <OnLoad function="ScrollFrame_OnLoad"/>
-        </Scripts>
-      </ScrollFrame>
+      </Frame>
+<!--      <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">-->
+<!--        <Size x="292" y="102"/>-->
+<!--        <Anchors>-->
+<!--          <Anchor point="TOP" relativeTo="$parentAddButton" relativePoint="BOTTOM" x="60" y="-5"/>-->
+<!--        </Anchors>-->
+<!--        <ScrollChild>-->
+<!--          <Frame name="SM_GroupButtons">-->
+<!--            <Size x="235" y="10"/>-->
+<!--            <Anchors>-->
+<!--              <Anchor point="TOPLEFT"/>-->
+<!--            </Anchors>-->
+<!--            <Scripts>-->
+<!--              <OnLoad function="GroupButtons_OnLoad"/>-->
+<!--            </Scripts>-->
+<!--          </Frame>-->
+<!--        </ScrollChild>-->
+<!--        <Scripts>-->
+<!--          <OnLoad function="ScrollFrame_OnLoad"/>-->
+<!--        </Scripts>-->
+<!--      </ScrollFrame>-->
       <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
         <Size x="86" y="22"/>
         <Anchors>
