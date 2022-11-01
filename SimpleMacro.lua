@@ -40,8 +40,7 @@ local function slashCmdHandler(msg, _)
   if msg == "open" or msg == "o" or msg == "" then
     ShowUIPanel(SimpleMacroFrame)
   elseif msg == "settings" or msg == "s" then
-    InterfaceOptionsFrame_OpenToCategory("Simple Macro")
-    InterfaceOptionsFrame_OpenToCategory("Simple Macro")
+    InterfaceOptionsFrame_OpenToCategory(addonName)
   elseif msg == "rdb" then
     SimpleMacro.dba = L["DEFAULTS_ACCOUNT"]
     SimpleMacro.dbc = L["DEFAULTS_CHARACTER"]
