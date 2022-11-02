@@ -130,6 +130,11 @@ author: Alundaio (aka Revolucas)
 --]]
 
 function print_table(node)
+  if node == nil then
+    print('print_table: nil')
+    return
+  end
+
   -- to make output beautiful
   local function tab(amt)
     local str = ""

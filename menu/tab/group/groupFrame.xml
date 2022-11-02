@@ -35,7 +35,7 @@
         </Scripts>
       </Button>
       <Frame parentKey="MacroSelector" inherits="ScrollBoxSelectorTemplate" frameStrata="HIGH">
-        <Size x="416" y="50"/>
+        <Size x="416" y="100"/>
         <Anchors>
           <Anchor point="TOPLEFT" x="12" y="-290"/>
         </Anchors>

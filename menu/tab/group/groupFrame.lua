@@ -1,5 +1,5 @@
 local _, L = ...
-local C = L["Group"]
+local C = L["GROUP_FRAME"]
 local G = _G
 
 local function isempty(s)
@@ -419,7 +419,7 @@ function SimpleMacroGroupTabMixin:OnLoad()
   end
 
   self.MacroSelector:SetSetupCallback(SimpleMacroFrameInitMacroButton);
-  self.MacroSelector:SetCustomStride(9);
+  self.MacroSelector:SetCustomStride(C["MACROS_PER_ROW"]);
   self.MacroSelector:SetCustomPadding(5, 5, 5, 5, 13, 13);
 
   local function SimpleMacroFrameMacroButtonSelectedCallback(selectionIndex)
@@ -436,9 +436,8 @@ function SimpleMacroGroupTabMixin:OnShow()
   local groupID = SimpleMacroGroupFrame:GetSelectedGroup()
   local groupTable = SimpleMacro.dbc.GroupTable
 
-  SM_printall(groupTable[groupID])
   self:Update()
-  --self:SelectMacro(1);
+  self:SelectMacro(#groupTable[groupID])
 end
 
 function SimpleMacroGroupTabMixin:OnHide()
@@ -451,13 +450,14 @@ function SimpleMacroGroupTabMixin:SelectMacro(index)
   local groupCount = #group
 
   if index then
-    if groupCount < index then
+    if groupCount == 0 then
       index = nil;
+    elseif index > groupCount then
+      index = groupCount
     end
   end
 
   self.MacroSelector:SetSelectedIndex(index);
-  self:UpdateButtons();
 end
 
 function SimpleMacroGroupTabMixin:GetSelectedIndex()
@@ -484,24 +484,39 @@ function SimpleMacroGroupTabMixin:Update()
     groupTable[groupID] = {}
   end
 
-  local function MacroFrameGetMacroInfo(selectionIndex)
-    local groupID = SimpleMacroGroupFrame:GetSelectedGroup()
-    local groupTable = SimpleMacro.dbc.GroupTable
-    return GetMacroInfo(groupTable[groupID][selectionIndex])
+  local function SimpleMacroGroupFrameGetMacroInfo(selectionIndex)
+    if selectionIndex <= #groupTable[groupID] then
+      return GetMacroInfo(groupTable[groupID][selectionIndex])
+    end
+
+    return nil, nil, nil
   end
 
-  local function MacroFrameGetNumMacros()
-    local groupID = SimpleMacroGroupFrame:GetSelectedGroup()
-    local groupTable = SimpleMacro.dbc.GroupTable
-    return #groupTable[groupID]
+  local function SimpleMacroGroupFrameGetNumMacros()
+    return C["MAX_MACROS_PER_GROUP"]
   end
 
-  self.MacroSelector:SetSelectionsDataProvider(MacroFrameGetMacroInfo, MacroFrameGetNumMacros);
+  self.MacroSelector:SetSelectionsDataProvider(SimpleMacroGroupFrameGetMacroInfo, SimpleMacroGroupFrameGetNumMacros);
   self:UpdateButtons();
 end
 
 function SimpleMacroGroupTabMixin:UpdateButtons()
-  -- TODO enable/disable delete from group button
+  local groupID = SimpleMacroGroupFrame:GetSelectedGroup()
+  local groupTable = SimpleMacro.dbc.GroupTable
+
+  -- Add button
+  if #groupTable[groupID] < C["MAX_MACROS_PER_GROUP"] then
+    SimpleMacroGroupFrameAddButton:Enable()
+  else
+    SimpleMacroGroupFrameAddButton:Disable()
+  end
+
+  -- Delete button
+  if self:GetSelectedIndex() == nil then
+    SimpleMacroGroupFrameDeleteButton:Disable()
+  else
+    SimpleMacroGroupFrameDeleteButton:Enable()
+  end
 
   self.MacroSelector:UpdateAllSelectedTextures();
 end
@@ -529,28 +544,32 @@ function SimpleMacroGroupFrame_AddButton_OnClick()
   local groupID = SimpleMacroGroupFrame:GetSelectedGroup()
   local groupTable = SimpleMacro.dbc.GroupTable
 
-  -- TODO fix duplicates in group
   if #groupTable[groupID] == 0 then
-    table.insert(groupTable[groupID], macroIndex)
     groupTable[groupID].searchTable = {}
-    groupTable[groupID].searchTable[macroIndex] = true
-  else
-    if groupTable[groupID].searchTable[macroIndex] == nil then
-      table.insert(groupTable[groupID], macroIndex)
-      table.sort(groupTable[groupID])
-    end
   end
 
-  SimpleMacroGroupFrame:Update()
-  -- Find index where macro was added
+  if not groupTable[groupID].searchTable[macroIndex] then
+    groupTable[groupID].searchTable[macroIndex] = true
+    table.insert(groupTable[groupID], macroIndex)
+    table.sort(groupTable[groupID])
+  end
+
   for i, v in ipairs(groupTable[groupID]) do
     if v == macroIndex then
       SimpleMacroGroupFrame:SelectMacro(i)
       break
     end
   end
+  SimpleMacroGroupFrame:Update()
 end
 
 function SimpleMacroGroupFrame_DeleteButton_OnClick()
-  print('Delete button OnClick')
+  local selectedIndex = SimpleMacroGroupFrame:GetSelectedIndex()
+  local groupID = SimpleMacroGroupFrame:GetSelectedGroup()
+  local groupTable = SimpleMacro.dbc.GroupTable
+
+  table.remove(groupTable[groupID], selectedIndex)
+
+  SimpleMacroGroupFrame:SelectMacro(selectedIndex)
+  SimpleMacroGroupFrame:Update()
 end

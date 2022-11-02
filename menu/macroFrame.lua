@@ -1,4 +1,5 @@
 local _, L = ...
+local C = L["MACRO_FRAME"]
 local G = _G
 
 UIPanelWindows["SimpleMacroFrame"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };
@@ -31,7 +32,7 @@ function SimpleMacroFrameMixin:OnLoad()
   end
 
   self.MacroSelector:SetSetupCallback(SimpleMacroFrameInitMacroButton);
-  self.MacroSelector:SetCustomStride(9);
+  self.MacroSelector:SetCustomStride(C["MACROS_PER_ROW"]);
   self.MacroSelector:SetCustomPadding(5, 5, 5, 5, 13, 13);
 
   local function SimpleMacroFrameMacroButtonSelectedCallback(selectionIndex)
