@@ -103,12 +103,13 @@ function SimpleMacroSettings_SetupContextMenu()
   end
 end
 
-local isAdded = C["CHANGE_BUTTON_ADDED"]
+-- TODO use dropdown lib to avoid taint (e.g. Raider IO dropdown entry)
+local changeButtonAddedFlag = C["CHANGE_BUTTON_ADDED"]
 
 local selfButtons = UnitPopupMenuSelf:GetMenuButtons()
 function UnitPopupMenuSelf:GetMenuButtons()
-  if selfButtons[isAdded] == nil then
-    selfButtons[isAdded] = true
+  if selfButtons[changeButtonAddedFlag] == nil then
+    selfButtons[changeButtonAddedFlag] = true
     tinsert(selfButtons, SimpleMacroChangeGroupTargetButton)
   end
 
@@ -117,8 +118,8 @@ end
 
 local partyButtons = UnitPopupMenuParty:GetMenuButtons()
 function UnitPopupMenuParty:GetMenuButtons()
-  if partyButtons[isAdded] == nil then
-    partyButtons[isAdded] = true
+  if partyButtons[changeButtonAddedFlag] == nil then
+    partyButtons[changeButtonAddedFlag] = true
     tinsert(partyButtons, SimpleMacroChangeGroupTargetButton)
   end
 
@@ -127,8 +128,8 @@ end
 
 local raidButtons = UnitPopupMenuRaidPlayer:GetMenuButtons()
 function UnitPopupMenuRaidPlayer:GetMenuButtons()
-  if raidButtons[isAdded] == nil then
-    raidButtons[isAdded] = true
+  if raidButtons[changeButtonAddedFlag] == nil then
+    raidButtons[changeButtonAddedFlag] = true
     tinsert(raidButtons, SimpleMacroChangeGroupTargetButton)
   end
 

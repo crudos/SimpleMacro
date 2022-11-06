@@ -34,9 +34,11 @@ L["GLOBAL_STRING"]["ADD_CONDITIONAL_GROUP"] = "Add Conditional Group"
 L["GLOBAL_STRING"]["CONDITIONAL_GROUP"] = "Conditional Group %d"
 
 -- Group
-L["GLOBAL_STRING"]["ADD_TO_GROUP"] = "Add to Group"
-L["GLOBAL_STRING"]["DELETE_FROM_GROUP"] = "Delete From Group"
+L["GLOBAL_STRING"]["ADD_TO_GROUP"] = "Add To Group"
 L["GLOBAL_STRING"]["CHANGE_TARGET"] = "Change Target"
+L["GLOBAL_STRING"]["CREATE_GROUP"] = "Create Group"
+L["GLOBAL_STRING"]["DELETE_FROM_GROUP"] = "Delete From Group"
+
 
 local function loadGlobalStrings()
   for i, j in pairs(L["GLOBAL_STRING"]) do
