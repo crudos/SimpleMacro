@@ -202,11 +202,13 @@ function SimpleMacroGroupTabMixin:UpdateGroupTabs()
 
   for i = 1, C["MAX_TABS"] do
     local tab = G['SimpleMacroGroupFrameTab'..i]
+    -- group tabs
     if i <= #groupTable then
       tab:SetScript("OnClick", function() SimpleMacroGroupFrame:SelectTab(tab) end)
       tab:SetText(tostring(i))
       tab:Show()
-    elseif i > 1 and i == #groupTable + 1 then -- add button is never first
+    -- add tab
+    elseif i > 1 and i == #groupTable + 1 then
       tab:SetScript("OnClick", function() SimpleMacroGroupFrame_CreateButton_OnClick() end)
       tab:SetText("+")
       tab:Show()
@@ -247,13 +249,14 @@ end
 -- Buttons
 function SimpleMacroGroupFrame_AddButton_OnClick()
   local index = SimpleMacroFrame:GetSelectedIndex()
-  local macroIndex = SimpleMacroFrame:GetMacroDataIndex(index)
   local groupID = SimpleMacroGroupFrame:GetSelectedGroupID()
   local groupTable = SimpleMacro.dbc.GroupTable
 
   if #groupTable[groupID] == 0 then
     groupTable[groupID].searchTable = {}
   end
+
+  local macroIndex = SimpleMacroFrame:GetMacroDataIndex(index)
 
   if not groupTable[groupID].searchTable[macroIndex] then
     groupTable[groupID].searchTable[macroIndex] = true

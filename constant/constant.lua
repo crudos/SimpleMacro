@@ -7,7 +7,6 @@ L["DEFAULTS_ACCOUNT"] = {
 }
 L["DEFAULTS_CHARACTER"] = {
   GroupTable = {},
-  tab = 1,
 }
 
 L["SETTINGS"] = {}

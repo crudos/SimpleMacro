@@ -135,48 +135,10 @@
       </Layer>
     </Layers>
   </CheckButton>
-  <CheckButton name="SM_ListEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
-    <Size x="244" y="16"/>
-    <Layers>
-      <Layer level="CONTENT">
-        <FontString name="$parentNumber" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_NUMBER">
-          <Anchors>
-            <Anchor point="LEFT" x="16" y="0"/>
-          </Anchors>
-        </FontString>
-        <FontString name="$parentInfo" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_COMMAND">
-          <Anchors>
-            <Anchor point="LEFT" relativeTo="$parentNumber" relativePoint="RIGHT" x="24" y="0"/>
-          </Anchors>
-        </FontString>
-      </Layer>
-    </Layers>
-  </CheckButton>
-  <CheckButton name="LineEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        LineListEntry_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="ArgEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        ArgListEntry_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="CondEntryTemplate" inherits="SM_ListEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        <!-- CondListEntry_OnClick(self, button, down) -->
-      </OnClick>
-    </Scripts>
-  </CheckButton>
   <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
     <Size x="92" y="16"/>
     <Layers>
-      <Layer level="CONTENT">
+      <Layer level="HIGHLIGHT">
         <FontString name="$parentData" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_ERROR">
           <Anchors>
             <Anchor point="CENTER" x="0" y="0"/>
