@@ -6,6 +6,9 @@
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
     </Anchors>
+    <KeyValues>
+      <KeyValue key="maxTabWidth" value="41" type="number"/>
+    </KeyValues>
     <Layers>
       <Layer level="ARTWORK">
         <Texture name="$parentHorizontalBarLeft" file="Interface\ClassTrainerFrame\UI-ClassTrainer-HorizontalBar">

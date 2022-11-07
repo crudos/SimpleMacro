@@ -6,15 +6,15 @@ local function loadTabs(parentFrame)
   local tabFramePrefix = 'SimpleMacroGroupFrameTab'
 
   for i = 1, C["MAX_TABS"] do
-    local tab = CreateFrame("Button", tabFramePrefix..i, parentFrame, "PanelTopTabButtonTemplate", i)
+    local tab = CreateFrame("Button", tabFramePrefix..i, parentFrame, "SimpleMacroTopTabButtonTemplate", i)
     if i == 1 then
-      tab:SetPoint("TOPRIGHT", parentFrame.MacroSelector, "TOPRIGHT", -110, 46)
+      tab:SetPoint("TOPRIGHT", parentFrame.MacroSelector, "TOPRIGHT", -134, 50)
     else
-      tab:SetPoint("LEFT", tabFramePrefix..(i-1), "RIGHT", -16, 0)
+      tab:SetPoint("LEFT", tabFramePrefix..(i-1), "RIGHT", -2, 0)
     end
   end
 
-  PanelTemplates_SetNumTabs(parentFrame, C["MAX_TABS"])
+  parentFrame.numTabs = C["MAX_TABS"]; -- avoid AnchorTabs PanelTemplates_SetNumTabs
 end
 
 local function isempty(s)
@@ -165,16 +165,16 @@ function SimpleMacroGroupTabMixin:UpdateButtons()
   if #groupTable > 0 then
     self.MacroSelector:Show()
     SimpleMacroGroupFrameCreateButton:Hide()
-
-    -- Add button
-    if #groupTable[groupID] < C["MAX_MACROS_PER_GROUP"] then
-      SimpleMacroGroupFrameAddButton:Enable()
-    else
-      SimpleMacroGroupFrameAddButton:Disable()
-    end
   else
     self.MacroSelector:Hide()
     SimpleMacroGroupFrameCreateButton:Show()
+  end
+
+  -- Add button
+  if #groupTable > 0 and #groupTable[groupID] < C["MAX_MACROS_PER_GROUP"] then
+    SimpleMacroGroupFrameAddButton:Enable()
+  else
+    SimpleMacroGroupFrameAddButton:Disable()
   end
 
   -- EditBox
@@ -208,7 +208,7 @@ function SimpleMacroGroupTabMixin:UpdateGroupTabs()
       tab:Show()
     elseif i > 1 and i == #groupTable + 1 then -- add button is never first
       tab:SetScript("OnClick", function() SimpleMacroGroupFrame_CreateButton_OnClick() end)
-      tab:SetText( "+")
+      tab:SetText("+")
       tab:Show()
     else
       tab:Hide()
@@ -220,12 +220,12 @@ end
 --  return SimpleMacro.dbc.GroupTable
 --end
 --
---function SimpleMacroTabFrameMixin:GetGroup(groupID)
---  return self:GetGroupTable()[groupID]
+--function SimpleMacroTabFrameMixin:GetSelectedGroup()
+--  return self:GetGroupTable()[self:GetSelectedGroupID()]
 --end
 --
---function SimpleMacroTabFrameMixin:UpdateGroup(groupID, macros)
---  SimpleMacro.dbc.GroupTable[groupID] = macros
+--function SimpleMacroTabFrameMixin:UpdateSelectedGroup(data)
+--  SimpleMacro.dbc.GroupTable[self:GetSelectedGroupID()] = data
 --end
 
 function SimpleMacroGroupTabMixin:SetText()

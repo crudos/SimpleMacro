@@ -1,6 +1,89 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="template.lua"/>
   <!-- Templates -->
+  <Button name="SimpleMacroTabButtonTemplate" mixin="PanelTabButtonMixin" motionScriptsWhileDisabled="true" parentArray="Tabs" virtual="true">
+    <Size x="41" y="36"/>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture parentKey="LeftActive" atlas="uiframe-activetab-left" parentArray="TabTextures">
+          <Size x="20" y="42"/>
+          <Anchors>
+            <Anchor point="TOPLEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="RightActive" atlas="uiframe-activetab-right" parentArray="TabTextures">
+          <Size x="20" y="42"/>
+          <Anchors>
+            <Anchor point="TOPRIGHT"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="MiddleActive" atlas="_uiframe-activetab-center" horizTile="true" parentArray="TabTextures">
+          <Size x="1" y="42"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeKey="$parent.LeftActive" relativePoint="RIGHT"/>
+            <Anchor point="RIGHT" relativeKey="$parent.RightActive" relativePoint="LEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="Left" atlas="uiframe-tab-left" parentArray="TabTextures">
+          <Size x="20" y="36"/>
+          <Anchors>
+            <Anchor point="TOPLEFT"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="Right" atlas="uiframe-tab-right" parentArray="TabTextures">
+          <Size x="20" y="36"/>
+          <Anchors>
+            <Anchor point="TOPRIGHT"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="Middle" atlas="_uiframe-tab-center" horizTile="true" parentArray="TabTextures">
+          <Size x="1" y="36"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeKey="$parent.Left" relativePoint="RIGHT"/>
+            <Anchor point="RIGHT" relativeKey="$parent.Right" relativePoint="LEFT"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <Layer level="HIGHLIGHT">
+        <Texture parentKey="LeftHighlight" atlas="uiframe-tab-left" alphaMode="ADD" alpha="0.4" parentArray="TabTextures">
+          <Size x="20" y="36"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" relativeKey="$parent.Left"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="RightHighlight" atlas="uiframe-tab-right" alphaMode="ADD" alpha="0.4" parentArray="TabTextures">
+          <Size x="20" y="36"/>
+          <Anchors>
+            <Anchor point="TOPRIGHT" relativeKey="$parent.Right"/>
+          </Anchors>
+        </Texture>
+        <Texture parentKey="MiddleHighlight" atlas="_uiframe-tab-center" horizTile="true" alphaMode="ADD" alpha="0.4" parentArray="TabTextures">
+          <Size x="1" y="36"/>
+          <Anchors>
+            <Anchor point="LEFT" relativeKey="$parent.Middle" relativePoint="LEFT"/>
+            <Anchor point="RIGHT" relativeKey="$parent.Middle" relativePoint="RIGHT"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad method="OnLoad"/>
+      <OnEvent method="OnEvent"/>
+      <OnShow method="OnShow"/>
+      <OnEnter method="OnEnter"/>
+      <OnLeave method="OnLeave"/>
+    </Scripts>
+    <ButtonText parentKey="Text">
+      <Size x="0" y="10"/>
+      <Anchors>
+        <Anchor point="CENTER" x="0" y="2"/>
+      </Anchors>
+    </ButtonText>
+    <NormalFont style="GameFontNormalSmall"/>
+    <HighlightFont style="GameFontHighlightSmall"/>
+    <DisabledFont style="GameFontHighlightSmall"/>
+  </Button>
+  <Button name="SimpleMacroTopTabButtonTemplate" inherits="SimpleMacroTabButtonTemplate" mixin="SimpleMacroTopTabButtonMixin" virtual="true"/>
   <CheckButton name="SimpleMacroButtonTemplate" mixin="SimpleMacroButtonMixin" inherits="SelectorButtonTemplate" virtual="true">
     <Layers>
       <Layer level="OVERLAY">
