@@ -1,6 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="settings.lua"/>
-  <Frame name="SimpleMacroSettings">
+  <Frame name="SimpleMacroSettings" mixin="SimpleMacroSettingsMixin" hidden="true">
     <Frames>
       <CheckButton name="$parentContextMenu" inherits="SimpleMacroCheckButtonTemplate">
         <Anchors>
@@ -13,12 +13,9 @@
       </CheckButton>
     </Frames>
     <Scripts>
-      <OnLoad>
-        SimpleMacroSettings_OnLoad(self)
-      </OnLoad>
-      <OnShow>
-        SimpleMacroSettings_OnShow(self)
-      </OnShow>
+      <OnLoad method="OnLoad"/>
+      <OnShow method="OnShow"/>
+      <OnHide method="OnHide"/>
     </Scripts>
   </Frame>
 </Ui>

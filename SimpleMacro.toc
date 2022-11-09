@@ -7,6 +7,11 @@
 ## SavedVariablesPerCharacter: SimpleMacroCharacterDB
 ## OptionalDeps: WoWUnit
 
+lib\external\LibStub\LibStub.lua
+lib\external\LibDropDownExtension-1.0\LibDropDownExtension.lua
+
+lib\module\module.xml
+
 lib\util\util.lua
 lib\parser\parser.lua
 lib\SMacro\SMacro.lua
@@ -23,9 +28,9 @@ menu\tab\create\createFrame.xml
 menu\tab\create\changeFrame.xml
 menu\tab\group\groupFrame.xml
 
-settings\settings.xml
-
 SimpleMacro.xml
+
+settings\settings.xml
 
 test\SMacro\SMacroTest.lua
 test\parser\parserTest.lua

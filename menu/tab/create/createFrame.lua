@@ -343,6 +343,9 @@ function SimpleMacroTabFrameMixin:OnLoad()
 end
 
 function SimpleMacroTabFrameMixin:OnShow()
+  if SimpleMacroFrame.macroBase ~= nil then
+    self:SetText(self:GetSelectedIndex())
+  end
 end
 
 function SimpleMacroTabFrameMixin:OnHide()
@@ -374,7 +377,7 @@ function SimpleMacroTabFrameMixin:DeleteMacro()
   local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
   DeleteMacro(actualIndex);
 
-  local macroCount = select(PanelTemplates_GetSelectedTab(self), GetNumMacros());
+  local macroCount = select(PanelTemplates_GetSelectedTab(SimpleMacroFrame), GetNumMacros());
   local newMacroIndex = math.min(macroCount, selectedMacroIndex);
   self:SelectMacro(newMacroIndex > 0 and newMacroIndex or nil);
 

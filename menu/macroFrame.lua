@@ -56,7 +56,6 @@ end
 
 function SimpleMacroFrameMixin:OnShow()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-  --self:SetAccountMacros();
   self:ChangeTab(1);
 end
 

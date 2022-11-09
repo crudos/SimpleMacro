@@ -1,16 +1,18 @@
 local _, L = ...
 
+L["SETTINGS"] = {}
+L["SETTINGS"]["ENUM"] = { "ContextMenu" }
+
 L["DEFAULTS_ACCOUNT"] = {
-  settings = {
-    ContextMenu = false,
-  },
+  Settings = {}
 }
+for _, setting in pairs(L["SETTINGS"]["ENUM"]) do
+  L["DEFAULTS_ACCOUNT"].Settings[setting] = false
+end
+
 L["DEFAULTS_CHARACTER"] = {
   GroupTable = {},
 }
-
-L["SETTINGS"] = {}
-L["SETTINGS"]["CHANGE_BUTTON_ADDED"] = "SimpleMacroChangeButtonAdded"
 
 L["tabs"] = { "Create", "Group" }
 

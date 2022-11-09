@@ -1,6 +1,31 @@
 local addonName, L = ...
 local G = _G
 
+local loadingAgainSoon
+
+function LoadModules()
+  local modules = L:GetModules()
+  local numLoaded = 0
+  local numPending = 0
+  for _, module in ipairs(modules) do
+    if not module:IsLoaded() and module:CanLoad() then
+      if module:HasDependencies() then
+        numLoaded = numLoaded + 1
+        module:Load()
+      else
+        numPending = numPending + 1
+      end
+    end
+  end
+  if not loadingAgainSoon and numLoaded > 0 and numPending > 0 then
+    loadingAgainSoon = true
+    C_Timer.After(1, function()
+      loadingAgainSoon = false
+      LoadModules()
+    end)
+  end
+end
+
 local listener = CreateFrame("Frame", "SimpleMacro")
 listener:RegisterEvent("ADDON_LOADED")
 listener:RegisterEvent("PLAYER_LOGOUT")
@@ -21,7 +46,8 @@ function listener:OnEvent(event, arg1)
     SimpleMacro.dba = SimpleMacroAccountDB
     SimpleMacro.dbc = SimpleMacroCharacterDB
 
-    SimpleMacroSettings_Setup()
+    LoadModules()
+    SimpleMacroSettings:LoadSettings()
     SimpleMacro.loaded = true
   end
 
@@ -44,8 +70,10 @@ local function slashCmdHandler(msg, _)
   elseif msg == "rdb" then
     SimpleMacro.dba = L["DEFAULTS_ACCOUNT"]
     SimpleMacro.dbc = L["DEFAULTS_CHARACTER"]
+    SimpleMacroSettings:LoadSettings()
   elseif msg == "rg" then
     SimpleMacro.dbc.GroupTable = {}
+    SimpleMacroSettings:LoadSettings()
     print("The group table has been reset.")
   else
     print("usage: /sm [option]")

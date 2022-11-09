@@ -72,7 +72,7 @@ function SimpleMacroGroupTabMixin:OnLoad()
   self.MacroSelector:SetSelectedCallback(SimpleMacroFrameMacroButtonSelectedCallback);
   self.MacroSelector:SetCustomStride(C["MACROS_PER_ROW"]);
   self.MacroSelector:SetCustomPadding(5, 5, 5, 5, 13, 13);
-  self.MacroSelector:AdjustScrollBarOffsets(0, 5, -4);
+  self.MacroSelector:AdjustScrollBarOffsets(0, 5, -3);
 
   EventRegistry:RegisterCallback("ClickBindingFrame.UpdateFrames", self.UpdateButtons, self);
 end
@@ -218,6 +218,19 @@ function SimpleMacroGroupTabMixin:UpdateGroupTabs()
   end
 end
 
+function SimpleMacroGroupTabMixin:ChangeGroupTarget(groupID, newTarget)
+  local groupTable = SimpleMacro.dbc.GroupTable
+  local group = groupTable[groupID]
+
+  if not isempty(newTarget) then
+    for i = 1, #group do
+      changeTargets(group[i], newTarget)
+    end
+  end
+
+  print("Set target of Group "..groupID.." to "..newTarget)
+end
+
 --function SimpleMacroGroupTabMixin:GetGroupTable()
 --  return SimpleMacro.dbc.GroupTable
 --end
@@ -290,6 +303,7 @@ function SimpleMacroGroupFrame_CreateButton_OnClick()
 
   groupTable[newGroupID] = {}
   SimpleMacroGroupFrame:SelectTab(G['SimpleMacroGroupFrameTab'..newGroupID])
+  SimpleMacroSettings:LoadSettings()
 end
 
 function SimpleMacroGroupFrame_EditBox_OnTextChanged(self)
@@ -303,14 +317,6 @@ end
 function SimpleMacroGroupFrame_ChangeButton_OnClick()
   local newTarget = SimpleMacroGroupFrameEditBox:GetText()
   local groupID = SimpleMacroGroupFrame:GetSelectedGroupID()
-  local groupTable = SimpleMacro.dbc.GroupTable
-  local group = groupTable[groupID]
 
-  if not isempty(newTarget) then
-    for i = 1, #group do
-      changeTargets(group[i], newTarget)
-    end
-  end
-
-  print("Set target of Group "..groupID.." to "..newTarget)
+  SimpleMacroGroupFrame:ChangeGroupTarget(groupID, newTarget)
 end
