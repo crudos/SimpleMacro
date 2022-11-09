@@ -1,4 +1,6 @@
-local _, L = ...
+local _, ns = ...
+local L = ns.L -- TODO move line table into MACRO_EDITOR
+local C = ns.C["MACRO_EDITOR"]
 local G = _G
 
 --[[
@@ -119,7 +121,7 @@ function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
       return UIDropDownMenu_GetSelectedValue(this)
     end
     self.GetID = function(this)
-      for i = 1, L["MACRO_EDITOR"]["NUM_MACRO_CATEGORIES"] do
+      for i = 1, C["NUM_MACRO_CATEGORIES"] do
         if this:GetValue() == L["LINE_TYPE_TABLE"][i].CATEGORY then
           return i
         end

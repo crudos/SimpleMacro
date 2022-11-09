@@ -1,4 +1,4 @@
-local _, L = ...
+local _, ns = ...
 
 SMacro = {
   lines = {}
@@ -31,7 +31,7 @@ end
    ]]
 function SMacro:set(macro_id)
   local _, _, body = GetMacroInfo(macro_id)
-  local success, ret = pcall(L['parse_lines'], body)
+  local success, ret = pcall(ns['parse_lines'], body)
 
   if success then
     self.lines = ret

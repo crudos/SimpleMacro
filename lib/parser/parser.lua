@@ -51,7 +51,7 @@
     name, string
     input, string
   ]]
-local _, L = ...
+local _, ns = ...
 
 local function isempty(s)
   return s == nil or s == ''
@@ -240,4 +240,4 @@ function parse_lines(body)
   return lines
 end
 
-L['parse_lines'] = parse_lines
+ns['parse_lines'] = parse_lines

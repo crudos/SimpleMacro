@@ -1,4 +1,5 @@
-local _, L = ...
+local _, ns = ...
+local L = ns.L
 local G = _G
 
 --[[
@@ -53,6 +54,7 @@ loadGlobalStrings()
   ]]
 
 -- Settings
+L["SETTINGS"] = {}
 L["SETTINGS"]["ContextMenu"] = "Add target changer to context menu"
 L["SETTINGS"]["ContextMenuTooltip"] = "Allows you to update the target of a group by right-clicking a unit frame."
 

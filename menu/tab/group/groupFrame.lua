@@ -1,5 +1,5 @@
-local _, L = ...
-local C = L["GROUP_FRAME"]
+local _, ns = ...
+local C = ns.C["GROUP_FRAME"]
 local G = _G
 
 local function loadTabs(parentFrame)

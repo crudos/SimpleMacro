@@ -10,14 +10,14 @@
 lib\external\LibStub\LibStub.lua
 lib\external\LibDropDownExtension-1.0\LibDropDownExtension.lua
 
+constant\constant.xml
+localization\localization.xml
+
 lib\module\module.xml
 
 lib\util\util.lua
 lib\parser\parser.lua
 lib\SMacro\SMacro.lua
-
-constant\constant.xml
-localization\localization.xml
 
 menu\templates\template.xml
 menu\macroFrame.xml

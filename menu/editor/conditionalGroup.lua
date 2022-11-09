@@ -1,4 +1,5 @@
-local _, L = ...
+local _, ns = ...
+local C = ns.C
 local G = _G
 
 local function saveConditionalGroups(conditionalPopup)
@@ -104,7 +105,7 @@ function SimpleMacroEditorConditionalPopup_DropDown_Initialize(self)
   local selectedValue = self:GetValue()
   local info = UIDropDownMenu_CreateInfo()
 
-  for i, conditionalData in ipairs(L["CONDITIONAL_LIST"]) do
+  for i, conditionalData in ipairs(C["CONDITIONAL_LIST"]) do
     for _, alias in ipairs(conditionalData["ALIASES"]) do
       info.func = SimpleMacroEditorConditionalPopup_DropDown_OnClick
       info.text = alias
@@ -128,7 +129,7 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
     UIDropDownMenu_SetSelectedValue(this, this.value)
   end
   self.SetValue = function(this, value)
-    for i, conditionalData in ipairs(L["CONDITIONAL_LIST"]) do
+    for i, conditionalData in ipairs(C["CONDITIONAL_LIST"]) do
       for _, alias in ipairs(conditionalData["ALIASES"]) do
         if value == alias then
           this.id = i
@@ -142,7 +143,7 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
 
     local editBox = this.editBox
     if editBox ~= nil then
-      if L["CONDITIONAL_LIST"][self:GetID()]["INPUT_HINT"] ~= nil then
+      if C["CONDITIONAL_LIST"][self:GetID()]["INPUT_HINT"] ~= nil then
         editBox:Show()
       else
         editBox:Hide()
@@ -174,8 +175,8 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
   end
   self.SetDefaultValue = function(this)
     this.id = 1
-    this.value = L["CONDITIONAL_LIST"][1]["ALIASES"][1]
-    this.tooltip = L["CONDITIONAL_STRING"]["DESCRIPTION"][1]
+    this.value = C["CONDITIONAL_LIST"][1]["ALIASES"][1]
+    this.tooltip = C["CONDITIONAL_STRING"]["DESCRIPTION"][1]
     this:SetInputValue("")
     UIDropDownMenu_SetSelectedValue(this, this.value)
   end

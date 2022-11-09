@@ -1,10 +1,11 @@
-local addonName, L = ...
+local addonName, ns = ...
+local C = ns.C
 local G = _G
 
 local loadingAgainSoon
 
 function LoadModules()
-  local modules = L:GetModules()
+  local modules = ns:GetModules()
   local numLoaded = 0
   local numPending = 0
   for _, module in ipairs(modules) do
@@ -31,19 +32,15 @@ listener:RegisterEvent("ADDON_LOADED")
 listener:RegisterEvent("PLAYER_LOGOUT")
 
 function listener:OnEvent(event, arg1)
-  if event == "ADDON_LOADED"
-      and arg1 == addonName
-      and SimpleMacro.loaded == nil then
-
+  if event == "ADDON_LOADED" and arg1 == addonName and SimpleMacro.loaded == nil then
     if SimpleMacroAccountDB == nil then
-      SimpleMacroAccountDB = L["DEFAULTS_ACCOUNT"]
+      SimpleMacroAccountDB = C["SETTINGS"]["DEFAULT_ACCOUNT"]
     end
+    SimpleMacro.dba = SimpleMacroAccountDB
 
     if SimpleMacroCharacterDB == nil then
-      SimpleMacroCharacterDB = L["DEFAULTS_CHARACTER"]
+      SimpleMacroCharacterDB = C["SETTINGS"]["DEFAULT_CHARACTER"]
     end
-
-    SimpleMacro.dba = SimpleMacroAccountDB
     SimpleMacro.dbc = SimpleMacroCharacterDB
 
     LoadModules()
@@ -68,8 +65,8 @@ local function slashCmdHandler(msg, _)
   elseif msg == "settings" or msg == "s" then
     InterfaceOptionsFrame_OpenToCategory(addonName)
   elseif msg == "rdb" then
-    SimpleMacro.dba = L["DEFAULTS_ACCOUNT"]
-    SimpleMacro.dbc = L["DEFAULTS_CHARACTER"]
+    SimpleMacro.dba = C["SETTINGS"]["DEFAULT_ACCOUNT"]
+    SimpleMacro.dbc = C["SETTINGS"]["DEFAULT_CHARACTER"]
     SimpleMacroSettings:LoadSettings()
   elseif msg == "rg" then
     SimpleMacro.dbc.GroupTable = {}

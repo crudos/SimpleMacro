@@ -1,14 +1,21 @@
-local addonName, L = ...
-local C = L["SETTINGS"]
+local addonName, ns = ...
+local C = ns.C["SETTINGS"]
+local L = ns.L["SETTINGS"]
 local G = _G
 
-local dropdown = L:GetModule("DropDown")
+local dropdown = ns:GetModule("DropDown")
 
 SimpleMacroSettingsMixin = {}
 
 function SimpleMacroSettingsMixin:OnLoad()
   self.name = addonName
   InterfaceOptions_AddCategory(self);
+
+  for setting, _ in pairs(C["DEFAULT_ACCOUNT"].Settings) do
+    print('setting', setting)
+    G[self:GetName()..setting.."Text"]:SetText(L[setting])
+    G[self:GetName()..setting].tooltipText = L[setting.."Tooltip"]
+  end
 end
 
 function SimpleMacroSettingsMixin:LoadSettings()
@@ -19,29 +26,26 @@ function SimpleMacroSettingsMixin:LoadSettings()
 end
 
 function SimpleMacroSettingsMixin:OnShow()
-  for setting, _ in pairs(L["DEFAULTS_ACCOUNT"].Settings) do
-    G[self:GetName()..setting.."Text"]:SetText(C[setting])
-    G[self:GetName()..setting].tooltipText = C[setting.."Tooltip"]
-  end
+
 end
 
 function SimpleMacroSettingsMixin:OnHide()
   self:SaveSettings()
+  self:LoadSettings()
 end
 
 function SimpleMacroSettingsMixin:SaveSettings()
-  for setting, _ in pairs(L["DEFAULTS_ACCOUNT"].Settings) do
+  for setting, _ in pairs(C["DEFAULT_ACCOUNT"].Settings) do
     if G[self:GetName()..setting]:GetChecked() == true then
-      self:Enable(setting)
+      SimpleMacro.dba.Settings[setting] = true
     else
-      self:Disable(setting)
+      SimpleMacro.dba.Settings[setting] = false
     end
   end
 end
 
 function SimpleMacroSettingsMixin:Enable(setting)
   if setting == "ContextMenu" then
-    SimpleMacro.dba.Settings[setting] = true
     if #SimpleMacro.dbc.GroupTable > 0 then
       dropdown:Enable()
     else
@@ -52,7 +56,6 @@ end
 
 function SimpleMacroSettingsMixin:Disable(setting)
   if setting == "ContextMenu" then
-    SimpleMacro.dba.Settings[setting] = false
     dropdown:Disable()
   end
 end

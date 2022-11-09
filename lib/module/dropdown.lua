@@ -1,7 +1,8 @@
-local _, L = ...
+local _, ns = ...
+local L = ns.L["CONTEXT"]
 
 ---@class DropDownModule : Module
-local dropdown = L:NewModule("DropDown") ---@type DropDownModule
+local dropdown = ns:NewModule("DropDown") ---@type DropDownModule
 
 local validTypes = {
   ARENAENEMY = true,
@@ -30,7 +31,7 @@ local unitOptions
 
 local function OnToggle(bdropdown, event, options, level, data)
   if event == "OnShow" then
-    if not IsValidDropDown(bdropdown) then
+    if not dropdown:IsEnabled() or not IsValidDropDown(bdropdown) then
       return
     end
     dropdown:UpdateMenuList()
@@ -65,25 +66,19 @@ end
 function dropdown:OnLoad()
   unitOptions = {
     {
-      text = L["CONTEXT"]["CHANGE_GROUP_TARGET"],
+      text = L["CHANGE_GROUP_TARGET"],
       hasArrow = true,
       menuList = {}
     }
   }
-end
 
-function dropdown:OnEnable()
   LibDropDownExtension:RegisterEvent("OnShow OnHide", OnToggle, 1, dropdown)
-end
-
-function dropdown:OnDisable()
-  LibDropDownExtension:UnRegisterEvent("OnShow OnHide", OnToggle, 1, dropdown)
 end
 
 function dropdown:UpdateMenuList()
   for i, _ in ipairs(SimpleMacro.dbc.GroupTable) do
     unitOptions[1].menuList[i] = {
-      text = L["CONTEXT"]["GROUP"].." "..i,
+      text = L["GROUP"].." "..i,
       func = SimpleMacroGroupFrame.ChangeGroupTarget,
       arg1 = i,
       arg2 = UnitPopupSharedUtil.GetCurrentDropdownMenu().name,

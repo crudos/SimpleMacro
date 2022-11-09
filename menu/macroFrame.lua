@@ -1,5 +1,5 @@
-local _, L = ...
-local C = L["MACRO_FRAME"]
+local _, ns = ...
+local C = ns.C["MACRO_FRAME"]
 local G = _G
 
 UIPanelWindows["SimpleMacroFrame"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };

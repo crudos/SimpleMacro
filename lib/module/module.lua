@@ -1,4 +1,4 @@
-local _, L = ...
+local _, ns = ...
 
 ---@type table<string, Module>
 local modules = {}
@@ -142,7 +142,7 @@ end
 
 ---@param id string @Unique module ID reference.
 ---@param data? Module @Optional table with properties to copy into the newly created module.
-function L:NewModule(id, data)
+function ns:NewModule(id, data)
   assert(type(id) == "string", "SimpleMacro Module expects NewModule(id[, data]) where id is a string, data is optional table.")
   assert(not modules[id], "SimpleMacro Module expects NewModule(id[, data]) where id is a string, that is unique and not already taken.")
   ---@type Module
@@ -172,7 +172,7 @@ local function SortModules(a, b)
 end
 
 ---@return Module[]
-function L:GetModules()
+function ns:GetModules()
   local ordered = {}
   local index = 0
   for _, module in pairs(modules) do
@@ -185,7 +185,7 @@ end
 
 ---@param id string @Unique module ID reference.
 ---@param silent? boolean @Ommit to throw if module doesn't exists.
-function L:GetModule(id, silent)
+function ns:GetModule(id, silent)
   assert(type(id) == "string", "SimpleMacro Module expects GetModule(id) where id is a string.")
   for _, module in pairs(modules) do
     if module.id == id then
