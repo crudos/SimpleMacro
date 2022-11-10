@@ -12,21 +12,13 @@ function SimpleMacroSettingsMixin:OnLoad()
   InterfaceOptions_AddCategory(self);
 
   for setting, _ in pairs(C["DEFAULT_ACCOUNT"].Settings) do
-    print('setting', setting)
     G[self:GetName()..setting.."Text"]:SetText(L[setting])
     G[self:GetName()..setting].tooltipText = L[setting.."Tooltip"]
   end
 end
 
-function SimpleMacroSettingsMixin:LoadSettings()
-  for setting, isChecked in pairs(SimpleMacro.dba.Settings) do
-    G[self:GetName()..setting]:SetChecked(isChecked)
-    if isChecked then self:Enable(setting) else self:Disable(setting) end
-  end
-end
-
 function SimpleMacroSettingsMixin:OnShow()
-
+  -- do nothing
 end
 
 function SimpleMacroSettingsMixin:OnHide()
@@ -41,6 +33,13 @@ function SimpleMacroSettingsMixin:SaveSettings()
     else
       SimpleMacro.dba.Settings[setting] = false
     end
+  end
+end
+
+function SimpleMacroSettingsMixin:LoadSettings()
+  for setting, isChecked in pairs(SimpleMacro.dba.Settings) do
+    G[self:GetName()..setting]:SetChecked(isChecked)
+    if isChecked then self:Enable(setting) else self:Disable(setting) end
   end
 end
 

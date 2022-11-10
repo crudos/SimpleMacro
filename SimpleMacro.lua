@@ -53,7 +53,6 @@ function listener:OnEvent(event, arg1)
     SimpleMacroCharacterDB = SimpleMacro.dbc
   end
 end
-
 listener:SetScript("OnEvent", listener.OnEvent)
 
 SLASH_SIMPLEMACRO1 = '/sm'

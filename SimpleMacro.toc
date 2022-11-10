@@ -7,6 +7,8 @@
 ## SavedVariablesPerCharacter: SimpleMacroCharacterDB
 ## OptionalDeps: WoWUnit
 
+lib\util\util.lua
+
 lib\external\LibStub\LibStub.lua
 lib\external\LibDropDownExtension-1.0\LibDropDownExtension.lua
 
@@ -15,7 +17,6 @@ localization\localization.xml
 
 lib\module\module.xml
 
-lib\util\util.lua
 lib\parser\parser.lua
 lib\SMacro\SMacro.lua
 

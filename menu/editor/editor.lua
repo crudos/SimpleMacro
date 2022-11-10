@@ -114,6 +114,7 @@ function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
     self.SetValue = function(this, value)
       this.value = value
       this.tooltip = value.." commands."
+
       UIDropDownMenu_SetSelectedValue(this, value)
       this:RefreshValue()
     end
