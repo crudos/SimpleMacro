@@ -2,30 +2,31 @@ local _, ns = ...
 
 ---@class SMacro
 ---@field public new fun(): SMacro Creates a new SMacro object to represent a macro
----@field public set fun() Stores body from existing macro
----@field public getID fun() Get macro identifier
----@field public compose fun() Returns a string representation of the macro
----@field public setCommand fun() Sets a line in the macro to the given command
----@field public getCommand fun() Gets the command for a given line
----@field public getCommandType fun() Gets the command type for a given line
----@field public addLine fun() Adds a new line to the macro
----@field public removeLine fun() Removes a line from the macro
----@field public composeLine fun() Gets a line from the macro
----@field public addArgument fun() Adds a new argument to the end of the line
----@field public getArgument fun() Gets the text of the specified argument
----@field public setArgument fun() Sets an argument within a line
----@field public removeArgument fun() Remove argument from a line
----@field public getArguments fun() Gets arguments from a macro on a given line
----@field public addConditionalGroup fun() Adds a new conditional group
----@field public getConditionalGroups fun() Gets conditional groups
----@field public addConditional fun() Adds a new conditional
----@field public setConditional fun() Sets a conditional
----@field public removeConditional fun() Removes a conditional
----@field public resetConditionals fun() Delete all conditionals for a given line and argument
----@field public getConditionals fun() Retrieve all conditionals for a given line, argument, and conditional group
----@field public composeConditionals fun() Retrieve string representation of all conditionals for a given line, argument, and conditional group
----@field public composeAllConditionals fun() Retrieve string representation of all conditionals for a given line and argument
----@field public removeConditionalGroup fun() Remove conditional group
+---@field public set fun(macro_id: number) Stores body from existing macro
+---@field public getID fun(): number Get macro identifier
+---@field public compose fun(): string Returns a string representation of the macro
+---@field public setCommand fun(line_num: number, command: string) Sets a line in the macro to the given command
+---@field public getCommand fun(line_num: number) Gets the command for a given line
+---@field public getCommandType fun(line_num: number) Gets the command type for a given line
+---@field public addLine fun(): number Adds a new line to the macro
+---@field public removeLine fun(line_num: number): boolean Removes a line from the macro
+---@field public composeLine fun(line_num: number): string Gets a line from the macro
+---@field public addArgument fun(line_num: number): number Adds a new argument to the end of the line
+---@field public getArgument fun(line_num: number, arg_num: number, cond_num: number): string Gets the text of the specified argument
+---@field public setArgument fun(line_num: number, arg_num: number, argument: string): boolean Sets an argument within a line
+---@field public removeArgument fun(line_num: number, arg_num: number): boolean Remove argument from a line
+---@field public getArguments fun(line_num: number): table Gets arguments from a macro on a given line
+---@field public addConditionalGroup fun(line_num: number, arg_num: number): number Adds a new conditional group
+---@field public removeConditionalGroup fun(line_num: number, arg_num: number, cond_num: number): table Remove conditional group
+---@field public getConditionalGroups fun(line_num: number, arg_num: number): table Gets conditional groups
+---@field public addConditional fun(line_num: number, arg_num: number, cond_num: number, conditional: string, input: string): number Adds a new conditional
+---@field public setConditional fun(line_num: number, arg_num: number, cond_num: number, index: number, conditional: string, input: string): boolean Sets a conditional
+---@field public removeConditional fun(line_num: number, arg_num: number, cond_num: number, index: number): boolean Removes a conditional
+---@field public resetConditionals fun(line_num: number, arg_num: number): nil Delete all conditionals for a given line and argument
+---@field public getConditionals fun(line_num: number, arg_num: number, cond_num: number): table Retrieve all conditionals for a given line, argument, and conditional group
+---@field public composeConditionals fun(line_num: number, arg_num: number, cond_num: number): string Retrieve string representation of all conditionals for a given line, argument, and conditional group
+---@field public composeAllConditionals fun(line_num: number, arg_num: number): string Retrieve string representation of all conditionals for a given line and argument
+
 SMacro = {
   lines = {}
 }
@@ -268,6 +269,7 @@ end
 ---@param cond_num number index of conditional group
 ---@param conditional string conditional
 ---@param input string input to conditional
+---@return number index of new conditional
 function SMacro:addConditional(line_num, arg_num, cond_num, conditional, input)
   local cond_count = #self.lines[line_num].args[arg_num].conds[cond_num]
   local cond = {}
@@ -275,6 +277,8 @@ function SMacro:addConditional(line_num, arg_num, cond_num, conditional, input)
   cond.input = input
   self.lines[line_num].args[arg_num].conds[cond_num][cond_count + 1] = cond
   self.lines[line_num].args[arg_num].conds[cond_num].count = cond_count + 1
+
+  return cond_count + 1
 end
 
 ---@param line_num number row number for the line
@@ -283,13 +287,16 @@ end
 ---@param index number index of conditional in group
 ---@param conditional string conditional
 ---@param input string input to conditional
+---@return boolean if conditional was set
 function SMacro:setConditional(line_num, arg_num, cond_num, index, conditional, input)
   if self.lines[line_num].args[arg_num].conds[cond_num][index] ~= nil then
     local cond = {}
     cond.name = conditional
     cond.input = input
     self.lines[line_num].args[arg_num].conds[cond_num][index] = cond
+    return true
   end
+  return false
 end
 
 ---@param line_num number row number for the line
