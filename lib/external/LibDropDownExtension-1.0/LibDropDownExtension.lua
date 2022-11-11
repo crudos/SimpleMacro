@@ -123,628 +123,628 @@ local cdropdowns = Lib._cdropdowns
 
 ---@param self CustomDropDownButton
 local function CustomDropDownButton_OnClick(self)
-  local option = self.option
-  if not option then
-    return
-  end
-  local cdropdown = self:GetParent()
-  ---@diagnostic disable-next-line: assign-type-mismatch
-  local checked = option.checked ---@type boolean
-  if type(checked) == "function" then
-    checked = checked(self)
-  end
-  if option.keepShownOnClick and not option.notCheckable then
-    if checked then
-      checked = false
-      self.check:Hide()
-      self.uncheck:Show()
-    else
-      checked = true
-      self.check:Show()
-      self.uncheck:Hide()
+    local option = self.option
+    if not option then
+        return
     end
-  end
-  if type(option.checkedEval) ~= "function" then
-    option.checkedEval = checked
-  end
-  if type(option.func) == "function" then
-    option.func(self, option.arg1, option.arg2, checked)
-  end
-  if not option.noClickSound then
-    PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
-  end
-  if not option.keepShownOnClick then
-    ---@diagnostic disable-next-line: undefined-field
-    cdropdown:GetParent():Hide() -- CloseDropDownMenus()
-  end
+    local cdropdown = self:GetParent()
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    local checked = option.checked ---@type boolean
+    if type(checked) == "function" then
+        checked = checked(self)
+    end
+    if option.keepShownOnClick and not option.notCheckable then
+        if checked then
+            checked = false
+            self.check:Hide()
+            self.uncheck:Show()
+        else
+            checked = true
+            self.check:Show()
+            self.uncheck:Hide()
+        end
+    end
+    if type(option.checkedEval) ~= "function" then
+        option.checkedEval = checked
+    end
+    if type(option.func) == "function" then
+        option.func(self, option.arg1, option.arg2, checked)
+    end
+    if not option.noClickSound then
+        PlaySound(SOUNDKIT.U_CHAT_SCROLL_BUTTON)
+    end
+    if not option.keepShownOnClick then
+        ---@diagnostic disable-next-line: undefined-field
+        cdropdown:GetParent():Hide() -- CloseDropDownMenus()
+    end
 end
 
 -----@param frame Frame
 -----@param level number
 -----@param menuList table
 local function CustomDropDownInitialize(frame, level, menuList)
-  for _, info in ipairs(menuList) do
-    UIDropDownMenu_AddButton(info, level)
-  end
+    for _, info in ipairs(menuList) do
+        UIDropDownMenu_AddButton(info, level)
+    end
 end
 
 ---@param self CustomDropDownButton
 local function CustomDropDownButton_OnEnter(self)
-  local option = self.option
-  if not option then
-    return
-  end
-  ---@diagnostic disable-next-line: assign-type-mismatch
-  local cdropdown = self:GetParent() ---@type CustomDropDown
-  local level = cdropdown:GetID() + 1
-  if option.hasArrow then
-    local listFrame = _G["DropDownList"..level]
-    if ( not listFrame or not listFrame:IsShown() or select(2, listFrame:GetPoint(1)) ~= self ) then
-      --local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
-      --local oldInitialize = dropDownFrame.initialize
-      --UIDropDownMenu_SetInitializeFunction(dropDownFrame, CustomDropDownInitialize)
-      --ToggleDropDownMenu(level, self.value, nil, nil, nil, nil, option.menuList, self.expandArrow)
-      --UIDropDownMenu_SetInitializeFunction(dropDownFrame, oldInitialize)
+    local option = self.option
+    if not option then
+        return
     end
-  else
-    CloseDropDownMenus(level)
-  end
-  self.highlight:Show()
-  local shownTooltip
-  if self.normalText:IsTruncated() then
-    if not shownTooltip then
-      shownTooltip = true
-      GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-      GameTooltip_SetTitle(GameTooltip, self.normalText:GetText())
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    local cdropdown = self:GetParent() ---@type CustomDropDown
+    local level = cdropdown:GetID() + 1
+    if option.hasArrow then
+        local listFrame = _G["DropDownList"..level]
+        if ( not listFrame or not listFrame:IsShown() or select(2, listFrame:GetPoint(1)) ~= self ) then
+            --local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
+            --local oldInitialize = dropDownFrame.initialize
+            --UIDropDownMenu_SetInitializeFunction(dropDownFrame, CustomDropDownInitialize)
+            --ToggleDropDownMenu(level, self.value, nil, nil, nil, nil, option.menuList, self.expandArrow)
+            --UIDropDownMenu_SetInitializeFunction(dropDownFrame, oldInitialize)
+        end
     else
-      GameTooltip:AddLine(self.normalText:GetText(), 1, 1, 1, false)
+        CloseDropDownMenus(level)
     end
-    GameTooltip:Show()
-  end
-  if option.tooltipTitle and not option.noTooltipWhileEnabled then
-    if option.tooltipOnButton then
-      if not shownTooltip then
-        shownTooltip = true
-        GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
-        GameTooltip_SetTitle(GameTooltip, option.tooltipTitle)
-      else
-        GameTooltip:AddLine(option.tooltipTitle, 1, 1, 1, false)
-      end
-      if option.tooltipText then
-        GameTooltip_AddNormalLine(GameTooltip, option.tooltipText, true)
-      end
-      GameTooltip:Show()
+    self.highlight:Show()
+    local shownTooltip
+    if self.normalText:IsTruncated() then
+        if not shownTooltip then
+            shownTooltip = true
+            GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+            GameTooltip_SetTitle(GameTooltip, self.normalText:GetText())
+        else
+            GameTooltip:AddLine(self.normalText:GetText(), 1, 1, 1, false)
+        end
+        GameTooltip:Show()
     end
-  end
-  if option.mouseOverIcon then
-    self.iconTexture:SetTexture(self.mouseOverIcon)
-    self.iconTexture:Show()
-  end
+    if option.tooltipTitle and not option.noTooltipWhileEnabled then
+        if option.tooltipOnButton then
+            if not shownTooltip then
+                shownTooltip = true
+                GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
+                GameTooltip_SetTitle(GameTooltip, option.tooltipTitle)
+            else
+                GameTooltip:AddLine(option.tooltipTitle, 1, 1, 1, false)
+            end
+            if option.tooltipText then
+                GameTooltip_AddNormalLine(GameTooltip, option.tooltipText, true)
+            end
+            GameTooltip:Show()
+        end
+    end
+    if option.mouseOverIcon then
+        self.iconTexture:SetTexture(self.mouseOverIcon)
+        self.iconTexture:Show()
+    end
 end
 
 ---@param self CustomDropDownButton
 local function CustomDropDownButton_OnLeave(self)
-  self.highlight:Hide()
-  GameTooltip:Hide()
-  local option = self.option
-  if option.mouseOverIcon then
-    if option.icon then
-      self.iconTexture:SetTexture(option.icon)
-    else
-      self.iconTexture:Hide()
+    self.highlight:Hide()
+    GameTooltip:Hide()
+    local option = self.option
+    if option.mouseOverIcon then
+        if option.icon then
+            self.iconTexture:SetTexture(option.icon)
+        else
+            self.iconTexture:Hide()
+        end
     end
-  end
 end
 
 ---@param self CustomDropDownButton
 local function CustomDropDownButton_OnEnable(self)
-  self.invisibleButton:Hide()
+    self.invisibleButton:Hide()
 end
 
 ---@param self CustomDropDownButton
 local function CustomDropDownButton_OnDisable(self)
-  self.invisibleButton:Show()
+    self.invisibleButton:Show()
 end
 
 local function CustomDropDownButton_InvisibleButton_OnEnter(self)
-  local button = self:GetParent() ---@type CustomDropDownButton
-  ---@diagnostic disable-next-line: assign-type-mismatch
-  local cdropdown = button:GetParent() ---@type CustomDropDown
-  CloseDropDownMenus(cdropdown:GetID() + 1)
-  if not button.tooltipOnButton or (not button.tooltipTitle and not button.tooltipWhileDisabled) then
-    return
-  end
-  GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
-  GameTooltip_SetTitle(GameTooltip, button.tooltipTitle)
-  if button.tooltipInstruction then
-    GameTooltip_AddInstructionLine(GameTooltip, button.tooltipInstruction)
-  end
-  if button.tooltipText then
-    GameTooltip_AddNormalLine(GameTooltip, button.tooltipText, true)
-  end
-  if button.tooltipWarning then
-    GameTooltip_AddColoredLine(GameTooltip, button.tooltipWarning, RED_FONT_COLOR, true)
-  end
-  GameTooltip:Show()
+    local button = self:GetParent() ---@type CustomDropDownButton
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    local cdropdown = button:GetParent() ---@type CustomDropDown
+    CloseDropDownMenus(cdropdown:GetID() + 1)
+    if not button.tooltipOnButton or (not button.tooltipTitle and not button.tooltipWhileDisabled) then
+        return
+    end
+    GameTooltip:SetOwner(button, "ANCHOR_RIGHT")
+    GameTooltip_SetTitle(GameTooltip, button.tooltipTitle)
+    if button.tooltipInstruction then
+        GameTooltip_AddInstructionLine(GameTooltip, button.tooltipInstruction)
+    end
+    if button.tooltipText then
+        GameTooltip_AddNormalLine(GameTooltip, button.tooltipText, true)
+    end
+    if button.tooltipWarning then
+        GameTooltip_AddColoredLine(GameTooltip, button.tooltipWarning, RED_FONT_COLOR, true)
+    end
+    GameTooltip:Show()
 end
 
 local function CustomDropDownButton_InvisibleButton_OnLeave(self)
-  GameTooltip:Hide()
+    GameTooltip:Hide()
 end
 
 local function CustomDropDownButton_ColorSwatch_OnClick(self)
-  local button = self:GetParent() ---@type CustomDropDownButton
-  CloseMenus()
-  UIDropDownMenuButton_OpenColorPicker(button)
+    local button = self:GetParent() ---@type CustomDropDownButton
+    CloseMenus()
+    UIDropDownMenuButton_OpenColorPicker(button)
 end
 
 local function CustomDropDownButton_ColorSwatch_OnEnter(self)
-  local button = self:GetParent() ---@type CustomDropDownButton
-  ---@diagnostic disable-next-line: assign-type-mismatch
-  local cdropdown = button:GetParent() ---@type CustomDropDown
-  CloseDropDownMenus(cdropdown:GetID() + 1)
-  button.colorSwatchBg:SetVertexColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
+    local button = self:GetParent() ---@type CustomDropDownButton
+    ---@diagnostic disable-next-line: assign-type-mismatch
+    local cdropdown = button:GetParent() ---@type CustomDropDown
+    CloseDropDownMenus(cdropdown:GetID() + 1)
+    button.colorSwatchBg:SetVertexColor(NORMAL_FONT_COLOR.r, NORMAL_FONT_COLOR.g, NORMAL_FONT_COLOR.b)
 end
 
 local function CustomDropDownButton_ColorSwatch_OnLeave(self)
-  local button = self:GetParent() ---@type CustomDropDownButton
-  button.colorSwatchBg:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
+    local button = self:GetParent() ---@type CustomDropDownButton
+    button.colorSwatchBg:SetVertexColor(HIGHLIGHT_FONT_COLOR.r, HIGHLIGHT_FONT_COLOR.g, HIGHLIGHT_FONT_COLOR.b)
 end
 
 ---@param cdropdown CustomDropDown
 ---@param button CustomDropDownButton?
 ---@return CustomDropDownButton button
 local function NewCustomDropDownButton(cdropdown, button)
-  local index = #cdropdown.buttons + 1
-  ---@diagnostic disable-next-line: cast-local-type
-  button = button or CreateFrame("Button", cdropdown:GetName() .. "Button" .. index, cdropdown, "UIDropDownMenuButtonTemplate")
-  button.order = nil
-  button.option = nil
-  button:SetID(index)
-  button:SetFrameLevel(cdropdown:GetFrameLevel() + 2)
-  button:SetScript("OnClick", CustomDropDownButton_OnClick)
-  button:SetScript("OnEnter", CustomDropDownButton_OnEnter)
-  button:SetScript("OnLeave", CustomDropDownButton_OnLeave)
-  button:SetScript("OnEnable", CustomDropDownButton_OnEnable)
-  button:SetScript("OnDisable", CustomDropDownButton_OnDisable)
-  local buttonName = button:GetName()
-  button.invisibleButton = _G[buttonName .. "InvisibleButton"]
-  button.invisibleButton:SetScript("OnEnter", CustomDropDownButton_InvisibleButton_OnEnter)
-  button.invisibleButton:SetScript("OnLeave", CustomDropDownButton_InvisibleButton_OnLeave)
-  button.highlight = _G[buttonName .. "Highlight"]
-  button.normalText = _G[buttonName .. "NormalText"]
-  button.normalText:ClearAllPoints()
-  button.normalText:SetPoint("LEFT")
-  button.normalText:SetPoint("RIGHT")
-  button.normalText:SetWordWrap(false) ---@diagnostic disable-line: redundant-parameter
-  button.normalText:SetNonSpaceWrap(false)
-  button.iconTexture = _G[buttonName .. "Icon"]
-  button.expandArrow = _G[buttonName .. "ExpandArrow"]
-  button.expandArrow:SetScript("OnMouseDown", nil) ---@diagnostic disable-line: param-type-mismatch
-  button.expandArrow:SetScript("OnEnter", nil) ---@diagnostic disable-line: param-type-mismatch
-  button.check = _G[buttonName .. "Check"]
-  button.uncheck = _G[buttonName .. "UnCheck"]
-  button.colorSwatch = _G[buttonName .. "ColorSwatch"]
-  button.colorSwatchBg = _G[buttonName .. "ColorSwatchSwatchBg"]
-  button.colorSwatchNormalTexture = _G[buttonName .. "ColorSwatchNormalTexture"]
-  button.colorSwatch:SetScript("OnClick", CustomDropDownButton_ColorSwatch_OnClick)
-  button.colorSwatch:SetScript("OnEnter", CustomDropDownButton_ColorSwatch_OnEnter)
-  button.colorSwatch:SetScript("OnLeave", CustomDropDownButton_ColorSwatch_OnLeave)
-  ---@diagnostic disable-next-line: return-type-mismatch
-  return button
+    local index = #cdropdown.buttons + 1
+    ---@diagnostic disable-next-line: cast-local-type
+    button = button or CreateFrame("Button", cdropdown:GetName() .. "Button" .. index, cdropdown, "UIDropDownMenuButtonTemplate")
+    button.order = nil
+    button.option = nil
+    button:SetID(index)
+    button:SetFrameLevel(cdropdown:GetFrameLevel() + 2)
+    button:SetScript("OnClick", CustomDropDownButton_OnClick)
+    button:SetScript("OnEnter", CustomDropDownButton_OnEnter)
+    button:SetScript("OnLeave", CustomDropDownButton_OnLeave)
+    button:SetScript("OnEnable", CustomDropDownButton_OnEnable)
+    button:SetScript("OnDisable", CustomDropDownButton_OnDisable)
+    local buttonName = button:GetName()
+    button.invisibleButton = _G[buttonName .. "InvisibleButton"]
+    button.invisibleButton:SetScript("OnEnter", CustomDropDownButton_InvisibleButton_OnEnter)
+    button.invisibleButton:SetScript("OnLeave", CustomDropDownButton_InvisibleButton_OnLeave)
+    button.highlight = _G[buttonName .. "Highlight"]
+    button.normalText = _G[buttonName .. "NormalText"]
+    button.normalText:ClearAllPoints()
+    button.normalText:SetPoint("LEFT")
+    button.normalText:SetPoint("RIGHT")
+    button.normalText:SetWordWrap(false) ---@diagnostic disable-line: redundant-parameter
+    button.normalText:SetNonSpaceWrap(false)
+    button.iconTexture = _G[buttonName .. "Icon"]
+    button.expandArrow = _G[buttonName .. "ExpandArrow"]
+    button.expandArrow:SetScript("OnMouseDown", nil) ---@diagnostic disable-line: param-type-mismatch
+    button.expandArrow:SetScript("OnEnter", nil) ---@diagnostic disable-line: param-type-mismatch
+    button.check = _G[buttonName .. "Check"]
+    button.uncheck = _G[buttonName .. "UnCheck"]
+    button.colorSwatch = _G[buttonName .. "ColorSwatch"]
+    button.colorSwatchBg = _G[buttonName .. "ColorSwatchSwatchBg"]
+    button.colorSwatchNormalTexture = _G[buttonName .. "ColorSwatchNormalTexture"]
+    button.colorSwatch:SetScript("OnClick", CustomDropDownButton_ColorSwatch_OnClick)
+    button.colorSwatch:SetScript("OnEnter", CustomDropDownButton_ColorSwatch_OnEnter)
+    button.colorSwatch:SetScript("OnLeave", CustomDropDownButton_ColorSwatch_OnLeave)
+    ---@diagnostic disable-next-line: return-type-mismatch
+    return button
 end
 
 ---@param cdropdown CustomDropDown
 local function CustomDropDown_OnShow(cdropdown)
-  ---@type DropDownList
-  local parent = cdropdown:GetParent() ---@diagnostic disable-line: assign-type-mismatch
-  local maxWidth = parent.maxWidth
-  local width, height = parent:GetWidth(), 32
-  for i = 1, #cdropdown.buttons do
-    local button = cdropdown.buttons[i]
-    if button:IsShown() then
-      button:SetWidth(maxWidth or width)
-      height = height + button:GetHeight()
+    ---@type DropDownList
+    local parent = cdropdown:GetParent() ---@diagnostic disable-line: assign-type-mismatch
+    local maxWidth = parent.maxWidth
+    local width, height = parent:GetWidth(), 32
+    for i = 1, #cdropdown.buttons do
+        local button = cdropdown.buttons[i]
+        if button:IsShown() then
+            button:SetWidth(maxWidth or width)
+            height = height + button:GetHeight()
+        end
     end
-  end
-  cdropdown:SetHeight(height)
+    cdropdown:SetHeight(height)
 end
 
 ---@param widget Region
 local function Hide(widget)
-  widget:SetAlpha(0)
-  widget:Hide()
-  widget.Show = widget.Hide
+    widget:SetAlpha(0)
+    widget:Hide()
+    widget.Show = widget.Hide
 end
 
 ---@param dropdown DropDownList
 ---@return CustomDropDown
 local function NewCustomDropDown(dropdown)
-  ---@type CustomDropDown
-  local cdropdown = CreateFrame("Button", "LibDropDownExtensionCustomDropDown_" .. tostring(dropdown), dropdown, "UIDropDownListTemplate") ---@diagnostic disable-line: assign-type-mismatch
-  cdropdown:SetID(dropdown:GetID())
-  cdropdown.options = {}
-  cdropdown.buttons = {}
-  do
-    local cdropdownName = cdropdown:GetName()
-    Hide(_G[cdropdownName .. "Backdrop"])
-    Hide(_G[cdropdownName .. "MenuBackdrop"])
-    cdropdown:SetFrameStrata(dropdown:GetFrameStrata())
-    cdropdown:SetFrameLevel(dropdown:GetFrameLevel() + 1)
-    cdropdown:SetScript("OnClick", nil) ---@diagnostic disable-line: param-type-mismatch
+    ---@type CustomDropDown
+    local cdropdown = CreateFrame("Button", "LibDropDownExtensionCustomDropDown_" .. tostring(dropdown), dropdown, "UIDropDownListTemplate") ---@diagnostic disable-line: assign-type-mismatch
+    cdropdown:SetID(dropdown:GetID())
+    cdropdown.options = {}
+    cdropdown.buttons = {}
+    do
+        local cdropdownName = cdropdown:GetName()
+        Hide(_G[cdropdownName .. "Backdrop"])
+        Hide(_G[cdropdownName .. "MenuBackdrop"])
+        cdropdown:SetFrameStrata(dropdown:GetFrameStrata())
+        cdropdown:SetFrameLevel(dropdown:GetFrameLevel() + 1)
+        cdropdown:SetScript("OnClick", nil) ---@diagnostic disable-line: param-type-mismatch
     cdropdown:SetScript("OnUpdate", nil) ---@diagnostic disable-line: param-type-mismatch
     cdropdown:SetScript("OnShow", CustomDropDown_OnShow)
-    cdropdown:SetScript("OnHide", nil) ---@diagnostic disable-line: param-type-mismatch
+        cdropdown:SetScript("OnHide", nil) ---@diagnostic disable-line: param-type-mismatch
     for i = 1, UIDROPDOWNMENU_MAXBUTTONS do
-      ---@type CustomDropDownButton
-      local button = _G[cdropdown:GetName() .. "Button" .. i]
-      if not button then
-        break
-      end
-      button = NewCustomDropDownButton(cdropdown, button)
-      cdropdown.buttons[i] = button
+        ---@type CustomDropDownButton
+        local button = _G[cdropdown:GetName() .. "Button" .. i]
+        if not button then
+            break
+        end
+        button = NewCustomDropDownButton(cdropdown, button)
+        cdropdown.buttons[i] = button
     end
-  end
-  return cdropdown
+    end
+    return cdropdown
 end
 
 ---@param a CustomDropDownButton
 ---@param b CustomDropDownButton
 local function SortDropDownButtons(a, b)
-  return a.order < b.order
+    return a.order < b.order
 end
 
 ---@param cdropdown CustomDropDown
 local function ClearDropDown(cdropdown)
-  for i = 1, #cdropdown.buttons do
-    local button = cdropdown.buttons[i]
-    button.option = nil
-  end
-  table.wipe(cdropdown.options)
+    for i = 1, #cdropdown.buttons do
+        local button = cdropdown.buttons[i]
+        button.option = nil
+    end
+    table.wipe(cdropdown.options)
 end
 
 ---@param cdropdown CustomDropDown
 ---@param options CustomDropDownOption[]
 ---@param orderOffset number
 local function AppendDropDown(cdropdown, options, orderOffset)
-  ---@type table<CustomDropDownButton, boolean?>
-  local available = {}
-  for i = 1, #cdropdown.buttons do
-    local button = cdropdown.buttons[i]
-    if not button.option then
-      available[button] = true
+    ---@type table<CustomDropDownButton, boolean?>
+    local available = {}
+    for i = 1, #cdropdown.buttons do
+        local button = cdropdown.buttons[i]
+        if not button.option then
+            available[button] = true
+        end
     end
-  end
-  for i = 1, #options do
-    local option = options[i]
-    ---@type CustomDropDownButton
-    local button = next(available)
-    if not button then
-      button = NewCustomDropDownButton(cdropdown)
-      cdropdown.buttons[#cdropdown.buttons + 1] = button
-    else
-      available[button] = nil
+    for i = 1, #options do
+        local option = options[i]
+        ---@type CustomDropDownButton
+        local button = next(available)
+        if not button then
+            button = NewCustomDropDownButton(cdropdown)
+            cdropdown.buttons[#cdropdown.buttons + 1] = button
+        else
+            available[button] = nil
+        end
+        button.order = orderOffset + i
+        button.option = option
+        cdropdown.options[#cdropdown.options + 1] = option
     end
-    button.order = orderOffset + i
-    button.option = option
-    cdropdown.options[#cdropdown.options + 1] = option
-  end
 end
 
 ---@param button CustomDropDownButton
 local function RefreshButton(button)
-  local option = button.option
+    local option = button.option
 
-  local icon = button.iconTexture
-  local invisibleButton = button.invisibleButton
+    local icon = button.iconTexture
+    local invisibleButton = button.invisibleButton
 
-  button:SetDisabledFontObject(GameFontDisableSmallLeft)
-  button:Enable()
-  invisibleButton:Hide()
+    button:SetDisabledFontObject(GameFontDisableSmallLeft)
+    button:Enable()
+    invisibleButton:Hide()
 
-  if option.notClickable then
-    option.disabled = true
-    button:SetDisabledFontObject(GameFontHighlightSmallLeft)
-  end
-
-  if option.isTitle then
-    option.disabled = true
-    button:SetDisabledFontObject(GameFontNormalSmallLeft)
-  end
-
-  if option.disabled then
-    button:Disable()
-    invisibleButton:Show()
-    option.colorCode = nil
-  end
-
-  if option.disablecolor then
-    option.colorCode = option.disablecolor
-  end
-
-  if option.text then
-
-    if option.colorCode then
-      button:SetText(option.colorCode .. option.text .. "|r")
-    else
-      button:SetText(option.text)
+    if option.notClickable then
+        option.disabled = true
+        button:SetDisabledFontObject(GameFontHighlightSmallLeft)
     end
 
-    if option.icon or option.mouseOverIcon then
-      icon:ClearAllPoints()
-      icon:SetPoint("RIGHT")
-      icon:SetSize(16, 16)
-      icon:SetTexture(option.icon or option.mouseOverIcon)
-      if option.tCoordLeft then
-        icon:SetTexCoord(option.tCoordLeft, option.tCoordRight, option.tCoordTop, option.tCoordBottom)
-      else
-        icon:SetTexCoord(0, 1, 0, 1)
-      end
-      icon:Show()
-    else
-      icon:Hide()
+    if option.isTitle then
+        option.disabled = true
+        button:SetDisabledFontObject(GameFontNormalSmallLeft)
     end
-
-    if option.fontObject then
-      button:SetNormalFontObject(option.fontObject)
-      button:SetHighlightFontObject(option.fontObject)
-    else
-      button:SetNormalFontObject(GameFontHighlightSmallLeft)
-      button:SetHighlightFontObject(GameFontHighlightSmallLeft)
-    end
-
-  else
-    button:SetText("")
-    icon:Hide()
-  end
-
-  if option.iconInfo then
-    icon.tFitDropDownSizeX = option.iconInfo.tFitDropDownSizeX
-  else
-    icon.tFitDropDownSizeX = nil
-  end
-
-  if option.iconOnly and option.icon then
-    icon:ClearAllPoints()
-    icon:SetPoint("LEFT")
-    icon:SetWidth(option.iconInfo and option.iconInfo.tSizeX or 16)
-    icon:SetHeight(option.iconInfo and option.iconInfo.tSizeY or 16)
-    icon:SetTexture(option.icon)
-    if option.iconInfo and option.iconInfo.tCoordLeft then
-      icon:SetTexCoord(option.iconInfo.tCoordLeft, option.iconInfo.tCoordRight, option.iconInfo.tCoordTop, option.iconInfo.tCoordBottom)
-    else
-      icon:SetTexCoord(0, 1, 0, 1)
-    end
-    icon:Show()
-  end
-
-  local expandArrow = button.expandArrow
-  expandArrow:SetShown(option.hasArrow)
-  expandArrow:SetEnabled(not option.disabled)
-
-  if option.iconOnly then
-    icon:SetPoint("LEFT")
-    icon:SetPoint("RIGHT", -5, 0)
-  end
-
-  --[=[
-  local xPos = 5
-  local displayInfo = button.normalText ---@type FontString|Texture
-  if option.iconOnly then
-      displayInfo = icon
-  end
-
-  displayInfo:ClearAllPoints()
-
-  if option.notCheckable then
-      if option.justifyH and option.justifyH == "CENTER" then
-          displayInfo:SetPoint("CENTER", button, "CENTER", -7, 0)
-      else
-          displayInfo:SetPoint("LEFT", button, "LEFT", 0, 0)
-      end
-      xPos = xPos + 10
-  else
-      displayInfo:SetPoint("LEFT", button, "LEFT", 20, 0)
-      xPos = xPos + 12
-  end
-
-  local frame = UIDROPDOWNMENU_OPEN_MENU
-if frame and frame.displayMode == "MENU" then
-  if not option.notCheckable then
-    xPos = xPos - 6
-  end
-  end
-
-  frame = frame or UIDROPDOWNMENU_INIT_MENU
-  if option.leftPadding then
-  xPos = xPos + option.leftPadding
-  end
-
-  displayInfo:SetPoint("TOPLEFT", button, "TOPLEFT", xPos, 0)
-  --]=]
-
-  if not option.notCheckable then
-
-    local check = button.check
-    local uncheck = button.uncheck
 
     if option.disabled then
-      check:SetDesaturated(true)
-      check:SetAlpha(0.5)
-      uncheck:SetDesaturated(true)
-      uncheck:SetAlpha(0.5)
+        button:Disable()
+        invisibleButton:Show()
+        option.colorCode = nil
+    end
+
+    if option.disablecolor then
+        option.colorCode = option.disablecolor
+    end
+
+    if option.text then
+
+        if option.colorCode then
+            button:SetText(option.colorCode .. option.text .. "|r")
+        else
+            button:SetText(option.text)
+        end
+
+        if option.icon or option.mouseOverIcon then
+            icon:ClearAllPoints()
+            icon:SetPoint("RIGHT")
+            icon:SetSize(16, 16)
+            icon:SetTexture(option.icon or option.mouseOverIcon)
+            if option.tCoordLeft then
+                icon:SetTexCoord(option.tCoordLeft, option.tCoordRight, option.tCoordTop, option.tCoordBottom)
+            else
+                icon:SetTexCoord(0, 1, 0, 1)
+            end
+            icon:Show()
+        else
+            icon:Hide()
+        end
+
+        if option.fontObject then
+            button:SetNormalFontObject(option.fontObject)
+            button:SetHighlightFontObject(option.fontObject)
+        else
+            button:SetNormalFontObject(GameFontHighlightSmallLeft)
+            button:SetHighlightFontObject(GameFontHighlightSmallLeft)
+        end
+
     else
-      check:SetDesaturated(false)
-      check:SetAlpha(1)
-      uncheck:SetDesaturated(false)
-      uncheck:SetAlpha(1)
+        button:SetText("")
+        icon:Hide()
     end
 
-    if option.customCheckIconAtlas or option.customCheckIconTexture then
-      check:SetTexCoord(0, 1, 0, 1)
-      uncheck:SetTexCoord(0, 1, 0, 1)
-      if option.customCheckIconAtlas then
-        check:SetAtlas(option.customCheckIconAtlas)
-        uncheck:SetAtlas(option.customUncheckIconAtlas or option.customCheckIconAtlas)
-      else
-        check:SetTexture(option.customCheckIconTexture)
-        uncheck:SetTexture(option.customUncheckIconTexture or option.customCheckIconTexture)
-      end
-    elseif option.isNotRadio then
-      check:SetTexCoord(0, 0.5, 0, 0.5)
-      check:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
-      uncheck:SetTexCoord(0.5, 1, 0, 0.5)
-      uncheck:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
+    if option.iconInfo then
+        icon.tFitDropDownSizeX = option.iconInfo.tFitDropDownSizeX
     else
-      check:SetTexCoord(0, 0.5, 0.5, 1)
-      check:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
-      uncheck:SetTexCoord(0.5, 1, 0.5, 1)
-      uncheck:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
+        icon.tFitDropDownSizeX = nil
     end
 
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    local checked = option.checked ---@type boolean
-    if type(checked) == "function" then
-      checked = checked(button)
+    if option.iconOnly and option.icon then
+        icon:ClearAllPoints()
+        icon:SetPoint("LEFT")
+        icon:SetWidth(option.iconInfo and option.iconInfo.tSizeX or 16)
+        icon:SetHeight(option.iconInfo and option.iconInfo.tSizeY or 16)
+        icon:SetTexture(option.icon)
+        if option.iconInfo and option.iconInfo.tCoordLeft then
+            icon:SetTexCoord(option.iconInfo.tCoordLeft, option.iconInfo.tCoordRight, option.iconInfo.tCoordTop, option.iconInfo.tCoordBottom)
+        else
+            icon:SetTexCoord(0, 1, 0, 1)
+        end
+        icon:Show()
     end
 
-    if checked then
-      button:LockHighlight()
-      check:Show()
-      uncheck:Hide()
+    local expandArrow = button.expandArrow
+    expandArrow:SetShown(option.hasArrow)
+    expandArrow:SetEnabled(not option.disabled)
+
+    if option.iconOnly then
+        icon:SetPoint("LEFT")
+        icon:SetPoint("RIGHT", -5, 0)
+    end
+
+    --[=[
+    local xPos = 5
+    local displayInfo = button.normalText ---@type FontString|Texture
+    if option.iconOnly then
+        displayInfo = icon
+    end
+
+    displayInfo:ClearAllPoints()
+
+    if option.notCheckable then
+        if option.justifyH and option.justifyH == "CENTER" then
+            displayInfo:SetPoint("CENTER", button, "CENTER", -7, 0)
+        else
+            displayInfo:SetPoint("LEFT", button, "LEFT", 0, 0)
+        end
+        xPos = xPos + 10
     else
-      button:UnlockHighlight()
-      check:Hide()
-      uncheck:Show()
+        displayInfo:SetPoint("LEFT", button, "LEFT", 20, 0)
+        xPos = xPos + 12
     end
 
-  else
-    button.check:Hide()
-    button.uncheck:Hide()
-  end
+    local frame = UIDROPDOWNMENU_OPEN_MENU
+  if frame and frame.displayMode == "MENU" then
+    if not option.notCheckable then
+      xPos = xPos - 6
+    end
+    end
 
-  local colorSwatch = button.colorSwatch
-  if option.hasColorSwatch then
-    button.colorSwatchNormalTexture:SetVertexColor(option.r, option.g, option.b)
-    colorSwatch:Show()
-  else
-    colorSwatch:Hide()
-  end
+    frame = frame or UIDROPDOWNMENU_INIT_MENU
+    if option.leftPadding then
+    xPos = xPos + option.leftPadding
+    end
+
+    displayInfo:SetPoint("TOPLEFT", button, "TOPLEFT", xPos, 0)
+    --]=]
+
+    if not option.notCheckable then
+
+        local check = button.check
+        local uncheck = button.uncheck
+
+        if option.disabled then
+            check:SetDesaturated(true)
+            check:SetAlpha(0.5)
+            uncheck:SetDesaturated(true)
+            uncheck:SetAlpha(0.5)
+        else
+            check:SetDesaturated(false)
+            check:SetAlpha(1)
+            uncheck:SetDesaturated(false)
+            uncheck:SetAlpha(1)
+        end
+
+        if option.customCheckIconAtlas or option.customCheckIconTexture then
+            check:SetTexCoord(0, 1, 0, 1)
+            uncheck:SetTexCoord(0, 1, 0, 1)
+            if option.customCheckIconAtlas then
+                check:SetAtlas(option.customCheckIconAtlas)
+                uncheck:SetAtlas(option.customUncheckIconAtlas or option.customCheckIconAtlas)
+            else
+                check:SetTexture(option.customCheckIconTexture)
+                uncheck:SetTexture(option.customUncheckIconTexture or option.customCheckIconTexture)
+            end
+        elseif option.isNotRadio then
+            check:SetTexCoord(0, 0.5, 0, 0.5)
+            check:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
+            uncheck:SetTexCoord(0.5, 1, 0, 0.5)
+            uncheck:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
+        else
+            check:SetTexCoord(0, 0.5, 0.5, 1)
+            check:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
+            uncheck:SetTexCoord(0.5, 1, 0.5, 1)
+            uncheck:SetTexture("Interface\\Common\\UI-DropDownRadioChecks")
+        end
+
+        ---@diagnostic disable-next-line: assign-type-mismatch
+        local checked = option.checked ---@type boolean
+        if type(checked) == "function" then
+            checked = checked(button)
+        end
+
+        if checked then
+            button:LockHighlight()
+            check:Show()
+            uncheck:Hide()
+        else
+            button:UnlockHighlight()
+            check:Hide()
+            uncheck:Show()
+        end
+
+    else
+        button.check:Hide()
+        button.uncheck:Hide()
+    end
+
+    local colorSwatch = button.colorSwatch
+    if option.hasColorSwatch then
+        button.colorSwatchNormalTexture:SetVertexColor(option.r, option.g, option.b)
+        colorSwatch:Show()
+    else
+        colorSwatch:Hide()
+    end
 end
 
 ---@param cdropdown CustomDropDown
 local function RefreshButtons(cdropdown)
-  local lastButton ---@type CustomDropDownButton?
-  for i = 1, #cdropdown.buttons do
-    local button = cdropdown.buttons[i]
-    if not button.option then
-      button.order = 1000000
+    local lastButton ---@type CustomDropDownButton?
+    for i = 1, #cdropdown.buttons do
+        local button = cdropdown.buttons[i]
+        if not button.option then
+            button.order = 1000000
+        end
     end
-  end
-  table.sort(cdropdown.buttons, SortDropDownButtons)
-  for i = 1, #cdropdown.buttons do
-    local button = cdropdown.buttons[i]
-    if button.option then
-      button:ClearAllPoints()
-      if lastButton then
-        button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, 0)
-      else
-        button:SetPoint("TOPLEFT", cdropdown, "TOPLEFT", 15, -17)
-      end
-      RefreshButton(button)
-      button:Show()
-      lastButton = button
+    table.sort(cdropdown.buttons, SortDropDownButtons)
+    for i = 1, #cdropdown.buttons do
+        local button = cdropdown.buttons[i]
+        if button.option then
+            button:ClearAllPoints()
+            if lastButton then
+                button:SetPoint("TOPLEFT", lastButton, "BOTTOMLEFT", 0, 0)
+            else
+                button:SetPoint("TOPLEFT", cdropdown, "TOPLEFT", 15, -17)
+            end
+            RefreshButton(button)
+            button:Show()
+            lastButton = button
+        else
+            button:Hide()
+        end
+    end
+    local numOptions = #cdropdown.options
+    if numOptions > 0 then
+        ---@diagnostic disable-next-line: assign-type-mismatch
+        local parent = cdropdown:GetParent() ---@type Frame
+        parent:SetHeight(parent:GetHeight() + 16 * numOptions)
+        cdropdown:ClearAllPoints()
+        cdropdown:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 0, 0)
+        cdropdown:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", 0, 0)
+        cdropdown:Show()
     else
-      button:Hide()
+        cdropdown:Hide()
     end
-  end
-  local numOptions = #cdropdown.options
-  if numOptions > 0 then
-    ---@diagnostic disable-next-line: assign-type-mismatch
-    local parent = cdropdown:GetParent() ---@type Frame
-    parent:SetHeight(parent:GetHeight() + 16 * numOptions)
-    cdropdown:ClearAllPoints()
-    cdropdown:SetPoint("BOTTOMLEFT", parent, "BOTTOMLEFT", 0, 0)
-    cdropdown:SetPoint("BOTTOMRIGHT", parent, "BOTTOMRIGHT", 0, 0)
-    cdropdown:Show()
-  else
-    cdropdown:Hide()
-  end
 end
 
 ---@param dropdown DropDownList
 local function GetCustomDropDown(dropdown)
-  local cdropdown = cdropdowns[dropdown]
-  if not cdropdown then
-    cdropdown = NewCustomDropDown(dropdown)
-    cdropdowns[dropdown] = cdropdown
-  end
-  return cdropdown
+    local cdropdown = cdropdowns[dropdown]
+    if not cdropdown then
+        cdropdown = NewCustomDropDown(dropdown)
+        cdropdowns[dropdown] = cdropdown
+    end
+    return cdropdown
 end
 
 ---@param option CustomDropDownOption
 local function IsOptionValid(option)
-  return type(option) == "table"
+    return type(option) == "table"
 end
 
 ---@param options1 CustomDropDownOption[]
 ---@param options2 CustomDropDownOption[]
 local function CopyOptions(options1, options2)
-  table.wipe(options2)
-  local index = 0
-  for i = 1, #options1 do
-    local option = options1[i]
-    if IsOptionValid(option) then
-      index = index + 1
-      options2[index] = option
+    table.wipe(options2)
+    local index = 0
+    for i = 1, #options1 do
+        local option = options1[i]
+        if IsOptionValid(option) then
+            index = index + 1
+            options2[index] = option
+        end
     end
-  end
 end
 
 ---@param options CustomDropDownOption[]
 local function RemoveInvalidOptions(options)
-  for i = #options, 1, -1 do
-    local option = options[i]
-    if not IsOptionValid(option) then
-      table.remove(options, i)
+    for i = #options, 1, -1 do
+        local option = options[i]
+        if not IsOptionValid(option) then
+            table.remove(options, i)
+        end
     end
-  end
 end
 
 Lib.Option = Lib.Option or {}
 
 Lib.Option.Separator = Lib.Option.Separator or {
-  hasArrow = false,
-  dist = 0,
-  isTitle = true,
-  isUninteractable = true,
-  notCheckable = true,
-  iconOnly = true,
-  icon = "Interface\\Common\\UI-TooltipDivider-Transparent",
-  tCoordLeft = 0,
-  tCoordRight = 1,
-  tCoordTop = 0,
-  tCoordBottom = 1,
-  tSizeX = 0,
-  tSizeY = 8,
-  tFitDropDownSizeX = true,
-  iconInfo = {
+    hasArrow = false,
+    dist = 0,
+    isTitle = true,
+    isUninteractable = true,
+    notCheckable = true,
+    iconOnly = true,
+    icon = "Interface\\Common\\UI-TooltipDivider-Transparent",
     tCoordLeft = 0,
     tCoordRight = 1,
     tCoordTop = 0,
     tCoordBottom = 1,
     tSizeX = 0,
     tSizeY = 8,
-    tFitDropDownSizeX = true
-  }
+    tFitDropDownSizeX = true,
+    iconInfo = {
+        tCoordLeft = 0,
+        tCoordRight = 1,
+        tCoordTop = 0,
+        tCoordBottom = 1,
+        tSizeX = 0,
+        tSizeY = 8,
+        tFitDropDownSizeX = true
+    }
 }
 
 Lib.Option.Space = Lib.Option.Space or {
-  hasArrow = false,
-  dist = 0,
-  isTitle = true,
-  isUninteractable = true,
-  notCheckable = true
+    hasArrow = false,
+    dist = 0,
+    isTitle = true,
+    isUninteractable = true,
+    notCheckable = true
 }
 
 Lib._separatorTable = Lib._separatorTable or { Lib.Option.Separator }
@@ -753,69 +753,69 @@ local separatorTable = Lib._separatorTable
 ---@param event LibDropDownExtensionEvent
 ---@param dropdown DropDownList
 function Lib:Broadcast(event, dropdown)
-  local level = dropdown:GetID()
-  local cdropdown = GetCustomDropDown(dropdown)
-  local shownSeparator
-  ClearDropDown(cdropdown)
-  for i = 1, #callbacks do
-    local callback = callbacks[i]
-    local callbackLevel = callback.events[event]
-    if callbackLevel == true or callbackLevel == level then
-      local status, retval = pcall(callback.func, dropdown.dropdown, event, callback.options, level, callback.data)
-      if status and retval then
-        if not shownSeparator and callback.options[1] then
-          shownSeparator = true
-          AppendDropDown(cdropdown, separatorTable, 0)
+    local level = dropdown:GetID()
+    local cdropdown = GetCustomDropDown(dropdown)
+    local shownSeparator
+    ClearDropDown(cdropdown)
+    for i = 1, #callbacks do
+        local callback = callbacks[i]
+        local callbackLevel = callback.events[event]
+        if callbackLevel == true or callbackLevel == level then
+            local status, retval = pcall(callback.func, dropdown.dropdown, event, callback.options, level, callback.data)
+            if status and retval then
+                if not shownSeparator and callback.options[1] then
+                    shownSeparator = true
+                    AppendDropDown(cdropdown, separatorTable, 0)
+                end
+                if type(retval) == "table" and retval ~= callback.options then
+                    CopyOptions(retval, callback.options)
+                else
+                    RemoveInvalidOptions(callback.options)
+                end
+                AppendDropDown(cdropdown, callback.options, i * 100)
+            end
         end
-        if type(retval) == "table" and retval ~= callback.options then
-          CopyOptions(retval, callback.options)
-        else
-          RemoveInvalidOptions(callback.options)
-        end
-        AppendDropDown(cdropdown, callback.options, i * 100)
-      end
     end
-  end
-  RefreshButtons(cdropdown)
+    RefreshButtons(cdropdown)
 end
 
 ---@param func LibDropDownExtensionCallback
 ---@return CustomDropDownCallback?, number?
 local function GetCallbackForFunc(func)
-  for i = 1, #callbacks do
-    local callback = callbacks[i]
-    if callback.func == func then
-      return callback, i
+    for i = 1, #callbacks do
+        local callback = callbacks[i]
+        if callback.func == func then
+            return callback, i
+        end
     end
-  end
 end
 
 ---@param self DropDownList
 local function DropDown_OnShow(self)
-  Lib:Broadcast("OnShow", self)
+    Lib:Broadcast("OnShow", self)
 end
 
 ---@param self DropDownList
 local function DropDown_OnHide(self)
-  Lib:Broadcast("OnHide", self)
+    Lib:Broadcast("OnHide", self)
 end
 
 -- Only need to hook once
 if not LibPrevMinor then
-  if DropDownList1 then
-    DropDownList1:HookScript("OnShow", DropDown_OnShow)
-    DropDownList1:HookScript("OnHide", DropDown_OnHide)
-  end
+    if DropDownList1 then
+        DropDownList1:HookScript("OnShow", DropDown_OnShow)
+        DropDownList1:HookScript("OnHide", DropDown_OnHide)
+    end
 
-  if DropDownList2 then
-    DropDownList2:HookScript("OnShow", DropDown_OnShow)
-    DropDownList2:HookScript("OnHide", DropDown_OnHide)
-  end
+    if DropDownList2 then
+        DropDownList2:HookScript("OnShow", DropDown_OnShow)
+        DropDownList2:HookScript("OnHide", DropDown_OnHide)
+    end
 
-  if DropDownList3 and (not LibPrevMinor or LibPrevMinor < 2) then
-    DropDownList3:HookScript("OnShow", DropDown_OnShow)
-    DropDownList3:HookScript("OnHide", DropDown_OnHide)
-  end
+    if DropDownList3 and (not LibPrevMinor or LibPrevMinor < 2) then
+        DropDownList3:HookScript("OnShow", DropDown_OnShow)
+        DropDownList3:HookScript("OnHide", DropDown_OnHide)
+    end
 end
 
 ---@param events string
@@ -824,20 +824,20 @@ end
 ---@param data table?
 ---@return boolean success
 function Lib:RegisterEvent(events, func, levels, data)
-  assert(type(events) == "string" and type(func) == "function", "LibDropDownExtension:RegisterEvent(events, func[, levels][, data]) requires events to be a string and func a function. levels is an optional number 1, 2 or nil for any level.")
-  local callback = GetCallbackForFunc(func)
-  for _, event in ipairs({strsplit(" ", events)}) do
-    if not callback then
-      callback = {} ---@type CustomDropDownCallback
-      callback.events = {}
-      callback.func = func
-      callback.options = {}
-      callback.data = type(data) == "table" and data or {}
-      callbacks[#callbacks + 1] = callback
+    assert(type(events) == "string" and type(func) == "function", "LibDropDownExtension:RegisterEvent(events, func[, levels][, data]) requires events to be a string and func a function. levels is an optional number 1, 2 or nil for any level.")
+    local callback = GetCallbackForFunc(func)
+    for _, event in ipairs({strsplit(" ", events)}) do
+        if not callback then
+            callback = {} ---@type CustomDropDownCallback
+            callback.events = {}
+            callback.func = func
+            callback.options = {}
+            callback.data = type(data) == "table" and data or {}
+            callbacks[#callbacks + 1] = callback
+        end
+        callback.events[event] = levels or true
     end
-    callback.events[event] = levels or true
-  end
-  return callback ~= nil
+    return callback ~= nil
 end
 
 ---@param events string
@@ -845,18 +845,18 @@ end
 ---@param levels (number|boolean)?
 ---@return boolean success
 function Lib:UnregisterEvent(events, func, levels)
-  assert(type(events) == "string" and type(func) == "function", "LibDropDownExtension:UnregisterEvent(events, func) requires events to be a string and func a function.")
-  local callback, index = GetCallbackForFunc(func)
-  if not callback then
-    return false
-  end
-  for _, event in ipairs({strsplit(" ", events)}) do
-    callback.events[event] = levels
-  end
-  if not next(callback.events) then
-    table.remove(callbacks, index)
-  end
-  return true
+    assert(type(events) == "string" and type(func) == "function", "LibDropDownExtension:UnregisterEvent(events, func) requires events to be a string and func a function.")
+    local callback, index = GetCallbackForFunc(func)
+    if not callback then
+        return false
+    end
+    for _, event in ipairs({strsplit(" ", events)}) do
+        callback.events[event] = levels
+    end
+    if not next(callback.events) then
+        table.remove(callbacks, index)
+    end
+    return true
 end
 
 -- DEBUG
