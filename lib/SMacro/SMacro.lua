@@ -1,21 +1,36 @@
 local _, ns = ...
 
+---@class SMacro
+---@field public new fun(): SMacro Creates a new SMacro object to represent a macro
+---@field public set fun() Stores body from existing macro
+---@field public getID fun() Get macro identifier
+---@field public compose fun() Returns a string representation of the macro
+---@field public setCommand fun() Sets a line in the macro to the given command
+---@field public getCommand fun() Gets the command for a given line
+---@field public getCommandType fun() Gets the command type for a given line
+---@field public addLine fun() Adds a new line to the macro
+---@field public removeLine fun() Removes a line from the macro
+---@field public composeLine fun() Gets a line from the macro
+---@field public addArgument fun() Adds a new argument to the end of the line
+---@field public getArgument fun() Gets the text of the specified argument
+---@field public setArgument fun() Sets an argument within a line
+---@field public removeArgument fun() Remove argument from a line
+---@field public getArguments fun() Gets arguments from a macro on a given line
+---@field public addConditionalGroup fun() Adds a new conditional group
+---@field public getConditionalGroups fun() Gets conditional groups
+---@field public addConditional fun() Adds a new conditional
+---@field public setConditional fun() Sets a conditional
+---@field public removeConditional fun() Removes a conditional
+---@field public resetConditionals fun() Delete all conditionals for a given line and argument
+---@field public getConditionals fun() Retrieve all conditionals for a given line, argument, and conditional group
+---@field public composeConditionals fun() Retrieve string representation of all conditionals for a given line, argument, and conditional group
+---@field public composeAllConditionals fun() Retrieve string representation of all conditionals for a given line and argument
+---@field public removeConditionalGroup fun() Remove conditional group
 SMacro = {
   lines = {}
 }
 
---[[
-    SMacro:new
-    SMacro:set
-    SMacro:getID
-    SMacro:compose
-
-  ]]
-
---[[
-    Creates a new SMacro object to represent a macro
-
-  ]]
+---@return SMacro new SMacro object
 function SMacro:new()
   local m = { lines = { count = 0 } }
   setmetatable(m, self)
@@ -23,12 +38,7 @@ function SMacro:new()
   return m
 end
 
---[[
-   Stores body from existing macro
-
-   params:
-      macro_id: identifier for an existing macro to pull body from
-   ]]
+---@param macro_id number identifier for an existing macro to pull body from
 function SMacro:set(macro_id)
   local _, _, body = GetMacroInfo(macro_id)
   local success, ret = pcall(ns['parse_lines'], body)
@@ -43,20 +53,12 @@ function SMacro:set(macro_id)
   self.id = macro_id
 end
 
---[[
-   Returns macro id
-
-   ]]
+---@return number macro identifier
 function SMacro:getID()
   return self.id
 end
 
---[[
-    Returns a string representation of the macro
-
-    returns:
-      string: text representing the macro's body joined with \n
-  ]]
+---@return string formatted macro body
 function SMacro:compose()
   local lines = self.lines
 
@@ -76,55 +78,25 @@ function SMacro:compose()
   return result
 end
 
---[[
-    SMacro:setCommand
-    SMacro:getCommand
-    SMacro:getCommandType
-
-  ]]
-
---[[
-    Sets a line in the macro to the given command
-
-    params:
-      line_num: line to set the command on
-      command: text representing a command
-  ]]
+---@param line_num number row number for the line
+---@param command string text representing command (including / or #)
 function SMacro:setCommand(line_num, command)
   self.lines[line_num].type, self.lines[line_num].cmd = string.match(command, "([#/])(.*)")
 end
 
---[[
-    Gets the command for a given line
-
-    params:
-      line_num: the line number of the command
-  ]]
+---@param line_num number row number for the line
+---@return string command for this line
 function SMacro:getCommand(line_num)
   return self.lines[line_num].type..self.lines[line_num].cmd
 end
 
---[[
-    Gets the command type for a given line
-
-    params:
-      line_num: the line number of the command
-  ]]
+---@param line_num number row number for the line
+---@return string command type for this line
 function SMacro:getCommandType(line_num)
   return self.lines[line_num].type..self.lines[line_num].type
 end
 
---[[
-    SMacro:addLine
-    SMacro:removeLine
-    SMacro:composeLine
-
-  ]]
-
---[[
-    Adds a new line to the macro
-
-  ]]
+---@return number index of new line
 function SMacro:addLine()
   local new_line = self.lines.count + 1
 
@@ -139,12 +111,8 @@ function SMacro:addLine()
   return new_line
 end
 
---[[
-    Removes a line from the macro
-
-    params:
-      line_num: row number for the line
-  ]]
+---@param line_num number row number for the line
+---@return boolean if line was removed
 function SMacro:removeLine(line_num)
   local line_count, isRemoved
 
@@ -169,14 +137,8 @@ function SMacro:removeLine(line_num)
   return isRemoved
 end
 
---[[
-    Gets a line from the macro
-
-    params:
-      line_num: row number for the line
-    returns:
-      string: text representing line
-  ]]
+---@param line_num number row number for the line
+---@return string text representing line
 function SMacro:composeLine(line_num)
   local body, lines, currentLine
 
@@ -207,24 +169,9 @@ function SMacro:composeLine(line_num)
   return body
 end
 
---[[
-    SMacro:addArgument
-    SMacro:getArgument
-    SMacro:setArgument
-    SMacro:removeArgument
-    SMacro:getArguments
-
-  ]]
-
---[[
-    Adds a new argument to the end of the line
-
-    params:
-      line_num: row number for the line
-      argument: text of argument
-    returns:
-      string: text of added argument
-  ]]
+---@param line_num number row number for the line
+---@param argument string text of argument
+---@return number index of of added argument
 function SMacro:addArgument(line_num, argument)
   local new_arg = self.lines[line_num].args.count + 1
 
@@ -235,29 +182,17 @@ function SMacro:addArgument(line_num, argument)
   return new_arg
 end
 
---[[
-    Gets the text of the specified argument
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-    returns:
-      string: text of argument
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@return string text of argument
 function SMacro:getArgument(line_num, arg_num)
   return self.lines[line_num].args[arg_num].arg
 end
 
---[[
-    Sets an argument within a line
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      argument: text of argument
-    returns:
-      boolean: if the argument was set
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param argument string text of argument
+---@return boolean if the argument was set
 function SMacro:setArgument(line_num, arg_num, argument)
   if self.lines[line_num].args[arg_num] ~= nil then
     self.lines[line_num].args[arg_num].arg = argument
@@ -267,15 +202,9 @@ function SMacro:setArgument(line_num, arg_num, argument)
   return false
 end
 
---[[
-    Remove argument from a line
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-    returns:
-      boolean: if the argument was removed
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@return boolean if the argument was removed
 function SMacro:removeArgument(line_num, arg_num)
   local arguments, arg_count, isRemoved
 
@@ -297,40 +226,15 @@ function SMacro:removeArgument(line_num, arg_num)
   return isRemoved
 end
 
---[[
-    Gets arguments from a macro on a given line
-
-    params:
-      line_num: row number for the line
-    returns:
-      table: arguments for this line
-  ]]
+---@param line_num number row number for the line
+---@return table arguments for this line
 function SMacro:getArguments(line_num)
   return self.lines[line_num].args
 end
 
---[[
-    SMacro:addConditionalGroup
-    SMacro:getConditionalGroups
-    SMacro:addConditional
-    SMacro:setConditional
-    SMacro:removeConditional
-    SMacro:resetConditionals
-    SMacro:getConditionals
-    SMacro:composeConditionals
-    SMacro:composeAllConditionals
-
-  ]]
-
---[[
-    Adds a new conditional group
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-    returns:
-      number: index of recently added conditional group
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@return number index of recently added conditional group
 function SMacro:addConditionalGroup(line_num, arg_num)
   local cond_groups = self.lines[line_num].args[arg_num].conds
 
@@ -344,43 +248,26 @@ function SMacro:addConditionalGroup(line_num, arg_num)
   return #self.lines[line_num].args[arg_num].conds
 end
 
---[[
-    Gets conditional groups
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-    returns:
-      conditional_groups: list of conditional groups for the provided line and argument
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@return table conditional groups for this line and argument
 function SMacro:getConditionalGroups(line_num, arg_num)
   return self.lines[line_num].args[arg_num].conds
 end
 
---[[
-    Remove conditional group
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      cond_num: index of conditional_group
-    returns:
-      conditional_group: conditional group that was removed
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param cond_num number index of conditional group
+---@return table conditional group that was removed
 function SMacro:removeConditionalGroup(line_num, arg_num, cond_num)
   return tremove(self.lines[line_num].args[arg_num].conds, cond_num)
 end
 
---[[
-    Adds a new conditional
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      cond_num: index of conditional_group
-      conditional: conditional to add
-      input: optional data for a conditional
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param cond_num number index of conditional group
+---@param conditional string conditional
+---@param input string input to conditional
 function SMacro:addConditional(line_num, arg_num, cond_num, conditional, input)
   local cond_count = #self.lines[line_num].args[arg_num].conds[cond_num]
   local cond = {}
@@ -390,16 +277,12 @@ function SMacro:addConditional(line_num, arg_num, cond_num, conditional, input)
   self.lines[line_num].args[arg_num].conds[cond_num].count = cond_count + 1
 end
 
---[[
-    Sets a conditional
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      cond_num: index of conditional group
-      conditional: conditional to add
-      input: optional data for a conditional
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param cond_num number index of conditional group
+---@param index number index of conditional in group
+---@param conditional string conditional
+---@param input string input to conditional
 function SMacro:setConditional(line_num, arg_num, cond_num, index, conditional, input)
   if self.lines[line_num].args[arg_num].conds[cond_num][index] ~= nil then
     local cond = {}
@@ -409,17 +292,11 @@ function SMacro:setConditional(line_num, arg_num, cond_num, index, conditional, 
   end
 end
 
---[[
-    Removes a conditional
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      cond_num: index of the conditional group
-      index: index of conditional in group
-    returns:
-      boolean: if the conditional was removed
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param cond_num number index of conditional group
+---@param index number index of conditional in group
+---@return boolean if the conditional was removed
 function SMacro:removeConditional(line_num, arg_num, cond_num, index)
   local conditionals = self.lines[line_num].args[arg_num].conds[cond_num]
   local cond_count = #conditionals
@@ -438,38 +315,24 @@ function SMacro:removeConditional(line_num, arg_num, cond_num, index)
   return isRemoved
 end
 
---[[
-    Delete all conditionals for a given line and argument
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
 function SMacro:resetConditionals(line_num, arg_num)
   self.lines[line_num].args[arg_num].conds = {}
 end
 
---[[
-    Retrieve all conditionals for a given line, argument, and conditional group
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      cond_num: index of conditional group
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param cond_num number index of conditional group
+---@return table conditionals table for this line, argument, and conditional group
 function SMacro:getConditionals(line_num, arg_num, cond_num)
   return self.lines[line_num].args[arg_num].conds[cond_num]
 end
 
---[[
-    Retrieve string representation of all conditionals
-    for a given line, argument, and conditional group
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-      cond_num: index of conditional group
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@param cond_num number index of conditional group
+---@return string formatted conditionals for this line, argument, and conditional group
 function SMacro:composeConditionals(line_num, arg_num, cond_num)
   local conditionals = self.lines[line_num].args[arg_num].conds[cond_num]
 
@@ -500,14 +363,9 @@ function SMacro:composeConditionals(line_num, arg_num, cond_num)
   return result
 end
 
---[[
-    Retrieve string representation of all conditionals
-    for a given line and argument
-
-    params:
-      line_num: row number for the line
-      arg_num: index of the arg
-  ]]
+---@param line_num number row number for the line
+---@param arg_num number index of the argument
+---@return string formatted conditionals for this line and argument
 function SMacro:composeAllConditionals(line_num, arg_num)
   local condGroups = self.lines[line_num].args[arg_num].conds
 
