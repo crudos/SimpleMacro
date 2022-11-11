@@ -2,22 +2,23 @@ local MAJOR, MINOR = "LibDropDownExtension-1.0", 3
 assert(LibStub, MAJOR .. " requires LibStub")
 
 ---@class DropDownList : Button
----@field private dropdown CustomDropDown
+---@field public dropdown CustomDropDown
 ---@field public GetID fun(): number
 ---@field public maxWidth number
 
 ---@class LibDropDownExtension
----@field private _callbacks CustomDropDownCallback[]
----@field private _cdropdowns table<DropDownList, CustomDropDown>
----@field private _separatorTable CustomDropDownOption[]
+---@field public _callbacks CustomDropDownCallback[]
+---@field public _cdropdowns table<DropDownList, CustomDropDown>
+---@field public _separatorTable CustomDropDownOption[]
+---@field public _hooked table<DropDownList, boolean>
+---@field public _Broadcast fun(self: LibDropDownExtension, event: LibDropDownExtensionEvent, dropdown: DropDownList)
 ---@field public Option table<string, CustomDropDownOption> `LibDropDownExtension.Option.Separator` `LibDropDownExtension.Option.Space`
----@field public Broadcast fun(self: LibDropDownExtension, event: LibDropDownExtensionEvent, dropdown: DropDownList): nil LibDropDownExtension:Broadcast(event, dropdown)` Execute registered callbacks for `event` and copy results from `dropdown`.
 ---@field public RegisterEvent fun(self: LibDropDownExtension, events: string, func: LibDropDownExtensionCallback, levels?: number|boolean, data?: table): boolean `LibDropDownExtension:RegisterEvent(events, func[, levels[, data]])` where func is later called as `func(dropdown, event, options, level, data)` and the return boolean if true will append the options to the dropdown, otherwise false will ignore appending our options to the dropdown.
 ---@field public UnregisterEvent fun(self: LibDropDownExtension, events: string, func: LibDropDownExtensionCallback, levels?: number|boolean): boolean `LibDropDownExtension:UnregisterEvent(events, func[, levels])`
 
 ---@alias LibDropDownExtensionEvent "OnShow"|"OnHide"
 
----@alias LibDropDownExtensionCallback fun(dropdown: CustomDropDown, event: LibDropDownExtensionEvent, options: CustomDropDownOption[], level: number, data: any[]?): CustomDropDownOption[]?
+---@alias LibDropDownExtensionCallback fun(dropdown: CustomDropDown, event: LibDropDownExtensionEvent, options: CustomDropDownOption[], level: number, data?: table): CustomDropDownOption[]?
 
 ---@type LibDropDownExtension?, number?
 local Lib, LibPrevMinor = LibStub:NewLibrary(MAJOR, MINOR) ---@diagnostic disable-line: assign-type-mismatch
@@ -67,7 +68,7 @@ if not Lib then return end
 ---@field public arg1 any @This is the first argument used by .func
 ---@field public arg2 any @This is the second argument used by .func
 ---@field public fontObject table @font object replacement for Normal and Highlight
----@field public menuList table @This contains an array of info tables to be displayed as a child menu
+---@field public menuTable table @This contains an array of info tables to be displayed as a child menu
 ---@field public noClickSound boolean @Set to 1 to suppress the sound when clicking the button. The sound only plays if .func is set.
 ---@field public padding number @Number of pixels to pad the text on the right side
 ---@field public leftPadding number @Number of pixels to pad the button on the left side
@@ -159,15 +160,6 @@ local function CustomDropDownButton_OnClick(self)
     end
 end
 
------@param frame Frame
------@param level number
------@param menuList table
-local function CustomDropDownInitialize(frame, level, menuList)
-    for _, info in ipairs(menuList) do
-        UIDropDownMenu_AddButton(info, level)
-    end
-end
-
 ---@param self CustomDropDownButton
 local function CustomDropDownButton_OnEnter(self)
     local option = self.option
@@ -176,18 +168,10 @@ local function CustomDropDownButton_OnEnter(self)
     end
     ---@diagnostic disable-next-line: assign-type-mismatch
     local cdropdown = self:GetParent() ---@type CustomDropDown
-    local level = cdropdown:GetID() + 1
     if option.hasArrow then
-        local listFrame = _G["DropDownList"..level]
-        if ( not listFrame or not listFrame:IsShown() or select(2, listFrame:GetPoint(1)) ~= self ) then
-            --local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
-            --local oldInitialize = dropDownFrame.initialize
-            --UIDropDownMenu_SetInitializeFunction(dropDownFrame, CustomDropDownInitialize)
-            --ToggleDropDownMenu(level, self.value, nil, nil, nil, nil, option.menuList, self.expandArrow)
-            --UIDropDownMenu_SetInitializeFunction(dropDownFrame, oldInitialize)
-        end
+        -- open next dropdown level and we don't support that
     else
-        CloseDropDownMenus(level)
+        CloseDropDownMenus(cdropdown:GetID() + 1)
     end
     self.highlight:Show()
     local shownTooltip
@@ -343,7 +327,7 @@ local function CustomDropDown_OnShow(cdropdown)
     for i = 1, #cdropdown.buttons do
         local button = cdropdown.buttons[i]
         if button:IsShown() then
-            button:SetWidth(maxWidth or width)
+            button:SetWidth(maxWidth)
             height = height + button:GetHeight()
         end
     end
@@ -358,7 +342,6 @@ local function Hide(widget)
 end
 
 ---@param dropdown DropDownList
----@return CustomDropDown
 local function NewCustomDropDown(dropdown)
     ---@type CustomDropDown
     local cdropdown = CreateFrame("Button", "LibDropDownExtensionCustomDropDown_" .. tostring(dropdown), dropdown, "UIDropDownListTemplate") ---@diagnostic disable-line: assign-type-mismatch
@@ -549,15 +532,15 @@ local function RefreshButton(button)
     end
 
     local frame = UIDROPDOWNMENU_OPEN_MENU
-  if frame and frame.displayMode == "MENU" then
-    if not option.notCheckable then
-      xPos = xPos - 6
-    end
+	if frame and frame.displayMode == "MENU" then
+		if not option.notCheckable then
+			xPos = xPos - 6
+		end
     end
 
     frame = frame or UIDROPDOWNMENU_INIT_MENU
     if option.leftPadding then
-    xPos = xPos + option.leftPadding
+		xPos = xPos + option.leftPadding
     end
 
     displayInfo:SetPoint("TOPLEFT", button, "TOPLEFT", xPos, 0)
@@ -711,6 +694,67 @@ local function RemoveInvalidOptions(options)
     end
 end
 
+---@param event LibDropDownExtensionEvent
+---@param dropdown DropDownList
+function Lib:_Broadcast(event, dropdown)
+    local level = dropdown:GetID()
+    local cdropdown = GetCustomDropDown(dropdown)
+    local shownSeparator
+    ClearDropDown(cdropdown)
+    for i = 1, #callbacks do
+        local callback = callbacks[i]
+        local callbackLevel = callback.events[event]
+        if callbackLevel == true or callbackLevel == level then
+            local status, retval = pcall(callback.func, dropdown.dropdown, event, callback.options, level, callback.data)
+            if status and retval then
+                if not shownSeparator and callback.options[1] then
+                    shownSeparator = true
+                    AppendDropDown(cdropdown, Lib._separatorTable, 0)
+                end
+                if type(retval) == "table" and retval ~= callback.options then
+                    CopyOptions(retval, callback.options)
+                else
+                    RemoveInvalidOptions(callback.options)
+                end
+                AppendDropDown(cdropdown, callback.options, i * 100)
+            end
+        end
+    end
+    RefreshButtons(cdropdown)
+end
+
+---@param func LibDropDownExtensionCallback
+---@return CustomDropDownCallback?, number?
+local function GetCallbackForFunc(func)
+    for i = 1, #callbacks do
+        local callback = callbacks[i]
+        if callback.func == func then
+            return callback, i
+        end
+    end
+end
+
+---@param self DropDownList
+local function DropDown_OnShow(self)
+    Lib:_Broadcast("OnShow", self)
+end
+
+---@param self DropDownList
+local function DropDown_OnHide(self)
+    Lib:_Broadcast("OnHide", self)
+end
+
+Lib._hooked = Lib._hooked or {}
+
+for i = 1, 3 do
+    local dropDownList = _G[format("DropDownList%d", i)] ---@type DropDownList?
+    if dropDownList and not Lib._hooked[dropDownList] then
+        Lib._hooked[dropDownList] = true
+        dropDownList:HookScript("OnShow", DropDown_OnShow)
+        dropDownList:HookScript("OnHide", DropDown_OnHide)
+    end
+end
+
 Lib.Option = Lib.Option or {}
 
 Lib.Option.Separator = Lib.Option.Separator or {
@@ -748,75 +792,6 @@ Lib.Option.Space = Lib.Option.Space or {
 }
 
 Lib._separatorTable = Lib._separatorTable or { Lib.Option.Separator }
-local separatorTable = Lib._separatorTable
-
----@param event LibDropDownExtensionEvent
----@param dropdown DropDownList
-function Lib:Broadcast(event, dropdown)
-    local level = dropdown:GetID()
-    local cdropdown = GetCustomDropDown(dropdown)
-    local shownSeparator
-    ClearDropDown(cdropdown)
-    for i = 1, #callbacks do
-        local callback = callbacks[i]
-        local callbackLevel = callback.events[event]
-        if callbackLevel == true or callbackLevel == level then
-            local status, retval = pcall(callback.func, dropdown.dropdown, event, callback.options, level, callback.data)
-            if status and retval then
-                if not shownSeparator and callback.options[1] then
-                    shownSeparator = true
-                    AppendDropDown(cdropdown, separatorTable, 0)
-                end
-                if type(retval) == "table" and retval ~= callback.options then
-                    CopyOptions(retval, callback.options)
-                else
-                    RemoveInvalidOptions(callback.options)
-                end
-                AppendDropDown(cdropdown, callback.options, i * 100)
-            end
-        end
-    end
-    RefreshButtons(cdropdown)
-end
-
----@param func LibDropDownExtensionCallback
----@return CustomDropDownCallback?, number?
-local function GetCallbackForFunc(func)
-    for i = 1, #callbacks do
-        local callback = callbacks[i]
-        if callback.func == func then
-            return callback, i
-        end
-    end
-end
-
----@param self DropDownList
-local function DropDown_OnShow(self)
-    Lib:Broadcast("OnShow", self)
-end
-
----@param self DropDownList
-local function DropDown_OnHide(self)
-    Lib:Broadcast("OnHide", self)
-end
-
--- Only need to hook once
-if not LibPrevMinor then
-    if DropDownList1 then
-        DropDownList1:HookScript("OnShow", DropDown_OnShow)
-        DropDownList1:HookScript("OnHide", DropDown_OnHide)
-    end
-
-    if DropDownList2 then
-        DropDownList2:HookScript("OnShow", DropDown_OnShow)
-        DropDownList2:HookScript("OnHide", DropDown_OnHide)
-    end
-
-    if DropDownList3 and (not LibPrevMinor or LibPrevMinor < 2) then
-        DropDownList3:HookScript("OnShow", DropDown_OnShow)
-        DropDownList3:HookScript("OnHide", DropDown_OnHide)
-    end
-end
 
 ---@param events string
 ---@param func LibDropDownExtensionCallback
@@ -859,42 +834,37 @@ function Lib:UnregisterEvent(events, func, levels)
     return true
 end
 
--- DEBUG
+-- DEBUG:
 --[[
-    C_Timer.After(0.5, function()
-        Lib:RegisterEvent("OnShow", function(dropdown, event, options, level, data)
-            if event == "OnShow" then
-                options[1] = { text = "A1 | Level " .. level .. " | Random " .. data.test .. " | A1", tooltipOnButton = true, tooltipTitle = "Custom Tooltip Title", tooltipText = "Custom Tooltip Text" }
-                options[2] = { text = "A2 | Level " .. level .. " | Random " .. data.test .. " | A2" }
-                options[3] = { text = "A3 | Level " .. level .. " | Random " .. data.test .. " | A3" }
-                return true
-            else
-                wipe(options)
-            end
-        end, true, { test = random(100000000, 999999999) })
-    end)
-    C_Timer.After(0.5, function()
-        Lib:RegisterEvent("OnShow", function(dropdown, event, options, level, data)
-            if event == "OnShow" then
-                options[1] = { text = "B1 | Level " .. level .. " | Random " .. data.test .. " | B1" }
-                options[2] = { text = "B2 | Level " .. level .. " | Random " .. data.test .. " | B2" }
-                options[3] = { text = "B3 | Level " .. level .. " | Random " .. data.test .. " | B3" }
-                return true
-            else
-                wipe(options)
-            end
-        end, true, { test = random(100000000, 999999999) })
-    end)
-    C_Timer.After(0.5, function()
-        Lib:RegisterEvent("OnShow", function(dropdown, event, options, level, data)
-            if event == "OnShow" then
-                options[1] = { text = "C1 | Level " .. level .. " | Random " .. data.test .. " | C1" }
-                options[2] = { text = "C2 | Level " .. level .. " | Random " .. data.test .. " | C2" }
-                options[3] = { text = "C3 | Level " .. level .. " | Random " .. data.test .. " | C3" }
-                return true
-            else
-                wipe(options)
-            end
-        end, true, { test = random(100000000, 999999999) })
-    end)
+print(..., MAJOR, LibPrevMinor, "->", MINOR)
+Lib:RegisterEvent("OnShow", function(dropdown, event, options, level, data)
+    if event == "OnShow" then
+        options[1] = { text = "A1 | Level " .. level .. " | Random " .. data.test .. " | A1", tooltipOnButton = true, tooltipTitle = "Custom Tooltip Title", tooltipText = "Custom Tooltip Text" }
+        options[2] = { text = "A2 | Level " .. level .. " | Random " .. data.test .. " | A2" }
+        options[3] = { text = "A3 | Level " .. level .. " | Random " .. data.test .. " | A3" }
+        return true
+    else
+        wipe(options)
+    end
+end, true, { test = random(100000000, 999999999) })
+Lib:RegisterEvent("OnShow", function(dropdown, event, options, level, data)
+    if event == "OnShow" then
+        options[1] = { text = "B1 | Level " .. level .. " | Random " .. data.test .. " | B1" }
+        options[2] = { text = "B2 | Level " .. level .. " | Random " .. data.test .. " | B2" }
+        options[3] = { text = "B3 | Level " .. level .. " | Random " .. data.test .. " | B3" }
+        return true
+    else
+        wipe(options)
+    end
+end, true, { test = random(100000000, 999999999) })
+Lib:RegisterEvent("OnShow", function(dropdown, event, options, level, data)
+    if event == "OnShow" then
+        options[1] = { text = "C1 | Level " .. level .. " | Random " .. data.test .. " | C1" }
+        options[2] = { text = "C2 | Level " .. level .. " | Random " .. data.test .. " | C2" }
+        options[3] = { text = "C3 | Level " .. level .. " | Random " .. data.test .. " | C3" }
+        return true
+    else
+        wipe(options)
+    end
+end, true, { test = random(100000000, 999999999) })
 --]]
