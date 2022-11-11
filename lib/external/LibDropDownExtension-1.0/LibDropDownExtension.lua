@@ -1,4 +1,4 @@
-local MAJOR, MINOR = "LibDropDownExtension-1.0", 2
+local MAJOR, MINOR = "LibDropDownExtension-1.0", 3
 assert(LibStub, MAJOR .. " requires LibStub")
 
 ---@class DropDownList : Button
@@ -11,6 +11,7 @@ assert(LibStub, MAJOR .. " requires LibStub")
 ---@field private _cdropdowns table<DropDownList, CustomDropDown>
 ---@field private _separatorTable CustomDropDownOption[]
 ---@field public Option table<string, CustomDropDownOption> `LibDropDownExtension.Option.Separator` `LibDropDownExtension.Option.Space`
+---@field public Broadcast fun(self: LibDropDownExtension, event: LibDropDownExtensionEvent, dropdown: DropDownList): nil LibDropDownExtension:Broadcast(event, dropdown)` Execute registered callbacks for `event` and copy results from `dropdown`.
 ---@field public RegisterEvent fun(self: LibDropDownExtension, events: string, func: LibDropDownExtensionCallback, levels?: number|boolean, data?: table): boolean `LibDropDownExtension:RegisterEvent(events, func[, levels[, data]])` where func is later called as `func(dropdown, event, options, level, data)` and the return boolean if true will append the options to the dropdown, otherwise false will ignore appending our options to the dropdown.
 ---@field public UnregisterEvent fun(self: LibDropDownExtension, events: string, func: LibDropDownExtensionCallback, levels?: number|boolean): boolean `LibDropDownExtension:UnregisterEvent(events, func[, levels])`
 
@@ -21,7 +22,6 @@ assert(LibStub, MAJOR .. " requires LibStub")
 ---@type LibDropDownExtension?, number?
 local Lib, LibPrevMinor = LibStub:NewLibrary(MAJOR, MINOR) ---@diagnostic disable-line: assign-type-mismatch
 if not Lib then return end
-LibPrevMinor = LibPrevMinor or 1
 
 ---@class CustomDropDownOptionIconInfo
 ---@field public tCoordLeft number
@@ -159,94 +159,13 @@ local function CustomDropDownButton_OnClick(self)
   end
 end
 
----@param frame Frame
----@param level number
----@param menuList table
-local function InitializeOptions(frame, level, menuList)
+-----@param frame Frame
+-----@param level number
+-----@param menuList table
+local function CustomDropDownInitialize(frame, level, menuList)
   for _, info in ipairs(menuList) do
     UIDropDownMenu_AddButton(info, level)
   end
-end
-
----@param level number
----@param menuList table
----@param button CustomDropDown
-local function ToggleCustomDropDownMenu(level, menuList, button)
-  UIDROPDOWNMENU_MENU_LEVEL = level
-  UIDROPDOWNMENU_MENU_VALUE = "CustomDropDown"..level
-  local listFrameName = "DropDownList"..level
-  local listFrame = _G[listFrameName]
-
-  -- Set the dropdownframe scale
-  local uiScale
-  local uiParentScale = UIParent:GetScale()
-  if GetCVar("useUIScale") == "1" then
-    uiScale = tonumber(GetCVar("uiscale"))
-    if uiParentScale < uiScale then
-      uiScale = uiParentScale
-    end
-  else
-    uiScale = uiParentScale
-  end
-  listFrame:SetScale(uiScale)
-
-  -- Hide the listframe anyways since it is redrawn OnShow()
-  listFrame:Hide()
-
-  local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
-
-  listFrame:ClearAllPoints()
-  local anchorFrame
-  -- If this is a dropdown button, not the arrow anchor it to itself
-  if ( strsub(button:GetParent():GetName(), 0,12) == "DropDownList" and strlen(button:GetParent():GetName()) == 13 ) then
-    anchorFrame = button
-  else
-    anchorFrame = button:GetParent()
-  end
-
-  local point = "TOPLEFT"
-  local relativePoint = "TOPRIGHT"
-  listFrame:SetPoint(point, anchorFrame, relativePoint, 0, 0)
-
-  if dropDownFrame.hideBackdrops then
-    _G[listFrameName.."Backdrop"]:Hide()
-    _G[listFrameName.."MenuBackdrop"]:Hide()
-  else
-    -- Change list box appearance depending on display mode
-    if ( dropDownFrame and dropDownFrame.displayMode == "MENU" ) then
-      _G[listFrameName.."Backdrop"]:Hide()
-      _G[listFrameName.."MenuBackdrop"]:Show()
-    else
-      _G[listFrameName.."Backdrop"]:Show()
-      _G[listFrameName.."MenuBackdrop"]:Hide()
-    end
-  end
-
-  UIDropDownMenu_Initialize(dropDownFrame, InitializeOptions, nil, level, menuList)
-
-  -- If no items in the drop down don't show it
-  if ( listFrame.numButtons == 0 ) then
-    return
-  end
-
-  listFrame:Show()
-
-  listFrame.onHide = dropDownFrame.onHide
-
-  -- Set the listframe frameStrata
-  if dropDownFrame.listFrameStrata then
-    listFrame.baseFrameStrata = listFrame:GetFrameStrata()
-    listFrame:SetFrameStrata(dropDownFrame.listFrameStrata)
-  end
-
-  -- Does not handle offscreen
-  local xOffset = -10
-  local yOffset = -19
-
-  listFrame:ClearAllPoints()
-  listFrame.parentLevel = tonumber(strmatch(anchorFrame:GetName(), "DropDownList(%d+)"))
-  listFrame.parentID = anchorFrame:GetID()
-  listFrame:SetPoint(point, anchorFrame, relativePoint, xOffset, yOffset)
 end
 
 ---@param self CustomDropDownButton
@@ -259,9 +178,13 @@ local function CustomDropDownButton_OnEnter(self)
   local cdropdown = self:GetParent() ---@type CustomDropDown
   local level = cdropdown:GetID() + 1
   if option.hasArrow then
-    local listFrame = _G["DropDownList"..level];
+    local listFrame = _G["DropDownList"..level]
     if ( not listFrame or not listFrame:IsShown() or select(2, listFrame:GetPoint(1)) ~= self ) then
-      ToggleCustomDropDownMenu(level, option.menuList, cdropdown);
+      local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
+      local oldInitialize = dropDownFrame.initialize
+      UIDropDownMenu_SetInitializeFunction(dropDownFrame, CustomDropDownInitialize)
+      ToggleDropDownMenu(level, self.value, nil, nil, nil, nil, option.menuList, self.expandArrow)
+      UIDropDownMenu_SetInitializeFunction(dropDownFrame, oldInitialize)
     end
   else
     CloseDropDownMenus(level)
@@ -420,7 +343,7 @@ local function CustomDropDown_OnShow(cdropdown)
   for i = 1, #cdropdown.buttons do
     local button = cdropdown.buttons[i]
     if button:IsShown() then
-      button:SetWidth(maxWidth)
+      button:SetWidth(maxWidth or width)
       height = height + button:GetHeight()
     end
   end
@@ -435,6 +358,7 @@ local function Hide(widget)
 end
 
 ---@param dropdown DropDownList
+---@return CustomDropDown
 local function NewCustomDropDown(dropdown)
   ---@type CustomDropDown
   local cdropdown = CreateFrame("Button", "LibDropDownExtensionCustomDropDown_" .. tostring(dropdown), dropdown, "UIDropDownListTemplate") ---@diagnostic disable-line: assign-type-mismatch
@@ -448,18 +372,18 @@ local function NewCustomDropDown(dropdown)
     cdropdown:SetFrameStrata(dropdown:GetFrameStrata())
     cdropdown:SetFrameLevel(dropdown:GetFrameLevel() + 1)
     cdropdown:SetScript("OnClick", nil) ---@diagnostic disable-line: param-type-mismatch
-  cdropdown:SetScript("OnUpdate", nil) ---@diagnostic disable-line: param-type-mismatch
-  cdropdown:SetScript("OnShow", CustomDropDown_OnShow)
+    cdropdown:SetScript("OnUpdate", nil) ---@diagnostic disable-line: param-type-mismatch
+    cdropdown:SetScript("OnShow", CustomDropDown_OnShow)
     cdropdown:SetScript("OnHide", nil) ---@diagnostic disable-line: param-type-mismatch
-  for i = 1, UIDROPDOWNMENU_MAXBUTTONS do
-    ---@type CustomDropDownButton
-    local button = _G[cdropdown:GetName() .. "Button" .. i]
-    if not button then
-      break
+    for i = 1, UIDROPDOWNMENU_MAXBUTTONS do
+      ---@type CustomDropDownButton
+      local button = _G[cdropdown:GetName() .. "Button" .. i]
+      if not button then
+        break
+      end
+      button = NewCustomDropDownButton(cdropdown, button)
+      cdropdown.buttons[i] = button
     end
-    button = NewCustomDropDownButton(cdropdown, button)
-    cdropdown.buttons[i] = button
-  end
   end
   return cdropdown
 end
@@ -787,12 +711,48 @@ local function RemoveInvalidOptions(options)
   end
 end
 
+Lib.Option = Lib.Option or {}
+
+Lib.Option.Separator = Lib.Option.Separator or {
+  hasArrow = false,
+  dist = 0,
+  isTitle = true,
+  isUninteractable = true,
+  notCheckable = true,
+  iconOnly = true,
+  icon = "Interface\\Common\\UI-TooltipDivider-Transparent",
+  tCoordLeft = 0,
+  tCoordRight = 1,
+  tCoordTop = 0,
+  tCoordBottom = 1,
+  tSizeX = 0,
+  tSizeY = 8,
+  tFitDropDownSizeX = true,
+  iconInfo = {
+    tCoordLeft = 0,
+    tCoordRight = 1,
+    tCoordTop = 0,
+    tCoordBottom = 1,
+    tSizeX = 0,
+    tSizeY = 8,
+    tFitDropDownSizeX = true
+  }
+}
+
+Lib.Option.Space = Lib.Option.Space or {
+  hasArrow = false,
+  dist = 0,
+  isTitle = true,
+  isUninteractable = true,
+  notCheckable = true
+}
+
 Lib._separatorTable = Lib._separatorTable or { Lib.Option.Separator }
 local separatorTable = Lib._separatorTable
 
 ---@param event LibDropDownExtensionEvent
 ---@param dropdown DropDownList
-local function Broadcast(event, dropdown)
+function Lib:Broadcast(event, dropdown)
   local level = dropdown:GetID()
   local cdropdown = GetCustomDropDown(dropdown)
   local shownSeparator
@@ -832,64 +792,31 @@ end
 
 ---@param self DropDownList
 local function DropDown_OnShow(self)
-  Broadcast("OnShow", self)
+  Lib:Broadcast("OnShow", self)
 end
 
 ---@param self DropDownList
 local function DropDown_OnHide(self)
-  Broadcast("OnHide", self)
+  Lib:Broadcast("OnHide", self)
 end
 
-if DropDownList1 then
-  DropDownList1:HookScript("OnShow", DropDown_OnShow)
-  DropDownList1:HookScript("OnHide", DropDown_OnHide)
+-- Only need to hook once
+if not LibPrevMinor then
+  if DropDownList1 then
+    DropDownList1:HookScript("OnShow", DropDown_OnShow)
+    DropDownList1:HookScript("OnHide", DropDown_OnHide)
+  end
+
+  if DropDownList2 then
+    DropDownList2:HookScript("OnShow", DropDown_OnShow)
+    DropDownList2:HookScript("OnHide", DropDown_OnHide)
+  end
+
+  if DropDownList3 and (not LibPrevMinor or LibPrevMinor < 2) then
+    DropDownList3:HookScript("OnShow", DropDown_OnShow)
+    DropDownList3:HookScript("OnHide", DropDown_OnHide)
+  end
 end
-
-if DropDownList2 then
-  DropDownList2:HookScript("OnShow", DropDown_OnShow)
-  DropDownList2:HookScript("OnHide", DropDown_OnHide)
-end
-
-if DropDownList3 and LibPrevMinor < 2 then
-  DropDownList3:HookScript("OnShow", DropDown_OnShow)
-  DropDownList3:HookScript("OnHide", DropDown_OnHide)
-end
-
-Lib.Option = Lib.Option or {}
-
-Lib.Option.Separator = Lib.Option.Separator or {
-  hasArrow = false,
-  dist = 0,
-  isTitle = true,
-  isUninteractable = true,
-  notCheckable = true,
-  iconOnly = true,
-  icon = "Interface\\Common\\UI-TooltipDivider-Transparent",
-  tCoordLeft = 0,
-  tCoordRight = 1,
-  tCoordTop = 0,
-  tCoordBottom = 1,
-  tSizeX = 0,
-  tSizeY = 8,
-  tFitDropDownSizeX = true,
-  iconInfo = {
-    tCoordLeft = 0,
-    tCoordRight = 1,
-    tCoordTop = 0,
-    tCoordBottom = 1,
-    tSizeX = 0,
-    tSizeY = 8,
-    tFitDropDownSizeX = true
-  }
-}
-
-Lib.Option.Space = Lib.Option.Space or {
-  hasArrow = false,
-  dist = 0,
-  isTitle = true,
-  isUninteractable = true,
-  notCheckable = true
-}
 
 ---@param events string
 ---@param func LibDropDownExtensionCallback

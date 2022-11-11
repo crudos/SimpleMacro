@@ -23,26 +23,25 @@ local validTypes = {
   WORLD_STATE_SCORE = true
 }
 
-local function IsValidDropDown(bdropdown)
-  return type(bdropdown.which) == "string" and validTypes[bdropdown.which]
+local function IsValidDropDown(baseDropdown)
+  return type(baseDropdown.which) == "string" and validTypes[baseDropdown.which]
 end
 
 local unitOptions
 
-local function OnToggle(bdropdown, event, options, level, data)
+local function OnToggle(baseDropdown, event, options, level, module)
+  if not module:IsEnabled() or not IsValidDropDown(baseDropdown) then
+    return
+  end
+
   if event == "OnShow" then
-    if not dropdown:IsEnabled() or not IsValidDropDown(bdropdown) then
-      return
-    end
-    dropdown:UpdateMenuList()
+    module:UpdateMenuList()
     if not options[1] then
       local index = 0
       for i = 1, #unitOptions do
         local option = unitOptions[i]
-        if not option.show or option.show() then
-          index = index + 1
-          options[index] = option
-        end
+        index = index + 1
+        options[index] = option
       end
       return true
     end
