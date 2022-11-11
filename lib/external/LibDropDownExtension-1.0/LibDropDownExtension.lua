@@ -180,11 +180,11 @@ local function CustomDropDownButton_OnEnter(self)
   if option.hasArrow then
     local listFrame = _G["DropDownList"..level]
     if ( not listFrame or not listFrame:IsShown() or select(2, listFrame:GetPoint(1)) ~= self ) then
-      local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
-      local oldInitialize = dropDownFrame.initialize
-      UIDropDownMenu_SetInitializeFunction(dropDownFrame, CustomDropDownInitialize)
-      ToggleDropDownMenu(level, self.value, nil, nil, nil, nil, option.menuList, self.expandArrow)
-      UIDropDownMenu_SetInitializeFunction(dropDownFrame, oldInitialize)
+      --local dropDownFrame = UIDROPDOWNMENU_OPEN_MENU
+      --local oldInitialize = dropDownFrame.initialize
+      --UIDropDownMenu_SetInitializeFunction(dropDownFrame, CustomDropDownInitialize)
+      --ToggleDropDownMenu(level, self.value, nil, nil, nil, nil, option.menuList, self.expandArrow)
+      --UIDropDownMenu_SetInitializeFunction(dropDownFrame, oldInitialize)
     end
   else
     CloseDropDownMenus(level)

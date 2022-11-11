@@ -5,22 +5,10 @@ local L = ns.L["CONTEXT"]
 local dropdown = ns:NewModule("DropDown") ---@type DropDownModule
 
 local validTypes = {
-  ARENAENEMY = true,
-  BN_FRIEND = true,
-  CHAT_ROSTER = true,
-  COMMUNITIES_GUILD_MEMBER = true,
-  COMMUNITIES_WOW_MEMBER = true,
-  FOCUS = true,
-  FRIEND = true,
-  GUILD = true,
-  GUILD_OFFLINE = true,
   PARTY = true,
   PLAYER = true,
   RAID = true,
   RAID_PLAYER = true,
-  SELF = true,
-  TARGET = true,
-  WORLD_STATE_SCORE = true
 }
 
 local function IsValidDropDown(baseDropdown)
@@ -63,21 +51,14 @@ function dropdown:CanLoad()
 end
 
 function dropdown:OnLoad()
-  unitOptions = {
-    {
-      text = L["CHANGE_GROUP_TARGET"],
-      hasArrow = true,
-      menuList = {}
-    }
-  }
-
+  unitOptions = {}
   LibDropDownExtension:RegisterEvent("OnShow OnHide", OnToggle, 1, dropdown)
 end
 
 function dropdown:UpdateMenuList()
   for i, _ in ipairs(SimpleMacro.dbc.GroupTable) do
-    unitOptions[1].menuList[i] = {
-      text = L["GROUP"].." "..i,
+    unitOptions[i] = {
+      text = string.format(L["SET_GROUP_TARGET"], i),
       func = SimpleMacroGroupFrame.ChangeGroupTarget,
       arg1 = i,
       arg2 = UnitPopupSharedUtil.GetCurrentDropdownMenu().name,

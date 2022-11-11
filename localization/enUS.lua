@@ -65,8 +65,7 @@ L["CHANGE"]["Icon"] = "Choose an icon:"
 
 -- Context menu
 L["CONTEXT"] = {}
-L["CONTEXT"]["CHANGE_GROUP_TARGET"] = "Change Group Target"
-L["CONTEXT"]["GROUP"] = "Group"
+L["CONTEXT"]["SET_GROUP_TARGET"] = "Set Group %d Target"
 
 -- Popup menu
 L["LINES_TITLE"] = "Lines"
