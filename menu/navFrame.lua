@@ -22,11 +22,11 @@ function SimpleMacroNavigationMixin:ChangeTab(tabID)
   PanelTemplates_SetTab(self, tabID)
 
   if tabID == 1 then
-    ShowUIPanel(SMCreateFrame)
+    ShowUIPanel(SimpleMacroCreateFrame)
     HideUIPanel(SimpleMacroGroupFrame)
   elseif tabID == 2 then
     ShowUIPanel(SimpleMacroGroupFrame)
-    HideUIPanel(SMCreateFrame)
+    HideUIPanel(SimpleMacroCreateFrame)
   end
 end
 
@@ -34,7 +34,7 @@ function SimpleMacroNavigationMixin:GetMenu()
   local tabID = PanelTemplates_GetSelectedTab(self)
 
   if tabID == 1 then
-    return SMCreateFrame
+    return SimpleMacroCreateFrame
   elseif tabID == 2 then
     return SimpleMacroGroupFrame
   end

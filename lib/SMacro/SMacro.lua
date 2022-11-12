@@ -26,7 +26,6 @@ local _, ns = ...
 ---@field public getConditionals fun(line_num: number, arg_num: number, cond_num: number): table Retrieve all conditionals for a given line, argument, and conditional group
 ---@field public composeConditionals fun(line_num: number, arg_num: number, cond_num: number): string Retrieve string representation of all conditionals for a given line, argument, and conditional group
 ---@field public composeAllConditionals fun(line_num: number, arg_num: number): string Retrieve string representation of all conditionals for a given line and argument
-
 SMacro = {
   lines = {}
 }

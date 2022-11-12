@@ -42,6 +42,24 @@ function SimpleMacroEditorPopupMixin:OnHide()
   HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
 
+---@param index number absolute index of macro
+---@return SMacro SMacro for this macro
+function SimpleMacroEditorPopupMixin:SetSMacro(index)
+  local currentMacro = SMacro:new()
+  currentMacro:set(index)
+  self.SMacro = currentMacro
+  return currentMacro
+end
+
+---@return SMacro stored SMacro or nil if there is none
+function SimpleMacroEditorPopupMixin:GetSMacro()
+  if self.SMacro then
+    return self.SMacro
+  else
+    return nil
+  end
+end
+
 function SimpleMacroEditorPopupMixin:GetSelectedLine()
   return self.selectedLine
 end

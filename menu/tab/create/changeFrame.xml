@@ -2,7 +2,7 @@
   <Script file="changeFrame.lua"/>
 
   <Frame name="SimpleMacroChangeFrame" mixin="ChangeFrameMixin" inherits="IconSelectorPopupFrameTemplate"
-         toplevel="true" frameStrata="HIGH" parent="SMCreateFrame" movable="true" enableMouse="true" hidden="true">
+         toplevel="true" frameStrata="HIGH" parent="SimpleMacroCreateFrame" movable="true" enableMouse="true" hidden="true">
     <KeyValues>
       <KeyValue key="editBoxHeaderText" value="MACRO_POPUP_TEXT" type="global"/>
     </KeyValues>

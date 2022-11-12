@@ -1,14 +1,14 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="createFrame.lua"/>
 
-  <Frame name="SMCreateFrame" mixin="SimpleMacroTabFrameMixin" hidden="false" parent="SimpleMacroFrame">
+  <Frame name="SimpleMacroCreateFrame" mixin="SimpleMacroTabFrameMixin" hidden="true" parent="SimpleMacroFrame">
     <Anchors>
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
     </Anchors>
     <Layers>
       <Layer level="ARTWORK">
-        <FontString name="$parentEnterMacroText" inherits="GameFontHighlightSmall" text="ENTER_MACRO_LABEL">
+        <FontString name="$parentEnterMacroText" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_ENTER_MACRO_LABEL">
           <Anchors>
             <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="8" y="3"/>
           </Anchors>
@@ -28,7 +28,7 @@
           <Anchor point="LEFT" relativeTo="SimpleMacroFrameSelectedMacroButton" relativePoint="RIGHT" x="6" y="-8"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SMCreateFrame_ChangeButton_OnClick"/>
+          <OnClick function="SimpleMacroCreateFrame_ChangeButton_OnClick"/>
         </Scripts>
       </Button>
       <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
@@ -37,18 +37,18 @@
           <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="11" y="-13"/>
         </Anchors>
         <ScrollChild>
-          <EditBox name="SMCreateFrameText" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
+          <EditBox name="SimpleMacroCreateFrameText" multiLine="true" letters="255" autoFocus="false" countInvisibleLetters="true">
             <Size x="383" y="85"/>
             <Scripts>
               <OnLoad>
                 ScrollingEdit_OnCursorChanged(self, 0, 0, 0, 0);
               </OnLoad>
               <OnTextChanged>
-                SMCreateFrame.textChanged = 1;
+                SimpleMacroCreateFrame.textChanged = 1;
                 --if ( MacroPopupFrame.mode == "new" ) then
                 --  MacroPopupFrame:Hide();
                 --end
-                SMCreateFrameCharLimitText:SetFormattedText(MACROFRAME_CHAR_LIMIT, SMCreateFrameText:GetNumLetters());
+                SimpleMacroCreateFrameCharLimitText:SetFormattedText(MACROFRAME_CHAR_LIMIT, SimpleMacroCreateFrameText:GetNumLetters());
 
                 ScrollingEdit_OnTextChanged(self, self:GetParent());
               </OnTextChanged>
@@ -69,32 +69,32 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            SMCreateFrameText:SetFocus();
+            SimpleMacroCreateFrameText:SetFocus();
           </OnClick>
         </Scripts>
       </Button>
-      <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="CANCEL">
+      <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_OPEN_EDITOR">
         <Size x="80" y="22"/>
         <Anchors>
           <Anchor point="BOTTOMRIGHT" relativeTo="$parentScrollFrame" relativePoint="TOPRIGHT" x="25" y="10"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SMCreateFrame_CancelButton_OnClick"/>
+          <OnClick function="SimpleMacroCreateFrame_OpenEditor_OnClick"/> <!-- TODO temporary -->
         </Scripts>
       </Button>
-      <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SAVE">
+      <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_SAVE">
         <Size x="80" y="22"/>
         <Anchors>
           <Anchor point="BOTTOM" relativeTo="$parentCancelButton" relativePoint="TOP" x="0" y="15"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SMCreateFrame_SaveButton_OnClick"/>
+          <OnClick function="SimpleMacroCreateFrame_SaveButton_OnClick"/>
         </Scripts>
       </Button>
       <Frame name="$parentTextBackground" inherits="TooltipBackdropTemplate">
         <Size x="419" y="95"/>
         <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="SMCreateFrame" x="6" y="-289"/>
+          <Anchor point="TOPLEFT" relativeTo="SimpleMacroCreateFrame" x="6" y="-289"/>
         </Anchors>
       </Frame>
       <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
@@ -115,7 +115,7 @@
           <Anchor point="BOTTOMRIGHT" x="-88" y="4"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SMCreateFrame_NewButton_OnClick"/>
+          <OnClick function="SimpleMacroCreateFrame_NewButton_OnClick"/>
         </Scripts>
       </Button>
     </Frames>

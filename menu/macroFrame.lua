@@ -39,7 +39,7 @@ function SimpleMacroFrameMixin:OnLoad()
     SimpleMacroFrame:SaveMacro();
     SimpleMacroFrame:SelectMacro(selectionIndex);
     SimpleMacroChangeFrame:Hide();
-    SMCreateFrameText:ClearFocus();
+    SimpleMacroCreateFrameText:ClearFocus();
   end
 
   self.MacroSelector:SetSelectedCallback(SimpleMacroFrameMacroButtonSelectedCallback);
@@ -134,36 +134,36 @@ function SimpleMacroFrameMixin:UpdateButtons()
   local hasSelectedMacro = self:GetSelectedIndex() ~= nil;
   if hasSelectedMacro then
     self:ShowDetails();
-    SMCreateFrameDeleteButton:Enable();
+    SimpleMacroCreateFrameDeleteButton:Enable();
   else
     self:HideDetails();
-    SMCreateFrameDeleteButton:Disable();
+    SimpleMacroCreateFrameDeleteButton:Disable();
   end
 
   local inClickBinding = InClickBindingMode();
 
   --Update New Button
   local numMacros = self.MacroSelector.numMacros;
-  SMCreateFrameNewButton:SetEnabled(numMacros and (numMacros < self.macroMax) and not inClickBinding);
+  SimpleMacroCreateFrameNewButton:SetEnabled(numMacros and (numMacros < self.macroMax) and not inClickBinding);
 
   -- Disable Buttons
   if SimpleMacroChangeFrame:IsShown() or inClickBinding then
-    SMCreateFrameChangeButton:Disable();
-    SMCreateFrameDeleteButton:Disable();
+    SimpleMacroCreateFrameChangeButton:Disable();
+    SimpleMacroCreateFrameDeleteButton:Disable();
   else
-    SMCreateFrameChangeButton:Enable();
-    SMCreateFrameDeleteButton:Enable();
+    SimpleMacroCreateFrameChangeButton:Enable();
+    SimpleMacroCreateFrameDeleteButton:Enable();
   end
 
   if not hasSelectedMacro then
-    SMCreateFrameDeleteButton:Disable();
+    SimpleMacroCreateFrameDeleteButton:Disable();
   end
 
   -- Add disabled tooltip if in click binding mode
   local disabledInClickBinding = {
-    SMCreateFrameChangeButton,
-    SMCreateFrameDeleteButton,
-    SMCreateFrameNewButton,
+    SimpleMacroCreateFrameChangeButton,
+    SimpleMacroCreateFrameDeleteButton,
+    SimpleMacroCreateFrameNewButton,
   };
   local onEnterFunction, onLeaveFunction;
   if inClickBinding then

@@ -62,10 +62,10 @@ function SM_MacroEditor_CreateLineFrame(lineNum)
   local macroEditorLine
   local curLine = "SM_MacroEditorLine"..lineNum
   if G[curLine] == nil then
-    macroEditorLine = CreateFrame("CheckButton", curLine, SMCreateFrameMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
+    macroEditorLine = CreateFrame("CheckButton", curLine, SimpleMacroCreateFrameMacroEditorScrollFrameChild, "SM_MacroEditorLineEntryTemplate")
 
     if lineNum == 1 then
-      macroEditorLine:SetPoint("TOPLEFT", SMCreateFrameMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
+      macroEditorLine:SetPoint("TOPLEFT", SimpleMacroCreateFrameMacroEditorScrollFrameChild, "TOPLEFT", 0, 0)
     else
       macroEditorLine:SetPoint("TOPLEFT", "SM_MacroEditorLine"..(lineNum - 1), "BOTTOMLEFT", 0, 0)
     end
@@ -86,7 +86,7 @@ function SM_MacroEditor_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   local macroEditorArg
   local curArg = currentLine.."Arg"..argumentNum
   if G[curArg] == nil then
-    macroEditorArg = CreateFrame("CheckButton", curArg, SMCreateFrameMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
+    macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroCreateFrameMacroEditorScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
   else
     macroEditorArg = G[curArg]
     macroEditorArg:Show()
@@ -214,7 +214,7 @@ function SimpleMacroTabFrameMixin:SetText(index)
   local actualIndex = self:GetMacroDataIndex(index);
   local name, _, body = GetMacroInfo(actualIndex);
   if name then
-    SMCreateFrameText:SetText(body);
+    SimpleMacroCreateFrameText:SetText(body);
   end
 end
 
@@ -238,45 +238,45 @@ function SimpleMacroTabFrameMixin:DeleteMacro()
   local retainScrollPosition = true;
   SimpleMacroFrame:Update(retainScrollPosition);
 
-  SMCreateFrameText:ClearFocus();
+  SimpleMacroCreateFrameText:ClearFocus();
 end
 
 function SimpleMacroTabFrameMixin:SaveMacro(selectedMacroIndex)
   if self.textChanged and (selectedMacroIndex ~= nil) then
     local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
-    EditMacro(actualIndex, nil, nil, SMCreateFrameText:GetText());
+    EditMacro(actualIndex, nil, nil, SimpleMacroCreateFrameText:GetText());
     self:SelectMacro(selectedMacroIndex);
     self.textChanged = nil;
   end
 end
 
 function SimpleMacroTabFrameMixin:HideDetails()
-  SMCreateFrameChangeButton:Hide();
-  SMCreateFrameCharLimitText:Hide();
-  SMCreateFrameText:Hide();
+  SimpleMacroCreateFrameChangeButton:Hide();
+  SimpleMacroCreateFrameCharLimitText:Hide();
+  SimpleMacroCreateFrameText:Hide();
 end
 
 function SimpleMacroTabFrameMixin:ShowDetails()
-  SMCreateFrameChangeButton:Show();
-  SMCreateFrameCharLimitText:Show();
-  SMCreateFrameEnterMacroText:Show();
-  SMCreateFrameText:Show();
+  SimpleMacroCreateFrameChangeButton:Show();
+  SimpleMacroCreateFrameCharLimitText:Show();
+  SimpleMacroCreateFrameEnterMacroText:Show();
+  SimpleMacroCreateFrameText:Show();
 end
 
 -- OnClick functions
-function SMCreateFrame_NewButton_OnClick()
+function SimpleMacroCreateFrame_NewButton_OnClick()
   SimpleMacroFrame:SaveMacro();
   SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.New;
   SimpleMacroChangeFrame:Show();
 end
 
-function SMCreateFrame_ChangeButton_OnClick()
+function SimpleMacroCreateFrame_ChangeButton_OnClick()
   SimpleMacroFrame:SaveMacro();
   SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.Edit;
   SimpleMacroChangeFrame:Show()
 end
 
-function SMCreateFrame_SaveButton_OnClick()
+function SimpleMacroCreateFrame_SaveButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
   SimpleMacroFrame:SaveMacro();
 
@@ -284,19 +284,22 @@ function SMCreateFrame_SaveButton_OnClick()
   SimpleMacroFrame:Update(retainScrollPosition);
 
   SimpleMacroChangeFrame:Hide();
-  SMCreateFrameText:ClearFocus();
+  SimpleMacroCreateFrameText:ClearFocus();
 end
 
-function SMCreateFrame_CancelButton_OnClick()
+function SimpleMacroCreateFrame_OpenEditor_OnClick(self)
+  local parent = self:GetParent()
 
+  SimpleMacroEditorPopup:SetSMacro(parent:GetMacroDataIndex(parent:GetSelectedIndex()))
+  ShowUIPanel(SimpleMacroEditorPopup)
 end
 
-function SMCreateFrame_CancelButton_OnClick()
+function SimpleMacroCreateFrame_CancelButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 
   local retainScrollPosition = true;
   SimpleMacroFrame:Update(retainScrollPosition);
 
   SimpleMacroChangeFrame:Hide();
-  SMCreateFrameText:ClearFocus();
+  SimpleMacroCreateFrameText:ClearFocus();
 end

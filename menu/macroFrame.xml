@@ -84,7 +84,7 @@
         <Scripts>
           <OnClick>
             self:SetChecked(false);
-            PickupMacro(SMCreateFrame.selectedMacro);
+            PickupMacro(SimpleMacroCreateFrame.selectedMacro);
           </OnClick>
         </Scripts>
       </CheckButton>

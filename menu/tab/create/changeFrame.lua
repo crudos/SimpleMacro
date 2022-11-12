@@ -6,7 +6,7 @@ function ChangeFrameMixin:OnShow()
   self.BorderBox.IconSelectorEditBox:SetFocus();
 
   if self.mode == IconSelectorPopupFrameModes.New then
-    SMCreateFrameText:Hide();
+    SimpleMacroCreateFrameText:Hide();
   end
 
   self.iconDataProvider = self:GetMacroFrame():RefreshIconDataProvider();
@@ -24,9 +24,9 @@ function ChangeFrameMixin:OnShow()
   self.IconSelector:SetSelectedCallback(OnIconSelected);
 
   -- Disable Buttons
-  SMCreateFrameChangeButton:Disable();
-  SMCreateFrameDeleteButton:Disable();
-  SMCreateFrameNewButton:Disable();
+  SimpleMacroCreateFrameChangeButton:Disable();
+  SimpleMacroCreateFrameDeleteButton:Disable();
+  SimpleMacroCreateFrameNewButton:Disable();
   SimpleMacroFrameTab1:Disable();
   SimpleMacroFrameTab2:Disable();
 end
@@ -36,17 +36,17 @@ function ChangeFrameMixin:OnHide()
   local macroFrame = self:GetMacroFrame();
 
   if self.mode == IconSelectorPopupFrameModes.New then
-    SMCreateFrameText:Show();
-    SMCreateFrameText:SetFocus();
+    SimpleMacroCreateFrameText:Show();
+    SimpleMacroCreateFrameText:SetFocus();
   end
 
   -- Enable Buttons
-  SMCreateFrameChangeButton:Enable();
-  SMCreateFrameDeleteButton:Enable();
+  SimpleMacroCreateFrameChangeButton:Enable();
+  SimpleMacroCreateFrameDeleteButton:Enable();
 
   local numAccountMacros, numCharacterMacros = GetNumMacros();
   local numMacros = macroFrame.macroBase and numAccountMacros or numCharacterMacros;
-  SMCreateFrameNewButton:SetEnabled(numMacros < macroFrame.macroMax);
+  SimpleMacroCreateFrameNewButton:SetEnabled(numMacros < macroFrame.macroMax);
 
   -- Enable tabs
   PanelTemplates_UpdateTabs(macroFrame);

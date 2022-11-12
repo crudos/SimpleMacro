@@ -13,6 +13,9 @@ L["GLOBAL_STRING"]["ACCOUNT_MACROS"] = "Account Macros"
 L["GLOBAL_STRING"]["CHARACTER_MACROS"] = "Character Macros"
 L["GLOBAL_STRING"]["CREATE"] = "Create"
 L["GLOBAL_STRING"]["GROUP"] = "Group"
+L["GLOBAL_STRING"]["ENTER_MACRO_LABEL"] = "Enter macro commands:"
+L["GLOBAL_STRING"]["SAVE"] = "Save"
+L["GLOBAL_STRING"]["OPEN_EDITOR"] = "Open Editor" -- TODO temporary
 L["GLOBAL_STRING"]["CANCEL"] = "Cancel"
 L["GLOBAL_STRING"]["OKAY"] = "Okay"
 L["GLOBAL_STRING"]["EXIT"] = "Exit"
@@ -79,6 +82,7 @@ L["LINE_TYPE_COMMAND_LABEL"] = "Command"
 L["LINE_TYPE_TOOLTIP"] = "This line will start with "
 L["LINE_TYPE_TOOLTIP_NONE"] = "No command."
 
+L["MACRO_EDITOR"] = {}
 L["MACRO_EDITOR"]["LINE_TYPE_TABLE"] = {}
 L["MACRO_EDITOR"]["LINE_TYPE_TABLE"][1] = {}
 L["MACRO_EDITOR"]["LINE_TYPE_TABLE"][2] = {}
