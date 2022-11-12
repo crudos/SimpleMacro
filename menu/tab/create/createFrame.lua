@@ -288,6 +288,10 @@ function SMCreateFrame_SaveButton_OnClick()
 end
 
 function SMCreateFrame_CancelButton_OnClick()
+
+end
+
+function SMCreateFrame_CancelButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
 
   local retainScrollPosition = true;

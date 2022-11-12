@@ -1,6 +1,5 @@
 local addonName, ns = ...
 local C = ns.C
-local G = _G
 
 local loadingAgainSoon
 
