@@ -3,7 +3,7 @@ A helper addon for managing macros in World of Warcraft.
 
 ## Key features
 * Form driven macro creation
-* Macro grouping for simultaneous update of target conditionals
+* Batch update of target conditionals
 
 ## Commands
 Slash commands are */sm*, */smacro*, */simplemacro*
