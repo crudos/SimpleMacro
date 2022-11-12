@@ -1,25 +1,12 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="editor.lua"/>
 
-  <Frame name="SimpleMacroEditorPopup" mixin="SimpleMacroEditorPopupMixin" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroFrame" enableMouse="true" hidden="true">
+  <Frame name="SimpleMacroEditorPopup" mixin="SimpleMacroEditorPopupMixin" inherits="SimpleMacroPopupFrameTemplate" toplevel="true"
+         parent="SimpleMacroFrame" enableMouse="true" hidden="true">
     <Size x="312" y="208"/>
-    <KeyValues>
-      <KeyValue key="OnCancel" value="SimpleMacroEditorPopup_CancelButton_OnClick" type="global"/>
-      <KeyValue key="OnOkay" value="SimpleMacroEditorPopup_OkayButton_OnClick" type="global"/>
-      <KeyValue key="OnDelete" value="SimpleMacroEditorPopup_DeleteButton_OnClick" type="global"/>
-    </KeyValues>
     <Anchors>
       <Anchor point="LEFT" relativeTo="$parent" relativePoint="RIGHT" x="0" y="0"/>
     </Anchors>
-    <Layers>
-      <Layer level="BACKGROUND">
-        <FontString parentKey="Title" inherits="GameFontNormal" text="SIMPLE_MACRO_STRING_MACRO_EDITOR_TITLE">
-          <Anchors>
-            <Anchor point="TOP" relativePoint="TOP" x="0" y="-15"/>
-          </Anchors>
-        </FontString>
-      </Layer>
-    </Layers>
     <Frames>
       <Frame parentKey="CategoryDropDown" inherits="SimpleMacroEditorPopupDropDownTemplate" enableMouse="true">
         <Anchors>

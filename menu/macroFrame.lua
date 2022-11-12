@@ -1,18 +1,13 @@
 local _, ns = ...
 local C = ns.C["MACRO_FRAME"]
-local G = _G
 
 UIPanelWindows["SimpleMacroFrame"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH };
-
-local function getGlobalString(stringID)
-  return G["SIMPLE_MACRO_STRING_"..stringID]
-end
 
 SimpleMacroFrameMixin = {};
 
 function SimpleMacroFrameMixin:OnLoad()
   self:RegisterForDrag("LeftButton")
-  self:SetTitle(getGlobalString"MENU_TITLE")
+  self:SetTitle(GetGlobalString"MENU_TITLE")
 
   PanelTemplates_SetNumTabs(self, 2)
   PanelTemplates_SetTab(self, 1)

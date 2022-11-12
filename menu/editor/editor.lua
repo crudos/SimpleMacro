@@ -27,6 +27,7 @@ end
 SimpleMacroEditorPopupMixin = {};
 
 function SimpleMacroEditorPopupMixin:OnLoad()
+  self:SetTitle(GetGlobalString("MACRO_EDITOR_TITLE"))
 end
 
 function SimpleMacroEditorPopupMixin:OnShow()

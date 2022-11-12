@@ -1,5 +1,5 @@
 local _, ns = ...
-local C = ns.C["CREATE_TAB"]
+local C = ns.C["CREATE_FRAME"]
 local G = _G
 
 --[[
@@ -7,6 +7,7 @@ local G = _G
 
   ]]
 
+--[[
 local function SM_HideEditorLines(num)
   local lc = num
   while G["SM_MacroEditorLine"..lc] do
@@ -174,7 +175,7 @@ function MacroEditor_AddNewLine_OnClick(_, _, _)
   SM_CreateTab_Update()
 end
 
-
+--]]
 
 
 -- new shit
