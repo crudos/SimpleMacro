@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="editor.lua"/>
 
-  <Frame name="SimpleMacroEditorPopup" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroFrame" enableMouse="true" hidden="true">
+  <Frame name="SimpleMacroEditorPopup" mixin="SimpleMacroEditorPopupMixin" inherits="SimpleMacroPopupFrameTemplate" toplevel="true" parent="SimpleMacroFrame" enableMouse="true" hidden="true">
     <Size x="312" y="208"/>
     <KeyValues>
       <KeyValue key="OnCancel" value="SimpleMacroEditorPopup_CancelButton_OnClick" type="global"/>
@@ -57,9 +57,9 @@
       </Button>
     </Frames>
     <Scripts>
-      <OnLoad function="SimpleMacroEditorPopup_OnLoad"/>
-      <OnShow function="SimpleMacroEditorPopup_OnShow"/>
-      <OnHide function="SimpleMacroEditorPopup_OnHide"/>
+      <OnLoad method="OnLoad"/>
+      <OnShow method="OnShow"/>
+      <OnHide method="OnHide"/>
     </Scripts>
   </Frame>
 </Ui>

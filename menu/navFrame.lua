@@ -9,6 +9,10 @@ function SimpleMacroNavigationMixin:OnShow()
   self:ChangeTab(1)
 end
 
+function SimpleMacroNavigationMixin:OnHide()
+  -- do nothing
+end
+
 function SimpleMacroNavigationMixin:SelectTab(tab)
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
   self:ChangeTab(tab:GetID());

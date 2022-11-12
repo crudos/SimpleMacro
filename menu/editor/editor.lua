@@ -1,5 +1,5 @@
 local _, ns = ...
-local L = ns.L -- TODO move line table into MACRO_EDITOR
+local L = ns.L["MACRO_EDITOR"]
 local C = ns.C["MACRO_EDITOR"]
 local G = _G
 
@@ -7,7 +7,7 @@ local G = _G
   SimpleMacroEditorPopup
 ]]
 local function generateCommandString(category, command)
-  return (category == L["MACRO_EDITOR"]["HASH_CATEGORY"] and '#' or '/')..command
+  return (category == C["HASH_CATEGORY"] and '#' or '/')..command
 end
 
 local function saveArgumentAndCommand(editor)
@@ -24,54 +24,16 @@ local function saveArgumentAndCommand(editor)
   EditMacro(parsed:getID(), nil, nil, parsed:compose())
 end
 
-function SimpleMacroEditorPopup_OnLoad(self)
-  self.GetSelectedMacro = function(this)
-    return this.selectedMacro
-  end
-  self.GetParsed = function(this)
-    return this.selectedMacro.parsed
-  end
-  self.SetSelectedMacro = function(this, id)
-    local name, texture, body = GetMacroInfo(id)
+SimpleMacroEditorPopupMixin = {};
 
-    this.selectedMacro = { name = name, texture = texture, body = body }
-    this.selectedMacro.parsed = SMacro:new()
-    this.selectedMacro.parsed:set(id)
-  end
-  self.GetSelectedLine = function(this)
-    return this.selectedLine
-  end
-  self.SetSelectedLine = function(this, id)
-    this.selectedLine = id
-  end
-  self.GetSelectedArgument = function(this)
-    return this.selectedArgument
-  end
-  self.SetSelectedArgument = function(this, id)
-    this.selectedArgument = id
-  end
-  self.GetConditionalGroupButtons = function(this)
-    if this.conditionalGroupButtons == nil then
-      this.conditionalGroupButtons = {}
-    end
-    return this.conditionalGroupButtons
-  end
-  self.InsertConditionalGroupButton = function(this, groupButton)
-    if this.conditionalGroupButtons == nil then
-      this.conditionalGroupButtons = {}
-    end
-    tinsert(this.conditionalGroupButtons, groupButton)
-  end
-  self.RemoveLastConditionalGroupButton = function(this)
-    tremove(this.conditionalGroupButtons)
-  end
+function SimpleMacroEditorPopupMixin:OnLoad()
 end
 
-function SimpleMacroEditorPopup_OnShow(_)
+function SimpleMacroEditorPopupMixin:OnShow()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
 end
 
-function SimpleMacroEditorPopup_OnHide(_)
+function SimpleMacroEditorPopupMixin:OnHide()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
   SM_MacroEditor_Update()
 
@@ -79,6 +41,43 @@ function SimpleMacroEditorPopup_OnHide(_)
   SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
   HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
+
+function SimpleMacroEditorPopupMixin:GetSelectedLine()
+  return self.selectedLine
+end
+
+function SimpleMacroEditorPopupMixin:SetSelectedLine(id)
+  self.selectedLine = id
+end
+
+function SimpleMacroEditorPopupMixin:GetSelectedArgument()
+  return self.selectedArgument
+end
+
+function SimpleMacroEditorPopupMixin:SetSelectedArgument(id)
+  self.selectedArgument = id
+end
+
+function SimpleMacroEditorPopupMixin:GetConditionalGroupButtons()
+  if self.conditionalGroupButtons == nil then
+    self.conditionalGroupButtons = {}
+  end
+  return self.conditionalGroupButtons
+end
+
+function SimpleMacroEditorPopupMixin:InsertConditionalGroupButton(groupButton)
+  if self.conditionalGroupButtons == nil then
+    self.conditionalGroupButtons = {}
+  end
+  tinsert(self.conditionalGroupButtons, groupButton)
+end
+
+function SimpleMacroEditorPopupMixin:RemoveLastConditionalGroupButton()
+  tremove(self.conditionalGroupButtons)
+end
+
+-- old
+
 
 function SimpleMacroEditorPopup_CancelButton_OnClick(self)
   HideUIPanel(self:GetParent())
@@ -189,7 +188,7 @@ function SimpleMacroEditorPopup_CommandDropDown_OnEvent(self, event, ...)
     end
     self.GetID = function(_)
       local category = SimpleMacroEditorPopup.CategoryDropDown:GetID()
-      for i = 1, L["MACRO_EDITOR"]["NUM_MACRO_COMMANDS"] do
+      for i = 1, C["NUM_MACRO_COMMANDS"] do
         if L["LINE_TYPE_TABLE"][category][i] ~= nil then
           for _, cmd in pairs(L["LINE_TYPE_TABLE"][category][i].COMMANDS) do
             if SimpleMacroEditorPopup.CommandDropDown:GetValue() == cmd then
@@ -297,7 +296,7 @@ function SimpleMacroEditorPopup_AddConditionalGroupButton_OnClick(self)
   local newConditionalGroupButton = createConditionalGroupButton(conditionalGroupCount + 1)
   openConditionalGroup(newConditionalGroupButton)
 
-  if #SimpleMacroEditorPopup:GetConditionalGroupButtons() >= L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] then
+  if #SimpleMacroEditorPopup:GetConditionalGroupButtons() >= C["MAX_CONDITIONAL_GROUPS"] then
     self:Disable()
   end
 end
@@ -340,7 +339,7 @@ local function hideConditionalGroupButtons(startingIndex)
   local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroupINDEXButton"
   local firstHidden = nil
 
-  for i = L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"], startingIndex + 1, -1 do
+  for i = C["MAX_CONDITIONAL_GROUPS"], startingIndex + 1, -1 do
     local buttonFrame = G[string.gsub(conditionalGroupButtonName, "INDEX", i)]
     if buttonFrame ~= nil and buttonFrame:IsShown() then
       buttonFrame:Hide()
@@ -388,7 +387,7 @@ function SimpleMacroEditorPopup_Update()
 
   hideConditionalGroupButtons(conditionalGroups and #conditionalGroups or 0)
 
-  if #popupFrame:GetConditionalGroupButtons() < L["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] then
+  if #popupFrame:GetConditionalGroupButtons() < C["MAX_CONDITIONAL_GROUPS"] then
     popupFrame.AddConditionalGroupButton:Enable()
   end
 end

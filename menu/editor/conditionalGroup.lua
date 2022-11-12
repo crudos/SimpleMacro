@@ -1,4 +1,5 @@
 local _, ns = ...
+local L = ns.L
 local C = ns.C
 local G = _G
 
