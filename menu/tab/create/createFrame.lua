@@ -211,6 +211,10 @@ function SimpleMacroTabFrameMixin:GetMacroDataIndex(index)
   return SimpleMacroFrame:GetMacroDataIndex(index);
 end
 
+function SimpleMacroTabFrameMixin:Update()
+  self:SetText(self:GetSelectedIndex())
+end
+
 function SimpleMacroTabFrameMixin:SetText(index)
   local actualIndex = self:GetMacroDataIndex(index);
   local name, _, body = GetMacroInfo(actualIndex);

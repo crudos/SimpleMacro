@@ -162,6 +162,12 @@
     </Scripts>
   </CheckButton>
   <Frame name="SimpleMacroPopupFrameTemplate" inherits="DefaultPanelTemplate" virtual="true">
+    <KeyValues>
+      <!--
+      <KeyValue key="OnOkay" value="FooFrame_OnOkay" type="global"/>
+      <KeyValue key="OnDelete" value="FooFrame_OnDelete" type="global"/>
+      -->
+    </KeyValues>
     <Layers>
       <Layer level="BACKGROUND" textureSubLevel="-6">
         <Texture name="$parentBg" file="Interface\FrameGeneral\UI-Background-Rock" horizTile="true" vertTile="true" parentKey="Bg">
@@ -175,12 +181,30 @@
     <Frames>
       <Frame parentKey="Inset" inherits="InsetFrameTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" x="6" y="-21"/>
-          <Anchor point="BOTTOMRIGHT" x="-2" y="26"/>
+          <Anchor point="TOPLEFT" x="8" y="-24"/>
+          <Anchor point="BOTTOMRIGHT" x="-6" y="27"/>
         </Anchors>
       </Frame>
       <Frame parentKey="NineSlice" inherits="NineSlicePanelTemplate"/>
       <Button parentKey="ClosePanelButton" inherits="UIPanelCloseButtonDefaultAnchors"/>
+      <Button parentKey="OkayButton" inherits="UIPanelButtonTemplate" text="OKAY">
+        <Size x="80" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMRIGHT" x="-5" y="4"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroPopupFrameOkayButton_OnClick"/>
+        </Scripts>
+      </Button>
+      <Button parentKey="DeleteButton" inherits="UIPanelButtonTemplate" text="DELETE">
+        <Size x="80" y="22"/>
+        <Anchors>
+          <Anchor point="BOTTOMLEFT" x="6" y="4"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroPopupFrameDeleteButton_OnClick"/>
+        </Scripts>
+      </Button>
     </Frames>
   </Frame>
   <Frame name="SimpleMacroDropDownTemplate" inherits="UIDropDownMenuTemplate" virtual="true">

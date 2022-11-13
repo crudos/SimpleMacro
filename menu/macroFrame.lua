@@ -102,6 +102,7 @@ function SimpleMacroFrameMixin:RefreshIconDataProvider()
   return self.iconDataProvider;
 end
 
+-- TODO move create frame specifics to its own Update
 function SimpleMacroFrameMixin:Update()
   local useAccountMacros = PanelTemplates_GetSelectedTab(self) == 1;
   local numAccountMacros, numCharacterMacros = GetNumMacros();
@@ -130,6 +131,7 @@ function SimpleMacroFrameMixin:UpdateButtons()
   if hasSelectedMacro then
     self:ShowDetails();
     SimpleMacroCreateFrameDeleteButton:Enable();
+    SimpleMacroNavigationFrame:GetMenu():Update()
   else
     self:HideDetails();
     SimpleMacroCreateFrameDeleteButton:Disable();
