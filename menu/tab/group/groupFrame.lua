@@ -47,9 +47,9 @@ local function changeTargets(index, target)
   end
 end
 
-SimpleMacroGroupTabMixin = {}
+SimpleMacroGroupFrameMixin = {}
 
-function SimpleMacroGroupTabMixin:OnLoad()
+function SimpleMacroGroupFrameMixin:OnLoad()
   loadTabs(self)
 
   local function SimpleMacroFrameInitMacroButton(macroButton, selectionIndex, name, texture, body)
@@ -77,7 +77,7 @@ function SimpleMacroGroupTabMixin:OnLoad()
   EventRegistry:RegisterCallback("ClickBindingFrame.UpdateFrames", self.UpdateButtons, self);
 end
 
-function SimpleMacroGroupTabMixin:OnShow()
+function SimpleMacroGroupFrameMixin:OnShow()
   local groupTable = SimpleMacro.dbc.GroupTable
 
   -- select group if there is one
@@ -88,16 +88,16 @@ function SimpleMacroGroupTabMixin:OnShow()
   self:Update()
 end
 
-function SimpleMacroGroupTabMixin:OnHide()
+function SimpleMacroGroupFrameMixin:OnHide()
   -- do nothing
 end
 
-function SimpleMacroGroupTabMixin:SelectTab(tab)
+function SimpleMacroGroupFrameMixin:SelectTab(tab)
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
   self:ChangeTab(tab:GetID())
 end
 
-function SimpleMacroGroupTabMixin:ChangeTab(tabID)
+function SimpleMacroGroupFrameMixin:ChangeTab(tabID)
   PanelTemplates_SetTab(self, tabID)
 
   if tabID ~= nil then
@@ -110,7 +110,7 @@ function SimpleMacroGroupTabMixin:ChangeTab(tabID)
   self:Update()
 end
 
-function SimpleMacroGroupTabMixin:SelectMacro(index)
+function SimpleMacroGroupFrameMixin:SelectMacro(index)
   local groupID = self:GetSelectedGroupID()
   local groupTable = SimpleMacro.dbc.GroupTable
 
@@ -121,15 +121,15 @@ function SimpleMacroGroupTabMixin:SelectMacro(index)
   self.MacroSelector:SetSelectedIndex(index);
 end
 
-function SimpleMacroGroupTabMixin:GetSelectedIndex()
+function SimpleMacroGroupFrameMixin:GetSelectedIndex()
   return self.MacroSelector:GetSelectedIndex();
 end
 
-function SimpleMacroGroupTabMixin:GetSelectedGroupID()
+function SimpleMacroGroupFrameMixin:GetSelectedGroupID()
   return PanelTemplates_GetSelectedTab(self)
 end
 
-function SimpleMacroGroupTabMixin:RefreshIconDataProvider()
+function SimpleMacroGroupFrameMixin:RefreshIconDataProvider()
   if self.iconDataProvider == nil then
     self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spell);
   end
@@ -137,7 +137,7 @@ function SimpleMacroGroupTabMixin:RefreshIconDataProvider()
   return self.iconDataProvider;
 end
 
-function SimpleMacroGroupTabMixin:Update()
+function SimpleMacroGroupFrameMixin:Update()
   local groupID = self:GetSelectedGroupID()
   local groupTable = SimpleMacro.dbc.GroupTable
 
@@ -157,7 +157,7 @@ function SimpleMacroGroupTabMixin:Update()
   self:UpdateButtons();
 end
 
-function SimpleMacroGroupTabMixin:UpdateButtons()
+function SimpleMacroGroupFrameMixin:UpdateButtons()
   local groupID = self:GetSelectedGroupID()
   local groupTable = SimpleMacro.dbc.GroupTable
 
@@ -197,7 +197,7 @@ function SimpleMacroGroupTabMixin:UpdateButtons()
   self:UpdateGroupTabs()
 end
 
-function SimpleMacroGroupTabMixin:UpdateGroupTabs()
+function SimpleMacroGroupFrameMixin:UpdateGroupTabs()
   local groupTable = SimpleMacro.dbc.GroupTable
 
   for i = 1, C["MAX_TABS"] do
@@ -218,7 +218,7 @@ function SimpleMacroGroupTabMixin:UpdateGroupTabs()
   end
 end
 
-function SimpleMacroGroupTabMixin:ChangeGroupTarget(groupID, newTarget)
+function SimpleMacroGroupFrameMixin:ChangeGroupTarget(groupID, newTarget)
   local groupTable = SimpleMacro.dbc.GroupTable
   local group = groupTable[groupID]
 
@@ -231,7 +231,7 @@ function SimpleMacroGroupTabMixin:ChangeGroupTarget(groupID, newTarget)
   print("Set target of Group "..groupID.." to "..newTarget)
 end
 
---function SimpleMacroGroupTabMixin:GetGroupTable()
+--function SimpleMacroGroupFrameMixin:GetGroupTable()
 --  return SimpleMacro.dbc.GroupTable
 --end
 --
@@ -243,19 +243,19 @@ end
 --  SimpleMacro.dbc.GroupTable[self:GetSelectedGroupID()] = data
 --end
 
-function SimpleMacroGroupTabMixin:SetText()
+function SimpleMacroGroupFrameMixin:SetText()
   -- do nothing on group tab
 end
 
-function SimpleMacroGroupTabMixin:SaveMacro()
+function SimpleMacroGroupFrameMixin:SaveMacro()
   -- do nothing on group tab
 end
 
-function SimpleMacroGroupTabMixin:HideDetails()
+function SimpleMacroGroupFrameMixin:HideDetails()
   -- do nothing on group tab
 end
 
-function SimpleMacroGroupTabMixin:ShowDetails()
+function SimpleMacroGroupFrameMixin:ShowDetails()
   -- do nothing on group tab
 end
 

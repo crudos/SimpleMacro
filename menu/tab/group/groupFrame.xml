@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="groupFrame.lua"/>
 
-  <Frame name="SimpleMacroGroupFrame" mixin="SimpleMacroGroupTabMixin" hidden="true" parent="SimpleMacroFrame">
+  <Frame name="SimpleMacroGroupFrame" mixin="SimpleMacroGroupFrameMixin" hidden="true" parent="SimpleMacroFrame">
     <Anchors>
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
