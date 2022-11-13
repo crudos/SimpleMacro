@@ -302,10 +302,11 @@ function MacroBodySelector_CreateArgumentFrame(currentLine, lineNum, argumentNum
     macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroCreateFrameScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
   else
     macroEditorArg = G[curArg]
+
     macroEditorArg:Show()
   end
 
-  local currentMacro = Sim()
+  local currentMacro = SimpleMacroCreateFrame:GetC()
   local argumentWithConditionals = currentMacro:composeAllConditionals(lineNum, argumentNum)..' '..currentMacro:getArgument(lineNum, argumentNum)
   G[curArg.."Data"]:SetText(argumentWithConditionals)
   macroEditorArg:SetSize(G[curArg.."Data"]:GetStringWidth(), C["EDITOR_HEIGHT"])
@@ -331,11 +332,11 @@ end
 function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
   if self:GetChecked() then
     SimpleMacroCreateFrameScrollFrame:Hide()
-    SimpleMacroCreateFrameTextBackground:Hide()
+    --SimpleMacroCreateFrameTextBackground:Hide()
     setupMacroBodySelector()
   else
     SimpleMacroCreateFrameScrollFrame:Show()
-    SimpleMacroCreateFrameTextBackground:Show()
+    --SimpleMacroCreateFrameTextBackground:Show()
   end
 end
 

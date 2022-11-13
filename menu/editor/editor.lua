@@ -136,7 +136,6 @@ end
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local parent = self:GetParent()
   parent:Save()
-  -- TODO update create frame editor box
   HideUIPanel(parent)
 end
 
@@ -414,40 +413,5 @@ function hideConditionalGroupButtons(startingIndex)
     local lastEnabledButton = G[string.gsub(conditionalGroupButtonName, "INDEX", startingIndex)]
     anchorAddButtonTo(lastEnabledButton)
     resizeFrameForButtons(SimpleMacroEditorPopup, startingIndex - firstHidden)
-  end
-end
-
-function SimpleMacroEditorPopup_Update()
-  local popupFrame = SimpleMacroEditorPopup
-  local parsedMacro = popupFrame:GetParsed()
-  local currentLine = popupFrame:GetSelectedLine()
-  local currentArgument = popupFrame:GetSelectedArgument()
-
-  -- dropdowns
-  local categoryID, commandID, nameID = getCommandIds(parsedMacro:getCommand(currentLine))
-  popupFrame.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
-  popupFrame.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
-
-  -- TODO Fix for empty argument. This currently hides the edit box and conditional group buttons.
-  local conditionalGroups
-  if currentArgument ~= nil then
-    -- editbox
-    local lineArguments = parsedMacro:getArguments(currentLine)
-    popupFrame.ArgumentEditBox:SetText(lineArguments[currentArgument].arg)
-
-    -- conditionals
-    conditionalGroups = parsedMacro:getConditionalGroups(currentLine, currentArgument)
-    for i, _ in ipairs(conditionalGroups) do
-      createConditionalGroupButton(i)
-    end
-  else
-    popupFrame.ArgumentEditBox:SetText("")
-    SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
-  end
-
-  hideConditionalGroupButtons(conditionalGroups and #conditionalGroups or 0)
-
-  if #popupFrame:GetConditionalGroupButtons() < C["MAX_CONDITIONAL_GROUPS"] then
-    popupFrame.AddConditionalGroupButton:Enable()
   end
 end
