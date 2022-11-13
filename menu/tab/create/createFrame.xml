@@ -33,6 +33,11 @@
       </Button>
       <ScrollFrame name="$parentScrollFrame" inherits="UIPanelScrollFrameTemplate">
         <Size x="383" y="85"/>
+        <KeyValues>
+          <KeyValue key="maxLetters" value="255" type="number"/>
+          <KeyValue key="instructions" value="REPORTING_COMMENT_INSTRUCTIONS" type="global"/>
+          <KeyValue key="hideCharCount" value="true" type="boolean"/>
+        </KeyValues>
         <Anchors>
           <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="11" y="-13"/>
         </Anchors>
@@ -45,11 +50,7 @@
               </OnLoad>
               <OnTextChanged>
                 SimpleMacroCreateFrame.textChanged = 1;
-                --if ( MacroPopupFrame.mode == "new" ) then
-                --  MacroPopupFrame:Hide();
-                --end
                 SimpleMacroCreateFrameCharLimitText:SetFormattedText(MACROFRAME_CHAR_LIMIT, SimpleMacroCreateFrameText:GetNumLetters());
-
                 ScrollingEdit_OnTextChanged(self, self:GetParent());
               </OnTextChanged>
               <OnCursorChanged function="ScrollingEdit_OnCursorChanged"/>
@@ -62,6 +63,17 @@
           </EditBox>
         </ScrollChild>
       </ScrollFrame>
+      <ScrollFrame name="$parentScrollFrame2" inherits="InputScrollFrameTemplate" hidden="true">
+        <Size x="403" y="92"/>
+        <KeyValues>
+          <KeyValue key="maxLetters" value="255" type="number"/>
+<!--          <KeyValue key="instructions" value="SIMPLE_MACRO_STRING_MACRO_BODY_INSTRUCTIONS" type="global"/>-->
+          <KeyValue key="hideCharCount" value="false" type="boolean"/>
+        </KeyValues>
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="SimpleMacroFrameSelectedMacroBackground" relativePoint="BOTTOMLEFT" x="11" y="-13"/>
+        </Anchors>
+      </ScrollFrame>
       <Button name="$parentTextButton">
         <Size x="383" y="85"/>
         <Anchors>
@@ -73,10 +85,19 @@
           </OnClick>
         </Scripts>
       </Button>
+      <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_SAVE">
+        <Size x="80" y="22"/>
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentChangeButton" relativePoint="RIGHT" x="113" y="0"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroCreateFrame_SaveButton_OnClick"/>
+        </Scripts>
+      </Button>
       <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_OPEN_EDITOR">
         <Size x="80" y="22"/>
         <Anchors>
-          <Anchor point="BOTTOMRIGHT" relativeTo="$parentScrollFrame" relativePoint="TOPRIGHT" x="25" y="10"/>
+          <Anchor point="RIGHT" relativeTo="$parentSaveButton" relativePoint="LEFT" x="-5"/>
         </Anchors>
         <Scripts>
           <OnClick function="SimpleMacroCreateFrame_OpenEditor_OnClick"/> <!-- TODO temporary -->
@@ -84,18 +105,12 @@
       </Button>
       <CheckButton name="$parentEditBoxToggle" inherits="SimpleMacroCheckButtonTemplate">
         <Anchors>
-          <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT" x="-5"/>
-        </Anchors>
-      </CheckButton>
-      <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_SAVE">
-        <Size x="80" y="22"/>
-        <Anchors>
-          <Anchor point="BOTTOM" relativeTo="$parentCancelButton" relativePoint="TOP" x="0" y="15"/>
+          <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT" x="-3"/>
         </Anchors>
         <Scripts>
-          <OnClick function="SimpleMacroCreateFrame_SaveButton_OnClick"/>
+          <OnClick function="SimpleMacroCreateFrame_EditBoxToggle_OnClick"/>
         </Scripts>
-      </Button>
+      </CheckButton>
       <Frame name="$parentTextBackground" inherits="TooltipBackdropTemplate">
         <Size x="419" y="95"/>
         <Anchors>

@@ -185,7 +185,7 @@ StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
   button1 = OKAY,
   button2 = CANCEL,
   OnAccept = function(_)
-    SimpleMacroCreateFrameMixin:DeleteMacro();
+    SimpleMacroCreateFrame:DeleteMacro();
   end,
   timeout = 0,
   whileDead = 1,
@@ -287,11 +287,67 @@ function SimpleMacroCreateFrame_SaveButton_OnClick()
   SimpleMacroCreateFrameText:ClearFocus();
 end
 
+-- TODO temp
 function SimpleMacroCreateFrame_OpenEditor_OnClick(self)
   local parent = self:GetParent()
 
   SimpleMacroEditorPopup:SetSMacro(parent:GetMacroDataIndex(parent:GetSelectedIndex()))
   ShowUIPanel(SimpleMacroEditorPopup)
+end
+
+
+function MacroBodySelector_CreateArgumentFrame(currentLine, lineNum, argumentNum)
+  local macroEditorArg
+  local curArg = currentLine.."Arg"..argumentNum
+  if G[curArg] == nil then
+    macroEditorArg = CreateFrame("CheckButton", curArg, SimpleMacroCreateFrameScrollFrameChild, "SM_MacroEditorArgEntryTemplate")
+  else
+    macroEditorArg = G[curArg]
+    macroEditorArg:Show()
+  end
+
+  local currentMacro = Sim()
+  local argumentWithConditionals = currentMacro:composeAllConditionals(lineNum, argumentNum)..' '..currentMacro:getArgument(lineNum, argumentNum)
+  G[curArg.."Data"]:SetText(argumentWithConditionals)
+  macroEditorArg:SetSize(G[curArg.."Data"]:GetStringWidth(), C["EDITOR_HEIGHT"])
+  macroEditorArg:SetID(argumentNum)
+
+  if argumentNum == 1 then
+    macroEditorArg:SetPoint("LEFT", currentLine, "RIGHT", 2, 0)
+  else
+    local previousArg = currentLine.."Arg"..(argumentNum - 1)
+    macroEditorArg:SetPoint("LEFT", previousArg, "RIGHT", 2, 0)
+    G[previousArg.."Data"]:SetText(G[previousArg.."Data"]:GetText()..";")
+    G[previousArg]:SetSize(G[previousArg.."Data"]:GetStringWidth(), C["EDITOR_HEIGHT"])
+  end
+
+  return curArg
+end
+
+local function setupMacroBodySelector()
+
+end
+
+-- TODO temp
+function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
+  if self:GetChecked() then
+    SimpleMacroCreateFrameScrollFrame:Hide()
+    SimpleMacroCreateFrameTextBackground:Hide()
+    SimpleMacroCreateFrameTextButton:Hide()
+    --SimpleMacroCreateFrameEnterMacroText:Hide()
+    SimpleMacroCreateFrameCharLimitText:Hide()
+
+    SimpleMacroCreateFrameScrollFrame2:Show()
+    setupMacroBodySelector()
+  else
+    SimpleMacroCreateFrameScrollFrame:Show()
+    SimpleMacroCreateFrameTextBackground:Show()
+    SimpleMacroCreateFrameTextButton:Show()
+    --SimpleMacroCreateFrameEnterMacroText:Show()
+    SimpleMacroCreateFrameCharLimitText:Show()
+
+    SimpleMacroCreateFrameScrollFrame2:Hide()
+  end
 end
 
 function SimpleMacroCreateFrame_CancelButton_OnClick()

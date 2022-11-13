@@ -29,6 +29,7 @@ L["GLOBAL_STRING"]["COMMAND"] = "command"
 L["GLOBAL_STRING"]["ADD_ARGUMENT"] = "Add Argument"
 L["GLOBAL_STRING"]["SET_CONDITIONALS"] = "Set Conditionals"
 L["GLOBAL_STRING"]["ERROR"] = "ERROR"
+L["GLOBAL_STRING"]["MACRO_BODY_INSTRUCTIONS"] = "Input macro content..."
 
 -- Macro Editor
 L["GLOBAL_STRING"]["MACRO_EDITOR_TITLE"] = "Macro Editor"
