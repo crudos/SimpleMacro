@@ -29,20 +29,21 @@ C["CONDITIONAL_LIST"][16] = { ALIASES = { "group:" }, INPUT_HINT = "party/raid" 
 C["CONDITIONAL_LIST"][17] = { ALIASES = { "harm" } }
 C["CONDITIONAL_LIST"][18] = { ALIASES = { "help" } }
 C["CONDITIONAL_LIST"][19] = { ALIASES = { "indoors" } }
-C["CONDITIONAL_LIST"][20] = { ALIASES = { "modifier:", "mod:" }, INPUT_HINT = "shift/ctrl/alt" }
-C["CONDITIONAL_LIST"][21] = { ALIASES = { "mounted" } }
-C["CONDITIONAL_LIST"][22] = { ALIASES = { "outdoors" } }
-C["CONDITIONAL_LIST"][23] = { ALIASES = { "overridebar" } }
-C["CONDITIONAL_LIST"][24] = { ALIASES = { "party" } }
-C["CONDITIONAL_LIST"][25] = { ALIASES = { "pet:" }, INPUT_HINT = "<pet name or type>" }
-C["CONDITIONAL_LIST"][26] = { ALIASES = { "petbattle" } }
-C["CONDITIONAL_LIST"][27] = { ALIASES = { "possessbar" } }
-C["CONDITIONAL_LIST"][28] = { ALIASES = { "raid" } }
-C["CONDITIONAL_LIST"][29] = { ALIASES = { "resting" } }
-C["CONDITIONAL_LIST"][30] = { ALIASES = { "shapeshift" } }
-C["CONDITIONAL_LIST"][31] = { ALIASES = { "spec:" }, INPUT_HINT = "1/2" }
-C["CONDITIONAL_LIST"][32] = { ALIASES = { "stealth" } }
-C["CONDITIONAL_LIST"][33] = { ALIASES = { "swimming" } }
-C["CONDITIONAL_LIST"][34] = { ALIASES = { "talent:" }, INPUT_HINT = "<row#>/<column#>" }
-C["CONDITIONAL_LIST"][35] = { ALIASES = { "unithasvehicleui" } }
-C["CONDITIONAL_LIST"][36] = { ALIASES = { "vehicleui" } }
+C["CONDITIONAL_LIST"][20] = { ALIASES = { "known" }, INPUT_HINT = "<spell name or ID>" }
+C["CONDITIONAL_LIST"][21] = { ALIASES = { "modifier:", "mod:" }, INPUT_HINT = "shift/ctrl/alt" }
+C["CONDITIONAL_LIST"][22] = { ALIASES = { "mounted" } }
+C["CONDITIONAL_LIST"][23] = { ALIASES = { "outdoors" } }
+C["CONDITIONAL_LIST"][24] = { ALIASES = { "overridebar" } }
+C["CONDITIONAL_LIST"][25] = { ALIASES = { "party" } }
+C["CONDITIONAL_LIST"][26] = { ALIASES = { "pet:" }, INPUT_HINT = "<pet name or type>" }
+C["CONDITIONAL_LIST"][27] = { ALIASES = { "petbattle" } }
+C["CONDITIONAL_LIST"][28] = { ALIASES = { "possessbar" } }
+C["CONDITIONAL_LIST"][29] = { ALIASES = { "raid" } }
+C["CONDITIONAL_LIST"][30] = { ALIASES = { "resting" } }
+C["CONDITIONAL_LIST"][31] = { ALIASES = { "shapeshift" } }
+C["CONDITIONAL_LIST"][32] = { ALIASES = { "spec:" }, INPUT_HINT = "1/2" }
+C["CONDITIONAL_LIST"][33] = { ALIASES = { "stealth" } }
+C["CONDITIONAL_LIST"][34] = { ALIASES = { "swimming" } }
+C["CONDITIONAL_LIST"][35] = { ALIASES = { "talent:" }, INPUT_HINT = "<row#>/<column#>" }
+C["CONDITIONAL_LIST"][36] = { ALIASES = { "unithasvehicleui" } }
+C["CONDITIONAL_LIST"][37] = { ALIASES = { "vehicleui" } }
