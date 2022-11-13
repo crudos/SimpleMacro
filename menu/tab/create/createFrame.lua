@@ -217,7 +217,7 @@ end
 
 function SimpleMacroCreateFrameMixin:GetText()
   SimpleMacroCreateFrameText:GetText();
-  --SimpleMacroCreateFrameScrollFrame2.EditBox:GetText();
+  --self.ScrollFrame.EditBox:GetText();
 end
 
 function SimpleMacroCreateFrameMixin:SetText(index)
@@ -225,7 +225,7 @@ function SimpleMacroCreateFrameMixin:SetText(index)
   local name, _, body = GetMacroInfo(actualIndex);
   if name then
     SimpleMacroCreateFrameText:SetText(body);
-    SimpleMacroCreateFrameScrollFrame2.EditBox:SetText(body);
+    self.ScrollFrame.EditBox:SetText(body);
   end
 end
 
@@ -344,6 +344,7 @@ function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
     SimpleMacroCreateFrameCharLimitText:Hide()
 
     SimpleMacroCreateFrameScrollFrame2:Show()
+    SimpleMacroCreateFrameTextBackground2:Show()
     setupMacroBodySelector()
   else
     SimpleMacroCreateFrameScrollFrame:Show()
@@ -353,6 +354,7 @@ function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
     SimpleMacroCreateFrameCharLimitText:Show()
 
     SimpleMacroCreateFrameScrollFrame2:Hide()
+    SimpleMacroCreateFrameTextBackground2:Hide()
   end
 end
 
