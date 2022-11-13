@@ -35,7 +35,7 @@
         <Texture name="$parentSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
           <Size x="64" y="64"/>
           <Anchors>
-            <Anchor point="TOPLEFT" x="5" y="-218"/>
+            <Anchor point="TOPLEFT" x="3" y="-218"/>
           </Anchors>
         </Texture>
         <FontString name="$parentSelectedMacroName" inherits="GameFontNormalLarge" justifyH="LEFT">
