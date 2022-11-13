@@ -122,6 +122,7 @@ function SimpleMacroFrameMixin:Update()
 
   self.MacroSelector.numMacros = useAccountMacros and numAccountMacros or numCharacterMacros;
   self.MacroSelector:SetSelectionsDataProvider(MacroFrameGetMacroInfo, MacroFrameGetNumMacros);
+  self.MacroSelector:ScrollToSelectedIndex()
 
   self:UpdateButtons();
 end

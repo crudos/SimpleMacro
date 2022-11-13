@@ -104,9 +104,7 @@ function ChangeFrameMixin:OkayButton_OnClick()
   end
 
   macroFrame:SelectMacro(index);
-
-  local retainScrollPosition = true;
-  macroFrame:Update(retainScrollPosition);
+  macroFrame:Update();
 end
 
 function ChangeFrameMixin:GetMacroFrame()

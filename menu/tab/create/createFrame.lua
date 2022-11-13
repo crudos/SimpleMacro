@@ -240,9 +240,7 @@ function SimpleMacroCreateFrameMixin:DeleteMacro()
   local newMacroIndex = math.min(macroCount, selectedMacroIndex);
   self:SelectMacro(newMacroIndex > 0 and newMacroIndex or nil);
 
-  local retainScrollPosition = true;
-  SimpleMacroFrame:Update(retainScrollPosition);
-
+  SimpleMacroFrame:Update();
   SimpleMacroCreateFrameText:ClearFocus();
 end
 
@@ -284,10 +282,7 @@ end
 function SimpleMacroCreateFrame_SaveButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
   SimpleMacroFrame:SaveMacro();
-
-  local retainScrollPosition = true;
-  SimpleMacroFrame:Update(retainScrollPosition);
-
+  SimpleMacroFrame:Update();
   SimpleMacroChangeFrame:Hide();
   SimpleMacroCreateFrameText:ClearFocus();
 end
@@ -301,10 +296,7 @@ end
 
 function SimpleMacroCreateFrame_CancelButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-
-  local retainScrollPosition = true;
   SimpleMacroFrame:Update(retainScrollPosition);
-
   SimpleMacroChangeFrame:Hide();
   SimpleMacroCreateFrameText:ClearFocus();
 end

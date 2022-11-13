@@ -1,6 +1,13 @@
 local _, ns = ...
 local C = ns.C
 
+C["MACRO_EDITOR"] = {}
+C["MACRO_EDITOR"]["NUM_MACRO_CATEGORIES"] = 12
+C["MACRO_EDITOR"]["NUM_MACRO_COMMANDS"] = 32
+C["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] = 5
+C["MACRO_EDITOR"]["MAX_CONDITIONALS"] = 5
+C["MACRO_EDITOR"]["HASH_CATEGORY"] = "Metacommands"
+
 -- All the conditionals in the game with alternate text and boolean expressing if they require user input
 C["CONDITIONAL_LIST"] = {}
 C["CONDITIONAL_LIST"][1] = { ALIASES = { "target=", "@" }, INPUT_HINT = "<target name>" }

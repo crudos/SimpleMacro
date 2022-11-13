@@ -1,4 +1,4 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="constant.lua"/>
-  <Script file="macroEditor.lua"/>
+  <Script file="editor.lua"/>
 </Ui>

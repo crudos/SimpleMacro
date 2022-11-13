@@ -82,6 +82,11 @@
           <OnClick function="SimpleMacroCreateFrame_OpenEditor_OnClick"/> <!-- TODO temporary -->
         </Scripts>
       </Button>
+      <CheckButton name="$parentEditBoxToggle" inherits="SimpleMacroCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT" x="-5"/>
+        </Anchors>
+      </CheckButton>
       <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_SAVE">
         <Size x="80" y="22"/>
         <Anchors>
