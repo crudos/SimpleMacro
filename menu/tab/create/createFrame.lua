@@ -215,11 +215,17 @@ function SimpleMacroCreateFrameMixin:Update()
   self:SetText(self:GetSelectedIndex())
 end
 
+function SimpleMacroCreateFrameMixin:GetText()
+  SimpleMacroCreateFrameText:GetText();
+  --SimpleMacroCreateFrameScrollFrame2.EditBox:GetText();
+end
+
 function SimpleMacroCreateFrameMixin:SetText(index)
   local actualIndex = self:GetMacroDataIndex(index);
   local name, _, body = GetMacroInfo(actualIndex);
   if name then
     SimpleMacroCreateFrameText:SetText(body);
+    SimpleMacroCreateFrameScrollFrame2.EditBox:SetText(body);
   end
 end
 
@@ -247,7 +253,7 @@ end
 function SimpleMacroCreateFrameMixin:SaveMacro(selectedMacroIndex)
   if self.textChanged and (selectedMacroIndex ~= nil) then
     local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
-    EditMacro(actualIndex, nil, nil, SimpleMacroCreateFrameText:GetText());
+    EditMacro(actualIndex, nil, nil, self:GetText());
     self:SelectMacro(selectedMacroIndex);
     self.textChanged = nil;
   end
