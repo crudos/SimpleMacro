@@ -216,15 +216,13 @@ function SimpleMacroCreateFrameMixin:Update()
 end
 
 function SimpleMacroCreateFrameMixin:GetText()
-  SimpleMacroCreateFrameText:GetText();
-  --self.ScrollFrame.EditBox:GetText();
+  self.ScrollFrame.EditBox:GetText();
 end
 
 function SimpleMacroCreateFrameMixin:SetText(index)
   local actualIndex = self:GetMacroDataIndex(index);
   local name, _, body = GetMacroInfo(actualIndex);
   if name then
-    SimpleMacroCreateFrameText:SetText(body);
     self.ScrollFrame.EditBox:SetText(body);
   end
 end
@@ -247,7 +245,6 @@ function SimpleMacroCreateFrameMixin:DeleteMacro()
   self:SelectMacro(newMacroIndex > 0 and newMacroIndex or nil);
 
   SimpleMacroFrame:Update();
-  SimpleMacroCreateFrameText:ClearFocus();
 end
 
 function SimpleMacroCreateFrameMixin:SaveMacro(selectedMacroIndex)
@@ -261,15 +258,13 @@ end
 
 function SimpleMacroCreateFrameMixin:HideDetails()
   SimpleMacroCreateFrameChangeButton:Hide();
-  SimpleMacroCreateFrameCharLimitText:Hide();
-  SimpleMacroCreateFrameText:Hide();
+  self.ScrollFrame.EditBox:Hide()
 end
 
 function SimpleMacroCreateFrameMixin:ShowDetails()
   SimpleMacroCreateFrameChangeButton:Show();
-  SimpleMacroCreateFrameCharLimitText:Show();
   SimpleMacroCreateFrameEnterMacroText:Show();
-  SimpleMacroCreateFrameText:Show();
+  self.ScrollFrame.EditBox:Show()
 end
 
 -- OnClick functions
@@ -290,7 +285,6 @@ function SimpleMacroCreateFrame_SaveButton_OnClick()
   SimpleMacroFrame:SaveMacro();
   SimpleMacroFrame:Update();
   SimpleMacroChangeFrame:Hide();
-  SimpleMacroCreateFrameText:ClearFocus();
 end
 
 -- TODO temp
@@ -300,7 +294,6 @@ function SimpleMacroCreateFrame_OpenEditor_OnClick(self)
   SimpleMacroEditorPopup:SetSMacro(parent:GetMacroDataIndex(parent:GetSelectedIndex()))
   ShowUIPanel(SimpleMacroEditorPopup)
 end
-
 
 function MacroBodySelector_CreateArgumentFrame(currentLine, lineNum, argumentNum)
   local macroEditorArg
@@ -339,22 +332,10 @@ function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
   if self:GetChecked() then
     SimpleMacroCreateFrameScrollFrame:Hide()
     SimpleMacroCreateFrameTextBackground:Hide()
-    SimpleMacroCreateFrameTextButton:Hide()
-    --SimpleMacroCreateFrameEnterMacroText:Hide()
-    SimpleMacroCreateFrameCharLimitText:Hide()
-
-    SimpleMacroCreateFrameScrollFrame2:Show()
-    SimpleMacroCreateFrameTextBackground2:Show()
     setupMacroBodySelector()
   else
     SimpleMacroCreateFrameScrollFrame:Show()
     SimpleMacroCreateFrameTextBackground:Show()
-    SimpleMacroCreateFrameTextButton:Show()
-    --SimpleMacroCreateFrameEnterMacroText:Show()
-    SimpleMacroCreateFrameCharLimitText:Show()
-
-    SimpleMacroCreateFrameScrollFrame2:Hide()
-    SimpleMacroCreateFrameTextBackground2:Hide()
   end
 end
 
@@ -362,5 +343,4 @@ function SimpleMacroCreateFrame_CancelButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
   SimpleMacroFrame:Update(retainScrollPosition);
   SimpleMacroChangeFrame:Hide();
-  SimpleMacroCreateFrameText:ClearFocus();
 end

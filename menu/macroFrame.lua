@@ -34,7 +34,7 @@ function SimpleMacroFrameMixin:OnLoad()
     SimpleMacroFrame:SaveMacro();
     SimpleMacroFrame:SelectMacro(selectionIndex);
     SimpleMacroChangeFrame:Hide();
-    SimpleMacroCreateFrameText:ClearFocus();
+    --SimpleMacroCreateFrameText:ClearFocus();
   end
 
   self.MacroSelector:SetSelectedCallback(SimpleMacroFrameMacroButtonSelectedCallback);

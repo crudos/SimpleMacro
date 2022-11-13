@@ -6,7 +6,7 @@ function ChangeFrameMixin:OnShow()
   self.BorderBox.IconSelectorEditBox:SetFocus();
 
   if self.mode == IconSelectorPopupFrameModes.New then
-    SimpleMacroCreateFrameText:Hide();
+    SimpleMacroCreateFrame.ScrollFrame.EditBox:Hide();
   end
 
   self.iconDataProvider = self:GetMacroFrame():RefreshIconDataProvider();
@@ -36,8 +36,8 @@ function ChangeFrameMixin:OnHide()
   local macroFrame = self:GetMacroFrame();
 
   if self.mode == IconSelectorPopupFrameModes.New then
-    SimpleMacroCreateFrameText:Show();
-    SimpleMacroCreateFrameText:SetFocus();
+    SimpleMacroCreateFrame.ScrollFrame.EditBox:Show()
+    SimpleMacroCreateFrame.ScrollFrame.EditBox:SetFocus()
   end
 
   -- Enable Buttons
