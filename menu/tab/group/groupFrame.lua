@@ -235,11 +235,11 @@ end
 --  return SimpleMacro.dbc.GroupTable
 --end
 --
---function SimpleMacroTabFrameMixin:GetSelectedGroup()
+--function SimpleMacroGroupFrameMixin:GetSelectedGroup()
 --  return self:GetGroupTable()[self:GetSelectedGroupID()]
 --end
 --
---function SimpleMacroTabFrameMixin:UpdateSelectedGroup(data)
+--function SimpleMacroGroupFrameMixin:UpdateSelectedGroup(data)
 --  SimpleMacro.dbc.GroupTable[self:GetSelectedGroupID()] = data
 --end
 

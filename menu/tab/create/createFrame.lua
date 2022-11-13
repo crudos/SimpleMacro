@@ -185,37 +185,37 @@ StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
   button1 = OKAY,
   button2 = CANCEL,
   OnAccept = function(_)
-    SimpleMacroTabFrameMixin:DeleteMacro();
+    SimpleMacroCreateFrameMixin:DeleteMacro();
   end,
   timeout = 0,
   whileDead = 1,
   showAlert = 1
 };
 
-SimpleMacroTabFrameMixin = {};
+SimpleMacroCreateFrameMixin = {};
 
-function SimpleMacroTabFrameMixin:OnLoad()
+function SimpleMacroCreateFrameMixin:OnLoad()
 end
 
-function SimpleMacroTabFrameMixin:OnShow()
+function SimpleMacroCreateFrameMixin:OnShow()
   if SimpleMacroFrame.macroBase ~= nil then
     self:SetText(self:GetSelectedIndex())
   end
 end
 
-function SimpleMacroTabFrameMixin:OnHide()
+function SimpleMacroCreateFrameMixin:OnHide()
   self:SaveMacro();
 end
 
-function SimpleMacroTabFrameMixin:GetMacroDataIndex(index)
+function SimpleMacroCreateFrameMixin:GetMacroDataIndex(index)
   return SimpleMacroFrame:GetMacroDataIndex(index);
 end
 
-function SimpleMacroTabFrameMixin:Update()
+function SimpleMacroCreateFrameMixin:Update()
   self:SetText(self:GetSelectedIndex())
 end
 
-function SimpleMacroTabFrameMixin:SetText(index)
+function SimpleMacroCreateFrameMixin:SetText(index)
   local actualIndex = self:GetMacroDataIndex(index);
   local name, _, body = GetMacroInfo(actualIndex);
   if name then
@@ -223,15 +223,15 @@ function SimpleMacroTabFrameMixin:SetText(index)
   end
 end
 
-function SimpleMacroTabFrameMixin:SelectMacro(index)
+function SimpleMacroCreateFrameMixin:SelectMacro(index)
   return SimpleMacroFrame:SelectMacro(index);
 end
 
-function SimpleMacroTabFrameMixin:GetSelectedIndex()
+function SimpleMacroCreateFrameMixin:GetSelectedIndex()
   return SimpleMacroFrame:GetSelectedIndex();
 end
 
-function SimpleMacroTabFrameMixin:DeleteMacro()
+function SimpleMacroCreateFrameMixin:DeleteMacro()
   local selectedMacroIndex = self:GetSelectedIndex();
   local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
   DeleteMacro(actualIndex);
@@ -246,7 +246,7 @@ function SimpleMacroTabFrameMixin:DeleteMacro()
   SimpleMacroCreateFrameText:ClearFocus();
 end
 
-function SimpleMacroTabFrameMixin:SaveMacro(selectedMacroIndex)
+function SimpleMacroCreateFrameMixin:SaveMacro(selectedMacroIndex)
   if self.textChanged and (selectedMacroIndex ~= nil) then
     local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
     EditMacro(actualIndex, nil, nil, SimpleMacroCreateFrameText:GetText());
@@ -255,13 +255,13 @@ function SimpleMacroTabFrameMixin:SaveMacro(selectedMacroIndex)
   end
 end
 
-function SimpleMacroTabFrameMixin:HideDetails()
+function SimpleMacroCreateFrameMixin:HideDetails()
   SimpleMacroCreateFrameChangeButton:Hide();
   SimpleMacroCreateFrameCharLimitText:Hide();
   SimpleMacroCreateFrameText:Hide();
 end
 
-function SimpleMacroTabFrameMixin:ShowDetails()
+function SimpleMacroCreateFrameMixin:ShowDetails()
   SimpleMacroCreateFrameChangeButton:Show();
   SimpleMacroCreateFrameCharLimitText:Show();
   SimpleMacroCreateFrameEnterMacroText:Show();

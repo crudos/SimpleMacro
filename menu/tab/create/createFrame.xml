@@ -1,7 +1,7 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="createFrame.lua"/>
 
-  <Frame name="SimpleMacroCreateFrame" mixin="SimpleMacroTabFrameMixin" hidden="true" parent="SimpleMacroFrame">
+  <Frame name="SimpleMacroCreateFrame" mixin="SimpleMacroCreateFrameMixin" hidden="true" parent="SimpleMacroFrame">
     <Anchors>
       <Anchor point="TOPLEFT"/>
       <Anchor point="BOTTOMRIGHT"/>
