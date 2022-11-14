@@ -1,4 +1,6 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
+  <Include file="MacroTextButton.xml" />
+
   <Script file="template.lua"/>
   <!-- Templates -->
   <Button name="SimpleMacroTabButtonTemplate" mixin="PanelTabButtonMixin" motionScriptsWhileDisabled="true" parentArray="Tabs" virtual="true">
@@ -134,32 +136,6 @@
         </FontString>
       </Layer>
     </Layers>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorEntryTemplate" inherits="OptionsListButtonTemplate" virtual="true">
-    <Size x="92" y="16"/>
-    <Layers>
-      <Layer level="HIGHLIGHT">
-        <FontString name="$parentData" inherits="GameFontHighlightSmall" text="SIMPLE_MACRO_STRING_ERROR">
-          <Anchors>
-            <Anchor point="CENTER" x="0" y="0"/>
-          </Anchors>
-        </FontString>
-      </Layer>
-    </Layers>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorLineEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        SM_MacroEditorLine_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
-  </CheckButton>
-  <CheckButton name="SM_MacroEditorArgEntryTemplate" inherits="SM_MacroEditorEntryTemplate" virtual="true">
-    <Scripts>
-      <OnClick>
-        SM_MacroEditorArg_OnClick(self, button, down)
-      </OnClick>
-    </Scripts>
   </CheckButton>
   <Frame name="SimpleMacroPopupFrameTemplate" inherits="DefaultPanelTemplate" virtual="true">
     <KeyValues>

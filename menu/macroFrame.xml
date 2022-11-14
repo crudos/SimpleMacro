@@ -9,6 +9,14 @@
       <KeyValue key="maxTabWidth" value="140" type="number"/>
     </KeyValues>
     <Layers>
+      <Layer level="BACKGROUND">
+        <Texture name="$parentSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
+          <Size x="64" y="64"/>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="3" y="-218"/>
+          </Anchors>
+        </Texture>
+      </Layer>
       <Layer level="OVERLAY">
         <Texture name="MacroFramePortrait" file="Interface\MacroFrame\MacroFrame-Icon">
           <Size x="60" y="60"/>
@@ -31,12 +39,6 @@
             <Anchor point="LEFT" relativeTo="$parentHorizontalBarLeft" relativePoint="RIGHT" x="0" y="0"/>
           </Anchors>
           <TexCoords left="0" right="0.29296875" top="0.25" bottom="0.5"/>
-        </Texture>
-        <Texture name="$parentSelectedMacroBackground" file="Interface\Buttons\UI-EmptySlot">
-          <Size x="64" y="64"/>
-          <Anchors>
-            <Anchor point="TOPLEFT" x="3" y="-218"/>
-          </Anchors>
         </Texture>
         <FontString name="$parentSelectedMacroName" inherits="GameFontNormalLarge" justifyH="LEFT">
           <Size x="256" y="16"/>

@@ -36,6 +36,12 @@
           <Anchor point="LEFT" relativeTo="$parent" x="18"/>
         </Anchors>
       </ScrollFrame>
+      <Frame name="$parentTextBackground" inherits="TooltipBackdropTemplate">
+        <Anchors>
+          <Anchor point="TOPLEFT" relativeTo="$parentScrollFrame" x="-6" y="6"/>
+          <Anchor point="BOTTOMRIGHT" relativeTo="$parentScrollFrame" x="5" y="-7"/>
+        </Anchors>
+      </Frame>
       <Button name="$parentSaveButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_SAVE">
         <Size x="80" y="22"/>
         <Anchors>
@@ -62,12 +68,6 @@
           <OnClick function="SimpleMacroCreateFrame_EditBoxToggle_OnClick"/>
         </Scripts>
       </CheckButton>
-      <Frame name="$parentTextBackground" inherits="TooltipBackdropTemplate">
-        <Anchors>
-          <Anchor point="TOPLEFT" relativeTo="$parentScrollFrame" x="-6" y="6"/>
-          <Anchor point="BOTTOMRIGHT" relativeTo="$parentScrollFrame" x="5" y="-7"/>
-        </Anchors>
-      </Frame>
       <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
         <Size x="86" y="22"/>
         <Anchors>

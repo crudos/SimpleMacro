@@ -10,20 +10,21 @@ local _, ns = ...
 ---@field public getCommandType fun(line_num: number) Gets the command type for a given line
 ---@field public addLine fun(): number Adds a new line to the macro
 ---@field public removeLine fun(line_num: number): boolean Removes a line from the macro
+---@field public getLines fun(): table Gets line table
 ---@field public composeLine fun(line_num: number): string Gets a line from the macro
 ---@field public addArgument fun(line_num: number): number Adds a new argument to the end of the line
 ---@field public getArgument fun(line_num: number, arg_num: number, cond_num: number): string Gets the text of the specified argument
 ---@field public setArgument fun(line_num: number, arg_num: number, argument: string): boolean Sets an argument within a line
 ---@field public removeArgument fun(line_num: number, arg_num: number): boolean Remove argument from a line
----@field public getArguments fun(line_num: number): table Gets arguments from a macro on a given line
+---@field public getArguments fun(line_num: number): table Gets argument table for a given line
 ---@field public addConditionalGroup fun(line_num: number, arg_num: number): number Adds a new conditional group
 ---@field public removeConditionalGroup fun(line_num: number, arg_num: number, cond_num: number): table Remove conditional group
----@field public getConditionalGroups fun(line_num: number, arg_num: number): table Gets conditional groups
+---@field public getConditionalGroups fun(line_num: number, arg_num: number): table Gets conditional group table for given line and argument
 ---@field public addConditional fun(line_num: number, arg_num: number, cond_num: number, conditional: string, input: string): number Adds a new conditional
 ---@field public setConditional fun(line_num: number, arg_num: number, cond_num: number, index: number, conditional: string, input: string): boolean Sets a conditional
 ---@field public removeConditional fun(line_num: number, arg_num: number, cond_num: number, index: number): boolean Removes a conditional
----@field public resetConditionals fun(line_num: number, arg_num: number): nil Delete all conditionals for a given line and argument
----@field public getConditionals fun(line_num: number, arg_num: number, cond_num: number): table Retrieve all conditionals for a given line, argument, and conditional group
+---@field public resetConditionals fun(line_num: number, arg_num: number) Delete all conditionals for a given line and argument
+---@field public getConditionals fun(line_num: number, arg_num: number, cond_num: number): table Retrieve conditional table for a given line, argument, and conditional group
 ---@field public composeConditionals fun(line_num: number, arg_num: number, cond_num: number): string Retrieve string representation of all conditionals for a given line, argument, and conditional group
 ---@field public composeAllConditionals fun(line_num: number, arg_num: number): string Retrieve string representation of all conditionals for a given line and argument
 SMacro = {
@@ -87,13 +88,13 @@ end
 ---@param line_num number row number for the line
 ---@return string command for this line
 function SMacro:getCommand(line_num)
-  return self.lines[line_num].type..self.lines[line_num].cmd
+  return self:getCommandType(line_num)..self.lines[line_num].cmd
 end
 
 ---@param line_num number row number for the line
 ---@return string command type for this line
 function SMacro:getCommandType(line_num)
-  return self.lines[line_num].type..self.lines[line_num].type
+  return self.lines[line_num].type
 end
 
 ---@return number index of new line
@@ -135,6 +136,11 @@ function SMacro:removeLine(line_num)
   end
 
   return isRemoved
+end
+
+---@return table line table
+function SMacro:getLines()
+  return self.lines
 end
 
 ---@param line_num number row number for the line
