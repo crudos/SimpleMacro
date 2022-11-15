@@ -7,11 +7,6 @@ function SimpleMacroTextButtonTemplateMixin:OnLoad()
   self:RegisterForClicks("LeftButtonUp", "RightButtonUp")
 end
 
-function SimpleMacroTextButtonTemplateMixin:OnClick(mouseButton)
-  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
-
-end
-
 function SimpleMacroTextButtonTemplateMixin:OnEnter()
   if (self.text:IsTruncated()) then
     GameTooltip:SetOwner(self, "ANCHOR_RIGHT")
@@ -38,10 +33,28 @@ function SimpleMacroTextButtonTemplateMixin:Lock()
   self:LockHighlight()
 end
 
-function MacroLineTextButton_OnClick(button)
+---@param lineNum number
+---@param argumentNum number
+function SimpleMacroTextButtonTemplateMixin:OnClick(lineId, argumentId)
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+  local previousTextButton = SimpleMacroCreateFrame:GetClickedTextButton()
+  if previousTextButton then
+    previousTextButton:Unlock()
+  end
 
+  self:Lock()
+  SimpleMacroCreateFrame:SetClickedTextButton(self)
+  SimpleMacroEditorPopup:SetSelected(lineId, argumentId)
+  ShowUIPanel(SimpleMacroEditorPopup)
+  SimpleMacroEditorPopup:Update()
 end
 
-function MacroArgumentTextButton_OnClick(button)
+function MacroLineTextButton_OnClick(self)
+  local lineId = string.match(self:GetName(), ".-(%d).*")
+  self:OnClick(tonumber(lineId), nil)
+end
 
+function MacroArgumentTextButton_OnClick(self)
+  local lineId, argumentId = string.match(self:GetName(), ".-(%d).-(%d).*")
+  self:OnClick(tonumber(lineId), tonumber(argumentId))
 end

@@ -11,12 +11,6 @@ end
 
 function SimpleMacroEditorPopupMixin:OnShow()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-
-  -- TODO placeholders
-  printall(self:GetSMacro())
-  self:SetSelectedLine(2)
-  self:SetSelectedArgument(1)
-  self:Update()
 end
 
 function SimpleMacroEditorPopupMixin:OnHide()
@@ -26,22 +20,14 @@ function SimpleMacroEditorPopupMixin:OnHide()
   HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
 
----@param index number absolute index of macro
----@return SMacro SMacro for this macro
-function SimpleMacroEditorPopupMixin:SetSMacro(index)
-  local currentMacro = SMacro:new()
-  currentMacro:set(index)
-  self.SMacro = currentMacro
-  return currentMacro
-end
-
 ---@return SMacro current SMacro or nil if there is none
 function SimpleMacroEditorPopupMixin:GetSMacro()
-  if self.SMacro then
-    return self.SMacro
-  else
-    return nil
-  end
+  return SimpleMacroCreateFrame:GetSMacro()
+end
+
+function SimpleMacroEditorPopupMixin:SetSelected(lineId, argumentId)
+  self:SetSelectedLine(lineId)
+  self:SetSelectedArgument(argumentId)
 end
 
 function SimpleMacroEditorPopupMixin:GetSelectedLine()
@@ -103,6 +89,7 @@ function SimpleMacroEditorPopupMixin:Update()
   local currentLine = self:GetSelectedLine()
   local currentArgument = self:GetSelectedArgument()
 
+  print('Update', currentLine, currentArgument)
   -- dropdowns
   local categoryID, commandID, nameID = getCommandIds(sMacro:getCommand(currentLine))
   self.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)

@@ -2,68 +2,6 @@ local _, ns = ...
 local C = ns.C["CREATE_FRAME"]
 local G = _G
 
---[[
-  Macro edit box
-
-  ]]
-
---[[
-
-local function SM_MacroEditor_OnClick(self)
-  G["SM_MacroEditor_AddNewLine"]:Disable()
-
-  unlockHighlight(SimpleMacroFrame.selectedEditorEntry)
-  lockHighlight(self)
-
-  SimpleMacroEditorPopup:SetSelectedMacro(SimpleMacroFrame.createSelect + SimpleMacroFrame.macroStart)
-  SimpleMacroEditorPopup:SetSelectedLine(SimpleMacroFrame.selectedLine)
-  SimpleMacroEditorPopup:SetSelectedArgument(SimpleMacroFrame.selectedArgument)
-  ShowUIPanel(SimpleMacroEditorPopup)
-  SimpleMacroEditorPopup_Update()
-end
-
-function SM_MacroEditor_OnHide(_)
-  G["SM_MacroEditor_AddNewLine"]:Enable()
-
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_TAB)
-end
-
-function SM_MacroEditorLine_OnClick(self, _, _)
-  local lineNum = string.match(self:GetName(), ".-(%d).*")
-  SimpleMacroFrame.selectedLine = tonumber(lineNum)
-  SimpleMacroFrame.selectedArgument = nil
-  SM_MacroEditor_OnClick(self, SM_NewLineMenu)
-end
-
-function SM_MacroEditorArg_OnClick(self, _, _)
-  local lineNum, argNum = string.match(self:GetName(), ".-(%d).-(%d).*")
-  SimpleMacroFrame.selectedLine = tonumber(lineNum)
-  SimpleMacroFrame.selectedArgument = tonumber(argNum)
-  SM_MacroEditor_OnClick(self, SM_ArgMenu)
-end
-
-function SM_MacroEditor_OnLoad(self)
-  local width, _ = self:GetSize()
-
-  local addLineFrame = CreateFrame("CheckButton", "SM_MacroEditor_AddNewLine", self, "SM_MacroEditorLineEntryTemplate")
-  addLineFrame:SetPoint("BOTTOM", self:GetParent(), "BOTTOM", 0, 0)
-  addLineFrame:SetSize(width, 16)
-  addLineFrame:SetScript("OnClick", MacroEditor_AddNewLine_OnClick)
-
-  G["SM_MacroEditor_AddNewLineData"]:SetText("+ add new line +")
-end
-
-function MacroEditor_AddNewLine_OnClick(_, _, _)
-  local currentMacro = SM_CreateTab_GetCurrentMacro()
-  currentMacro:addLine()
-  SM_CreateTab_Update()
-end
-
---]]
-
-
--- new shit
-
 StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
   text = CONFIRM_DELETE_MACRO,
   button1 = OKAY,
@@ -107,7 +45,11 @@ function SimpleMacroCreateFrameMixin:SetText(index)
   local actualIndex = self:GetMacroDataIndex(index);
   local name, _, body = GetMacroInfo(actualIndex);
   if name then
+    self:SetSMacro(actualIndex)
     self.ScrollFrame.EditBox:SetText(body);
+    if SimpleMacroCreateFrameEditBoxToggle:GetChecked() then
+      setupMacroTextButtons()
+    end
   end
 end
 
@@ -188,10 +130,18 @@ end
 
 -- TODO temp
 function SimpleMacroCreateFrame_OpenEditor_OnClick(self)
-  local parent = self:GetParent()
-
-  SimpleMacroEditorPopup:SetSMacro(parent:GetMacroDataIndex(parent:GetSelectedIndex()))
   ShowUIPanel(SimpleMacroEditorPopup)
+  SimpleMacroEditorPopup:Update()
+end
+
+-- click editor funcs
+
+function SimpleMacroCreateFrameMixin:GetClickedTextButton()
+  return SimpleMacroCreateFrame.clickedTextButton
+end
+
+function SimpleMacroCreateFrameMixin:SetClickedTextButton(button)
+  SimpleMacroCreateFrame.clickedTextButton = button
 end
 
 local function HideArgumentButtons(lineNum, from)
@@ -271,7 +221,7 @@ function CreateArgumentButton(lineName, lineNum, argumentNum)
   return argumentButton
 end
 
-local function setupMacroTextButtons()
+function setupMacroTextButtons()
   local sMacro = SimpleMacroCreateFrame:GetSMacro() ---@type SMacro
   local lineCount = #sMacro:getLines()
   for lineNum = 1, lineCount, 1 do
@@ -288,7 +238,6 @@ end
 -- TODO temp
 function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
   if self:GetChecked() then
-    SimpleMacroCreateFrame:SetSMacro(SimpleMacroCreateFrame:GetMacroDataIndex(SimpleMacroCreateFrame:GetSelectedIndex()))
     SimpleMacroCreateFrameScrollFrame:Hide()
 
     setupMacroTextButtons()
@@ -302,6 +251,6 @@ end
 
 function SimpleMacroCreateFrame_CancelButton_OnClick()
   PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-  SimpleMacroFrame:Update(retainScrollPosition);
+  SimpleMacroFrame:Update();
   SimpleMacroChangeFrame:Hide();
 end
