@@ -62,7 +62,7 @@ function SimpleMacroEditorPopupMixin:InsertArgumentEditBoxes(editBox)
 end
 
 function SimpleMacroEditorPopupMixin:RemoveLastArgumentEditBox()
-  tremove(self.argumentEditBoxes)
+  return tremove(self.argumentEditBoxes)
 end
 
 function SimpleMacroEditorPopupMixin:GetConditionalGroupButtons()
@@ -80,7 +80,7 @@ function SimpleMacroEditorPopupMixin:InsertConditionalGroupButton(groupButton)
 end
 
 function SimpleMacroEditorPopupMixin:RemoveLastConditionalGroupButton()
-  tremove(self.conditionalGroupButtons)
+  return tremove(self.conditionalGroupButtons)
 end
 
 local function generateCommandString(category, command)
@@ -115,15 +115,18 @@ function SetupArgumentEditBoxes(arguments)
     end
 
     if i <= #arguments then
-      argumentEditBox:Show()
-      argumentEditBox:SetText(arguments[i].arg)
-      InsertArgumentEditBoxes(argumentEditBox)
-
       if i == i then
         argumentEditBox:SetPoint("TOP", 0, -80)
       else
         -- set under the previous argument section
       end
+
+      argumentEditBox:SetText(arguments[i].arg)
+      argumentEditBox:Show()
+      SimpleMacroEditorPopup:InsertArgumentEditBoxes(argumentEditBox)
+    else
+      argumentEditBox:Hide()
+      SimpleMacroEditorPopup:RemoveLastArgumentEditBox()
     end
   end
 end
