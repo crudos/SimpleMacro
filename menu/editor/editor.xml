@@ -3,7 +3,7 @@
 
   <Frame name="SimpleMacroEditorPopup" mixin="SimpleMacroEditorPopupMixin" inherits="SimpleMacroPopupFrameTemplate" toplevel="true"
          parent="SimpleMacroFrame" enableMouse="true" hidden="true">
-    <Size x="312" y="208"/>
+    <Size x="312" y="144"/>
     <KeyValues>
       <KeyValue key="OnOkay" value="SimpleMacroEditorPopup_OkayButton_OnClick" type="global"/>
       <KeyValue key="OnDelete" value="SimpleMacroEditorPopup_DeleteButton_OnClick" type="global"/>
@@ -28,15 +28,15 @@
           <OnEvent function="SimpleMacroEditorPopup_CommandDropDown_OnEvent"/>
         </Scripts>
       </Frame>
-      <EditBox parentKey="ArgumentEditBox" inherits="SimpleMacroEditorPopupEditBoxTemplate">
-        <Size x="160" y="27"/>
+      <Button parentKey="AddArgumentButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_ARGUMENT">
+        <Size x="240" y="22"/>
         <Anchors>
-          <Anchor point="TOP" relativePoint="TOP" x="0" y="-80"/>
+          <Anchor point="TOP" x="0" y="-80"/>
         </Anchors>
         <Scripts>
-<!--          <OnEnterPressed function="SM_ArgMenu_OkayButton_OnClick"/>-->
+          <OnClick function="SimpleMacroEditorPopup_AddArgumentButton_OnClick"/>
         </Scripts>
-      </EditBox>
+      </Button>
       <Button parentKey="AddConditionalGroupButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL_GROUP">
         <Size x="240" y="22"/>
         <Anchors>

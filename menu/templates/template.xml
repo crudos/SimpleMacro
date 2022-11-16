@@ -157,7 +157,7 @@
     <Frames>
       <Frame parentKey="Inset" inherits="InsetFrameTemplate">
         <Anchors>
-          <Anchor point="TOPLEFT" x="8" y="-24"/>
+          <Anchor point="TOPLEFT" x="8" y="-22"/>
           <Anchor point="BOTTOMRIGHT" x="-6" y="27"/>
         </Anchors>
       </Frame>

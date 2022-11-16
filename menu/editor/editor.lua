@@ -16,6 +16,7 @@ end
 function SimpleMacroEditorPopupMixin:OnHide()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
   -- close conditional popup
+  SimpleMacroCreateFrame:UnclickLastTextButton()
   SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
   HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
@@ -44,6 +45,24 @@ end
 
 function SimpleMacroEditorPopupMixin:SetSelectedArgument(id)
   self.selectedArgument = id
+end
+
+function SimpleMacroEditorPopupMixin:GetArgumentEditBoxes()
+  if self.argumentEditBoxes == nil then
+    self.argumentEditBoxes = {}
+  end
+  return self.argumentEditBoxes
+end
+
+function SimpleMacroEditorPopupMixin:InsertArgumentEditBoxes(editBox)
+  if self.argumentEditBoxes == nil then
+    self.argumentEditBoxes = {}
+  end
+  tinsert(self.argumentEditBoxes, editBox)
+end
+
+function SimpleMacroEditorPopupMixin:RemoveLastArgumentEditBox()
+  tremove(self.argumentEditBoxes)
 end
 
 function SimpleMacroEditorPopupMixin:GetConditionalGroupButtons()
@@ -84,6 +103,31 @@ function SimpleMacroEditorPopupMixin:Delete()
   self:GetParent():Update()
 end
 
+function SetupArgumentEditBoxes(arguments)
+  local editBoxName = "ArgumentEditBox"
+  local argumentEditBox
+  for i = 1, C["MAX_ARGUMENTS"] do
+    if G[editBoxName..i] ~= nil then
+      argumentEditBox = _G[editBoxName..i]
+    else
+      argumentEditBox = CreateFrame("Button", editBoxName..i, SimpleMacroEditorPopup, "SimpleMacroEditorPopupEditBoxTemplate")
+      argumentEditBox:SetSize(160, 27)
+    end
+
+    if i <= #arguments then
+      argumentEditBox:Show()
+      argumentEditBox:SetText(arguments[i].arg)
+      InsertArgumentEditBoxes(argumentEditBox)
+
+      if i == i then
+        argumentEditBox:SetPoint("TOP", 0, -80)
+      else
+        -- set under the previous argument section
+      end
+    end
+  end
+end
+
 function SimpleMacroEditorPopupMixin:Update()
   local sMacro = self:GetSMacro() ---@type SMacro
   local currentLine = self:GetSelectedLine()
@@ -95,20 +139,20 @@ function SimpleMacroEditorPopupMixin:Update()
   self.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
   self.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
 
-  -- TODO Fix for empty argument. This currently hides the edit box and conditional group buttons.
+  local arguments = sMacro:getArguments(currentLine)
+  SetupArgumentEditBoxes(arguments)
+
   local conditionalGroups
   if currentArgument ~= nil then
     -- editbox
-    local lineArguments = sMacro:getArguments(currentLine)
-    self.ArgumentEditBox:SetText(lineArguments[currentArgument].arg)
-
     -- conditionals
     conditionalGroups = sMacro:getConditionalGroups(currentLine, currentArgument)
     for i, _ in ipairs(conditionalGroups) do
       createConditionalGroupButton(i)
     end
   else
-    self.ArgumentEditBox:SetText("")
+    self.ArgumentEditBox:Hide()
+    self.AddConditionalGroupButton:Hide()
     SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
   end
 
@@ -271,6 +315,18 @@ function SimpleMacroEditorPopup_CommandDropDown_Initialize()
     info.tooltipTitle = entry.COMMANDS[1]
     info.tooltipText = entry.DESCRIPTION
     UIDropDownMenu_AddButton(info)
+  end
+end
+
+--[[
+  Arguments
+]]
+
+function SimpleMacroEditorPopup_AddArgumentButton_OnClick(self)
+  print('AddArgumentButton')
+
+  if #SimpleMacroEditorPopup:GetArgumentEditBoxes() >= C["MAX_CONDITIONAL_GROUPS"] then
+    self:Disable()
   end
 end
 

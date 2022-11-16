@@ -27,6 +27,9 @@ end
 
 function SimpleMacroCreateFrameMixin:OnHide()
   self:SaveMacro();
+  self:UnclickLastTextButton()
+  HideUIPanel(SimpleMacroEditorPopup)
+  HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
 
 function SimpleMacroCreateFrameMixin:GetMacroDataIndex(index)
@@ -135,6 +138,12 @@ function SimpleMacroCreateFrame_OpenEditor_OnClick(self)
 end
 
 -- click editor funcs
+
+function SimpleMacroCreateFrameMixin:UnclickLastTextButton()
+  if self:GetClickedTextButton() then
+    self:GetClickedTextButton():Unlock()
+  end
+end
 
 function SimpleMacroCreateFrameMixin:GetClickedTextButton()
   return SimpleMacroCreateFrame.clickedTextButton
