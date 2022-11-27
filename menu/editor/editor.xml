@@ -3,7 +3,7 @@
 
   <Frame name="SimpleMacroEditorPopup" mixin="SimpleMacroEditorPopupMixin" inherits="SimpleMacroPopupFrameTemplate" toplevel="true"
          parent="SimpleMacroFrame" enableMouse="true" hidden="true">
-    <Size x="312" y="144"/>
+    <Size x="312" y="100"/>
     <KeyValues>
       <KeyValue key="OnOkay" value="SimpleMacroEditorPopup_OkayButton_OnClick" type="global"/>
       <KeyValue key="OnDelete" value="SimpleMacroEditorPopup_DeleteButton_OnClick" type="global"/>

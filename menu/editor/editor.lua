@@ -3,7 +3,7 @@ local L = ns.L["MACRO_EDITOR"]
 local C = ns.C["MACRO_EDITOR"]
 local G = _G
 
-SimpleMacroEditorPopupMixin = {};
+SimpleMacroEditorPopupMixin = {}
 
 function SimpleMacroEditorPopupMixin:OnLoad()
   self:SetTitle(GetGlobalString("MACRO_EDITOR_TITLE"))
@@ -54,7 +54,7 @@ function SimpleMacroEditorPopupMixin:GetArgumentEditBoxes()
   return self.argumentEditBoxes
 end
 
-function SimpleMacroEditorPopupMixin:InsertArgumentEditBoxes(editBox)
+function SimpleMacroEditorPopupMixin:InsertArgumentEditBox(editBox)
   if self.argumentEditBoxes == nil then
     self.argumentEditBoxes = {}
   end
@@ -103,58 +103,90 @@ function SimpleMacroEditorPopupMixin:Delete()
   self:GetParent():Update()
 end
 
-function SetupArgumentEditBoxes(arguments)
-  local editBoxName = "ArgumentEditBox"
+local function isArgumentPopup()
+  if SimpleMacroEditorPopup:GetSelectedArgument() ~= nil then
+    return true
+  end
+  return false
+end
+
+function SimpleMacroEditorPopupMixin:SetupDropDowns()
+  local sMacro = self:GetSMacro() ---@type SMacro
+  local currentLine = self:GetSelectedLine()
+
+  if isArgumentPopup() then
+    self.CategoryDropDown:Hide()
+    self.CommandDropDown:Hide()
+  else
+    local categoryID, commandID, nameID = getCommandIds(sMacro:getCommand(currentLine))
+    self.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
+    self.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
+    self.CategoryDropDown:Show()
+    self.CommandDropDown:Show()
+  end
+end
+
+local function getArgumentEditBox(name)
   local argumentEditBox
+  if G[name] ~= nil then
+    argumentEditBox = _G[name]
+  else
+    argumentEditBox = CreateFrame("EditBox", name, SimpleMacroEditorPopup, "SimpleMacroEditorPopupEditBoxTemplate")
+    argumentEditBox:SetSize(160, 24)
+  end
+  return argumentEditBox
+end
+
+local function addArgumentEditBoxSection(argumentEditBox)
+  local popupFrame = SimpleMacroEditorPopup
+
+  argumentEditBox:Show()
+  popupFrame:InsertArgumentEditBox(argumentEditBox)
+
+  local addButton = popupFrame.AddArgumentButton
+  argumentEditBox:SetPoint(addButton:GetPoint())
+  addButton:SetPoint("TOP", argumentEditBox, "BOTTOM", 0, -10)
+end
+
+  -- TODO
+  --[[
+    If we're selecting the beginning of the line we should show every argument (no conditional group buttons)
+    Each argument should have a button to "go to the argument"
+  ]]--
+function SimpleMacroEditorPopupMixin:SetupArgumentEditBoxes()
+  local addButton = self.AddArgumentButton
+  addButton:SetPoint("TOP", 0, -80)
+
   for i = 1, C["MAX_ARGUMENTS"] do
-    if G[editBoxName..i] ~= nil then
-      argumentEditBox = _G[editBoxName..i]
-    else
-      argumentEditBox = CreateFrame("Button", editBoxName..i, SimpleMacroEditorPopup, "SimpleMacroEditorPopupEditBoxTemplate")
-      argumentEditBox:SetSize(160, 27)
-    end
+    local argumentEditBox = getArgumentEditBox("ArgumentEditBox"..i)
+    local arguments = self:GetSMacro():getArguments(self:GetSelectedLine(), self:GetSelectedArgument())
 
     if i <= #arguments then
-      if i == i then
-        argumentEditBox:SetPoint("TOP", 0, -80)
-      else
-        -- set under the previous argument section
-      end
-
+      print('addargumenteditbox', i)
+      addArgumentEditBoxSection(argumentEditBox)
       argumentEditBox:SetText(arguments[i].arg)
-      argumentEditBox:Show()
-      SimpleMacroEditorPopup:InsertArgumentEditBoxes(argumentEditBox)
+
+      local _, editBoxY = argumentEditBox:GetSize()
+      print('newheight', C["BASE_HEIGHT"] + i*(editBoxY + 10))
+      self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"] + i*(editBoxY + 10))
     else
       argumentEditBox:Hide()
-      SimpleMacroEditorPopup:RemoveLastArgumentEditBox()
     end
   end
 end
 
-function SimpleMacroEditorPopupMixin:Update()
-  local sMacro = self:GetSMacro() ---@type SMacro
-  local currentLine = self:GetSelectedLine()
-  local currentArgument = self:GetSelectedArgument()
-
-  print('Update', currentLine, currentArgument)
-  -- dropdowns
-  local categoryID, commandID, nameID = getCommandIds(sMacro:getCommand(currentLine))
-  self.CategoryDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID].CATEGORY)
-  self.CommandDropDown:SetValue(L["LINE_TYPE_TABLE"][categoryID][commandID].COMMANDS[nameID])
-
-  local arguments = sMacro:getArguments(currentLine)
-  SetupArgumentEditBoxes(arguments)
-
+  --TODO
+  --[[
+    Setup
+  ]]--
+function SimpleMacroEditorPopupMixin:SetupConditionalGroupButtons()
   local conditionalGroups
-  if currentArgument ~= nil then
-    -- editbox
-    -- conditionals
-    conditionalGroups = sMacro:getConditionalGroups(currentLine, currentArgument)
+  if isArgumentPopup() then
+    conditionalGroups = self:GetSMacro():getConditionalGroups(self:GetSelectedLine(), self:GetSelectedArgument())
     for i, _ in ipairs(conditionalGroups) do
       createConditionalGroupButton(i)
     end
   else
-    self.ArgumentEditBox:Hide()
     self.AddConditionalGroupButton:Hide()
     SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
   end
@@ -164,6 +196,13 @@ function SimpleMacroEditorPopupMixin:Update()
   if #self:GetConditionalGroupButtons() < C["MAX_CONDITIONAL_GROUPS"] then
     self.AddConditionalGroupButton:Enable()
   end
+end
+
+function SimpleMacroEditorPopupMixin:Update()
+  print('Update')
+  self:SetupDropDowns()
+  self:SetupArgumentEditBoxes()
+  self:SetupConditionalGroupButtons()
 end
 
 -- Buttons
@@ -178,7 +217,6 @@ function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
   parent:Delete()
   HideUIPanel(parent)
 end
-
 
 
 
@@ -201,11 +239,11 @@ function SimpleMacroEditorPopup_CategoryDropDown_OnEvent(self, event, ...)
       this.defaultValue = L["LINE_TYPE_TABLE"][6].CATEGORY
       this.value = this.defaultValue
       UIDropDownMenu_SetSelectedValue(this, this.value)
-      this.tooltip = this.value.." commands."
+      this.tooltip = this.value .. " commands."
     end
     self.SetValue = function(this, value)
       this.value = value
-      this.tooltip = value.." commands."
+      this.tooltip = value .. " commands."
 
       UIDropDownMenu_SetSelectedValue(this, value)
       this:RefreshValue()
@@ -248,7 +286,7 @@ function SimpleMacroEditorPopup_CategoryDropDown_Initialize()
     info.value = entry.CATEGORY
     info.checked = info.value == selectedValue and 1 or nil
     info.tooltipTitle = entry.CATEGORY
-    info.tooltipText = entry.CATEGORY.." commands."
+    info.tooltipText = entry.CATEGORY .. " commands."
     UIDropDownMenu_AddButton(info)
   end
 end
@@ -352,7 +390,7 @@ end
 function createConditionalGroupButton(index)
   local addButton = SimpleMacroEditorPopup.AddConditionalGroupButton
   local popupFrame = SimpleMacroEditorPopup
-  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup"..index.."Button"
+  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup" .. index .. "Button"
   local conditionalGroupButton
 
   if G[conditionalGroupButtonName] ~= nil then
