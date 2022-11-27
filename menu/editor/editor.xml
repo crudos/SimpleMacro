@@ -11,6 +11,15 @@
     <Anchors>
       <Anchor point="LEFT" relativeTo="$parent" relativePoint="RIGHT" x="0" y="0"/>
     </Anchors>
+    <Layers>
+      <Layer level="OVERLAY">
+        <FontString name="$parentArgumentText" inherits="GameFontNormal" parentKey="ArgumentText" wordwrap="false" hidden="true">
+          <Anchors>
+            <Anchor point="TOP" x="0" y="-34"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
     <Frames>
       <Frame parentKey="CategoryDropDown" inherits="SimpleMacroEditorPopupDropDownTemplate" enableMouse="true">
         <Anchors>

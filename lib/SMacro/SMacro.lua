@@ -10,7 +10,8 @@ local _, ns = ...
 ---@field public getCommandType fun(line_num: number) Gets the command type for a given line
 ---@field public addLine fun(): number Adds a new line to the macro
 ---@field public removeLine fun(line_num: number): boolean Removes a line from the macro
----@field public getLines fun(): table Gets line table
+---@field public getLines fun(): table Gets lines table
+---@field public getLine fun(line_num: number): table Gets line table
 ---@field public composeLine fun(line_num: number): string Gets a line from the macro
 ---@field public addArgument fun(line_num: number): number Adds a new argument to the end of the line
 ---@field public getArgument fun(line_num: number, arg_num: number, cond_num: number): string Gets the text of the specified argument
@@ -138,9 +139,14 @@ function SMacro:removeLine(line_num)
   return isRemoved
 end
 
----@return table line table
+---@return table lines table
 function SMacro:getLines()
   return self.lines
+end
+
+---@return table line table
+function SMacro:getLine(line_num)
+  return self:getLines()[line_num]
 end
 
 ---@param line_num number row number for the line
@@ -192,7 +198,10 @@ end
 ---@param arg_num number index of the argument
 ---@return string text of argument
 function SMacro:getArgument(line_num, arg_num)
-  return self.lines[line_num].args[arg_num].arg
+  if self:getArguments(line_num) then
+    return self:getArguments(line_num)[arg_num].arg
+  end
+  return nil
 end
 
 ---@param line_num number row number for the line
@@ -235,7 +244,10 @@ end
 ---@param line_num number row number for the line
 ---@return table arguments for this line
 function SMacro:getArguments(line_num)
-  return self.lines[line_num].args
+  if self:getLine(line_num) then
+    return self:getLine(line_num).args
+  end
+  return nil
 end
 
 ---@param line_num number row number for the line
@@ -258,7 +270,11 @@ end
 ---@param arg_num number index of the argument
 ---@return table conditional groups for this line and argument
 function SMacro:getConditionalGroups(line_num, arg_num)
-  return self.lines[line_num].args[arg_num].conds
+  local arguments = self:getArguments(line_num)
+  if arguments and arguments[arg_num] then
+    return arguments[arg_num].conds
+  end
+  return nil
 end
 
 ---@param line_num number row number for the line

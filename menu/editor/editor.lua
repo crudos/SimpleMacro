@@ -31,6 +31,10 @@ function SimpleMacroEditorPopupMixin:SetSelected(lineId, argumentId)
   self:SetSelectedArgument(argumentId)
 end
 
+function SimpleMacroEditorPopupMixin:GetSelected()
+  return self:GetSelectedLine(), self:GetSelectedArgument()
+end
+
 function SimpleMacroEditorPopupMixin:GetSelectedLine()
   return self.selectedLine
 end
@@ -87,6 +91,10 @@ function SimpleMacroEditorPopupMixin:RemoveLastConditionalGroupButton()
   return tremove(self.conditionalGroupButtons)
 end
 
+function SimpleMacroEditorPopupMixin:ResetConditionalGroupButtons()
+  self.conditionalGroupButtons = nil
+end
+
 local function generateCommandString(category, command)
   return (category == C["HASH_CATEGORY"] and '#' or '/')..command
 end
@@ -107,16 +115,6 @@ function SimpleMacroEditorPopupMixin:Delete()
   self:GetParent():Update()
 end
 
-function SimpleMacroEditorPopupMixin:Resize(frame, count)
-  local _, frameY
-  if frame == nil then
-    frameY = 0
-  else
-    _, frameY = frame:GetSize()
-  end
-  self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"] + count*(frameY + 10))
-end
-
 local function isArgumentPopup()
   if SimpleMacroEditorPopup:GetSelectedArgument() ~= nil then
     return true
@@ -124,6 +122,23 @@ local function isArgumentPopup()
   return false
 end
 
+function SimpleMacroEditorPopupMixin:Resize(frame, index, spacing)
+  local baseHeight = isArgumentPopup() and C["BASE_ARGUMENT_POPUP_HEIGHT"] or C["BASE_LINE_POPUP_HEIGHT"]
+  print('Resize, isArgumentPopup', isArgumentPopup())
+  if frame == nil then
+    self:SetSize(C["BASE_WIDTH"], baseHeight)
+    print('~reset to base height', baseHeight)
+  else
+    local _, frameY = frame:GetSize()
+    self:SetSize(C["BASE_WIDTH"], baseHeight + index * (frameY + spacing))
+    print('~set to', baseHeight + index * (frameY + spacing))
+  end
+end
+
+
+--[[
+  SETUP DROP DOWNS
+]]--
 function SimpleMacroEditorPopupMixin:SetupDropDowns()
   local sMacro = self:GetSMacro() ---@type SMacro
   local currentLine = self:GetSelectedLine()
@@ -140,8 +155,12 @@ function SimpleMacroEditorPopupMixin:SetupDropDowns()
   end
 end
 
+--[[
+  SETUP ARGUMENT EDIT BOXES
+]]--
 local function getArgumentEditBox(name)
   local argumentEditBox
+
   if G[name] ~= nil then
     argumentEditBox = _G[name]
   else
@@ -151,72 +170,130 @@ local function getArgumentEditBox(name)
     editBoxButton:SetPoint("LEFT", argumentEditBox, "RIGHT", 5, 1)
     editBoxButton:SetSize(24, 22)
     editBoxButton:SetText(">")
+    editBoxButton:SetScript("OnClick", SimpleMacroEditorPopup_EditBoxButton_OnClick)
   end
+
   return argumentEditBox
 end
 
 local function addArgumentEditBoxSection(argumentEditBox)
   local popupFrame = SimpleMacroEditorPopup
-
-  argumentEditBox:Show()
-  popupFrame:InsertArgumentEditBox(argumentEditBox)
-
   local addButton = popupFrame.AddArgumentButton
+
+  popupFrame:InsertArgumentEditBox(argumentEditBox)
+  argumentEditBox:Show()
   argumentEditBox:SetPoint(addButton:GetPoint())
   addButton:SetPoint("TOP", argumentEditBox, "BOTTOM", 0, -10)
 end
 
-  -- TODO
-  --[[
-    If we're selecting the beginning of the line we should show every argument (no conditional group buttons)
-    Each argument should have a button to "go to the argument"
-  ]]--
+--[[
+  If we're selecting the beginning of the line we should show every argument (no conditional group buttons)
+  Each argument should have a button to "go to the argument"
+]]--
 function SimpleMacroEditorPopupMixin:SetupArgumentEditBoxes()
   self:ResetArgumentEditBoxes()
   local addButton = self.AddArgumentButton
   addButton:SetPoint("TOP", 0, -80)
 
+  local arguments = self:GetSMacro():getArguments(self:GetSelectedLine())
   for i = 1, C["MAX_ARGUMENTS"] do
     local argumentEditBox = getArgumentEditBox("ArgumentEditBox"..i)
-    local arguments = self:GetSMacro():getArguments(self:GetSelectedLine())
     if isArgumentPopup() then
       argumentEditBox:Hide()
     else
-      if i <= #arguments then
+      if arguments and i <= #arguments then
         addArgumentEditBoxSection(argumentEditBox)
         argumentEditBox:SetText(arguments[i].arg)
-        self:Resize(argumentEditBox, i)
+        self:Resize(argumentEditBox, i, 10)
       else
-        argumentEditBox:Hide()
         if i == 1 then
-          self:Resize(nil, 0)
+          self:Resize()
         end
+        argumentEditBox:Hide()
       end
     end
   end
+
+  if isArgumentPopup() then
+    addButton:Hide()
+  else
+    if #arguments >= C["MAX_ARGUMENTS"] then
+      addButton:Disable()
+    else
+      addButton:Enable()
+    end
+    addButton:Show()
+  end
 end
 
-  --TODO
-  --[[
-    Setup
-  ]]--
-function SimpleMacroEditorPopupMixin:SetupConditionalGroupButtons()
-  local conditionalGroups
-  if isArgumentPopup() then
-    conditionalGroups = self:GetSMacro():getConditionalGroups(self:GetSelectedLine(), self:GetSelectedArgument())
-    for i, _ in ipairs(conditionalGroups) do
-      createConditionalGroupButton(i)
-    end
+--[[
+  SETUP CONDITIONAL GROUP BUTTONS
+]]--
+local function getConditionalGroupButton(index)
+  local popup = SimpleMacroEditorPopup
+  local addButton = popup.AddConditionalGroupButton
+  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup" .. index .. "Button"
+  local conditionalGroupButton
+
+  if G[conditionalGroupButtonName] ~= nil then
+    conditionalGroupButton = G[conditionalGroupButtonName]
   else
-    self.AddConditionalGroupButton:Hide()
-    SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
+    conditionalGroupButton = CreateFrame("Button", conditionalGroupButtonName, popup,"UIPanelButtonTemplate")
+    conditionalGroupButton:SetText(string.format(G["SIMPLE_MACRO_STRING_CONDITIONAL_GROUP"], index))
+    conditionalGroupButton:SetPoint(addButton:GetPoint())
+    conditionalGroupButton:SetSize(addButton:GetSize())
+    conditionalGroupButton:SetScript("OnClick", SimpleMacroEditorPopup_ConditionalGroupButton_OnClick)
+    conditionalGroupButton:SetScript("OnMouseUp", nil)
+    conditionalGroupButton:SetID(index)
   end
 
-  hideConditionalGroupButtons(conditionalGroups and #conditionalGroups or 0)
+  return conditionalGroupButton
+end
 
-  if #self:GetConditionalGroupButtons() < C["MAX_CONDITIONAL_GROUPS"] then
-    self.AddConditionalGroupButton:Enable()
+function SimpleMacroEditorPopupMixin:SetupConditionalGroupButtons()
+  local sMacro = self:GetSMacro()
+  local addButton = self.AddConditionalGroupButton
+
+  if isArgumentPopup() then
+    self.ArgumentText:Show()
+    self.ArgumentText:SetText(sMacro:getArgument(self:GetSelected()))
+
+    addButton:Show()
+    addButton:SetPoint("TOP", self.ArgumentText, "BOTTOM", 0, -10)
+    if #self:GetConditionalGroupButtons() < C["MAX_CONDITIONAL_GROUPS"] then
+      addButton:Enable()
+    else
+      addButton:Disable()
+    end
+
+    self:ResetConditionalGroupButtons()
+  else
+    self.ArgumentText:Hide()
+    addButton:Hide()
   end
+
+  local conditionalGroups = sMacro:getConditionalGroups(self:GetSelected())
+  for i = 1, C["MAX_CONDITIONAL_GROUPS"] do
+    local conditionalGroupButton = getConditionalGroupButton(i)
+    if isArgumentPopup() then
+      if conditionalGroups and i <= #conditionalGroups then
+        conditionalGroupButton:SetPoint(addButton:GetPoint())
+        addButton:SetPoint("TOP", conditionalGroupButton, "BOTTOM", 0, -6)
+        self:InsertConditionalGroupButton(conditionalGroupButton)
+        self:Resize(conditionalGroupButton, i, 6)
+        conditionalGroupButton:Show()
+      else
+        if i == 1 then
+          self:Resize()
+        end
+        conditionalGroupButton:Hide()
+      end
+    else
+      conditionalGroupButton:Hide()
+    end
+  end
+
+  SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
 end
 
 function SimpleMacroEditorPopupMixin:Update()
@@ -238,6 +315,19 @@ function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
   HideUIPanel(parent)
 end
 
+function SimpleMacroEditorPopup_EditBoxButton_OnClick(self)
+  local argumentId = string.match(self:GetName(), "%a+(%d)%a*")
+  print(self:GetName(), argumentId)
+  local popup = SimpleMacroEditorPopup
+  popup:SetSelectedArgument(argumentId)
+  popup:Update()
+end
+
+function SimpleMacroEditorPopup_AddArgumentButton_OnClick()
+  local popup = SimpleMacroEditorPopup
+  popup:GetSMacro():addArgument(popup:GetSelectedLine(), "")
+  popup:Update()
+end
 
 
 
@@ -380,19 +470,6 @@ function SimpleMacroEditorPopup_CommandDropDown_Initialize()
 end
 
 --[[
-  Arguments
-]]
-
-function SimpleMacroEditorPopup_AddArgumentButton_OnClick(self)
-  local popup = SimpleMacroEditorPopup
-  popup:GetSMacro():addArgument(popup:GetSelectedLine(), "")
-  popup:Update()
-  if #popup:GetSMacro():getArguments(popup:GetSelectedLine()) >= C["MAX_ARGUMENTS"] then
-    self:Disable()
-  end
-end
-
---[[
   Conditional groups
 ]]
 local function anchorAddButtonTo(button)
@@ -406,40 +483,6 @@ local function resizeFrameForButtons(frame, numButtons)
   local parentX, parentY = frame:GetSize()
   local _, buttonY = SimpleMacroEditorPopup.AddConditionalGroupButton:GetSize()
   frame:SetSize(parentX, parentY + numButtons * (buttonY + 4))
-end
-
-function createConditionalGroupButton(index)
-  local addButton = SimpleMacroEditorPopup.AddConditionalGroupButton
-  local popupFrame = SimpleMacroEditorPopup
-  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroup" .. index .. "Button"
-  local conditionalGroupButton
-
-  if G[conditionalGroupButtonName] ~= nil then
-    conditionalGroupButton = G[conditionalGroupButtonName]
-
-    if not conditionalGroupButton:IsShown() then
-      conditionalGroupButton:Show()
-      anchorAddButtonTo(conditionalGroupButton)
-      resizeFrameForButtons(popupFrame, 1)
-      popupFrame:InsertConditionalGroupButton(conditionalGroupButton)
-    end
-  else
-    conditionalGroupButton = CreateFrame("Button",
-                                         conditionalGroupButtonName,
-                                         popupFrame,
-                                         "UIPanelButtonTemplate")
-    conditionalGroupButton:SetText(string.format(G["SIMPLE_MACRO_STRING_CONDITIONAL_GROUP"], index))
-    conditionalGroupButton:SetPoint(addButton:GetPoint())
-    conditionalGroupButton:SetSize(addButton:GetSize())
-    conditionalGroupButton:SetScript("OnClick", SimpleMacroEditorPopup_ConditionalGroupButton_OnClick)
-    conditionalGroupButton:SetScript("OnMouseUp", nil)
-    conditionalGroupButton:SetID(index)
-    anchorAddButtonTo(conditionalGroupButton)
-    resizeFrameForButtons(popupFrame, 1)
-    popupFrame:InsertConditionalGroupButton(conditionalGroupButton)
-  end
-
-  return conditionalGroupButton
 end
 
 local function openConditionalGroup(button)
