@@ -162,15 +162,16 @@ function SimpleMacroEditorPopupMixin:SetupArgumentEditBoxes()
     local arguments = self:GetSMacro():getArguments(self:GetSelectedLine(), self:GetSelectedArgument())
 
     if i <= #arguments then
-      print('addargumenteditbox', i)
       addArgumentEditBoxSection(argumentEditBox)
       argumentEditBox:SetText(arguments[i].arg)
 
       local _, editBoxY = argumentEditBox:GetSize()
-      print('newheight', C["BASE_HEIGHT"] + i*(editBoxY + 10))
       self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"] + i*(editBoxY + 10))
     else
       argumentEditBox:Hide()
+      if i == 1 then
+        self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"])
+      end
     end
   end
 end
@@ -199,7 +200,6 @@ function SimpleMacroEditorPopupMixin:SetupConditionalGroupButtons()
 end
 
 function SimpleMacroEditorPopupMixin:Update()
-  print('Update')
   self:SetupDropDowns()
   self:SetupArgumentEditBoxes()
   self:SetupConditionalGroupButtons()
@@ -364,8 +364,7 @@ end
 ]]
 
 function SimpleMacroEditorPopup_AddArgumentButton_OnClick(self)
-  print('AddArgumentButton')
-
+  SimpleMacroEditorPopup:GetSMacro():addArgument(SimpleMacroEditorPopup:GetSelectedLine(), "")
   if #SimpleMacroEditorPopup:GetArgumentEditBoxes() >= C["MAX_CONDITIONAL_GROUPS"] then
     self:Disable()
   end

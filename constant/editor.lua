@@ -9,7 +9,7 @@ C["MACRO_EDITOR"]["MAX_CONDITIONAL_GROUPS"] = 5
 C["MACRO_EDITOR"]["MAX_CONDITIONALS"] = 5
 C["MACRO_EDITOR"]["HASH_CATEGORY"] = "Metacommands"
 C["MACRO_EDITOR"]["BASE_WIDTH"] = 312
-C["MACRO_EDITOR"]["BASE_HEIGHT"] = 100
+C["MACRO_EDITOR"]["BASE_HEIGHT"] = 144
 
 -- All the conditionals in the game with alternate text and boolean expressing if they require user input
 C["CONDITIONAL_LIST"] = {}
