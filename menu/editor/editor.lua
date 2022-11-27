@@ -65,6 +65,10 @@ function SimpleMacroEditorPopupMixin:RemoveLastArgumentEditBox()
   return tremove(self.argumentEditBoxes)
 end
 
+function SimpleMacroEditorPopupMixin:ResetArgumentEditBoxes()
+  self.argumentEditBoxes = nil
+end
+
 function SimpleMacroEditorPopupMixin:GetConditionalGroupButtons()
   if self.conditionalGroupButtons == nil then
     self.conditionalGroupButtons = {}
@@ -103,6 +107,16 @@ function SimpleMacroEditorPopupMixin:Delete()
   self:GetParent():Update()
 end
 
+function SimpleMacroEditorPopupMixin:Resize(frame, count)
+  local _, frameY
+  if frame == nil then
+    frameY = 0
+  else
+    _, frameY = frame:GetSize()
+  end
+  self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"] + count*(frameY + 10))
+end
+
 local function isArgumentPopup()
   if SimpleMacroEditorPopup:GetSelectedArgument() ~= nil then
     return true
@@ -133,6 +147,10 @@ local function getArgumentEditBox(name)
   else
     argumentEditBox = CreateFrame("EditBox", name, SimpleMacroEditorPopup, "SimpleMacroEditorPopupEditBoxTemplate")
     argumentEditBox:SetSize(160, 24)
+    local editBoxButton = CreateFrame("Button", name.."Button", argumentEditBox, "UIPanelButtonTemplate")
+    editBoxButton:SetPoint("LEFT", argumentEditBox, "RIGHT", 5, 1)
+    editBoxButton:SetSize(24, 22)
+    editBoxButton:SetText(">")
   end
   return argumentEditBox
 end
@@ -154,23 +172,25 @@ end
     Each argument should have a button to "go to the argument"
   ]]--
 function SimpleMacroEditorPopupMixin:SetupArgumentEditBoxes()
+  self:ResetArgumentEditBoxes()
   local addButton = self.AddArgumentButton
   addButton:SetPoint("TOP", 0, -80)
 
   for i = 1, C["MAX_ARGUMENTS"] do
     local argumentEditBox = getArgumentEditBox("ArgumentEditBox"..i)
-    local arguments = self:GetSMacro():getArguments(self:GetSelectedLine(), self:GetSelectedArgument())
-
-    if i <= #arguments then
-      addArgumentEditBoxSection(argumentEditBox)
-      argumentEditBox:SetText(arguments[i].arg)
-
-      local _, editBoxY = argumentEditBox:GetSize()
-      self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"] + i*(editBoxY + 10))
-    else
+    local arguments = self:GetSMacro():getArguments(self:GetSelectedLine())
+    if isArgumentPopup() then
       argumentEditBox:Hide()
-      if i == 1 then
-        self:SetSize(C["BASE_WIDTH"], C["BASE_HEIGHT"])
+    else
+      if i <= #arguments then
+        addArgumentEditBoxSection(argumentEditBox)
+        argumentEditBox:SetText(arguments[i].arg)
+        self:Resize(argumentEditBox, i)
+      else
+        argumentEditBox:Hide()
+        if i == 1 then
+          self:Resize(nil, 0)
+        end
       end
     end
   end
@@ -364,8 +384,10 @@ end
 ]]
 
 function SimpleMacroEditorPopup_AddArgumentButton_OnClick(self)
-  SimpleMacroEditorPopup:GetSMacro():addArgument(SimpleMacroEditorPopup:GetSelectedLine(), "")
-  if #SimpleMacroEditorPopup:GetArgumentEditBoxes() >= C["MAX_CONDITIONAL_GROUPS"] then
+  local popup = SimpleMacroEditorPopup
+  popup:GetSMacro():addArgument(popup:GetSelectedLine(), "")
+  popup:Update()
+  if #popup:GetSMacro():getArguments(popup:GetSelectedLine()) >= C["MAX_ARGUMENTS"] then
     self:Disable()
   end
 end
