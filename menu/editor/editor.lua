@@ -11,6 +11,7 @@ end
 
 function SimpleMacroEditorPopupMixin:OnShow()
   PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
+  SimpleMacroCreateFrame.keepPopupsOpen = 1
 end
 
 function SimpleMacroEditorPopupMixin:OnHide()
@@ -19,6 +20,7 @@ function SimpleMacroEditorPopupMixin:OnHide()
   SimpleMacroCreateFrame:UnclickLastTextButton()
   SimpleMacroEditorPopup_ConditionalGroupButtons_Reset(nil)
   HideUIPanel(SimpleMacroEditorConditionalPopup)
+  SimpleMacroCreateFrame.keepPopupsOpen = nil
 end
 
 function SimpleMacroEditorPopupMixin:GetSelectedLine()
@@ -278,11 +280,11 @@ end
 
 function SimpleMacroEditorPopupMixin:Save()
   if isArgumentPopup() then
-    self:ArgumentPopupSave(sMacro)
+    self:ArgumentPopupSave()
   else
-    self:LinePopupSave(sMacro)
+    self:LinePopupSave()
   end
-  self:GetParent():Update()
+  SimpleMacroFrame:Update()
 end
 
 function SimpleMacroEditorPopupMixin:ArgumentPopupSave()
@@ -309,7 +311,7 @@ function SimpleMacroEditorPopupMixin:Delete()
   else
     self:LinePopupDelete(sMacro)
   end
-  self:GetParent():Update()
+  SimpleMacroFrame:Update()
 end
 
 function SimpleMacroEditorPopupMixin:ArgumentPopupDelete()
@@ -515,27 +517,19 @@ local function resizeFrameForButtons(frame, numButtons)
   frame:SetSize(parentX, parentY + numButtons * (buttonY + 4))
 end
 
-local function openConditionalGroup(button)
-  SimpleMacroEditorPopup_ConditionalGroupButton_OnClick(button)
-  UIPanelButton_OnMouseDown(button)
-end
-
 function SimpleMacroEditorPopup_AddConditionalGroupButton_OnClick(self)
   -- Add new group to parsed macro
-  local parentFrame = self:GetParent()
-  local line = parentFrame:GetSelectedLine()
-  local argument = parentFrame:GetSelectedArgument()
-  parentFrame:GetParsed():addConditionalGroup(line, argument)
+  local popup = self:GetParent()
+  local line = popup:GetSelectedLine()
+  local argument = popup:GetSelectedArgument()
+  popup:GetSMacro():addConditionalGroup(line, argument)
 
   -- Create Button and open conditional popup
-  local conditionalGroupButtons = SimpleMacroEditorPopup:GetConditionalGroupButtons()
+  local conditionalGroupButtons = popup:GetConditionalGroupButtons()
   local conditionalGroupCount = conditionalGroupButtons ~= nil and #conditionalGroupButtons or 0
-  local newConditionalGroupButton = createConditionalGroupButton(conditionalGroupCount + 1)
-  openConditionalGroup(newConditionalGroupButton)
-
-  if #SimpleMacroEditorPopup:GetConditionalGroupButtons() >= C["MAX_CONDITIONAL_GROUPS"] then
-    self:Disable()
-  end
+  local newConditionalGroupButton = getConditionalGroupButton(conditionalGroupCount + 1)
+  newConditionalGroupButton:Click()
+  popup:Update()
 end
 
 function SimpleMacroEditorPopup_ConditionalGroupButton_OnClick(self)

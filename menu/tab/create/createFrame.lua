@@ -1,5 +1,6 @@
 local _, ns = ...
 local C = ns.C["CREATE_FRAME"]
+local L = ns.L["CREATE_FRAME"]
 local G = _G
 
 StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
@@ -23,6 +24,8 @@ end
 
 function SimpleMacroCreateFrameMixin:OnLoad()
   self.ScrollFrame.EditBox:HookScript("OnTextChanged", setTextChanged)
+  printall(self.EditBoxToggle.Text)
+  self.EditBoxToggle.Text:SetText(L["SIMPLE_MODE"])
 end
 
 function SimpleMacroCreateFrameMixin:OnShow()
@@ -44,10 +47,13 @@ end
 
 function SimpleMacroCreateFrameMixin:Update()
   self:SetText(self:GetSelectedIndex())
-  self:UnclickLastTextButton()
-  -- TODO might not work hiding these frames on every update
-  HideUIPanel(SimpleMacroEditorPopup)
-  HideUIPanel(SimpleMacroEditorConditionalPopup)
+
+  -- TODO find better logic here
+  if not SimpleMacroCreateFrame.keepPopupsOpen then
+    self:UnclickLastTextButton()
+    HideUIPanel(SimpleMacroEditorPopup)
+    HideUIPanel(SimpleMacroEditorConditionalPopup)
+  end
 end
 
 function SimpleMacroCreateFrameMixin:GetText()

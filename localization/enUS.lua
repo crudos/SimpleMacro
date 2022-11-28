@@ -40,6 +40,9 @@ L["GLOBAL_STRING"]["CONDITIONAL_EDITOR_TITLE"] = "Conditionals"
 L["GLOBAL_STRING"]["ADD_CONDITIONAL"] = "Add Conditional"
 L["GLOBAL_STRING"]["PREVIOUS_ARROW"] = "<"
 
+-- Conditional Editor
+L["GLOBAL_STRING"]["CONDITIONAL_EDITOR_TITLE"] = "Conditional Editor"
+
 -- Group
 L["GLOBAL_STRING"]["ADD_TO_GROUP"] = "Add To Group"
 L["GLOBAL_STRING"]["CHANGE_TARGET"] = "Change Target"
@@ -58,6 +61,10 @@ loadGlobalStrings()
 --[[
     Other strings
   ]]
+
+-- Create frame
+L["CREATE_FRAME"] = {}
+L["CREATE_FRAME"]["SIMPLE_MODE"] = "Simple Mode"
 
 -- Settings
 L["SETTINGS"] = {}
@@ -283,44 +290,46 @@ L["MACRO_EDITOR"]["LINE_TYPE_TABLE"][11][15] = { COMMANDS = { "targetraid" }, DE
 L["MACRO_EDITOR"]["LINE_TYPE_TABLE"][12][1] = { COMMANDS = { "show" }, DESCRIPTION = "Affects the button's icon on the Action Bar." }
 L["MACRO_EDITOR"]["LINE_TYPE_TABLE"][12][2] = { COMMANDS = { "showtooltip" }, DESCRIPTION = "Affects the button's icon and tooltip on the Action Bar." }
 
-L["CONDITIONAL_STRING"] = {}
-L["CONDITIONAL_STRING"]["DESCRIPTION"] = {}
-L["CONDITIONAL_STRING"]["DESCRIPTION"][1] = "Use this as the target. Can be a name or a special identifier such as focus/mouseover/party1/arena1."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][2] = "Given action bar page is selected."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][3] = "A (specific) bonus action bar is currently overriding the player's main action bar."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][4] = "Macro activated with the given mouse button."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][5] = "Player is in a vehicle and can exit it at will."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][6] = "Player is channeling the given spell."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][7] = "The mouse cursor is currently holding an item/ability/macro/etc."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][8] = "Player is in combat."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][9] = "Conditional target exists and is dead."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][10] = "Item type is equipped (item type can be an inventory slot, item type, or item subtype)."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][11] = "Conditional target exists."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][12] = "Player currently has an extra action bar/button."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][13] = "The player can use a flying mount in this zone (though incorrect in Wintergrasp during a battle)."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][14] = "Mounted or in flight form AND in the air."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][15] = "In a form or stance such as [Bear Form], [Shadowform], [Metamorphosis], [Battle Stance], etc."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][16] = "Player is in the given type of group (if argument is omitted, defaults to party)."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][17] = "Conditional target exists and can be targeted by harmful spells (e.g. [Fireball])."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][18] = "Conditional target exists and can be targeted by helpful spells (e.g. [Heal])."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][19] = "Player is indoors."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][20] = "Holding the given key."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][21] = "Player is mounted."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][22] = "Player is outdoors."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][23] = "Player's main action bar is currently replaced by the override action bar."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][24] = "Conditional target exists and is in your party."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][25] = "The given pet is out."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][26] = "Currently participating in a pet battle."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][27] = "Player's main action bar is currently replaced by the possess action bar."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][28] = "Conditional target exists and is in your raid/party."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][29] = "Player is currently resting."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][30] = "Player's main action bar is currently replaced by a temporary shapeshift action bar."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][31] = "Player's active specialization group (spec, talents and glyphs)."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][32] = "Player is stealthed."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][33] = "Player is swimming."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][34] = "Conditional talent activated."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][35] = "Conditional target has vehicle UI."
-L["CONDITIONAL_STRING"]["DESCRIPTION"][36] = "Player has vehicle UI."
+-- Conditional descriptions
+L["CONDITIONAL_EDITOR"] = {}
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"] = {}
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][1] = "Use this as the target. Can be a name or a special identifier such as focus/mouseover/party1/arena1."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][2] = "Given action bar page is selected."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][3] = "A (specific) bonus action bar is currently overriding the player's main action bar."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][4] = "Macro activated with the given mouse button."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][5] = "Player is in a vehicle and can exit it at will."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][6] = "Player is channeling the given spell."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][7] = "The mouse cursor is currently holding an item/ability/macro/etc."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][8] = "Player is in combat."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][9] = "Conditional target exists and is dead."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][10] = "Item type is equipped (item type can be an inventory slot, item type, or item subtype)."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][11] = "Conditional target exists."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][12] = "Player currently has an extra action bar/button."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][13] = "The player can use a flying mount in this zone (though incorrect in Wintergrasp during a battle)."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][14] = "Mounted or in flight form AND in the air."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][15] = "In a form or stance such as [Bear Form], [Shadowform], [Metamorphosis], [Battle Stance], etc."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][16] = "Player is in the given type of group (if argument is omitted, defaults to party)."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][17] = "Conditional target exists and can be targeted by harmful spells (e.g. [Fireball])."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][18] = "Conditional target exists and can be targeted by helpful spells (e.g. [Heal])."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][19] = "Player is indoors."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][20] = "Check for a talent’s learned status. Works with names and spell IDs. Works with #showtooltip."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][21] = "Holding the given key."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][22] = "Player is mounted."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][23] = "Player is outdoors."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][24] = "Player's main action bar is currently replaced by the override action bar."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][25] = "Conditional target exists and is in your party."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][26] = "The given pet is out."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][27] = "Currently participating in a pet battle."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][28] = "Player's main action bar is currently replaced by the possess action bar."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][29] = "Conditional target exists and is in your raid/party."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][30] = "Player is currently resting."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][31] = "Player's main action bar is currently replaced by a temporary shapeshift action bar."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][32] = "Player's active specialization group (spec, talents and glyphs)."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][33] = "Player is stealthed."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][34] = "Player is swimming."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][35] = "Conditional talent activated."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][36] = "Conditional target has vehicle UI."
+L["CONDITIONAL_EDITOR"]["DESCRIPTION"][37] = "Player has vehicle UI."
 
 L["USE_ALTERNATES"] = "Use alternate text"
 L["USE_ALTERNATES_DESC"] = "This will replace any eligible conditionals with shorter alternatives."

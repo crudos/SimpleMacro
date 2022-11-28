@@ -1,4 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
   <Script file="constant.lua"/>
   <Script file="editor.lua"/>
+  <Script file="conditionalGroup.lua"/>
 </Ui>

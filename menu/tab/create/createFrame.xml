@@ -51,23 +51,6 @@
           <OnClick function="SimpleMacroCreateFrame_SaveButton_OnClick"/>
         </Scripts>
       </Button>
-      <Button name="$parentCancelButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_OPEN_EDITOR">
-        <Size x="80" y="22"/>
-        <Anchors>
-          <Anchor point="BOTTOM" relativeTo="$parentSaveButton" relativePoint="TOP" y="5"/>
-        </Anchors>
-        <Scripts>
-          <OnClick function="SimpleMacroCreateFrame_OpenEditor_OnClick"/> <!-- TODO temporary -->
-        </Scripts>
-      </Button>
-      <CheckButton name="$parentEditBoxToggle" inherits="SimpleMacroCheckButtonTemplate">
-        <Anchors>
-          <Anchor point="RIGHT" relativeTo="$parentCancelButton" relativePoint="LEFT" x="-3"/>
-        </Anchors>
-        <Scripts>
-          <OnClick function="SimpleMacroCreateFrame_EditBoxToggle_OnClick"/>
-        </Scripts>
-      </CheckButton>
       <Button name="$parentDeleteButton" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_DELETE">
         <Size x="86" y="22"/>
         <Anchors>
@@ -89,6 +72,14 @@
           <OnClick function="SimpleMacroCreateFrame_NewButton_OnClick"/>
         </Scripts>
       </Button>
+      <CheckButton name="$parentEditBoxToggle" parentKey="EditBoxToggle" inherits="SimpleMacroCheckButtonTemplate">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentDeleteButton" relativePoint="RIGHT" x="3" y="-1"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroCreateFrame_EditBoxToggle_OnClick"/>
+        </Scripts>
+      </CheckButton>
     </Frames>
     <Scripts>
       <OnLoad method="OnLoad"/>

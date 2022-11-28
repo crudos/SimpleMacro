@@ -1,27 +1,63 @@
 local _, ns = ...
-local L = ns.L
-local C = ns.C
+local L = ns.L["CONDITIONAL_EDITOR"]
+local C = ns.C["CONDITIONAL_EDITOR"]
 local G = _G
 
-local function saveConditionalGroups(conditionalPopup)
-  local dropDowns = conditionalPopup:GetConditionalDropDowns()
-  local editor = conditionalPopup.editor
-  local parsed = editor:GetParsed()
-  local selectedLine = editor:GetSelectedLine()
-  local selectedArgument = editor:GetSelectedArgument()
-  local selectedConditionalGroup = conditionalPopup:GetID()
-  local parsedConditionalCount = #parsed:getConditionals(selectedLine, selectedArgument, selectedConditionalGroup)
+SimpleMacroEditorConditionalPopupMixin = {}
+
+function SimpleMacroEditorConditionalPopupMixin:OnLoad()
+  self:SetTitle(GetGlobalString("CONDITIONAL_EDITOR_TITLE"))
+  self.editor = SimpleMacroEditorPopup
+end
+
+function SimpleMacroEditorConditionalPopupMixin:OnShow()
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
+end
+
+function SimpleMacroEditorConditionalPopupMixin:OnHide()
+  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
+  SimpleMacroEditorPopup_ConditionalGroupButton_Unclick(self:GetID())
+end
+
+function SimpleMacroEditorConditionalPopupMixin:GetConditionalDropDowns()
+  if self.conditionalDropDowns == nil then
+    self.conditionalDropDowns = {}
+  end
+  return self.conditionalDropDowns
+end
+
+function SimpleMacroEditorConditionalPopupMixin:AddConditionalDropDown(dropDown)
+  if self.conditionalDropDowns == nil then
+    self.conditionalDropDowns = {}
+  end
+  return tinsert(self.conditionalDropDowns, dropDown)
+end
+
+function SimpleMacroEditorConditionalPopupMixin:RemoveConditionalDropDown()
+  return tremove(self.conditionalDropDowns, #self.conditionalDropDowns)
+end
+
+function SimpleMacroEditorConditionalPopupMixin:ResetConditionalDropDowns()
+  self.conditionalDropDowns = nil
+end
+
+function SimpleMacroEditorConditionalPopupMixin:Save()
+  local dropDowns = self:GetConditionalDropDowns()
+  local sMacro = SimpleMacroEditorPopup:GetSMacro()
+  local selectedLine, selectedArgument = SimpleMacroEditorPopup:GetSelected()
+  local selectedConditionalGroup = self:GetID()
+  local parsedConditionalCount = #sMacro:getConditionals(selectedLine, selectedArgument, selectedConditionalGroup)
 
   for i, dropDown in ipairs(dropDowns) do
     if i <= parsedConditionalCount then
-      parsed:setConditional(selectedLine,
+      sMacro:setConditional(selectedLine,
                             selectedArgument,
                             selectedConditionalGroup,
                             i,
                             dropDown:GetValue(),
                             dropDown:GetInputValue())
     else
-      parsed:addConditional(selectedLine,
+      sMacro:addConditional(selectedLine,
                             selectedArgument,
                             selectedConditionalGroup,
                             dropDown:GetValue(),
@@ -31,89 +67,90 @@ local function saveConditionalGroups(conditionalPopup)
 
   if parsedConditionalCount - #dropDowns > 0 then
     for i = #dropDowns + 1, parsedConditionalCount do
-      parsed:removeConditional(selectedLine,
+      sMacro:removeConditional(selectedLine,
                                selectedArgument,
                                selectedConditionalGroup,
                                i)
     end
   end
 
-  EditMacro(parsed:getID(), nil, nil, parsed:compose())
+  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
+  SimpleMacroFrame:Update()
 end
 
-local function deleteConditionalGroup(conditionalPopup)
-  local editor = conditionalPopup.editor
-  local parsed = editor:GetParsed()
-  local selectedLine = editor:GetSelectedLine()
-  local selectedArgument = editor:GetSelectedArgument()
-  local selectedConditionalGroup = conditionalPopup:GetID()
+function SimpleMacroEditorConditionalPopupMixin:Delete()
+  local sMacro = SimpleMacroEditorPopup:GetSMacro()
+  local selectedLine, selectedArgument = SimpleMacroEditorPopup:GetSelected()
+  local selectedConditionalGroup = self:GetID()
 
-  parsed:removeConditionalGroup(selectedLine,
+  sMacro:removeConditionalGroup(selectedLine,
                                 selectedArgument,
                                 selectedConditionalGroup)
-
-  EditMacro(parsed:getID(), nil, nil, parsed:compose())
+  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
+  SimpleMacroFrame:Update()
 end
 
-function SimpleMacroEditorConditionalPopup_OnLoad(self)
-  self.Update = SimpleMacroEditorConditionalPopup_Update
-  self.GetConditionalDropDowns = function(this)
-    if this.conditionalDropDowns == nil then
-      this.conditionalDropDowns = {}
-    end
-    return this.conditionalDropDowns
+function SimpleMacroEditorConditionalPopupMixin:Update()
+  local currentLine, currentArgument = SimpleMacroEditorPopup:GetSelected()
+  local sMacro = SimpleMacroEditorPopup:GetSMacro()
+  local conditionals = sMacro:getConditionals(currentLine, currentArgument, self:GetID())
+
+  for i, conditional in ipairs(conditionals) do
+    local currentDropDown = getConditionalDropDown(i)
+    currentDropDown:SetValue(conditional.name)
+    currentDropDown:SetInputValue(conditional.input or "")
   end
-  self.AddConditionalDropDown = function(this, dropDown)
-    if this.conditionalDropDowns == nil then
-      this.conditionalDropDowns = {}
-    end
-    tinsert(this.conditionalDropDowns, dropDown)
+
+  for _ = 1, #self:GetConditionalDropDowns() - #conditionals do
+    hideLastConditionalDropDown()
   end
-  self.RemoveConditionalDropDown = function(this)
-    tremove(this.conditionalDropDowns, #this.conditionalDropDowns)
+
+  self:UpdateButtons()
+end
+
+function SimpleMacroEditorConditionalPopupMixin:UpdateButtons()
+  local addButton = self.AddConditionalButton
+  if #self:GetConditionalDropDowns() >= C["MAX_CONDITIONALS"] then
+    addButton:Disable()
+  else
+    addButton:Enable()
   end
-  self.editor = SimpleMacroEditorPopup
 end
 
-function SimpleMacroEditorConditionalPopup_OnShow(_)
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_OPEN)
-end
+-- old
 
-function SimpleMacroEditorConditionalPopup_OnHide(self)
-  PlaySound(SOUNDKIT.IG_CHARACTER_INFO_CLOSE)
-  SimpleMacroEditorPopup_ConditionalGroupButton_Unclick(self:GetID())
-end
 
+
+-- button onclicks
 function SimpleMacroEditorConditionalPopup_CancelButton_OnClick(self)
   SimpleMacroEditorPopup_ConditionalGroupButtons_Reset()
   HideUIPanel(self:GetParent())
 end
 
 function SimpleMacroEditorConditionalPopup_OkayButton_OnClick(self)
-  local conditionalPopup = self:GetParent()
-  saveConditionalGroups(conditionalPopup)
-  HideUIPanel(conditionalPopup)
+  local parent = self:GetParent()
+  parent:Save()
+  HideUIPanel(parent)
 end
 
 function SimpleMacroEditorConditionalPopup_DeleteButton_OnClick(self)
-  local conditionalPopup = self:GetParent()
-  deleteConditionalGroup(conditionalPopup)
-  SM_MacroEditor_Update()
-  HideUIPanel(conditionalPopup)
+  local parent = self:GetParent()
+  parent:Delete()
+  HideUIPanel(parent)
 end
 
 function SimpleMacroEditorConditionalPopup_DropDown_Initialize(self)
   local selectedValue = self:GetValue()
   local info = UIDropDownMenu_CreateInfo()
 
-  for i, conditionalData in ipairs(C["CONDITIONAL_LIST"]) do
+  for i, conditionalData in ipairs(C["CONDITIONALS"]) do
     for _, alias in ipairs(conditionalData["ALIASES"]) do
       info.func = SimpleMacroEditorConditionalPopup_DropDown_OnClick
       info.text = alias
       info.value = alias
       info.checked = info.value == selectedValue and 1 or nil
       info.tooltipTitle = alias
-      info.tooltipText = L["CONDITIONAL_STRING"]["DESCRIPTION"][i]
+      info.tooltipText = L["DESCRIPTION"][i]
       info.arg1 = conditionalData
       UIDropDownMenu_AddButton(info)
     end
@@ -130,12 +167,12 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
     UIDropDownMenu_SetSelectedValue(this, this.value)
   end
   self.SetValue = function(this, value)
-    for i, conditionalData in ipairs(C["CONDITIONAL_LIST"]) do
+    for i, conditionalData in ipairs(C["CONDITIONALS"]) do
       for _, alias in ipairs(conditionalData["ALIASES"]) do
         if value == alias then
           this.id = i
           this.value = alias
-          this.tooltip = L["CONDITIONAL_STRING"]["DESCRIPTION"][i]
+          this.tooltip = L["DESCRIPTION"][i]
           break
         end
       end
@@ -144,7 +181,7 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
 
     local editBox = this.editBox
     if editBox ~= nil then
-      if C["CONDITIONAL_LIST"][self:GetID()]["INPUT_HINT"] ~= nil then
+      if C["CONDITIONALS"][self:GetID()]["INPUT_HINT"] ~= nil then
         editBox:Show()
       else
         editBox:Hide()
@@ -176,8 +213,8 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
   end
   self.SetDefaultValue = function(this)
     this.id = 1
-    this.value = C["CONDITIONAL_LIST"][1]["ALIASES"][1]
-    this.tooltip = C["CONDITIONAL_STRING"]["DESCRIPTION"][1]
+    this.value = C["CONDITIONALS"][1]["ALIASES"][1]
+    this.tooltip = L["DESCRIPTION"][1]
     this:SetInputValue("")
     UIDropDownMenu_SetSelectedValue(this, this.value)
   end
@@ -189,7 +226,7 @@ function SimpleMacroEditorConditionalPopup_DropDown_OnLoad(self)
   UIDropDownMenu_SetSelectedValue(self, self.value)
 end
 
-local function hideLastConditionalDropDown()
+function hideLastConditionalDropDown()
   local popupFrame = SimpleMacroEditorConditionalPopup
   local addButton = popupFrame.AddConditionalButton
   local conditionalDropDownName = popupFrame:GetName()..".ConditionalDropDown"..#popupFrame:GetConditionalDropDowns()
@@ -208,7 +245,7 @@ local function hideLastConditionalDropDown()
   end
 end
 
-local function createConditionalDropDown(index)
+function getConditionalDropDown(index)
   local popupFrame = SimpleMacroEditorConditionalPopup
   local addButton = popupFrame.AddConditionalButton
   local _, buttonY = addButton:GetSize()
@@ -265,23 +302,12 @@ local function createConditionalDropDown(index)
   return conditionalDropDown
 end
 
-local function addConditionalButtonUpdate()
-  local popupFrame = SimpleMacroEditorConditionalPopup
-  local addButton = popupFrame.AddConditionalButton
-
-  if #popupFrame:GetConditionalDropDowns() >= L["MACRO_EDITOR"]["MAX_CONDITIONALS"] then
-    addButton:Disable()
-  else
-    addButton:Enable()
-  end
-end
-
 function SimpleMacroEditorConditionalPopup_AddConditionalButton_OnClick()
   local conditionalDropDowns = SimpleMacroEditorConditionalPopup:GetConditionalDropDowns()
   local conditionalDropDownCount = conditionalDropDowns ~= nil and #conditionalDropDowns or 0
 
-  createConditionalDropDown(conditionalDropDownCount + 1)
-  addConditionalButtonUpdate()
+  getConditionalDropDown(conditionalDropDownCount + 1)
+  SimpleMacroEditorConditionalPopup:UpdateButtons()
 end
 
 function SimpleMacroEditorConditionalPopup_ConditionalDropDownDeleteButton_OnClick(self)
@@ -291,29 +317,10 @@ function SimpleMacroEditorConditionalPopup_ConditionalDropDownDeleteButton_OnCli
   for i, conditionalDropDown in ipairs(conditionalDropDowns) do
     if i >= currentDropDownId and conditionalDropDowns[i+1] ~= nil then
       conditionalDropDown:SetValue(conditionalDropDowns[i+1]:GetValue())
-      conditionalDropDown:SetInputValue(conditionalDropDowns[i+1]:GetInputValue())
+      conditionalDropDown:SetInputValue(conditionalDropDowns[i+1]:GetInputValue() or "")
     end
   end
 
   hideLastConditionalDropDown()
-  addConditionalButtonUpdate()
-end
-
-function SimpleMacroEditorConditionalPopup_Update(self)
-  local currentLine = SimpleMacroEditorPopup:GetSelectedLine()
-  local currentArgument = SimpleMacroEditorPopup:GetSelectedArgument()
-  local parsedMacro = SimpleMacroEditorPopup:GetParsed()
-  local conditionals = parsedMacro:getConditionals(currentLine, currentArgument, self:GetID())
-
-  for i, conditional in ipairs(conditionals) do
-    local currentDropDown = createConditionalDropDown(i)
-    currentDropDown:SetValue(conditional.name)
-    currentDropDown:SetInputValue(conditional.input)
-  end
-
-  for _ = 1, #self:GetConditionalDropDowns() - #conditionals do
-    hideLastConditionalDropDown()
-  end
-
-  addConditionalButtonUpdate()
+  SimpleMacroEditorConditionalPopup:UpdateButtons()
 end

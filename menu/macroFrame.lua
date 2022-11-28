@@ -206,6 +206,7 @@ function SimpleMacroFrameMixin:SelectMacro(index)
     SimpleMacroNavigationFrame:GetMenu():SetText(index)
   end
 
+  SimpleMacroCreateFrame.keepPopupsOpen = nil
   self:UpdateButtons();
 end
 
