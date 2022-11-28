@@ -38,6 +38,7 @@ L["GLOBAL_STRING"]["ADD_CONDITIONAL_GROUP"] = "Add Conditional Group"
 L["GLOBAL_STRING"]["CONDITIONAL_GROUP"] = "Conditional Group %d"
 L["GLOBAL_STRING"]["CONDITIONAL_EDITOR_TITLE"] = "Conditionals"
 L["GLOBAL_STRING"]["ADD_CONDITIONAL"] = "Add Conditional"
+L["GLOBAL_STRING"]["PREVIOUS_ARROW"] = "<"
 
 -- Group
 L["GLOBAL_STRING"]["ADD_TO_GROUP"] = "Add To Group"

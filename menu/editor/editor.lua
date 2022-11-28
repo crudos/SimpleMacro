@@ -95,26 +95,6 @@ function SimpleMacroEditorPopupMixin:ResetConditionalGroupButtons()
   self.conditionalGroupButtons = nil
 end
 
-local function generateCommandString(category, command)
-  return (category == C["HASH_CATEGORY"] and '#' or '/')..command
-end
-
-function SimpleMacroEditorPopupMixin:Save()
-  local sMacro = self:GetSMacro() ---@type SMacro
-  local selectedLine = self:GetSelectedLine()
-  sMacro:setCommand(selectedLine, generateCommandString(self.CategoryDropDown:GetValue(), self.CommandDropDown:GetValue()))
-  sMacro:setArgument(selectedLine, self:GetSelectedArgument(), self.ArgumentEditBox:GetText())
-  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
-  self:GetParent():Update()
-end
-
-function SimpleMacroEditorPopupMixin:Delete()
-  local sMacro = self:GetSMacro() ---@type SMacro
-  sMacro:removeArgument(self:GetSelectedLine(), self:GetSelectedArgument())
-  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
-  self:GetParent():Update()
-end
-
 local function isArgumentPopup()
   if SimpleMacroEditorPopup:GetSelectedArgument() ~= nil then
     return true
@@ -122,16 +102,14 @@ local function isArgumentPopup()
   return false
 end
 
+
 function SimpleMacroEditorPopupMixin:Resize(frame, index, spacing)
   local baseHeight = isArgumentPopup() and C["BASE_ARGUMENT_POPUP_HEIGHT"] or C["BASE_LINE_POPUP_HEIGHT"]
-  print('Resize, isArgumentPopup', isArgumentPopup())
   if frame == nil then
     self:SetSize(C["BASE_WIDTH"], baseHeight)
-    print('~reset to base height', baseHeight)
   else
     local _, frameY = frame:GetSize()
     self:SetSize(C["BASE_WIDTH"], baseHeight + index * (frameY + spacing))
-    print('~set to', baseHeight + index * (frameY + spacing))
   end
 end
 
@@ -170,7 +148,7 @@ local function getArgumentEditBox(name)
     editBoxButton:SetPoint("LEFT", argumentEditBox, "RIGHT", 5, 1)
     editBoxButton:SetSize(24, 22)
     editBoxButton:SetText(">")
-    editBoxButton:SetScript("OnClick", SimpleMacroEditorPopup_EditBoxButton_OnClick)
+    editBoxButton:SetScript("OnClick", SimpleMacroEditorPopup_OpenArgumentButton_OnClick)
   end
 
   return argumentEditBox
@@ -186,10 +164,6 @@ local function addArgumentEditBoxSection(argumentEditBox)
   addButton:SetPoint("TOP", argumentEditBox, "BOTTOM", 0, -10)
 end
 
---[[
-  If we're selecting the beginning of the line we should show every argument (no conditional group buttons)
-  Each argument should have a button to "go to the argument"
-]]--
 function SimpleMacroEditorPopupMixin:SetupArgumentEditBoxes()
   self:ResetArgumentEditBoxes()
   local addButton = self.AddArgumentButton
@@ -255,6 +229,7 @@ function SimpleMacroEditorPopupMixin:SetupConditionalGroupButtons()
   local addButton = self.AddConditionalGroupButton
 
   if isArgumentPopup() then
+    self.ArgumentBackButton:Show()
     self.ArgumentText:Show()
     self.ArgumentText:SetText(sMacro:getArgument(self:GetSelected()))
 
@@ -268,6 +243,7 @@ function SimpleMacroEditorPopupMixin:SetupConditionalGroupButtons()
 
     self:ResetConditionalGroupButtons()
   else
+    self.ArgumentBackButton:Hide()
     self.ArgumentText:Hide()
     addButton:Hide()
   end
@@ -302,6 +278,54 @@ function SimpleMacroEditorPopupMixin:Update()
   self:SetupConditionalGroupButtons()
 end
 
+local function generateCommandString(category, command)
+  return (category == C["HASH_CATEGORY"] and '#' or '/')..command
+end
+
+function SimpleMacroEditorPopupMixin:Save()
+  if isArgumentPopup() then
+    self:ArgumentPopupSave(sMacro)
+  else
+    self:LinePopupSave(sMacro)
+  end
+  self:GetParent():Update()
+end
+
+function SimpleMacroEditorPopupMixin:ArgumentPopupSave()
+  -- do nothing
+end
+
+function SimpleMacroEditorPopupMixin:LinePopupSave()
+  local sMacro = self:GetSMacro() ---@type SMacro
+  local selectedLine = self:GetSelectedLine()
+  sMacro:setCommand(selectedLine, generateCommandString(self.CategoryDropDown:GetValue(), self.CommandDropDown:GetValue()))
+  for i = 1, C["MAX_ARGUMENTS"] do
+    sMacro:setArgument(selectedLine, i, getArgumentEditBox("ArgumentEditBox"..i):GetText())
+  end
+  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
+end
+
+function SimpleMacroEditorPopupMixin:Delete()
+  if isArgumentPopup() then
+    self:ArgumentPopupDelete(sMacro)
+  else
+    self:LinePopupDelete(sMacro)
+  end
+  self:GetParent():Update()
+end
+
+function SimpleMacroEditorPopupMixin:ArgumentPopupDelete()
+  local sMacro = self:GetSMacro() ---@type SMacro
+  sMacro:removeArgument(self:GetSelected())
+  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
+end
+
+function SimpleMacroEditorPopupMixin:LinePopupDelete()
+  local sMacro = self:GetSMacro() ---@type SMacro
+  sMacro:removeLine(self:GetSelectedLine())
+  EditMacro(sMacro:getID(), nil, nil, sMacro:compose())
+end
+
 -- Buttons
 function SimpleMacroEditorPopup_OkayButton_OnClick(self)
   local parent = self:GetParent()
@@ -315,12 +339,12 @@ function SimpleMacroEditorPopup_DeleteButton_OnClick(self)
   HideUIPanel(parent)
 end
 
-function SimpleMacroEditorPopup_EditBoxButton_OnClick(self)
+function SimpleMacroEditorPopup_OpenArgumentButton_OnClick(self)
   local argumentId = string.match(self:GetName(), "%a+(%d)%a*")
-  print(self:GetName(), argumentId)
   local popup = SimpleMacroEditorPopup
-  popup:SetSelectedArgument(argumentId)
+  popup:SetSelectedArgument(tonumber(argumentId))
   popup:Update()
+  G["SimpleMacroLine"..popup:GetSelectedLine().."Argument"..popup:GetSelectedArgument()]:Click()
 end
 
 function SimpleMacroEditorPopup_AddArgumentButton_OnClick()
@@ -329,7 +353,12 @@ function SimpleMacroEditorPopup_AddArgumentButton_OnClick()
   popup:Update()
 end
 
-
+function SimpleMacroEditorPopup_ArgumentBackButton_OnClick()
+  local popup = SimpleMacroEditorPopup
+  popup:SetSelectedArgument(nil)
+  popup:Update()
+  G["SimpleMacroLine"..popup:GetSelectedLine()]:Click()
+end
 
 
 

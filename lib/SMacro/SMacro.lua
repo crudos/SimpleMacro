@@ -198,7 +198,8 @@ end
 ---@param arg_num number index of the argument
 ---@return string text of argument
 function SMacro:getArgument(line_num, arg_num)
-  if self:getArguments(line_num) then
+  local arguments = self:getArguments(line_num)
+  if arguments and #arguments >= arg_num then
     return self:getArguments(line_num)[arg_num].arg
   end
   return nil
@@ -397,7 +398,7 @@ end
 function SMacro:composeAllConditionals(line_num, arg_num)
   local condGroups = self.lines[line_num].args[arg_num].conds
 
-  if #condGroups > 0 then
+  if condGroups and #condGroups > 0 then
     local conditionalString = ""
     for i, _ in ipairs(condGroups) do
       conditionalString = conditionalString..self:composeConditionals(line_num, arg_num, i)

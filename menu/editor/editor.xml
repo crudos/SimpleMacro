@@ -21,6 +21,15 @@
       </Layer>
     </Layers>
     <Frames>
+      <Button parentKey="ArgumentBackButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_PREVIOUS_ARROW">
+        <Size x="24" y="22"/>
+        <Anchors>
+          <Anchor point="LEFT" x="16"/>
+        </Anchors>
+        <Scripts>
+          <OnClick function="SimpleMacroEditorPopup_ArgumentBackButton_OnClick"/>
+        </Scripts>
+      </Button>
       <Frame parentKey="CategoryDropDown" inherits="SimpleMacroEditorPopupDropDownTemplate" enableMouse="true">
         <Anchors>
           <Anchor point="TOPLEFT" x="-2" y="-40"/>
@@ -38,7 +47,7 @@
         </Scripts>
       </Frame>
       <Button parentKey="AddArgumentButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_ARGUMENT">
-        <Size x="240" y="22"/>
+        <Size x="220" y="22"/>
         <Anchors>
           <Anchor point="TOP" x="0" y="-80"/>
         </Anchors>
@@ -47,7 +56,7 @@
         </Scripts>
       </Button>
       <Button parentKey="AddConditionalGroupButton" frameStrata="HIGH" inherits="UIPanelButtonTemplate" text="SIMPLE_MACRO_STRING_ADD_CONDITIONAL_GROUP">
-        <Size x="240" y="22"/>
+        <Size x="220" y="22"/>
         <Anchors>
           <Anchor point="TOP" relativeKey="$parent.ArgumentEditBox" relativePoint="BOTTOM" x="0" y="-12"/>
         </Anchors>

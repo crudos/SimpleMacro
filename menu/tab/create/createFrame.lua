@@ -16,7 +16,13 @@ StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
 
 SimpleMacroCreateFrameMixin = {};
 
+-- TODO fix first load where textChanged is always set
+local function setTextChanged()
+  SimpleMacroCreateFrame.textChanged = 1
+end
+
 function SimpleMacroCreateFrameMixin:OnLoad()
+  self.ScrollFrame.EditBox:HookScript("OnTextChanged", setTextChanged)
 end
 
 function SimpleMacroCreateFrameMixin:OnShow()
@@ -38,10 +44,14 @@ end
 
 function SimpleMacroCreateFrameMixin:Update()
   self:SetText(self:GetSelectedIndex())
+  self:UnclickLastTextButton()
+  -- TODO might not work hiding these frames on every update
+  HideUIPanel(SimpleMacroEditorPopup)
+  HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
 
 function SimpleMacroCreateFrameMixin:GetText()
-  self.ScrollFrame.EditBox:GetText();
+  return self.ScrollFrame.EditBox:GetText()
 end
 
 function SimpleMacroCreateFrameMixin:SetText(index)
@@ -54,6 +64,7 @@ function SimpleMacroCreateFrameMixin:SetText(index)
       setupMacroTextButtons()
     end
   end
+  self.textChanged = nil
 end
 
 function SimpleMacroCreateFrameMixin:SelectMacro(index)
@@ -110,7 +121,6 @@ function SimpleMacroCreateFrameMixin:GetSMacro()
   return self.SMacro
 end
 
-
 -- OnClick functions
 function SimpleMacroCreateFrame_NewButton_OnClick()
   SimpleMacroFrame:SaveMacro();
@@ -138,7 +148,6 @@ function SimpleMacroCreateFrame_OpenEditor_OnClick(self)
 end
 
 -- click editor funcs
-
 function SimpleMacroCreateFrameMixin:UnclickLastTextButton()
   if self:GetClickedTextButton() then
     self:GetClickedTextButton():Unlock()
@@ -223,7 +232,7 @@ function CreateArgumentButton(lineName, lineNum, argumentNum)
     argumentButton:SetPoint("LEFT", lineName, "RIGHT", 1, 0)
   else
     local previousArgumentName = lineName.."Argument"..(argumentNum - 1)
-    argumentButton:SetPoint("LEFT", previousArgumentName, "RIGHT", 2, 0)
+    argumentButton:SetPoint("LEFT", previousArgumentName, "RIGHT", -1, 0)
     G[previousArgumentName]:SetText(G[previousArgumentName]:GetText()..";")
   end
 
@@ -249,8 +258,8 @@ function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
   if self:GetChecked() then
     SimpleMacroCreateFrameScrollFrame:Hide()
 
-    setupMacroTextButtons()
     ShowLineButtons(1)
+    setupMacroTextButtons()
   else
     SimpleMacroCreateFrameScrollFrame:Show()
 
