@@ -21,20 +21,6 @@ function SimpleMacroEditorPopupMixin:OnHide()
   HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
 
----@return SMacro current SMacro or nil if there is none
-function SimpleMacroEditorPopupMixin:GetSMacro()
-  return SimpleMacroCreateFrame:GetSMacro()
-end
-
-function SimpleMacroEditorPopupMixin:SetSelected(lineId, argumentId)
-  self:SetSelectedLine(lineId)
-  self:SetSelectedArgument(argumentId)
-end
-
-function SimpleMacroEditorPopupMixin:GetSelected()
-  return self:GetSelectedLine(), self:GetSelectedArgument()
-end
-
 function SimpleMacroEditorPopupMixin:GetSelectedLine()
   return self.selectedLine
 end
@@ -49,6 +35,20 @@ end
 
 function SimpleMacroEditorPopupMixin:SetSelectedArgument(id)
   self.selectedArgument = id
+end
+
+---@return SMacro current SMacro or nil if there is none
+function SimpleMacroEditorPopupMixin:GetSMacro()
+  return SimpleMacroCreateFrame:GetSMacro()
+end
+
+function SimpleMacroEditorPopupMixin:GetSelected()
+  return self:GetSelectedLine(), self:GetSelectedArgument()
+end
+
+function SimpleMacroEditorPopupMixin:SetSelected(lineId, argumentId)
+  self:SetSelectedLine(lineId)
+  self:SetSelectedArgument(argumentId)
 end
 
 function SimpleMacroEditorPopupMixin:GetArgumentEditBoxes()
@@ -102,7 +102,6 @@ local function isArgumentPopup()
   return false
 end
 
-
 function SimpleMacroEditorPopupMixin:Resize(frame, index, spacing)
   local baseHeight = isArgumentPopup() and C["BASE_ARGUMENT_POPUP_HEIGHT"] or C["BASE_LINE_POPUP_HEIGHT"]
   if frame == nil then
@@ -112,7 +111,6 @@ function SimpleMacroEditorPopupMixin:Resize(frame, index, spacing)
     self:SetSize(C["BASE_WIDTH"], baseHeight + index * (frameY + spacing))
   end
 end
-
 
 --[[
   SETUP DROP DOWNS
@@ -278,10 +276,6 @@ function SimpleMacroEditorPopupMixin:Update()
   self:SetupConditionalGroupButtons()
 end
 
-local function generateCommandString(category, command)
-  return (category == C["HASH_CATEGORY"] and '#' or '/')..command
-end
-
 function SimpleMacroEditorPopupMixin:Save()
   if isArgumentPopup() then
     self:ArgumentPopupSave(sMacro)
@@ -293,6 +287,10 @@ end
 
 function SimpleMacroEditorPopupMixin:ArgumentPopupSave()
   -- do nothing
+end
+
+local function generateCommandString(category, command)
+  return (category == C["HASH_CATEGORY"] and '#' or '/')..command
 end
 
 function SimpleMacroEditorPopupMixin:LinePopupSave()
@@ -488,13 +486,16 @@ function SimpleMacroEditorPopup_CommandDropDown_Initialize()
   local info = UIDropDownMenu_CreateInfo()
 
   for _, entry in ipairs(L["LINE_TYPE_TABLE"][categoryID]) do
-    info.text = entry.COMMANDS[1]
-    info.func = SimpleMacroEditorPopup_CommandDropDown_OnClick
-    info.value = entry.COMMANDS[1]
-    info.checked = info.value == selectedValue and 1 or nil
-    info.tooltipTitle = entry.COMMANDS[1]
-    info.tooltipText = entry.DESCRIPTION
-    UIDropDownMenu_AddButton(info)
+    for id, command in ipairs(entry["COMMANDS"]) do
+      info.text = command
+      info.func = SimpleMacroEditorPopup_CommandDropDown_OnClick
+      info.value = command
+      info.checked = info.value == selectedValue and 1 or nil
+      info.tooltipTitle = command
+      info.tooltipText = entry["DESCRIPTION"]
+      info.arg1 = id
+      UIDropDownMenu_AddButton(info)
+    end
   end
 end
 
@@ -568,27 +569,5 @@ function getCommandIds(command)
         end
       end
     end
-  end
-end
-
-function hideConditionalGroupButtons(startingIndex)
-  local conditionalGroupButtonName = "SimpleMacroEditorPopup.ConditionalGroupINDEXButton"
-  local firstHidden = nil
-
-  for i = C["MAX_CONDITIONAL_GROUPS"], startingIndex + 1, -1 do
-    local buttonFrame = G[string.gsub(conditionalGroupButtonName, "INDEX", i)]
-    if buttonFrame ~= nil and buttonFrame:IsShown() then
-      buttonFrame:Hide()
-      SimpleMacroEditorPopup:RemoveLastConditionalGroupButton()
-      if firstHidden == nil then
-        firstHidden = i
-      end
-    end
-  end
-
-  if firstHidden ~= nil then
-    local lastEnabledButton = G[string.gsub(conditionalGroupButtonName, "INDEX", startingIndex)]
-    anchorAddButtonTo(lastEnabledButton)
-    resizeFrameForButtons(SimpleMacroEditorPopup, startingIndex - firstHidden)
   end
 end
