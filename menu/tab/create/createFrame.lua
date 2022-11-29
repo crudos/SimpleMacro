@@ -24,7 +24,6 @@ end
 
 function SimpleMacroCreateFrameMixin:OnLoad()
   self.ScrollFrame.EditBox:HookScript("OnTextChanged", setTextChanged)
-  printall(self.EditBoxToggle.Text)
   self.EditBoxToggle.Text:SetText(L["SIMPLE_MODE"])
 end
 

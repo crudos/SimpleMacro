@@ -487,16 +487,18 @@ function SimpleMacroEditorPopup_CommandDropDown_Initialize()
   local selectedValue = SimpleMacroEditorPopup.CommandDropDown:GetValue()
   local info = UIDropDownMenu_CreateInfo()
 
-  for _, entry in ipairs(L["LINE_TYPE_TABLE"][categoryID]) do
-    for id, command in ipairs(entry["COMMANDS"]) do
-      info.text = command
-      info.func = SimpleMacroEditorPopup_CommandDropDown_OnClick
-      info.value = command
-      info.checked = info.value == selectedValue and 1 or nil
-      info.tooltipTitle = command
-      info.tooltipText = entry["DESCRIPTION"]
-      info.arg1 = id
-      UIDropDownMenu_AddButton(info)
+  if categoryID > 0 then
+    for _, entry in ipairs(L["LINE_TYPE_TABLE"][categoryID]) do
+      for id, command in ipairs(entry["COMMANDS"]) do
+        info.text = command
+        info.func = SimpleMacroEditorPopup_CommandDropDown_OnClick
+        info.value = command
+        info.checked = info.value == selectedValue and 1 or nil
+        info.tooltipTitle = command
+        info.tooltipText = entry["DESCRIPTION"]
+        info.arg1 = id
+        UIDropDownMenu_AddButton(info)
+      end
     end
   end
 end
