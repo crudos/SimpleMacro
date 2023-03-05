@@ -44,8 +44,9 @@ function SimpleMacroSettingsMixin:LoadSettings()
 end
 
 function SimpleMacroSettingsMixin:Enable(setting)
+  local groupCount = SimpleMacro.dbc.GroupTable:GetCount()
   if setting == "ContextMenu" then
-    if #SimpleMacro.dbc.GroupTable > 0 then
+    if groupCount > 0 then
       dropdown:Enable()
     else
       dropdown:Disable()

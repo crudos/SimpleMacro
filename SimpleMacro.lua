@@ -41,6 +41,7 @@ function listener:OnEvent(event, arg1)
       SimpleMacroCharacterDB = C["SETTINGS"]["DEFAULT_CHARACTER"]
     end
     SimpleMacro.dbc = SimpleMacroCharacterDB
+    SimpleMacro.dbc.GroupTable = GroupTable:New(SimpleMacro.dbc.GroupTable)
 
     LoadModules()
     SimpleMacroSettings:LoadSettings()
@@ -65,9 +66,11 @@ local function slashCmdHandler(msg, _)
   elseif msg == "rdb" then
     SimpleMacro.dba = C["SETTINGS"]["DEFAULT_ACCOUNT"]
     SimpleMacro.dbc = C["SETTINGS"]["DEFAULT_CHARACTER"]
+    SimpleMacro.dbc.GroupTable = GroupTable:New()
     SimpleMacroSettings:LoadSettings()
+    print("The db has been reset.")
   elseif msg == "rg" then
-    SimpleMacro.dbc.GroupTable = {}
+    SimpleMacro.dbc.GroupTable = GroupTable:New()
     SimpleMacroSettings:LoadSettings()
     print("The group table has been reset.")
   else

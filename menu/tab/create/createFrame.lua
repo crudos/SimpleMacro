@@ -83,6 +83,8 @@ end
 function SimpleMacroCreateFrameMixin:DeleteMacro()
   local selectedMacroIndex = self:GetSelectedIndex();
   local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
+
+  SimpleMacro.dbc.GroupTable:RemoveMacro(actualIndex)
   DeleteMacro(actualIndex);
 
   local macroCount = select(PanelTemplates_GetSelectedTab(SimpleMacroFrame), GetNumMacros());

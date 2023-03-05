@@ -12,7 +12,7 @@ C["SETTINGS"]["DEFAULT_ACCOUNT"] = {
   Settings = {}
 }
 C["SETTINGS"]["DEFAULT_CHARACTER"] = {
-  GroupTable = {}
+  GroupTable = GroupTable:New()
 }
 for _, setting in pairs(C["SETTINGS"]["ENUM"]) do
   C["SETTINGS"]["DEFAULT_ACCOUNT"].Settings[setting] = false

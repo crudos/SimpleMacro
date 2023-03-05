@@ -56,7 +56,8 @@ function dropdown:OnLoad()
 end
 
 function dropdown:UpdateMenuList()
-  for i, _ in ipairs(SimpleMacro.dbc.GroupTable) do
+  local groups = SimpleMacro.dbc.GroupTable:GetGroups()
+  for i, _ in ipairs(groups) do
     unitOptions[i] = {
       text = string.format(L["SET_GROUP_TARGET"], i),
       func = SimpleMacroGroupFrame.ChangeGroupTarget,

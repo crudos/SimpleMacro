@@ -12,13 +12,14 @@ lib\util\util.lua
 lib\external\LibStub\LibStub.lua
 lib\external\LibDropDownExtension-1.0\LibDropDownExtension.lua
 
+lib\GroupTable.lua
+lib\parser.lua
+lib\SMacro.lua
+
 constant\constant.xml
 localization\localization.xml
 
 lib\module\module.xml
-
-lib\parser\parser.lua
-lib\SMacro\SMacro.lua
 
 menu\templates\template.xml
 menu\macroFrame.xml
@@ -33,5 +34,7 @@ SimpleMacro.xml
 
 settings\settings.xml
 
-test\SMacro\SMacroTest.lua
-test\parser\parserTest.lua
+test\lib\GroupTableTest.lua
+test\lib\parserTest.lua
+test\lib\SMacroTest.lua
+
