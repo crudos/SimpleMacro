@@ -41,7 +41,15 @@ function listener:OnEvent(event, arg1)
       SimpleMacroCharacterDB = C["SETTINGS"]["DEFAULT_CHARACTER"]
     end
     SimpleMacro.dbc = SimpleMacroCharacterDB
-    SimpleMacro.dbc.GroupTable = GroupTable:New(SimpleMacro.dbc.GroupTable)
+
+    -- TODO this handles migrating old versions of group table to the new one, remove after a few releases
+    local gt = SimpleMacro.dbc.GroupTable
+    if gt and gt[1] and gt[1].searchTable then
+      SimpleMacro.dbc.GroupTable = GroupTable:New()
+      print('Your group table has been reset due to the new addon version.')
+    else
+      SimpleMacro.dbc.GroupTable = GroupTable:New(SimpleMacro.dbc.GroupTable)
+    end
 
     LoadModules()
     SimpleMacroSettings:LoadSettings()

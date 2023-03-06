@@ -83,50 +83,72 @@ function GroupTable:RemoveMacroAtIndex(index, macroIndex)
   return removedId
 end
 
----@param id number macro id
----@return
-function GroupTable:RemoveMacro(id)
-  for i, _ in ipairs(self.groups) do
-    self:RemoveMacroFromGroup(i, id)
-  end
-end
-
-local function isAccountMacro(id)
-  return id <= MAX_ACCOUNT_MACROS and true or false
-end
-
----@param index number index of group
----@param id number macro id
----@return
-function GroupTable:RemoveMacroFromGroup(index, id)
-  local group = self.groups[index]
-  local foundIndex
-
-  if group.idMap[id] then
-    group.idMap[id] = nil
-
-    for i, currentId in ipairs(group) do
-      if foundIndex ~= nil then
-        -- If the removed macro is the same type of macro (acct/char), decrement and update id map
-        if (isAccountMacro(id) and isAccountMacro(currentId)) or (not isAccountMacro(id) and not isAccountMacro(currentId)) then
-          group[i] = currentId - 1
-          group.idMap[currentId] = nil
-          group.idMap[currentId - 1] = true
-        end
-      end
-      if currentId == id then
-        foundIndex = i
-      end
-    end
-
-    table.remove(group, foundIndex)
-  end
-end
-
 ---@param groupIndex number index of group
 ---@param macroIndex number index of macro in group
 ---@return number macro id
 function GroupTable:GetMacroId(groupIndex, macroIndex)
   return self.groups[groupIndex][macroIndex]
+end
+
+---@param id number macro id
+function GroupTable:HandleDeleteMacro(id)
+  for i, _ in ipairs(self.groups) do
+    self:HandleDeleteMacroGroup(i, id)
+  end
+end
+
+-- Check that two macros are both same category of macro (ACCOUNT or CHARACTER)
+local function isSameMacroCategory(a, b)
+  if a <= MAX_ACCOUNT_MACROS and b <= MAX_ACCOUNT_MACROS then
+    return true
+  end
+
+  if a > MAX_ACCOUNT_MACROS and b > MAX_ACCOUNT_MACROS then
+    return true
+  end
+
+  return false
+end
+
+---@param index number index of group
+---@param id number macro id
+---@return number removed macro id or nil if not found
+function GroupTable:HandleDeleteMacroGroup(index, id)
+  local group = self.groups[index]
+  local foundIndex
+
+  for i, currentId in ipairs(group) do
+    -- If the removed macro is the same type of macro (acct/char), decrement and update id map
+    if id < currentId and isSameMacroCategory(id, currentId) then
+      group[i] = currentId - 1
+      group.idMap[currentId] = nil
+      group.idMap[currentId - 1] = true
+    end
+
+    if currentId == id then
+      foundIndex = i
+    end
+  end
+
+  if group.idMap[id] then
+    group.idMap[id] = nil
+  end
+
+  return foundIndex and table.remove(group, foundIndex) or nil
+end
+
+---@param id number macro id
+function GroupTable:HandleCreateMacro(id)
+  for index, _ in ipairs(self.groups) do
+    local group = self.groups[index]
+    for i, currentId in ipairs(group) do
+      -- If the created macro is the same type of macro (acct/char), increment and update id map
+      if id <= currentId and isSameMacroCategory(id, currentId) then
+        group[i] = currentId + 1
+        group.idMap[currentId] = nil
+        group.idMap[currentId + 1] = true
+      end
+    end
+  end
 end
 

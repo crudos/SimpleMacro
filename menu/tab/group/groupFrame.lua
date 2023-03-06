@@ -280,8 +280,6 @@ function SimpleMacroGroupFrame_AddButton_OnClick()
   local macroId = SimpleMacroFrame:GetMacroDataIndex(index)
 
   local indexAdded = groupTable:AddMacro(groupID, macroId)
-  printall(groupTable:GetGroups()[groupID])
-  printall(groupTable:GetGroups()[groupID].idMap)
   if indexAdded then SimpleMacroGroupFrame:SelectMacro(indexAdded) end
   SimpleMacroGroupFrame:Update()
 end

@@ -6,6 +6,7 @@
 
 ACCOUNT_MACRO = 17
 ACCOUNT_MACRO_2 = 57
+ACCOUNT_MACRO_3 = 94
 CHARACTER_MACRO = 125
 CHARACTER_MACRO_2 = 132
 
@@ -112,53 +113,7 @@ if WoWUnit ~= nil then
     AreEqual({{ACCOUNT_MACRO_2, ['idMap']={[ACCOUNT_MACRO_2]=true}}}, groupTable:GetGroups())
   end
 
-  function GroupTableTest:RemoveMacroTest()
-    ---@type GroupTable
-    local groupTable = GroupTable:New()
-    local index = groupTable:AddGroup()
-    groupTable:AddMacro(index, ACCOUNT_MACRO)
-    groupTable:RemoveMacro(ACCOUNT_MACRO)
-
-    AreEqual({{['idMap']={}}}, groupTable:GetGroups())
-  end
-
-  --TODO
-  function GroupTableTest:RemoveMacroFromGroupDecrementsAccountMacroTest()
-    ---@type GroupTable
-    local groupTable = GroupTable:New()
-    local index = groupTable:AddGroup()
-    groupTable:AddMacro(index, ACCOUNT_MACRO)
-    groupTable:AddMacro(index, ACCOUNT_MACRO_2)
-    groupTable:RemoveMacroFromGroup(index, ACCOUNT_MACRO)
-
-    AreEqual(ACCOUNT_MACRO_2 - 1, groupTable:GetMacroId(index, 1))
-    AreEqual(1, groupTable:GetMacroCount(index))
-  end
-
-  function GroupTableTest:RemoveMacroFromGroupDecrementsCharacterMacroTest()
-    ---@type GroupTable
-    local groupTable = GroupTable:New()
-    local index = groupTable:AddGroup()
-    groupTable:AddMacro(index, CHARACTER_MACRO)
-    groupTable:AddMacro(index, CHARACTER_MACRO_2)
-    groupTable:RemoveMacroFromGroup(index, CHARACTER_MACRO)
-
-    AreEqual(CHARACTER_MACRO_2 - 1, groupTable:GetMacroId(index, 1))
-    AreEqual(1, groupTable:GetMacroCount(index))
-  end
-
-  function GroupTableTest:RemoveMacroFromGroupNoDecrementTest()
-    ---@type GroupTable
-    local groupTable = GroupTable:New()
-    local index = groupTable:AddGroup()
-    groupTable:AddMacro(index, ACCOUNT_MACRO)
-    groupTable:AddMacro(index, CHARACTER_MACRO)
-    groupTable:RemoveMacroFromGroup(index, ACCOUNT_MACRO)
-
-    AreEqual(CHARACTER_MACRO, groupTable:GetMacroId(index, 1))
-  end
-
-  function GroupTableTest:GetMacroTest()
+  function GroupTableTest:GetMacroIdTest()
     ---@type GroupTable
     local groupTable = GroupTable:New()
     local groupIndex = groupTable:AddGroup()
@@ -166,4 +121,100 @@ if WoWUnit ~= nil then
 
     AreEqual(ACCOUNT_MACRO, groupTable:GetMacroId(groupIndex, macroIndex))
   end
+
+  function GroupTableTest:HandleDeleteMacroTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+    groupTable:HandleDeleteMacro(ACCOUNT_MACRO)
+
+    AreEqual({{['idMap']={}}}, groupTable:GetGroups())
+  end
+
+  function GroupTableTest:HandleDeleteMacroGroupDecrementsAccountMacroTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+    groupTable:AddMacro(index, ACCOUNT_MACRO_2)
+
+    local result = groupTable:HandleDeleteMacroGroup(index, ACCOUNT_MACRO)
+
+    AreEqual(ACCOUNT_MACRO, result)
+    AreEqual(ACCOUNT_MACRO_2 - 1, groupTable:GetMacroId(index, 1))
+    AreEqual(1, groupTable:GetMacroCount(index))
+  end
+
+  function GroupTableTest:HandleDeleteMacroGroupDecrementsAccountMacroNotInGroupTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+    groupTable:AddMacro(index, ACCOUNT_MACRO_3)
+
+    local result = groupTable:HandleDeleteMacroGroup(index, ACCOUNT_MACRO_2)
+
+    IsFalse(result)
+    AreEqual(ACCOUNT_MACRO_3 - 1, groupTable:GetMacroId(index, 2))
+    AreEqual(2, groupTable:GetMacroCount(index))
+  end
+
+  function GroupTableTest:HandleDeleteMacroGroupDecrementsCharacterMacroTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, CHARACTER_MACRO)
+    groupTable:AddMacro(index, CHARACTER_MACRO_2)
+
+    local result = groupTable:HandleDeleteMacroGroup(index, CHARACTER_MACRO)
+
+    AreEqual(CHARACTER_MACRO, result)
+    AreEqual(CHARACTER_MACRO_2 - 1, groupTable:GetMacroId(index, 1))
+    AreEqual(1, groupTable:GetMacroCount(index))
+  end
+
+  function GroupTableTest:HandleDeleteMacroGroupNoDecrementTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+    groupTable:AddMacro(index, CHARACTER_MACRO)
+
+    local result = groupTable:HandleDeleteMacroGroup(index, ACCOUNT_MACRO)
+
+    AreEqual(ACCOUNT_MACRO, result)
+    AreEqual(CHARACTER_MACRO, groupTable:GetMacroId(index, 1))
+  end
+
+  function GroupTableTest:HandleCreateMacroIncrementAccountMacrosTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO_2)
+    groupTable:HandleCreateMacro(ACCOUNT_MACRO_2)
+
+    AreEqual(ACCOUNT_MACRO_2 + 1, groupTable:GetMacroId(index, 1))
+  end
+
+  function GroupTableTest:HandleCreateMacroNoIncrementDifferentTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, CHARACTER_MACRO)
+    groupTable:HandleCreateMacro(ACCOUNT_MACRO_2)
+
+    AreEqual(CHARACTER_MACRO, groupTable:GetMacroId(index, 1))
+  end
+
+  function GroupTableTest:HandleCreateMacroNoIncrementLessTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+    groupTable:HandleCreateMacro(ACCOUNT_MACRO_2)
+
+    AreEqual(ACCOUNT_MACRO, groupTable:GetMacroId(index, 1))
+  end
+
 end

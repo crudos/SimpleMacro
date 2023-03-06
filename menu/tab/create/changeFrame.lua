@@ -93,14 +93,18 @@ function ChangeFrameMixin:OkayButton_OnClick()
   local index = 1
   local iconTexture = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture();
   local text = self.BorderBox.IconSelectorEditBox:GetText();
+  local groupTable = SimpleMacro.dbc.GroupTable ---@type GroupTable
 
   text = string.gsub(text, "\"", "");
   if self.mode == IconSelectorPopupFrameModes.New then
     local isCharacterMacro = macroFrame.macroBase > 0;
     index = CreateMacro(text, iconTexture, nil, isCharacterMacro) - macroFrame.macroBase;
+    groupTable:HandleCreateMacro(index)
   elseif self.mode == IconSelectorPopupFrameModes.Edit then
     local actualIndex = macroFrame:GetMacroDataIndex(macroFrame:GetSelectedIndex());
     index = EditMacro(actualIndex, text, iconTexture) - macroFrame.macroBase;
+    groupTable:HandleDeleteMacro(actualIndex)
+    groupTable:HandleCreateMacro(index)
   end
 
   macroFrame:SelectMacro(index);
