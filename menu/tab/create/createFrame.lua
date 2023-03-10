@@ -8,14 +8,14 @@ StaticPopupDialogs["SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO"] = {
   button1 = OKAY,
   button2 = CANCEL,
   OnAccept = function(_)
-    SimpleMacroCreateFrame:DeleteMacro();
+    SimpleMacroCreateFrame:DeleteMacro()
   end,
   timeout = 0,
   whileDead = 1,
   showAlert = 1
-};
+}
 
-SimpleMacroCreateFrameMixin = {};
+SimpleMacroCreateFrameMixin = {}
 
 -- TODO fix first load where textChanged is always set
 local function setTextChanged()
@@ -34,14 +34,14 @@ function SimpleMacroCreateFrameMixin:OnShow()
 end
 
 function SimpleMacroCreateFrameMixin:OnHide()
-  self:SaveMacro();
+  self:SaveMacro()
   self:UnclickLastTextButton()
   HideUIPanel(SimpleMacroEditorPopup)
   HideUIPanel(SimpleMacroEditorConditionalPopup)
 end
 
 function SimpleMacroCreateFrameMixin:GetMacroDataIndex(index)
-  return SimpleMacroFrame:GetMacroDataIndex(index);
+  return SimpleMacroFrame:GetMacroDataIndex(index)
 end
 
 function SimpleMacroCreateFrameMixin:Update()
@@ -60,11 +60,11 @@ function SimpleMacroCreateFrameMixin:GetText()
 end
 
 function SimpleMacroCreateFrameMixin:SetText(index)
-  local actualIndex = self:GetMacroDataIndex(index);
-  local name, _, body = GetMacroInfo(actualIndex);
+  local actualIndex = self:GetMacroDataIndex(index)
+  local name, _, body = GetMacroInfo(actualIndex)
   if name then
     self:SetSMacro(actualIndex)
-    self.ScrollFrame.EditBox:SetText(body);
+    self.ScrollFrame.EditBox:SetText(body)
     if SimpleMacroCreateFrameEditBoxToggle:GetChecked() then
       setupMacroTextButtons()
     end
@@ -73,44 +73,44 @@ function SimpleMacroCreateFrameMixin:SetText(index)
 end
 
 function SimpleMacroCreateFrameMixin:SelectMacro(index)
-  return SimpleMacroFrame:SelectMacro(index);
+  return SimpleMacroFrame:SelectMacro(index)
 end
 
 function SimpleMacroCreateFrameMixin:GetSelectedIndex()
-  return SimpleMacroFrame:GetSelectedIndex();
+  return SimpleMacroFrame:GetSelectedIndex()
 end
 
 function SimpleMacroCreateFrameMixin:DeleteMacro()
-  local selectedMacroIndex = self:GetSelectedIndex();
-  local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
+  local selectedMacroIndex = self:GetSelectedIndex()
+  local actualIndex = self:GetMacroDataIndex(selectedMacroIndex)
 
-  DeleteMacro(actualIndex);
+  DeleteMacro(actualIndex)
   SimpleMacro.dbc.GroupTable:HandleDeleteMacro(actualIndex)
 
-  local macroCount = select(PanelTemplates_GetSelectedTab(SimpleMacroFrame), GetNumMacros());
-  local newMacroIndex = math.min(macroCount, selectedMacroIndex);
-  self:SelectMacro(newMacroIndex > 0 and newMacroIndex or nil);
+  local macroCount = select(PanelTemplates_GetSelectedTab(SimpleMacroFrame), GetNumMacros())
+  local newMacroIndex = math.min(macroCount, selectedMacroIndex)
+  self:SelectMacro(newMacroIndex > 0 and newMacroIndex or nil)
 
-  SimpleMacroFrame:Update();
+  SimpleMacroFrame:Update()
 end
 
 function SimpleMacroCreateFrameMixin:SaveMacro(selectedMacroIndex)
   if self.textChanged and (selectedMacroIndex ~= nil) then
-    local actualIndex = self:GetMacroDataIndex(selectedMacroIndex);
-    EditMacro(actualIndex, nil, nil, self:GetText());
-    self:SelectMacro(selectedMacroIndex);
-    self.textChanged = nil;
+    local actualIndex = self:GetMacroDataIndex(selectedMacroIndex)
+    EditMacro(actualIndex, nil, nil, self:GetText())
+    self:SelectMacro(selectedMacroIndex)
+    self.textChanged = nil
   end
 end
 
 function SimpleMacroCreateFrameMixin:HideDetails()
-  SimpleMacroCreateFrameChangeButton:Hide();
+  SimpleMacroCreateFrameChangeButton:Hide()
   self.ScrollFrame.EditBox:Hide()
 end
 
 function SimpleMacroCreateFrameMixin:ShowDetails()
-  SimpleMacroCreateFrameChangeButton:Show();
-  SimpleMacroCreateFrameEnterMacroText:Show();
+  SimpleMacroCreateFrameChangeButton:Show()
+  SimpleMacroCreateFrameEnterMacroText:Show()
   self.ScrollFrame.EditBox:Show()
 end
 
@@ -130,22 +130,22 @@ end
 
 -- OnClick functions
 function SimpleMacroCreateFrame_NewButton_OnClick()
-  SimpleMacroFrame:SaveMacro();
-  SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.New;
-  SimpleMacroChangeFrame:Show();
+  SimpleMacroFrame:SaveMacro()
+  SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.New
+  SimpleMacroChangeFrame:Show()
 end
 
 function SimpleMacroCreateFrame_ChangeButton_OnClick()
-  SimpleMacroFrame:SaveMacro();
-  SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.Edit;
+  SimpleMacroFrame:SaveMacro()
+  SimpleMacroChangeFrame.mode = IconSelectorPopupFrameModes.Edit
   SimpleMacroChangeFrame:Show()
 end
 
 function SimpleMacroCreateFrame_SaveButton_OnClick()
-  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-  SimpleMacroFrame:SaveMacro();
-  SimpleMacroFrame:Update();
-  SimpleMacroChangeFrame:Hide();
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+  SimpleMacroFrame:SaveMacro()
+  SimpleMacroFrame:Update()
+  SimpleMacroChangeFrame:Hide()
 end
 
 -- TODO temp
@@ -240,7 +240,7 @@ function CreateArgumentButton(lineName, lineNum, argumentNum)
   else
     local previousArgumentName = lineName.."Argument"..(argumentNum - 1)
     argumentButton:SetPoint("LEFT", previousArgumentName, "RIGHT", -1, 0)
-    G[previousArgumentName]:SetText(G[previousArgumentName]:GetText()..";")
+    G[previousArgumentName]:SetText(G[previousArgumentName]:GetText().."")
   end
 
   return argumentButton
@@ -275,7 +275,7 @@ function SimpleMacroCreateFrame_EditBoxToggle_OnClick(self)
 end
 
 function SimpleMacroCreateFrame_CancelButton_OnClick()
-  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-  SimpleMacroFrame:Update();
-  SimpleMacroChangeFrame:Hide();
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+  SimpleMacroFrame:Update()
+  SimpleMacroChangeFrame:Hide()
 end
