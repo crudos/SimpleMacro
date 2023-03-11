@@ -152,3 +152,28 @@ function GroupTable:HandleCreateMacro(id)
   end
 end
 
+---@param index number index of group
+---@param id number macro id
+---@return boolean whether or not the group contains the macro
+function GroupTable:HasMacro(index, id)
+  return self.groups[index].idMap[id] ~= nil
+end
+
+---@param prevMacroId number previous macro id
+---@param curMacroId number current macro id
+function GroupTable:HandleEditMacro(prevMacroId, curMacroId)
+  if prevMacroId ~= curMacroId then
+    local toAdd = {}
+
+    for i, _ in ipairs(self.groups) do
+      toAdd[i] = self:HasMacro(i, prevMacroId)
+    end
+
+    self:HandleDeleteMacro(prevMacroId)
+    self:HandleCreateMacro(curMacroId)
+
+    for i, shouldAdd in ipairs(toAdd) do
+      if shouldAdd then self:AddMacro(i, curMacroId) end
+    end
+  end
+end

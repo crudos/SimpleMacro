@@ -217,4 +217,26 @@ if WoWUnit ~= nil then
     AreEqual(ACCOUNT_MACRO, groupTable:GetMacroId(index, 1))
   end
 
+  function GroupTableTest:HasMacroTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+
+    IsTrue(groupTable:HasMacro(index, ACCOUNT_MACRO))
+    IsFalse(groupTable:HasMacro(index, ACCOUNT_MACRO_2))
+  end
+
+  function GroupTableTest:HandleEditMacroTest()
+    ---@type GroupTable
+    local groupTable = GroupTable:New()
+    local index = groupTable:AddGroup()
+    groupTable:AddMacro(index, ACCOUNT_MACRO)
+    groupTable:AddMacro(index, ACCOUNT_MACRO_2)
+    groupTable:HandleEditMacro(ACCOUNT_MACRO, ACCOUNT_MACRO + 5)
+
+    IsTrue(groupTable:HasMacro(index, ACCOUNT_MACRO + 5))
+    IsTrue(groupTable:HasMacro(index, ACCOUNT_MACRO_2))
+  end
+
 end

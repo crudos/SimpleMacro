@@ -103,8 +103,7 @@ function ChangeFrameMixin:OkayButton_OnClick()
   elseif self.mode == IconSelectorPopupFrameModes.Edit then
     local actualIndex = macroFrame:GetMacroDataIndex(macroFrame:GetSelectedIndex())
     index = EditMacro(actualIndex, text, iconTexture) - macroFrame.macroBase
-    groupTable:HandleDeleteMacro(actualIndex)
-    groupTable:HandleCreateMacro(index + macroFrame.macroBase)
+    groupTable:HandleEditMacro(actualIndex, index + macroFrame.macroBase)
   end
 
   macroFrame:SelectMacro(index)

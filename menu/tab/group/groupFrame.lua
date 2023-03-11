@@ -87,7 +87,7 @@ function SimpleMacroGroupFrameMixin:OnShow()
   end
 
   -- move selector if we're out of bounds
-  if self:GetSelectedIndex() > groupTable:GetMacroCount(groupID) then
+  if groupID and self:GetSelectedIndex() > groupTable:GetMacroCount(groupID) then
     self:SelectMacro(1)
   end
 
