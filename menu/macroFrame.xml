@@ -56,7 +56,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            self:GetParent():SelectTab(self);
+            self:GetParent():SelectTab(self)
           </OnClick>
         </Scripts>
       </Button>
@@ -66,7 +66,7 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            self:GetParent():SelectTab(self);
+            self:GetParent():SelectTab(self)
           </OnClick>
         </Scripts>
       </Button>
@@ -85,8 +85,8 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            self:SetChecked(false);
-            PickupMacro(SimpleMacroCreateFrame.selectedMacro);
+            self:SetChecked(false)
+            PickupMacro(SimpleMacroCreateFrame.selectedMacro)
           </OnClick>
         </Scripts>
       </CheckButton>

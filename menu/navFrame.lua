@@ -1,4 +1,4 @@
-SimpleMacroNavigationMixin = {};
+SimpleMacroNavigationMixin = {}
 
 function SimpleMacroNavigationMixin:OnLoad()
   PanelTemplates_SetNumTabs(self, 2)
@@ -14,8 +14,8 @@ function SimpleMacroNavigationMixin:OnHide()
 end
 
 function SimpleMacroNavigationMixin:SelectTab(tab)
-  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-  self:ChangeTab(tab:GetID());
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+  self:ChangeTab(tab:GetID())
 end
 
 function SimpleMacroNavigationMixin:ChangeTab(tabID)

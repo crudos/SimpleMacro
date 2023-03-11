@@ -9,7 +9,7 @@ SimpleMacroSettingsMixin = {}
 
 function SimpleMacroSettingsMixin:OnLoad()
   self.name = addonName
-  InterfaceOptions_AddCategory(self);
+  InterfaceOptions_AddCategory(self)
 
   for setting, _ in pairs(C["DEFAULT_ACCOUNT"].Settings) do
     G[self:GetName()..setting.."Text"]:SetText(L[setting])

@@ -54,13 +54,13 @@ function SimpleMacroGroupFrameMixin:OnLoad()
 
   local function SimpleMacroFrameInitMacroButton(macroButton, selectionIndex, name, texture, body)
     if name ~= nil then
-      macroButton:SetIconTexture(texture);
-      macroButton.Name:SetText(name);
-      macroButton:Enable();
+      macroButton:SetIconTexture(texture)
+      macroButton.Name:SetText(name)
+      macroButton:Enable()
     else
-      macroButton:SetIconTexture("");
-      macroButton.Name:SetText("");
-      macroButton:Disable();
+      macroButton:SetIconTexture("")
+      macroButton.Name:SetText("")
+      macroButton:Disable()
     end
   end
 
@@ -68,13 +68,13 @@ function SimpleMacroGroupFrameMixin:OnLoad()
     self:SelectMacro(selectionIndex)
   end
 
-  self.MacroSelector:SetSetupCallback(SimpleMacroFrameInitMacroButton);
-  self.MacroSelector:SetSelectedCallback(SimpleMacroFrameMacroButtonSelectedCallback);
-  self.MacroSelector:SetCustomStride(C["MACROS_PER_ROW"]);
-  self.MacroSelector:SetCustomPadding(5, 5, 5, 5, 13, 13);
-  self.MacroSelector:AdjustScrollBarOffsets(0, 5, -3);
+  self.MacroSelector:SetSetupCallback(SimpleMacroFrameInitMacroButton)
+  self.MacroSelector:SetSelectedCallback(SimpleMacroFrameMacroButtonSelectedCallback)
+  self.MacroSelector:SetCustomStride(C["MACROS_PER_ROW"])
+  self.MacroSelector:SetCustomPadding(5, 5, 5, 5, 13, 13)
+  self.MacroSelector:AdjustScrollBarOffsets(0, 5, -3)
 
-  EventRegistry:RegisterCallback("ClickBindingFrame.UpdateFrames", self.UpdateButtons, self);
+  EventRegistry:RegisterCallback("ClickBindingFrame.UpdateFrames", self.UpdateButtons, self)
 end
 
 function SimpleMacroGroupFrameMixin:OnShow()
@@ -99,7 +99,7 @@ function SimpleMacroGroupFrameMixin:OnHide()
 end
 
 function SimpleMacroGroupFrameMixin:SelectTab(tab)
-  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
+  PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
   self:ChangeTab(tab:GetID())
 end
 
@@ -121,14 +121,14 @@ function SimpleMacroGroupFrameMixin:SelectMacro(index)
   local macroCount = SimpleMacro.dbc.GroupTable:GetMacroCount(groupID)
 
   if index and macroCount < index then
-    index = nil;
+    index = nil
   end
 
-  self.MacroSelector:SetSelectedIndex(index);
+  self.MacroSelector:SetSelectedIndex(index)
 end
 
 function SimpleMacroGroupFrameMixin:GetSelectedIndex()
-  return self.MacroSelector:GetSelectedIndex();
+  return self.MacroSelector:GetSelectedIndex()
 end
 
 function SimpleMacroGroupFrameMixin:GetSelectedGroupID()
@@ -137,10 +137,10 @@ end
 
 function SimpleMacroGroupFrameMixin:RefreshIconDataProvider()
   if self.iconDataProvider == nil then
-    self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spell);
+    self.iconDataProvider = CreateAndInitFromMixin(IconDataProviderMixin, IconDataProviderExtraType.Spell)
   end
 
-  return self.iconDataProvider;
+  return self.iconDataProvider
 end
 
 function SimpleMacroGroupFrameMixin:Update()
@@ -162,8 +162,8 @@ function SimpleMacroGroupFrameMixin:Update()
     return C["MAX_MACROS_PER_GROUP"]
   end
 
-  self.MacroSelector:SetSelectionsDataProvider(SimpleMacroGroupFrameGetMacroInfo, SimpleMacroGroupFrameGetNumMacros);
-  self:UpdateButtons();
+  self.MacroSelector:SetSelectionsDataProvider(SimpleMacroGroupFrameGetMacroInfo, SimpleMacroGroupFrameGetNumMacros)
+  self:UpdateButtons()
 end
 
 function SimpleMacroGroupFrameMixin:UpdateButtons()
@@ -205,7 +205,7 @@ function SimpleMacroGroupFrameMixin:UpdateButtons()
     SimpleMacroGroupFrameDeleteButton:Enable()
   end
 
-  self.MacroSelector:UpdateAllSelectedTextures();
+  self.MacroSelector:UpdateAllSelectedTextures()
   self:UpdateGroupTabs()
 end
 
@@ -304,9 +304,9 @@ end
 
 function SimpleMacroGroupFrame_EditBox_OnTextChanged(self)
   if #self:GetText() > 0 then
-    SimpleMacroGroupFrameChangeButton:Enable();
+    SimpleMacroGroupFrameChangeButton:Enable()
   else
-    SimpleMacroGroupFrameChangeButton:Disable();
+    SimpleMacroGroupFrameChangeButton:Disable()
   end
 end
 

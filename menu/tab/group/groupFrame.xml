@@ -88,10 +88,10 @@
           <OnEditFocusLost function="EditBox_ClearHighlight"/>
           <OnTextChanged function="SimpleMacroGroupFrame_EditBox_OnTextChanged"/>
           <OnEnterPressed>
-            self:ClearFocus();
+            self:ClearFocus()
           </OnEnterPressed>
           <OnEscapePressed>
-            self:ClearFocus();
+            self:ClearFocus()
           </OnEscapePressed>
         </Scripts>
       </EditBox>

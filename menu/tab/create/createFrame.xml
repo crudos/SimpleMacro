@@ -58,8 +58,8 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON);
-            StaticPopup_Show("SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO");
+            PlaySound(SOUNDKIT.IG_MAINMENU_OPTION_CHECKBOX_ON)
+            StaticPopup_Show("SIMPLE_MACRO_CONFIRM_DELETE_SELECTED_MACRO")
           </OnClick>
         </Scripts>
       </Button>
