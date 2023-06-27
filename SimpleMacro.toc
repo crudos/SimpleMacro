@@ -6,6 +6,7 @@
 ## SavedVariables: SimpleMacroAccountDB
 ## SavedVariablesPerCharacter: SimpleMacroCharacterDB
 ## OptionalDeps: WoWUnit
+## IconTexture: Interface\AddOns\SimpleMacro\icon\punch
 
 lib\util\util.lua
 
