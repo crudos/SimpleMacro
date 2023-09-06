@@ -1,4 +1,4 @@
-## Interface: 100105
+## Interface: 100107
 ## Title: SimpleMacro
 ## Author: Crudos
 ## Version: 10.1.5.0
