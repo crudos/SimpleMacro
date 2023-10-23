@@ -17,9 +17,8 @@ function ChangeFrameMixin:OnShow()
     self.BorderBox.SelectedIconArea.SelectedIconButton:SetIconTexture(icon)
 
     -- Index is not yet set, but we know if an icon in IconSelector was selected it was in the list, so set directly.
-    self.BorderBox.SelectedIconArea.SelectedIconButton.SelectedTexture:SetShown(false)
-    self.BorderBox.SelectedIconArea.SelectedIconText.SelectedIconHeader:SetText(ICON_SELECTION_TITLE_CURRENT)
     self.BorderBox.SelectedIconArea.SelectedIconText.SelectedIconDescription:SetText(ICON_SELECTION_CLICK)
+    self.BorderBox.SelectedIconArea.SelectedIconText.SelectedIconDescription:SetFontObject(GameFontHighlightSmall)
   end
   self.IconSelector:SetSelectedCallback(OnIconSelected)
 
@@ -76,7 +75,6 @@ function ChangeFrameMixin:Update()
   self.IconSelector:SetSelectionsDataProvider(getSelection, getNumSelections)
   self.IconSelector:ScrollToSelectedIndex()
 
-  self.BorderBox.SelectedIconArea.SelectedIconButton:SetSelectedTexture()
   self:SetSelectedIconText()
 end
 
