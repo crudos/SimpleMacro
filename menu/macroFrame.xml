@@ -2,8 +2,8 @@
   <Script file="macroFrame.lua"/>
 
   <!-- SimpleMacroUI -->
-  <Frame name="SimpleMacroFrame" mixin="SimpleMacroFrameMixin" toplevel="true"
-         movable="true" parent="UIParent" enableMouse="true" hidden="true" inherits="ButtonFrameTemplate">
+  <Frame name="SimpleMacroFrame" mixin="SimpleMacroFrameMixin" toplevel="true" movable="true" parent="UIParent" enableMouse="true"
+         clampedToScreen="true" hidden="true" inherits="ButtonFrameTemplate">
     <Size x="437" y="424"/>
     <KeyValues>
       <KeyValue key="maxTabWidth" value="140" type="number"/>
