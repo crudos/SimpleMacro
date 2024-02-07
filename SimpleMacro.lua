@@ -1,5 +1,6 @@
 local addonName, ns = ...
 local C = ns.C
+local G = _G
 
 local loadingAgainSoon
 
@@ -24,6 +25,37 @@ function LoadModules()
       LoadModules()
     end)
   end
+end
+
+function setupHooks(groupTable)
+  -- Post Hook for CreateMacro
+  local function postCreateHook(name, iconFileID, body, perCharacter, ...)
+    local macroId = ...
+    print('Custom Create')
+    groupTable:HandleCreateMacro(macroId + (G['SimpleMacroFrame'].macroBase or 0))
+    return macroId
+  end
+  local oldCreateMacro = CreateMacro
+  function CreateMacro(...)
+    local name, iconFileID, body, perCharacter = ...
+    return postCreateHook(name, iconFileID, body, perCharacter, oldCreateMacro(name, iconFileID, body, perCharacter, ...))
+  end
+
+  -- Post Hook for EditMacro
+  local function postEditHook(macroInfo, name, icon, body, ...)
+    local macroId = ...
+    print('Custom Edit')
+    groupTable:HandleEditMacro(macroInfo, macroId + (G['SimpleMacroFrame'].macroBase or 0))
+    return macroId
+  end
+  local oldEditMacro = EditMacro
+  function EditMacro(...)
+    local macroInfo, name, icon, body = ...
+    return postEditHook(macroInfo, name, icon, body, oldEditMacro(macroInfo, name, icon, body, ...))
+  end
+
+  -- hook for DeleteMacro
+  hooksecurefunc("DeleteMacro", groupTable.HandleDeleteMacro)
 end
 
 local listener = CreateFrame("Frame", "SimpleMacro")
@@ -52,6 +84,7 @@ function listener:OnEvent(event, arg1)
     end
 
     LoadModules()
+    --setupHooks(gt)
     SimpleMacroSettings:LoadSettings()
     SimpleMacro.loaded = true
   end

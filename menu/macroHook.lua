@@ -1,0 +1,33 @@
+local addonName, ns = ...
+
+--local groupTable = SimpleMacro.dbc.GroupTable
+--
+---- Post Hook for CreateMacro
+--local function postCreateHook(name, iconFileID, body, perCharacter, ...)
+--  local macroId = ...
+--  print('Custom Create')
+--  groupTable:HandleCreateMacro(macroId + SimpleMacroFrame.macroBase)
+--  return macroId
+--end
+--local oldCreateMacro = CreateMacro
+--function CreateMacro(...)
+--  local name, iconFileID, body, perCharacter = ...
+--  return postCreateHook(name, iconFileID, body, perCharacter, oldCreateMacro(name, iconFileID, body, perCharacter, ...))
+--end
+--
+---- Post Hook for EditMacro
+--local function postEditHook(macroInfo, name, icon, body, ...)
+--  local macroId = ...
+--  print('Custom Edit')
+--  groupTable:HandleEditMacro(macroInfo, macroId + SimpleMacroFrame.macroBase)
+--  return macroId
+--end
+--local oldEditMacro = EditMacro
+--function EditMacro(...)
+--  local macroInfo, name, icon, body = ...
+--  return postEditHook(macroInfo, name, icon, body, oldEditMacro(macroInfo, name, icon, body, ...))
+--end
+--
+---- hook for DeleteMacro
+--hooksecurefunc("DeleteMacro", groupTable.HandleDeleteMacro)
+
