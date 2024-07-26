@@ -1,3 +1,5 @@
+-- NO LONGER USED
+
 local _, ns = ...
 local L = ns.L["CONTEXT"]
 
@@ -12,12 +14,14 @@ local validTypes = {
 }
 
 local function IsValidDropDown(baseDropdown)
+  print('isvalid')
   return type(baseDropdown.which) == "string" and validTypes[baseDropdown.which]
 end
 
 local unitOptions
 
 local function OnToggle(baseDropdown, event, options, level, module)
+  print('toggle')
   if not module:IsEnabled() or not IsValidDropDown(baseDropdown) then
     return
   end

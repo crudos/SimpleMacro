@@ -2,31 +2,6 @@ local addonName, ns = ...
 local C = ns.C
 local G = _G
 
-local loadingAgainSoon
-
-function LoadModules()
-  local modules = ns:GetModules()
-  local numLoaded = 0
-  local numPending = 0
-  for _, module in ipairs(modules) do
-    if not module:IsLoaded() and module:CanLoad() then
-      if module:HasDependencies() then
-        numLoaded = numLoaded + 1
-        module:Load()
-      else
-        numPending = numPending + 1
-      end
-    end
-  end
-  if not loadingAgainSoon and numLoaded > 0 and numPending > 0 then
-    loadingAgainSoon = true
-    C_Timer.After(1, function()
-      loadingAgainSoon = false
-      LoadModules()
-    end)
-  end
-end
-
 function setupHooks(groupTable)
   -- Post Hook for CreateMacro
   local function postCreateHook(name, iconFileID, body, perCharacter, ...)
@@ -83,7 +58,6 @@ function listener:OnEvent(event, arg1)
       SimpleMacro.dbc.GroupTable = GroupTable:New(SimpleMacro.dbc.GroupTable)
     end
 
-    LoadModules()
     --setupHooks(gt)
     SimpleMacroSettings:LoadSettings()
     SimpleMacro.loaded = true
@@ -103,7 +77,7 @@ local function slashCmdHandler(msg, _)
   if msg == "open" or msg == "o" or msg == "" then
     ShowUIPanel(SimpleMacroFrame)
   elseif msg == "settings" or msg == "s" then
-    InterfaceOptionsFrame_OpenToCategory(addonName)
+    Settings.OpenToCategory(SimpleMacro.SettingsCategory:GetID())
   elseif msg == "rdb" then
     SimpleMacro.dba = C["SETTINGS"]["DEFAULT_ACCOUNT"]
     SimpleMacro.dbc = C["SETTINGS"]["DEFAULT_CHARACTER"]

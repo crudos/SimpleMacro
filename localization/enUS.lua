@@ -68,17 +68,15 @@ L["CREATE_FRAME"]["SIMPLE_MODE"] = "Simple Mode"
 
 -- Settings
 L["SETTINGS"] = {}
-L["SETTINGS"]["ContextMenu"] = "Add target changer to context menu"
-L["SETTINGS"]["ContextMenuTooltip"] = "Allows you to update the target of a group by right-clicking a unit frame."
+L["SETTINGS"]["CONTEXT_MENU"] = {}
+L["SETTINGS"]["CONTEXT_MENU"]["NAME"] = "Context Menu Group Buttons"
+L["SETTINGS"]["CONTEXT_MENU"]["TOOLTIP"] = "Allows you to update the target of a group by right-clicking a unit frame."
+L["SETTINGS"]["CONTEXT_MENU"]["SET_GROUP_TARGET"] = "Set Group %d Target"
 
 -- Change menu
 L["CHANGE"] = {}
 L["CHANGE"]["Name"] = "Enter a name (max 16 characters):"
 L["CHANGE"]["Icon"] = "Choose an icon:"
-
--- Context menu
-L["CONTEXT"] = {}
-L["CONTEXT"]["SET_GROUP_TARGET"] = "Set Group %d Target"
 
 -- Popup menu
 L["LINES_TITLE"] = "Lines"

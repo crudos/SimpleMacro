@@ -10,9 +10,6 @@
 
 lib\util\util.lua
 
-lib\external\LibStub\LibStub.lua
-lib\external\LibDropDownExtension-1.0\LibDropDownExtension.lua
-
 lib\GroupTable.lua
 lib\parser.lua
 lib\SMacro.lua
