@@ -1,5 +1,5 @@
 <Ui xmlns="http://www.blizzard.com/wow/ui/">
-  <Script file="settings2.lua"/>
+  <Script file="settings.lua"/>
   <Frame name="SimpleMacroSettings" mixin="SimpleMacroSettingsMixin" hidden="true">
     <Scripts>
       <OnLoad method="OnLoad"/>
