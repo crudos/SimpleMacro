@@ -17,10 +17,15 @@ function printall(...)
   local arg1, arg2, arg3, arg4 = ...
   local arg = { arg1, arg2, arg3, arg4 }
   local out = ""
-  for k, v in ipairs(arg) do
+  for _, v in ipairs(arg) do
     out = out..printVal(v).." "
   end
-  print(out)
+
+  if arg == nil then print('printall: nil') else print(out) end
+end
+
+function ternary(cond, truth, falsity)
+  if cond then return truth else return falsity end
 end
 
 function table.clone(tableToClone)

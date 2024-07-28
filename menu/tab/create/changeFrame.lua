@@ -91,7 +91,7 @@ function ChangeFrameMixin:OkayButton_OnClick()
   local index = 1
   local iconTexture = self.BorderBox.SelectedIconArea.SelectedIconButton:GetIconTexture()
   local text = self.BorderBox.IconSelectorEditBox:GetText()
-  local groupTable = SimpleMacro.dbc.GroupTable ---@type GroupTable
+  local groupTable = SimpleMacro.dbc.GROUP_TABLE ---@type GroupTable
 
   text = string.gsub(text, "\"", "")
   if self.mode == IconSelectorPopupFrameModes.New then

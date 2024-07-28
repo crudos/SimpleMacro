@@ -1,6 +1,6 @@
 local addonName, ns = ...
 
---local groupTable = SimpleMacro.dbc.GroupTable
+--local groupTable = SimpleMacro.dbc.GROUP_TABLE
 --
 ---- Post Hook for CreateMacro
 --local function postCreateHook(name, iconFileID, body, perCharacter, ...)

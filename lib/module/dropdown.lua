@@ -60,7 +60,7 @@
 --end
 --
 --function dropdown:UpdateMenuList()
---  local groups = SimpleMacro.dbc.GroupTable:GetGroups()
+--  local groups = SimpleMacro.dbc.GROUP_TABLE:GetGroups()
 --  for i, _ in ipairs(groups) do
 --    unitOptions[i] = {
 --      text = string.format(L["SET_GROUP_TARGET"], i),

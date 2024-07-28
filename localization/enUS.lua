@@ -68,10 +68,28 @@ L["CREATE_FRAME"]["SIMPLE_MODE"] = "Simple Mode"
 
 -- Settings
 L["SETTINGS"] = {}
-L["SETTINGS"]["CONTEXT_MENU"] = {}
-L["SETTINGS"]["CONTEXT_MENU"]["NAME"] = "Context Menu Group Buttons"
-L["SETTINGS"]["CONTEXT_MENU"]["TOOLTIP"] = "Allows you to update the target of a group by right-clicking a unit frame."
-L["SETTINGS"]["CONTEXT_MENU"]["SET_GROUP_TARGET"] = "Set Group %d Target"
+L["SETTINGS"]["TITLE"] = "SimpleMacro"
+L["SETTINGS"]["GROUP_TARGET_LABEL"] = "Group Targets"
+L["SETTINGS"]["GROUP_TARGET_TOOLTIP"] = "Settings related to updating the targets of macro groups."
+L["SETTINGS"]["CONTEXT_MENU_NAME"] = "Add to context menu"
+L["SETTINGS"]["CONTEXT_MENU_TOOLTIP"] = "Adds buttons to context (right-click) menus for updating the target of a group."
+L["SETTINGS"]["CONTEXT_MENU_BUTTON_TEXT"] = "Set Group %d Target"
+L["SETTINGS"]["AUTO_ARENA_NAME"] = "Upon entering 3v3"
+L["SETTINGS"]["AUTO_ARENA_TOOLTIP"] = "Automatically update targets of macro groups upon entering 3v3 arena or solo shuffle. (per character setting)"
+L["SETTINGS"]["AUTO_ARENA_ORDER_NAME"] = "Order"
+L["SETTINGS"]["AUTO_ARENA_ORDER_TOOLTIP"] = "Determines player order for updating the groups below."
+L["SETTINGS"]["AUTO_ARENA_ORDER_POSITION"] = "Position"
+L["SETTINGS"]["AUTO_ARENA_ORDER_POSITION_TOOLTIP"] = "Top to bottom ordering."
+L["SETTINGS"]["AUTO_ARENA_ORDER_ROLE_NAME"] = "Role, Name"
+L["SETTINGS"]["AUTO_ARENA_ORDER_ROLE_NAME_TOOLTIP"] = "Order by role (Tank->DPS->Healer) then by name (A-Z)"
+L["SETTINGS"]["AUTO_ARENA_ORDER_NAME_ROLE"] = "Name, Role"
+L["SETTINGS"]["AUTO_ARENA_ORDER_NAME_ROLE_TOOLTIP"] = "Order by name then by role"
+L["SETTINGS"]["AUTO_ARENA_GROUP1_NAME"] = "First group"
+L["SETTINGS"]["AUTO_ARENA_GROUP1_TOOLTIP"] = "This group's target will be updated with the first player."
+L["SETTINGS"]["AUTO_ARENA_GROUP2_NAME"] = "Second Group"
+L["SETTINGS"]["AUTO_ARENA_GROUP2_TOOLTIP"] = "This group's target will be updated with the second player."
+L["SETTINGS"]["AUTO_ARENA_GROUP_OPTION"] = "Group %d"
+L["SETTINGS"]["AUTO_ARENA_NONE_OPTION"] = "None"
 
 -- Change menu
 L["CHANGE"] = {}

@@ -7,16 +7,21 @@ end
 local C = ns.C
 
 C["SETTINGS"] = {}
-C["SETTINGS"]["ENUM"] = { "ContextMenu" }
 C["SETTINGS"]["DEFAULT_ACCOUNT"] = {
-  Settings = {}
+  SETTINGS = {
+    CONTEXT_MENU = false
+  }
 }
 C["SETTINGS"]["DEFAULT_CHARACTER"] = {
-  GroupTable = GroupTable:New()
+  GROUP_TABLE = GroupTable:New(),
+  SETTINGS = {
+    AUTO_ARENA = false,
+    AUTO_ARENA_ORDER = "POSITION",
+    AUTO_ARENA_GROUP1 = 1,
+    AUTO_ARENA_GROUP2 = 2
+  }
 }
-for _, setting in pairs(C["SETTINGS"]["ENUM"]) do
-  C["SETTINGS"]["DEFAULT_ACCOUNT"].Settings[setting] = false
-end
+C["SETTINGS"]["AUTO_ARENA_ORDER_OPTIONS"] = { "POSITION", "NAME_ROLE", "ROLE_NAME" }
 
 C["tabs"] = { "Create", "Group" }
 

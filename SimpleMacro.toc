@@ -1,7 +1,7 @@
-## Interface: 110000
+## Interface: 110002
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 11.0.0.1
+## Version: 11.0.0.3
 ## Notes: An addon that simplifies macro creation. Adds functionality for changing conditional targets across macros.
 ## SavedVariables: SimpleMacroAccountDB
 ## SavedVariablesPerCharacter: SimpleMacroCharacterDB

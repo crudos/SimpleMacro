@@ -85,7 +85,7 @@ function SimpleMacroCreateFrameMixin:DeleteMacro()
   local actualIndex = self:GetMacroDataIndex(selectedMacroIndex)
 
   DeleteMacro(actualIndex)
-  SimpleMacro.dbc.GroupTable:HandleDeleteMacro(actualIndex)
+  SimpleMacro.dbc.GROUP_TABLE:HandleDeleteMacro(actualIndex)
 
   local macroCount = select(PanelTemplates_GetSelectedTab(SimpleMacroFrame), GetNumMacros())
   local newMacroIndex = math.min(macroCount, selectedMacroIndex)
