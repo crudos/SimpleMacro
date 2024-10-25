@@ -50,7 +50,7 @@ do
   local autoArenaSetting = Settings.RegisterAddOnSetting(category, autoArenaVariable, autoArenaVariable, SimpleMacro.dba.SETTINGS,
                                                          Settings.VarType.Boolean, L["AUTO_ARENA_NAME"], Settings.Default.False)
   local autoArenaInitializer = Settings.CreateCheckbox(category, autoArenaSetting, L["AUTO_ARENA_TOOLTIP"])
-  Settings.SetOnValueChangedCallback(autoArenaVariable, function(_, set) print('set auto arena')
+  Settings.SetOnValueChangedCallback(autoArenaVariable, function(_, set)
     SimpleMacro.dbc.SETTINGS[set:GetVariable()] = set:GetValue() end)
   table.insert(SimpleMacro.Settings, autoArenaSetting)
 
@@ -146,14 +146,22 @@ function SimpleMacroSettingsMixin:LoadSettings()
       Settings.SetValue(variable, SimpleMacro.dbc.SETTINGS[variable])
     end
   end
+
+  self:HandleSettings()
 end
 
-function SimpleMacroSettingsMixin:OnLoad()
-  self:RegisterEvent("GROUP_ROSTER_UPDATE")
+function SimpleMacroSettingsMixin:HandleSettings()
+  self:UnregisterAllEvents()
+  if SimpleMacro.dbc.SETTINGS["AUTO_ARENA"] then
+    self:RegisterEvent("GROUP_ROSTER_UPDATE")
+  end
 end
 
 function SimpleMacroSettingsMixin:OnEvent(event)
-  if C_PvP.IsRatedArena() and GetNumGroupMembers() == 3 and SimpleMacro.dbc.SETTINGS["AUTO_ARENA"] then
+  if not UnitAffectingCombat('player')
+      and C_PvP.IsRatedArena()
+      and GetNumGroupMembers() == 3
+      and SimpleMacro.dbc.SETTINGS["AUTO_ARENA"] then
     local identifierList = {}
 
     for i=1,4 do

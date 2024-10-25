@@ -2,7 +2,6 @@
   <Script file="settings.lua"/>
   <Frame name="SimpleMacroSettings" mixin="SimpleMacroSettingsMixin" hidden="true">
     <Scripts>
-      <OnLoad method="OnLoad"/>
       <OnEvent method="OnEvent"/>
     </Scripts>
   </Frame>
