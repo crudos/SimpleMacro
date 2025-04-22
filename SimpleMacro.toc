@@ -1,7 +1,7 @@
-## Interface: 110100
+## Interface: 110105
 ## Title: SimpleMacro
 ## Author: Crudos
-## Version: 11.1.0.0
+## Version: 11.1.5.0
 ## Notes: An addon that simplifies macro creation. Adds functionality for changing conditional targets across macros.
 ## SavedVariables: SimpleMacroAccountDB
 ## SavedVariablesPerCharacter: SimpleMacroCharacterDB
@@ -32,8 +32,3 @@ menu\tab\group\groupFrame.xml
 SimpleMacro.xml
 
 settings\settings.xml
-
-test\lib\GroupTableTest.lua
-test\lib\parserTest.lua
-test\lib\SMacroTest.lua
-
