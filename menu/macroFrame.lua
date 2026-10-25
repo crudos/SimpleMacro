@@ -1,5 +1,6 @@
 local _, ns = ...
 local C = ns.C["MACRO_FRAME"]
+local MacroConsts = (Constants and Constants.MacroConsts) or _G
 
 UIPanelWindows["SimpleMacroFrame"] = { area = "left", pushable = 1, whileDead = 1, width = PANEL_DEFAULT_WIDTH }
 
@@ -82,14 +83,14 @@ end
 
 function SimpleMacroFrameMixin:SetAccountMacros()
   self.macroBase = 0
-  self.macroMax = MAX_ACCOUNT_MACROS
+  self.macroMax = MacroConsts.MAX_ACCOUNT_MACROS
   self:Update()
   self:SelectMacro(1)
 end
 
 function SimpleMacroFrameMixin:SetCharacterMacros()
-  self.macroBase = MAX_ACCOUNT_MACROS
-  self.macroMax = MAX_CHARACTER_MACROS
+  self.macroBase = MacroConsts.MAX_ACCOUNT_MACROS
+  self.macroMax = MacroConsts.MAX_CHARACTER_MACROS
   self:Update()
   self:SelectMacro(1)
 end
@@ -117,7 +118,7 @@ function SimpleMacroFrameMixin:Update()
   end
 
   local function MacroFrameGetNumMacros()
-    return useAccountMacros and MAX_ACCOUNT_MACROS or MAX_CHARACTER_MACROS
+    return useAccountMacros and MacroConsts.MAX_ACCOUNT_MACROS or MacroConsts.MAX_CHARACTER_MACROS
   end
 
   self.MacroSelector.numMacros = useAccountMacros and numAccountMacros or numCharacterMacros

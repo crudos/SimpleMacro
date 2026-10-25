@@ -99,11 +99,14 @@ end
 
 -- Check that two macros are both same category of macro (ACCOUNT or CHARACTER)
 local function isSameMacroCategory(a, b)
-  if a <= MAX_ACCOUNT_MACROS and b <= MAX_ACCOUNT_MACROS then
+  local macroConsts = (Constants and Constants.MacroConsts) or _G
+  local maxAccountMacros = macroConsts.MAX_ACCOUNT_MACROS
+
+  if a <= maxAccountMacros and b <= maxAccountMacros then
     return true
   end
 
-  if a > MAX_ACCOUNT_MACROS and b > MAX_ACCOUNT_MACROS then
+  if a > maxAccountMacros and b > maxAccountMacros then
     return true
   end
 
